@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='ReportDownloadService' targetNamespace='http://api.dcp.ericsson.net/reportdownload' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/reportdownload' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/reportdownload' version='1.0' xmlns:tns='http://api.dcp.ericsson.net/reportdownload' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='DeleteInvoices' type='tns:deleteInvoices'/>
+   <xs:element name='DeleteInvoicesResponse' type='tns:deleteInvoicesResponse'/>
+   <xs:element name='Query' type='tns:query'/>
+   <xs:element name='QueryInvoices' type='tns:queryInvoices'/>
+   <xs:element name='QueryInvoicesResponse' type='tns:queryInvoicesResponse'/>
+   <xs:element name='QueryResponse' type='tns:queryResponse'/>
+   <xs:complexType name='deleteInvoices'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+     <xs:element name='invoiceName' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='queryInvoices'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+     <xs:element minOccurs='0' name='invoiceType' type='xs:string'/>
+     <xs:element minOccurs='0' name='fromDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='toDate' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='queryResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='report' nillable='true' type='tns:reportData'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='reportData'>
+    <xs:sequence>
+     <xs:element name='url' type='xs:anyURI'/>
+     <xs:element name='reportDate' type='xs:dateTime'/>
+     <xs:element name='size' type='xs:long'/>
+     <xs:element name='reportType' type='xs:string'/>
+     <xs:element minOccurs='0' name='reportPeriod' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='queryInvoicesResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='InvoiceData' type='tns:invoiceData'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='invoiceData'>
+    <xs:sequence>
+     <xs:element name='url' type='xs:anyURI'/>
+     <xs:element name='invoiceName' type='xs:string'/>
+     <xs:element name='invoiceDate' type='xs:dateTime'/>
+     <xs:element name='size' type='xs:long'/>
+     <xs:element name='invoiceType' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='deleteInvoicesResponse'>
+    <xs:sequence>
+     <xs:element name='invoicesStatus' type='tns:deleteInvoicesStatus'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='query'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='customerno' type='xs:string'/>
+     <xs:element minOccurs='0' name='reporttype' type='xs:string'/>
+     <xs:element name='fromdate' type='xs:dateTime'/>
+     <xs:element name='todate' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name='deleteInvoicesStatus'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Success'/>
+     <xs:enumeration value='Failure'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </types>
+ <message name='ReportDownload_deleteInvoicesResponse'>
+  <part element='tns:DeleteInvoicesResponse' name='deleteInvoicesResponse'></part>
+ </message>
+ <message name='ReportDownload_queryInvoicesResponse'>
+  <part element='tns:QueryInvoicesResponse' name='queryInvoicesResponse'></part>
+ </message>
+ <message name='ReportDownload_queryResponse'>
+  <part element='tns:QueryResponse' name='queryResponse'></part>
+ </message>
+ <message name='ReportDownload_query'>
+  <part element='tns:Query' name='query'></part>
+ </message>
+ <message name='ReportDownload_deleteInvoices'>
+  <part element='tns:DeleteInvoices' name='deleteInvoices'></part>
+ </message>
+ <message name='ReportDownload_queryInvoices'>
+  <part element='tns:QueryInvoices' name='queryInvoices'></part>
+ </message>
+ <portType name='ReportDownload'>
+  <operation name='deleteInvoices' parameterOrder='deleteInvoices'>
+   <input message='tns:ReportDownload_deleteInvoices'></input>
+   <output message='tns:ReportDownload_deleteInvoicesResponse'></output>
+  </operation>
+  <operation name='query' parameterOrder='query'>
+   <input message='tns:ReportDownload_query'></input>
+   <output message='tns:ReportDownload_queryResponse'></output>
+  </operation>
+  <operation name='queryInvoices' parameterOrder='queryInvoices'>
+   <input message='tns:ReportDownload_queryInvoices'></input>
+   <output message='tns:ReportDownload_queryInvoicesResponse'></output>
+  </operation>
+ </portType>
+ <binding name='ReportDownloadBinding' type='tns:ReportDownload'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='deleteInvoices'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/reportdownload'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='query'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/reportdownload'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='queryInvoices'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/reportdownload'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='ReportDownloadService'>
+  <port binding='tns:ReportDownloadBinding' name='ReportDownloadPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/ReportDownload'/>
+  </port>
+ </service>
+</definitions>

@@ -1,0 +1,15 @@
+generated: '2026-09-10'
+method: searched
+source: Searched https://iotdeveloper.aeris.net (all 46 published articles, via the Zendesk Help Center API), https://support.aeris.net,
+  https://www.aeris.com/resource-library/ and the Aeris GitHub organizations for a dated API changelog or release-notes
+  surface.
+published: false
+scheme: null
+note: 'Aeris publishes no dated API changelog or release-notes page. What version history exists is implicit: each
+  published OpenAPI carries an info.version, and the developer-portal article titles restate that version (for example
+  "Enterprise Management API (3.9.3)", "eUICC Setup API (2.3.2)"). Those titles move when a contract is republished,
+  so a consumer can observe that a version changed but cannot learn what changed, when, or whether it was breaking.
+  The Zendesk article metadata does carry updated_at timestamps, which is the closest thing to a change signal Aeris
+  exposes.'
+observed_version_surface: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+entries: []

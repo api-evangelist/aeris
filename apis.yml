@@ -1,23 +1,318 @@
 aid: aeris
 name: Aeris
-description: 'Aeris is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: Aeris is a cellular IoT connectivity company, founded in 1992 and headquartered in San Jose, California, that
+  operates a global network and connectivity management platform purpose-built for machines rather than phones. Aeris provides
+  SIM and eSIM/eUICC lifecycle management, device provisioning and activation, rate-plan and bundle management, usage and
+  signalling analytics, SMS messaging, and IoT security monitoring to automotive, utilities, logistics, medical-device and
+  industrial customers. In February 2023 Aeris acquired Ericsson's IoT Accelerator and Connected Vehicle Cloud businesses,
+  and the IoT Accelerator platform now runs under the Aeris name and serves the bulk of its published API surface alongside
+  the older Aeris-native AerAdmin, AerFrame and AerTraffic connectivity APIs and the Aeris IoT Watchtower security API.
+image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
 url: https://raw.githubusercontent.com/api-evangelist/aeris/refs/heads/main/apis.yml
-x-type: company
-x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
+position: Producing
 created: '2026-09-10'
 modified: '2026-09-10'
 tags:
-- Company
-apis: []
+- IoT
+- Cellular Connectivity
+- M2M
+- eSIM
+- SIM Management
+- Telecom
+- Device Management
+- IoT Security
+- Connectivity Management Platform
+- SMS Messaging
+- eUICC
+- Fleet Telematics
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- name: Aeris IoT Accelerator REST API
+  description: The primary REST API of the Aeris IoT Accelerator platform (acquired from Ericsson in 2023), covering subscription
+    and SIM inventory, subscription search and change history, device and eUICC inventory, eSIM localization, eUICC setup
+    and eIM/ECO operations, enterprise management, order management, number management, custom fields, shared bundles, business
+    automation rulesets and triggers, signalling events and usage reporting, business analytics reports and invoices, consumer
+    connectivity purchases, resource inventory and incident management. Authenticates with a JWT bearer token from POST /iot/api/auth
+    or an X-Access-Token session token.
+  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - IoT
+  - Cellular Connectivity
+  - SIM Management
+  - eSIM
+  - eUICC
+  - Device Management
+  - Connectivity Management Platform
+  properties:
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: OpenAPI
+    url: openapi/aeris-auth-3.0-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-business-analytics-report-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-business-automation-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-consumer-connectivity-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-eco-operations-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-eim-info-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-enterprise-management-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-euicc-setup-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-incidents-external-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-mds-esb-device-localization-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-mds-esb-subscription-management-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-operator-order-management-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-organization-signaling-aggregations-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-resource-inventory-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-shared-bundle-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-sim-specification-management-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-change-history-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-custom-fields-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-device-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-device-reconnect-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-inventory-common-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-location-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-number-management-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-search-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-signalling-events-api-openapi.yaml
+  - type: OpenAPI
+    url: openapi/aeris-subscription-signalling-usages-api-openapi.yaml
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Overlay
+    url: overlays/aeris-iot-accelerator-overlay.yaml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+- name: Aeris IoT Accelerator SMS Messaging API
+  description: RESTful SMS messaging API for sending mobile-terminated SMS to devices, retrieving delivery status, and retrieving
+    inbound mobile-originated messages for a registration. The contract states it is based on the OneAPI SMS interface and
+    OMA REST NetAPIs v1, and uses the standard /smsmessaging/v1/outbound/{senderAddress}/requests resource shape. Authenticates
+    with HTTP Basic.
+  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  baseURL: https://sms.iot-api.aeris.com/dcpapi/smsmessaging/v1
+  tags:
+  - SMS Messaging
+  - IoT
+  - Telecom
+  - M2M
+  properties:
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: OpenAPI
+    url: openapi/aeris-sms-messaging-api-openapi.yaml
+- name: Aeris IoT Watchtower API
+  description: 'IoT security API for the Aeris IoT Watchtower product: device groups, applications, gateways, flows and activity
+    logs, event configuration and policies, enforcement rules, protection policies, rate limiters, location lists and security
+    reporting. Uses OAuth 2.0 client credentials, an Idempotency-Key header on gateway writes, and an RFC 7807 problem+json
+    error envelope.'
+  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  baseURL: https://watchtower-api-prd.aeriscloud.com
+  tags:
+  - IoT Security
+  - IoT
+  - Device Management
+  properties:
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: OpenAPI
+    url: openapi/aeris-watchtower-api-openapi-openapi.yaml
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- name: Aeris IoT Accelerator SOAP API
+  description: The legacy SOAP/WSDL service portal API of the IoT Accelerator platform, covering subscription management,
+    trigger and bundle package management, aggregated and subscription traffic, usage data download, report download, incident
+    and service-request management, realtime trace, operator info, device reconnect and API status. Aeris documents this surface
+    as deprecated in favour of the REST equivalents; the WSDLs remain published.
+  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348517998364-IoT-Accelerator-SOAP-API
+  baseURL: https://iot-api.aeris.net
+  tags:
+  - IoT
+  - SOAP
+  - Telecom
+  - Device Management
+  properties:
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348517998364-IoT-Accelerator-SOAP-API
+  - type: WSDL
+    url: wsdl/aeris-aggregated-traffic.wsdl
+  - type: WSDL
+    url: wsdl/aeris-api-status.wsdl
+  - type: WSDL
+    url: wsdl/aeris-bundle-package-management.wsdl
+  - type: WSDL
+    url: wsdl/aeris-device-reconnect.wsdl
+  - type: WSDL
+    url: wsdl/aeris-incident-management.wsdl
+  - type: WSDL
+    url: wsdl/aeris-operator-info.wsdl
+  - type: WSDL
+    url: wsdl/aeris-overall-status.wsdl
+  - type: WSDL
+    url: wsdl/aeris-realtime-trace.wsdl
+  - type: WSDL
+    url: wsdl/aeris-report-download.wsdl
+  - type: WSDL
+    url: wsdl/aeris-service-request-management.wsdl
+  - type: WSDL
+    url: wsdl/aeris-subscription-management.wsdl
+  - type: WSDL
+    url: wsdl/aeris-subscription-traffic.wsdl
+  - type: WSDL
+    url: wsdl/aeris-trigger-alarms.wsdl
+  - type: WSDL
+    url: wsdl/aeris-trigger-package-management.wsdl
+  - type: WSDL
+    url: wsdl/aeris-usage-data-download.wsdl
+- name: Aeris AerAdmin Device Management API
+  description: The Aeris-native SOAP web service used to provision, activate, suspend, cancel, retire and re-provision devices
+    on the Aeris network, change rate plans and service profiles, update device attributes and traffic policy, query device
+    detail, network status and location, and run the same operations in bulk. The WSDL is published unauthenticated at /AerAdmin_WS_5_0/ws?wsdl
+    and declares 47 operations. A REST facade over the same system is documented as the AerAdmin 5.0 REST API.
+  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
+  humanURL: https://support.aeris.net/hc/en-us/articles/360037124333-AerAdmin-Device-Management-API-SOAP-and-XML
+  baseURL: https://aeradminapi.aeris.com
+  tags:
+  - Device Management
+  - Cellular Connectivity
+  - M2M
+  - SOAP
+  properties:
+  - type: Documentation
+    url: https://support.aeris.net/hc/en-us/articles/360037124333-AerAdmin-Device-Management-API-SOAP-and-XML
+  - type: APIReference
+    url: https://support.aeris.net/hc/en-us/articles/360037274334-AerAdmin-5-0-REST-API-Reference
+  - type: WSDL
+    url: wsdl/aeris-aeradmin-ws-5-0.wsdl
+- name: Aeris AerFrame Device Communication and Control API
+  description: 'RESTful SMS and device-control API on the Aeris network: send mobile-terminated SMS, receive delivery notifications,
+    receive and acknowledge mobile-originated SMS, reset network registration, retrieve a local dialable number and query
+    network location. Organised as application registration, notification-channel and network-services resources, and documented
+    as based on the OMA-DM standard SMS API. Authenticates with an account API key.'
+  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
+  humanURL: https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API
+  baseURL: https://api.aerframe.aeris.com
+  tags:
+  - SMS Messaging
+  - M2M
+  - Cellular Connectivity
+  - IoT
+  properties:
+  - type: Documentation
+    url: https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API
+- name: Aeris AerTraffic Reports API
+  description: 'Web service interface for retrieving device traffic and billing data from the Aeris AerTraffic system: create
+    online and scheduled report templates, poll report status, download online, scheduled and archived reports, manage report
+    recipients and retrieve trend and account-level reports. Mirrors the reporting available in the AerPort web UI. Authenticates
+    with an account API key.'
+  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
+  humanURL: https://support.aeris.net/hc/en-us/articles/360037394973-AerTraffic-Reports-API
+  baseURL: https://aertrafficapi.aeris.com/v1
+  tags:
+  - IoT
+  - Cellular Connectivity
+  - Telecom
+  - M2M
+  properties:
+  - type: Documentation
+    url: https://support.aeris.net/hc/en-us/articles/360037394973-AerTraffic-Reports-API
 common:
 - type: Website
-  url: https://equityzen.com/company/aeris
+  url: https://www.aeris.com/
+- type: DeveloperPortal
+  url: https://iotdeveloper.aeris.net/hc/en-us
+- type: Documentation
+  url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+- type: APIReference
+  url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+- type: GettingStarted
+  url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+- type: Support
+  url: https://support.aeris.net/hc/en-us
+- type: Blog
+  url: https://www.aeris.com/resource-library/?_types=blogs
+- type: GitHubOrganization
+  url: https://github.com/aeristhings
+- type: SignUp
+  url: https://iot.aeris.com
+- type: TermsOfService
+  url: https://www.aeris.com/legal/services-terms-of-use/
+- type: PrivacyPolicy
+  url: https://www.aeris.com/legal/privacy-policy/
+- type: Postman
+  url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+- type: Compliance
+  url: https://www.aeris.com/trust-center/aeris-certifications/
+- type: TrustCenter
+  url: security/aeris-trust-center.yml
+- type: Packages
+  url: packages/aeris-packages.yml
+- type: SDKs
+  url: packages/aeris-packages.yml
+- type: Conformance
+  url: conformance/aeris-conformance.yml
+- type: Lifecycle
+  url: lifecycle/aeris-lifecycle.yml
+- type: Deprecation
+  url: lifecycle/aeris-lifecycle.yml
+- type: LLMsTxt
+  url: llms/aeris-llms.txt
+- type: MCPServer
+  url: mcp/aeris-mcp.yml
+- type: Plans
+  url: plans/aeris-plans-pricing.yml
+- type: DomainSecurity
+  url: security/aeris-domain-security.yml
+- type: Webhooks
+  url: asyncapi/aeris-stomp-notifications.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-09-10'
+  status: enriched
+  artifacts_added: 96
+  pass: local-v3

@@ -1,0 +1,33 @@
+generated: '2026-09-10'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.aeris.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Mar 27 23:59:59 2027 GMT
+  hsts: false
+- host: iotdeveloper.aeris.net
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov  6 23:45:24 2026 GMT
+  hsts: true
+  hsts_max_age: 259200
+- host: iot-api.aeris.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Jan  4 23:59:59 2027 GMT
+  hsts: null
+domains:
+- domain: aeris.com
+  dnssec: true
+  caa: []
+  spf: false
+  dmarc: true
+  dmarc_policy: none
+- domain: aeris.net
+  dnssec: true
+  caa: []
+  spf: false
+  dmarc: true
+  dmarc_policy: none

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='OverallStatusService' targetNamespace='http://api.dcp.ericsson.net/OverallStatus' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/OverallStatus' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/OverallStatus' version='1.0' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='GetStatus'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='GetStatusResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='voice' type='xs:int'/>
+      <xs:element minOccurs='0' name='cSD' type='xs:int'/>
+      <xs:element minOccurs='0' name='sMS' type='xs:int'/>
+      <xs:element minOccurs='0' name='gPRS' type='xs:int'/>
+      <xs:element minOccurs='0' name='customerAccessService' type='xs:int'/>
+      <xs:element minOccurs='0' name='customerSMSCAccount' type='xs:int'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+  </xs:schema>
+ </types>
+ <message name='OverallStatus_GetStatus'>
+  <part element='tns:GetStatus' name='getStatus'></part>
+ </message>
+ <message name='OverallStatus_GetStatusResponse'>
+  <part element='tns:GetStatusResponse' name='getStatusResponse'></part>
+ </message>
+ <portType name='OverallStatus'>
+  <operation name='GetStatus' parameterOrder='getStatus'>
+   <input message='tns:OverallStatus_GetStatus'></input>
+   <output message='tns:OverallStatus_GetStatusResponse'></output>
+  </operation>
+ </portType>
+ <binding name='OverallStatusBinding' type='tns:OverallStatus'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='GetStatus'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/OverallStatus/getStatus'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='OverallStatusService'>
+  <port binding='tns:OverallStatusBinding' name='OverallStatusPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/OverallStatus'/>
+  </port>
+ </service>
+</definitions>

@@ -1,0 +1,568 @@
+generated: '2026-09-10'
+method: searched
+source: openapi/aeris-business-analytics-report-api-openapi.yaml, openapi/aeris-business-automation-api-openapi.yaml,
+  openapi/aeris-consumer-connectivity-openapi.yaml, openapi/aeris-eco-operations-api-openapi.yaml, openapi/aeris-eim-info-api-openapi.yaml,
+  openapi/aeris-enterprise-management-api-openapi.yaml, openapi/aeris-euicc-setup-api-openapi.yaml, openapi/aeris-incidents-external-api-openapi.yaml,
+  openapi/aeris-operator-order-management-api-openapi.yaml, openapi/aeris-organization-signaling-aggregations-api-openapi.yaml,
+  openapi/aeris-resource-inventory-api-openapi.yaml, openapi/aeris-shared-bundle-api-openapi.yaml, openapi/aeris-sim-specification-management-api-openapi.yaml,
+  openapi/aeris-subscription-change-history-openapi.yaml, openapi/aeris-subscription-custom-fields-api-openapi.yaml,
+  openapi/aeris-subscription-device-api-openapi.yaml, openapi/aeris-subscription-device-reconnect-api-openapi.yaml,
+  openapi/aeris-subscription-inventory-common-api-openapi.yaml, openapi/aeris-subscription-location-api-openapi.yaml,
+  openapi/aeris-subscription-number-management-api-openapi.yaml, openapi/aeris-subscription-search-api-openapi.yaml,
+  openapi/aeris-subscription-signalling-events-api-openapi.yaml, openapi/aeris-subscription-signalling-usages-api-openapi.yaml,
+  openapi/aeris-watchtower-api-openapi-openapi.yaml — upgraded from the Aeris IoT Developer Portal API Quick start
+  guide, which publishes the authentication mechanism used by each API group.
+schemes:
+- name: Oauth2_auth
+  source: openapi/aeris-business-analytics-report-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: /iot/api/auth/token
+- name: Oauth2_auth
+  source: openapi/aeris-business-automation-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: /iot/api/auth/token
+- name: Oauth2_auth
+  source: openapi/aeris-consumer-connectivity-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+- name: OAuth2
+  source: openapi/aeris-eco-operations-api-openapi.yaml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+  description: The resources in the API are protected using the OAuth 2.0 protocol
+- name: OAuth2
+  source: openapi/aeris-eim-info-api-openapi.yaml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+  description: The resources in the API are protected using the OAuth 2.0 protocol
+- name: oauth2
+  source: openapi/aeris-enterprise-management-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+  description: The Enterprise API uses OAuth2 and OIDC for authentication and authorization.
+- name: OAuth2
+  source: openapi/aeris-euicc-setup-api-openapi.yaml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+  description: The resources in the API are protected using the OAuth 2.0 protocol
+- name: oauth2
+  source: openapi/aeris-incidents-external-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: /iot/api/auth/token
+  description: The External Incidents API uses OAuth2 and OIDC for authentication and authorization.
+- name: oauth2
+  source: openapi/aeris-operator-order-management-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://<baseURL>/iot/api/auth/token
+  description: The API uses OAuth2 and OIDC for authentication and authorization.
+- name: OAuth2
+  source: openapi/aeris-organization-signaling-aggregations-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: /iot/api/auth/token
+  description: The API uses OAuth2 and OIDC for authentication and authorization.
+- name: oauth2
+  source: openapi/aeris-resource-inventory-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://<baseURL>/iot/api/auth/token
+  description: The API uses OAuth2 and OIDC for authentication and authorization.
+- name: OAuth2
+  source: openapi/aeris-shared-bundle-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+  description: The resources in the API are protected using the OAuth 2.0 protocol with the password grant flow.
+- name: Oauth2_auth
+  source: openapi/aeris-sim-specification-management-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+- name: Oauth2_auth
+  source: openapi/aeris-subscription-change-history-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+- name: Oauth2_auth
+  source: openapi/aeris-subscription-custom-fields-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+- name: OAuth2
+  source: openapi/aeris-subscription-device-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+  description: The resources in the API are protected using the OAuth 2.0 protocol with the password grant flow.
+- name: Oauth2_auth
+  source: openapi/aeris-subscription-device-reconnect-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+- name: Oauth2_auth
+  source: openapi/aeris-subscription-inventory-common-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+- name: Oauth2_auth
+  source: openapi/aeris-subscription-location-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: '/iot/api/auth/token
+
+      '
+- name: OAuth2
+  source: openapi/aeris-subscription-number-management-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+  description: The resources in the API are protected using the OAuth 2.0 protocol with the password grant flow.
+- name: Oauth2Auth
+  source: openapi/aeris-subscription-search-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+- name: OAuth2
+  source: openapi/aeris-subscription-signalling-events-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: /iot/api/auth/token
+  description: The resources in the API are protected using the OAuth 2.0 protocol with the password grant flow.
+- name: OAuth2
+  source: openapi/aeris-subscription-signalling-usages-api-openapi.yaml
+  flows:
+  - flow: password
+    tokenUrl: /iot/api/auth/token
+  description: The resources in the API are protected using the OAuth 2.0 protocol with the password grant flow.
+- name: oAuth2ClientCredentials
+  source: openapi/aeris-watchtower-api-openapi-openapi.yaml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: /watchtower/v1/auth/token
+  description: This API uses OAuth 2 with the Client Credentials flow.
+scopes:
+- scope: cc.read
+  description: Access right needed to read from Consumer Connectivity service.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-consumer-connectivity-openapi.yaml
+- scope: cc.write
+  description: Access right needed to write to Consumer Connectivity service.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-consumer-connectivity-openapi.yaml
+- scope: cnx_aggregated_traffic
+  description: Access right to perform query operation.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-organization-signaling-aggregations-api-openapi.yaml
+- scope: cnx_eim_eco_add
+  description: Grant client access to create add eCO operations
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/aeris-eco-operations-api-openapi.yaml
+- scope: cnx_eim_eco_delete
+  description: Grant client access to create delete eCO operations
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/aeris-eco-operations-api-openapi.yaml
+- scope: cnx_eim_eco_update
+  description: Grant client access to create update eCO operations
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/aeris-eco-operations-api-openapi.yaml
+- scope: cnx_eim_eco_view
+  description: Grant client access to create/list eCO operations and read eCO job status
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/aeris-eco-operations-api-openapi.yaml
+- scope: cnx_eim_read
+  description: Grant client read access to eIM info resources
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/aeris-eim-info-api-openapi.yaml
+- scope: cnx_euicc_inventory
+  description: Grant user read access to device inventory resource
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-device-api-openapi.yaml
+- scope: cnx_invoice_download
+  description: Download invoices - for enterprises (old)
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_invoice_download_2
+  description: Download invoices
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_invoice_download_operator
+  description: Download invoices + invoice deletion - for operators (old)
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_invoice_download_operator_2
+  description: Download invoices + invoice deletion
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_invoice_download_supplier
+  description: Download invoices + invoice deletion - for supplier
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_log_incident_2
+  description: Grants access to view and create incidents information by operator users.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-incidents-external-api-openapi.yaml
+- scope: cnx_manage_incidents
+  description: Grants access to manage incidents information by operator users.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-incidents-external-api-openapi.yaml
+- scope: cnx_report_download
+  description: Download monthly reports - for TCXN (old)
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_report_download_2
+  description: Download monthly reports - for enterprises
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_report_download_no_invoice
+  description: Download monthly reports (no billing-related reports) - for enterprises (old)
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_report_download_no_invoice_2
+  description: Download monthly reports (no billing-related reports) - for enterprises
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_report_download_opco
+  description: Download monthly reports - for operators (old)
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_report_download_opco_2
+  description: Download monthly reports - for operators
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_report_download_operator
+  description: Download monthly reports - for TCXN (old)
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_report_download_operator_2
+  description: Download monthly reports - for TCXN
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_search_traffic
+  description: Grant user access to subscription traffic search resource
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-device-api-openapi.yaml
+- scope: cnx_show_movesim_action
+  description: Grant user access to change subscription owner
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-device-api-openapi.yaml
+- scope: cnx_ss_euicc_activationcode_man
+  sources:
+  - openapi/aeris-euicc-setup-api-openapi.yaml
+- scope: cnx_ss_euicc_activationcode_ro
+  sources:
+  - openapi/aeris-euicc-setup-api-openapi.yaml
+- scope: cnx_subscription_view
+  description: Grant user read access to Number management inventory resource
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-number-management-api-openapi.yaml
+- scope: cnx_subscription_view2
+  description: Grant user access to subscription inventory resource
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-device-api-openapi.yaml
+- scope: cnx_subscriptions_view
+  description: Grant user access to subscriptions inventory resource
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-device-api-openapi.yaml
+- scope: cnx_top_traffic_subscr_gprs
+  description: 'API: Subscriptions with most data traffic'
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_top_traffic_subscr_sms
+  description: 'API: Subscriptions with most SMS traffic'
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_traffic_analytics
+  description: Grant user read access to traffic analytics view
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-device-api-openapi.yaml
+- scope: cnx_usage_data_download
+  description: Download usage data (old)
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_usage_data_download_2
+  description: Download usage data
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+- scope: cnx_view_networks
+  sources:
+  - openapi/aeris-resource-inventory-api-openapi.yaml
+- scope: cnx_view_resources
+  description: Access right to read APN
+  flows:
+  - password
+  sources:
+  - openapi/aeris-resource-inventory-api-openapi.yaml
+- scope: css_deprecate_subscription_package
+  sources:
+  - openapi/aeris-enterprise-management-api-openapi.yaml
+- scope: css_manage_enterprise_groups
+  sources:
+  - openapi/aeris-enterprise-management-api-openapi.yaml
+- scope: css_manage_enterprise_hierarchy
+  description: Grants access to read, create and update enterprise and subscription package information.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-enterprise-management-api-openapi.yaml
+- scope: css_manage_incidents_for_advanced_reseller_enterprise
+  description: Grants access to view, create and update incidents information by reseller users.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-incidents-external-api-openapi.yaml
+- scope: css_premium_csp_incident_for_operators
+  description: Enables premium CSPs to create VIP Incidents compared to the standard incident severity matrix
+  flows:
+  - password
+  sources:
+  - openapi/aeris-incidents-external-api-openapi.yaml
+- scope: css_view_enterprise_groups
+  sources:
+  - openapi/aeris-enterprise-management-api-openapi.yaml
+- scope: css_view_resources
+  description: Grants access to read resource information.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-enterprise-management-api-openapi.yaml
+- scope: custom-field.read
+  description: read custom fields
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-custom-fields-api-openapi.yaml
+- scope: custom-field.write
+  description: create or update custom fields
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-custom-fields-api-openapi.yaml
+- scope: euicc-mgt.agreement.read
+  description: Grant client read access to eUICC agreement resources
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/aeris-euicc-setup-api-openapi.yaml
+- scope: euicc-mgt.agreement.write
+  description: Grant client write access to eUICC agreement resources
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/aeris-euicc-setup-api-openapi.yaml
+- scope: om_manage_order
+  description: Manage order
+  flows:
+  - password
+  sources:
+  - openapi/aeris-operator-order-management-api-openapi.yaml
+- scope: om_resource_approval
+  description: Approve or reject resource order
+  flows:
+  - password
+  sources:
+  - openapi/aeris-operator-order-management-api-openapi.yaml
+- scope: om_service_approval
+  description: Approve or reject service order
+  flows:
+  - password
+  sources:
+  - openapi/aeris-operator-order-management-api-openapi.yaml
+- scope: om_view_order
+  description: View order
+  flows:
+  - password
+  sources:
+  - openapi/aeris-operator-order-management-api-openapi.yaml
+- scope: org-mgt.shared-bundle-consumption.read
+  description: Grant read access to shared bundle traffic consumption information.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-shared-bundle-api-openapi.yaml
+- scope: rulesets.read
+  description: Access right to read a rulesets.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-automation-api-openapi.yaml
+- scope: rulesets.write
+  description: Access right to write a rulesets..
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-automation-api-openapi.yaml
+- scope: ssm.euicc-spec.read
+  description: Read access to eUICC spec resources in SSM
+  flows:
+  - password
+  sources:
+  - openapi/aeris-sim-specification-management-api-openapi.yaml
+- scope: ssm.euicc-spec.write
+  description: Write access to eUICC spec resources in SSM
+  flows:
+  - password
+  sources:
+  - openapi/aeris-sim-specification-management-api-openapi.yaml
+- scope: ssm.sim-spec.read
+  description: Read access to sim spec resources in SSM
+  flows:
+  - password
+  sources:
+  - openapi/aeris-sim-specification-management-api-openapi.yaml
+- scope: ssm.sim-spec.write
+  description: Write access to sim spec resources in SSM
+  flows:
+  - password
+  sources:
+  - openapi/aeris-sim-specification-management-api-openapi.yaml
+- scope: subscription-history.read
+  description: access subscription history
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-change-history-openapi.yaml
+- scope: subscription-service.read
+  description: Access right needed to read from the Subscription service.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-device-reconnect-api-openapi.yaml
+  - openapi/aeris-subscription-inventory-common-api-openapi.yaml
+  - openapi/aeris-subscription-search-api-openapi.yaml
+- scope: subscription-service.write
+  description: Access right needed to write to the Subscription service.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-device-reconnect-api-openapi.yaml
+  - openapi/aeris-subscription-inventory-common-api-openapi.yaml
+  - openapi/aeris-subscription-search-api-openapi.yaml
+- scope: subscription-signalling-events.read
+  description: Grant read access to listing subscription signalling events.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-signalling-events-api-openapi.yaml
+- scope: subscription-signalling-usages.read
+  description: Grant read access to subscription signalling usages API.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-signalling-usages-api-openapi.yaml
+- scope: subscription.write
+  description: update subscription
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-custom-fields-api-openapi.yaml
+- scope: sulo.cell-global-identities.read
+  description: Access cell global identity
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-location-api-openapi.yaml
+- scope: triggered-actions.read
+  description: Access right to read a triggered action.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-automation-api-openapi.yaml
+- scope: triggered-actions.write
+  description: Access right to write a triggered action.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-business-automation-api-openapi.yaml
+- scope: xdr-raw-api.read
+  description: Grant read access to listing signalling events.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-signalling-events-api-openapi.yaml
+- scope: xdr-report-api.read
+  description: Grant read access to usage reports.
+  flows:
+  - password
+  sources:
+  - openapi/aeris-subscription-signalling-usages-api-openapi.yaml
+docs:
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348574275868-JWT-Authentication-Best-Practices
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348572926236-Auth-API-1-0-1

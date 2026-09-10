@@ -1,0 +1,1136 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.7-b01-. --><!-- edited with XMLSpy v2012 rel. 2 sp1 (http://www.altova.com) by Amish (Aeris) --><wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ser="service.aeris.com/aeradmin/v1/API" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="soap.aeradmin.service.aeris.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsx="http://www.aeris.net/" xmlns:wsmhrd="service.aeris.com/aeradmin/v1/CompositeTypes" xmlns:ns="service.aeris.com/aeradmin/v1/BaseTypes" name="AerAdmin_V1" targetNamespace="soap.aeradmin.service.aeris.com">
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://www.aeris.net/">
+			<import namespace="service.aeris.com/aeradmin/v1/API" schemaLocation="http://aeradminapi.aeris.com:80/AerAdmin_WS_5_0/ws?xsd=3" />
+			<import namespace="service.aeris.com/aeradmin/v1/API" schemaLocation="http://aeradminapi.aeris.com:80/AerAdmin_WS_5_0/ws?xsd=4" />
+			<import namespace="service.aeris.com/aeradmin/v1/API" schemaLocation="http://aeradminapi.aeris.com:80/AerAdmin_WS_5_0/ws?xsd=5" />
+			<import namespace="service.aeris.com/aeradmin/v1/API" schemaLocation="http://aeradminapi.aeris.com:80/AerAdmin_WS_5_0/ws?xsd=6" />
+			<import namespace="service.aeris.com/aeradmin/v1/API" schemaLocation="http://aeradminapi.aeris.com:80/AerAdmin_WS_5_0/ws?xsd=7" />
+			<import namespace="service.aeris.com/aeradmin/v1/CompositeTypes" schemaLocation="http://aeradminapi.aeris.com:80/AerAdmin_WS_5_0/ws?xsd=2" />
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="BulkCancelResponse">
+		<wsdl:part name="body" element="ser:BulkCancelResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkSuspendRequest">
+		<wsdl:part name="body" element="ser:BulkSuspendRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkRetireRequest">
+		<wsdl:part name="body" element="ser:BulkRetireRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetRatePlanResponse">
+		<wsdl:part name="body" element="ser:GetRatePlanResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkChangeRatePlanResponse">
+		<wsdl:part name="body" element="ser:BulkChangeRatePlanResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkReprovisionResponse">
+		<wsdl:part name="body" element="ser:BulkReprovisionResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkUpdateDeviceAttrResponse">
+		<wsdl:part name="body" element="ser:BulkUpdateDeviceAttrResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetAvailableDeviceNumbersResponse">
+		<wsdl:part name="body" element="ser:GetAvailableDeviceNumbersResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ClearDeviceRegistrationRequest">
+		<wsdl:part name="body" element="ser:ClearDeviceRegistrationRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="AssignStaticIPResponse">
+		<wsdl:part name="body" element="ser:AssignStaticIPResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="StartBillingResponse">
+		<wsdl:part name="body" element="ser:StartBillingResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="CancelResponse">
+		<wsdl:part name="body" element="ser:CancelResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkRemoveStaticIPResponse">
+		<wsdl:part name="body" element="ser:BulkRemoveStaticIPResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="RemoveStaticIPRequest">
+		<wsdl:part name="body" element="ser:RemoveStaticIPRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkRemoveStaticIPRequest">
+		<wsdl:part name="body" element="ser:BulkRemoveStaticIPRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ProvisionResponse">
+		<wsdl:part name="body" element="ser:ProvisionResponse">
+		</wsdl:part>
+	</wsdl:message>
+        <wsdl:message name="AerCloudProvisionResponse">
+		<wsdl:part name="body" element="ser:AerCloudProvisionResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetDeviceDetailResponse">
+		<wsdl:part name="body" element="ser:GetDeviceDetailResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QueryDeviceResponse">
+		<wsdl:part name="body" element="ser:QueryDeviceResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetDeviceNetworkStatusResponse">
+		<wsdl:part name="body" element="ser:GetDeviceNetworkStatusResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QueryDeviceNetworkResponse">
+		<wsdl:part name="body" element="ser:QueryDeviceNetworkResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetDeviceLocationResponse">
+		<wsdl:part name="body" element="ser:GetDeviceLocationResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ChangeRatePlanRequest">
+		<wsdl:part name="body" element="ser:ChangeRatePlanRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="RemoveStaticIPResponse">
+		<wsdl:part name="body" element="ser:RemoveStaticIPResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="StartBillingRequest">
+		<wsdl:part name="body" element="ser:StartBillingRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="SuspendResponse">
+		<wsdl:part name="body" element="ser:SuspendResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="RetireResponse">
+		<wsdl:part name="body" element="ser:RetireResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ReprovisionRequest">
+		<wsdl:part name="body" element="ser:ReprovisionRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkStartBillingResponse">
+		<wsdl:part name="body" element="ser:BulkStartBillingResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetAvailableDeviceNumbersRequest">
+		<wsdl:part name="body" element="ser:GetAvailableDeviceNumbersRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ChangeServiceNameRequest">
+		<wsdl:part name="body" element="ser:ChangeServiceNameRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkActivateResponse">
+		<wsdl:part name="body" element="ser:BulkActivateResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkAerCloudProvisionRequest">
+		<wsdl:part name="body" element="ser:BulkAerCloudProvisionRequest">
+		</wsdl:part>
+	</wsdl:message>
+        <wsdl:message name="BulkProvisionRequest">
+		<wsdl:part name="body" element="ser:BulkProvisionRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkAssignStaticIPRequest">
+		<wsdl:part name="body" element="ser:BulkAssignStaticIPRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="CancelRequest">
+		<wsdl:part name="body" element="ser:CancelRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkUnsuspendRequest">
+		<wsdl:part name="body" element="ser:BulkUnsuspendRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UpdateDeviceAttrResponse">
+		<wsdl:part name="body" element="ser:UpdateDeviceAttrResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetServiceNameResponse">
+		<wsdl:part name="body" element="ser:GetServiceNameResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkUnsuspendResponse">
+		<wsdl:part name="body" element="ser:BulkUnsuspendResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ClearDeviceRegistrationResponse">
+		<wsdl:part name="body" element="ser:ClearDeviceRegistrationResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="AssignStaticIPRequest">
+		<wsdl:part name="body" element="ser:AssignStaticIPRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="HeartBeatRequest">
+		<wsdl:part name="body" element="ser:HeartBeatRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetRatePlanRequest">
+		<wsdl:part name="body" element="ser:GetRatePlanRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetServiceNameRequest">
+		<wsdl:part name="body" element="ser:GetServiceNameRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkStartBillingRequest">
+		<wsdl:part name="body" element="ser:BulkStartBillingRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ChangeRatePlanResponse">
+		<wsdl:part name="body" element="ser:ChangeRatePlanResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ProvisionRequest">
+		<wsdl:part name="body" element="ser:ProvisionRequest">
+		</wsdl:part>
+	</wsdl:message>
+        <wsdl:message name="AerCloudProvisionRequest">
+		<wsdl:part name="body" element="ser:AerCloudProvisionRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkAssignStaticIPResponse">
+		<wsdl:part name="body" element="ser:BulkAssignStaticIPResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UnsuspendResponse">
+		<wsdl:part name="body" element="ser:UnsuspendResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="TrafficPolicyRequest">
+		<wsdl:part name="body" element="ser:TrafficPolicyRequest">
+		</wsdl:part>
+	</wsdl:message>	
+	<wsdl:message name="TrafficPolicyResponse">
+		<wsdl:part name="body" element="ser:TrafficPolicyResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkCancelRequest">
+		<wsdl:part name="body" element="ser:BulkCancelRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkChangeRatePlanRequest">
+		<wsdl:part name="body" element="ser:BulkChangeRatePlanRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UpdateDeviceAttrRequest">
+		<wsdl:part name="body" element="ser:UpdateDeviceAttrRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkUpdateDeviceAttrRequest">
+		<wsdl:part name="body" element="ser:BulkUpdateDeviceAttrRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkProvisionResponse">
+		<wsdl:part name="body" element="ser:BulkProvisionResponse">
+		</wsdl:part>
+	</wsdl:message>
+        <wsdl:message name="BulkAerCloudProvisionResponse">
+		<wsdl:part name="body" element="ser:BulkAerCloudProvisionResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UnsuspendRequest">
+		<wsdl:part name="body" element="ser:UnsuspendRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkReprovisionRequest">
+		<wsdl:part name="body" element="ser:BulkReprovisionRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ActivateResponse">
+		<wsdl:part name="body" element="ser:ActivateResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkSuspendResponse">
+		<wsdl:part name="body" element="ser:BulkSuspendResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkRetireResponse">
+		<wsdl:part name="body" element="ser:BulkRetireResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ChangeServiceNameResponse">
+		<wsdl:part name="body" element="ser:ChangeServiceNameResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetDeviceDetailRequest">
+		<wsdl:part name="body" element="ser:GetDeviceDetailRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QueryDeviceRequest">
+		<wsdl:part name="body" element="ser:QueryDeviceRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetDeviceNetworkStatusRequest">
+		<wsdl:part name="body" element="ser:GetDeviceNetworkStatusRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="QueryDeviceNetworkRequest">
+		<wsdl:part name="body" element="ser:QueryDeviceNetworkRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetDeviceLocationRequest">
+		<wsdl:part name="body" element="ser:GetDeviceLocationRequest">
+		</wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:message name="ReprovisionResponse">
+		<wsdl:part name="body" element="ser:ReprovisionResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkChangeServiceNameResponse">
+		<wsdl:part name="body" element="ser:BulkChangeServiceNameResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ActivateRequest">
+		<wsdl:part name="body" element="ser:ActivateRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="HeartBeatResponse">
+		<wsdl:part name="body" element="ser:HeartBeatResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkActivateRequest">
+		<wsdl:part name="body" element="ser:BulkActivateRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkChangeServiceNameRequest">
+		<wsdl:part name="body" element="ser:BulkChangeServiceNameRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="SuspendRequest">
+		<wsdl:part name="body" element="ser:SuspendRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="RetireRequest">
+		<wsdl:part name="body" element="ser:RetireRequest">
+		</wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:message name="GetBulkServiceStatusRequest">
+		<wsdl:part name="body" element="ser:GetBulkServiceStatusRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetBulkServiceStatusResponse">
+		<wsdl:part name="body" element="ser:GetBulkServiceStatusResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="BulkTrafficPolicyRequest">
+		<wsdl:part name="body" element="ser:BulkTrafficPolicyRequest">
+		</wsdl:part>
+	</wsdl:message>	
+	<wsdl:message name="BulkTrafficPolicyResponse">
+		<wsdl:part name="body" element="ser:BulkTrafficPolicyResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="SwapSubscriptionRequest">
+		<wsdl:part name="body" element="ser:SwapSubscriptionRequest">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="SwapSubscriptionResponse">
+		<wsdl:part name="body" element="ser:SwapSubscriptionResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="SwapDeviceRequest">
+		<wsdl:part name="body" element="ser:SwapDeviceRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="SwapDeviceResponse">
+		<wsdl:part name="body" element="ser:SwapDeviceResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	
+	<wsdl:message name="BlockTrafficRequest">
+		<wsdl:part name="body" element="ser:BlockTrafficRequest">
+		</wsdl:part>
+	</wsdl:message>	
+	<wsdl:message name="BlockTrafficResponse">
+		<wsdl:part name="body" element="ser:BlockTrafficResponse">
+		</wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:message name="BulkBlockTrafficRequest">
+		<wsdl:part name="body" element="ser:BulkBlockTrafficRequest">
+		</wsdl:part>
+	</wsdl:message>	
+	<wsdl:message name="BulkBlockTrafficResponse">
+		<wsdl:part name="body" element="ser:BulkBlockTrafficResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="ProvisionDeviceRequest">
+		<wsdl:part name="body" element="ser:ProvisionDeviceRequest">
+		</wsdl:part>
+	</wsdl:message>	
+	<wsdl:message name="ProvisionDeviceResponse">
+		<wsdl:part name="body" element="ser:ProvisionDeviceResponse">
+		</wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:message name="UpdateDeviceStateRequest">
+		<wsdl:part name="body" element="ser:UpdateDeviceStateRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UpdateDeviceIPRequest">
+		<wsdl:part name="body" element="ser:UpdateDeviceIPRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ChangeDeviceRatePlanRequest">
+		<wsdl:part name="body" element="ser:UpdateDeviceProfileRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ChangeDeviceServiceProfileRequest">
+		<wsdl:part name="body" element="ser:UpdateServiceProfileRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UpdateDeviceAttributesRequest">
+		<wsdl:part name="body" element="ser:UpdateDeviceAttributesRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UpdateDeviceTrafficRequest">
+		<wsdl:part name="body" element="ser:UpdateDeviceTrafficRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UpdateDeviceResponse">
+		<wsdl:part name="body" element="ser:UpdateDeviceResponse">
+		</wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:portType name="AerAdminPortType">
+		<wsdl:operation name="activate">
+			<wsdl:input message="tns:ActivateRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:ActivateResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkActivate">
+			<wsdl:input message="tns:BulkActivateRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkActivateResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="cancel">
+			<wsdl:input message="tns:CancelRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:CancelResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkCancel">
+			<wsdl:input message="tns:BulkCancelRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkCancelResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="changeRatePlan">
+			<wsdl:input message="tns:ChangeRatePlanRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:ChangeRatePlanResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkChangeRatePlan">
+			<wsdl:input message="tns:BulkChangeRatePlanRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkChangeRatePlanResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="changeServiceName">
+			<wsdl:input message="tns:ChangeServiceNameRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:ChangeServiceNameResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkChangeServiceName">
+			<wsdl:input message="tns:BulkChangeServiceNameRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkChangeServiceNameResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="heartBeat">
+			<wsdl:input message="tns:HeartBeatRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:HeartBeatResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="provision">
+			<wsdl:input message="tns:ProvisionRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:ProvisionResponse">
+			</wsdl:output>
+		</wsdl:operation>
+                <wsdl:operation name="aercloudProvision">
+			<wsdl:input message="tns:AerCloudProvisionRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:AerCloudProvisionResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkProvision">
+			<wsdl:input message="tns:BulkProvisionRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkProvisionResponse">
+			</wsdl:output>
+		</wsdl:operation>
+                <wsdl:operation name="bulkAerCloudProvision">
+			<wsdl:input message="tns:BulkAerCloudProvisionRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkAerCloudProvisionResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDeviceDetail">
+			<wsdl:input message="tns:GetDeviceDetailRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:GetDeviceDetailResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="queryDeviceDetail">
+			<wsdl:input message="tns:QueryDeviceRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:QueryDeviceResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDeviceNetworkStatus">
+			<wsdl:input message="tns:GetDeviceNetworkStatusRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:GetDeviceNetworkStatusResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="queryDeviceNetworkStatus">
+			<wsdl:input message="tns:QueryDeviceNetworkRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:QueryDeviceNetworkResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDeviceLocation">
+			<wsdl:input message="tns:GetDeviceLocationRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:GetDeviceLocationResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="reprovision">
+			<wsdl:input message="tns:ReprovisionRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:ReprovisionResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkReprovision">
+			<wsdl:input message="tns:BulkReprovisionRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkReprovisionResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="startBilling">
+			<wsdl:input message="tns:StartBillingRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:StartBillingResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkStartBilling">
+			<wsdl:input message="tns:BulkStartBillingRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkStartBillingResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="swapSubscription">
+			<wsdl:input message="tns:SwapSubscriptionRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:SwapSubscriptionResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="swapDevice">
+			<wsdl:input message="tns:SwapDeviceRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:SwapDeviceResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="suspend">
+			<wsdl:input message="tns:SuspendRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:SuspendResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkSuspend">
+			<wsdl:input message="tns:BulkSuspendRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkSuspendResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="retire">
+			<wsdl:input message="tns:RetireRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:RetireResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkRetire">
+			<wsdl:input message="tns:BulkRetireRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkRetireResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unsuspend">
+			<wsdl:input message="tns:UnsuspendRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:UnsuspendResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkUnsuspend">
+			<wsdl:input message="tns:BulkUnsuspendRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkUnsuspendResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDeviceAttr">
+			<wsdl:input message="tns:UpdateDeviceAttrRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:UpdateDeviceAttrResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkUpdateDeviceAttr">
+			<wsdl:input message="tns:BulkUpdateDeviceAttrRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkUpdateDeviceAttrResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getRatePlan">
+			<wsdl:input message="tns:GetRatePlanRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:GetRatePlanResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getServiceName">
+			<wsdl:input message="tns:GetServiceNameRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:GetServiceNameResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAvailableDeviceNumbers">
+			<wsdl:input message="tns:GetAvailableDeviceNumbersRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:GetAvailableDeviceNumbersResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="clearDeviceRegistration">
+			<wsdl:input message="tns:ClearDeviceRegistrationRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:ClearDeviceRegistrationResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getBulkServiceStatus">
+			<wsdl:input message="tns:GetBulkServiceStatusRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:GetBulkServiceStatusResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="trafficPolicy">
+			<wsdl:input message="tns:TrafficPolicyRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:TrafficPolicyResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkTrafficPolicy">
+			<wsdl:input message="tns:BulkTrafficPolicyRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkTrafficPolicyResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="blockTraffic">
+			<wsdl:input message="tns:BlockTrafficRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BlockTrafficResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkBlockTraffic">
+			<wsdl:input message="tns:BulkBlockTrafficRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:BulkBlockTrafficResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="provisionDevice">
+			<wsdl:input message="tns:ProvisionDeviceRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:ProvisionDeviceResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDeviceState">
+			<wsdl:input message="tns:UpdateDeviceStateRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:UpdateDeviceResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="changeDeviceRatePlan">
+			<wsdl:input message="tns:ChangeDeviceRatePlanRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:UpdateDeviceResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="changeDeviceServiceProfile">
+			<wsdl:input message="tns:ChangeDeviceServiceProfileRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:UpdateDeviceResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDeviceAttributes">
+			<wsdl:input message="tns:UpdateDeviceAttributesRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:UpdateDeviceResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDeviceTraffic">
+			<wsdl:input message="tns:UpdateDeviceTrafficRequest">
+			</wsdl:input>
+			<wsdl:output message="tns:UpdateDeviceResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		
+	</wsdl:portType>
+	<wsdl:binding name="AerAdminBinding" type="tns:AerAdminPortType">
+		<wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="activate">
+			<wsdlsoap:operation soapAction="activate" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="swapSubscription">
+			<wsdlsoap:operation soapAction="swapSubscription" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkActivate">
+			<wsdlsoap:operation soapAction="bulkActivate" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="cancel">
+			<wsdlsoap:operation soapAction="cancel" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkCancel">
+			<wsdlsoap:operation soapAction="bulkCancel" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="changeRatePlan">
+			<wsdlsoap:operation soapAction="changeRatePlan" style="document" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkChangeRatePlan">
+			<wsdlsoap:operation soapAction="bulkChangeRatePlan" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="changeServiceName">
+			<wsdlsoap:operation soapAction="changeServiceName" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkChangeServiceName">
+			<wsdlsoap:operation soapAction="bulkChangeServiceName" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="heartBeat">
+			<wsdlsoap:operation soapAction="heartBeat" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="provision">
+			<wsdlsoap:operation soapAction="provision" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+                <wsdl:operation name="aercloudProvision">
+			<wsdlsoap:operation soapAction="aercloudProvision" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkProvision">
+			<wsdlsoap:operation soapAction="bulkProvision" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+                <wsdl:operation name="bulkAerCloudProvision">
+			<wsdlsoap:operation soapAction="bulkAerCloudProvision" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDeviceDetail">
+			<wsdlsoap:operation soapAction="getDeviceDetail" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="queryDeviceDetail">
+			<wsdlsoap:operation soapAction="queryDeviceDetail" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDeviceNetworkStatus">
+			<wsdlsoap:operation soapAction="getDeviceNetworkStatus" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="queryDeviceNetworkStatus">
+			<wsdlsoap:operation soapAction="queryDeviceNetworkStatus" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDeviceLocation">
+			<wsdlsoap:operation soapAction="getDeviceLocation" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="reprovision">
+			<wsdlsoap:operation soapAction="reprovision" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkReprovision">
+			<wsdlsoap:operation soapAction="bulkReprovision" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="startBilling">
+			<wsdlsoap:operation soapAction="startBilling" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkStartBilling">
+			<wsdlsoap:operation soapAction="bulkStartBilling" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="suspend">
+			<wsdlsoap:operation soapAction="suspend" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkSuspend">
+			<wsdlsoap:operation soapAction="bulkSuspend" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="retire">
+			<wsdlsoap:operation soapAction="retire" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkRetire">
+			<wsdlsoap:operation soapAction="bulkRetire" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="unsuspend">
+			<wsdlsoap:operation soapAction="unsuspend" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkUnsuspend">
+			<wsdlsoap:operation soapAction="bulkUnsuspend" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDeviceAttr">
+			<wsdlsoap:operation soapAction="updateDeviceAttr" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkUpdateDeviceAttr">
+			<wsdlsoap:operation soapAction="bulkUpdateDeviceAttr" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getServiceName">
+			<wsdlsoap:operation soapAction="getServiceName" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAvailableDeviceNumbers">
+			<wsdlsoap:operation soapAction="getAvailableDeviceNumbers" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getRatePlan">
+			<wsdlsoap:operation soapAction="getRatePlan" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="clearDeviceRegistration">
+			<wsdlsoap:operation soapAction="clearDeviceRegistration" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getBulkServiceStatus">
+			<wsdlsoap:operation soapAction="getBulkServiceStatus" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="trafficPolicy">
+			<wsdlsoap:operation soapAction="trafficPolicy" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkTrafficPolicy">
+			<wsdlsoap:operation soapAction="bulkTrafficPolicy" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="blockTraffic">
+			<wsdlsoap:operation soapAction="blockTraffic" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="bulkBlockTraffic">
+			<wsdlsoap:operation soapAction="bulkBlockTraffic" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>		
+		<wsdl:operation name="provisionDevice">
+			<wsdlsoap:operation soapAction="provisionDevice" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="swapDevice">
+			<wsdlsoap:operation soapAction="swapDevice" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDeviceState">
+			<wsdlsoap:operation soapAction="updateDeviceState" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="changeDeviceRatePlan">
+			<wsdlsoap:operation soapAction="changeDeviceRatePlan" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="changeDeviceServiceProfile">
+			<wsdlsoap:operation soapAction="changeDeviceServiceProfile" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDeviceAttributes">
+			<wsdlsoap:operation soapAction="updateDeviceAttributes" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="updateDeviceTraffic">
+			<wsdlsoap:operation soapAction="updateDeviceTraffic" />
+			<wsdl:input>
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		</wsdl:binding>
+	<wsdl:service name="AerAdminService">
+		<wsdl:port name="AerAdminPort" binding="tns:AerAdminBinding">
+			<wsdlsoap:address location="http://aeradminapi.aeris.com:80/AerAdmin_WS_5_0/ws" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

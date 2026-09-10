@@ -1,0 +1,264 @@
+generated: '2026-09-10'
+method: derived
+source: Derived from the components.schemas and id-reference fields of the 28 first-party OpenAPI definitions in
+  openapi/ (496 schema definitions, 459 distinct), cross-read against the resource paths and the IoT Accelerator
+  REST API article.
+summary:
+  specs_analysed: 28
+  schemas_analysed: 496
+  distinct_schemas: 459
+  note: 'The estate has no single shared component library: each service ships its own schemas and its own Error/Problem
+    type, so the same real-world entity is modelled several times under different names. The graph below is the
+    domain model as it is actually addressed by paths and id fields, not a normalized schema.'
+identity:
+  primary_key_types:
+  - IMSI
+  - ICCID
+  - MSISDN
+  - EID
+  note: 'Subscriptions are addressed polymorphically: most subscription paths take a subscription-id-type (IMSI,
+    ICCID or MSISDN) plus a subscription-id, rather than an opaque surrogate key. The AerAdmin SOAP surface additionally
+    addresses devices by MEID and accountID.'
+  tenancy:
+  - organizationId
+  - companyId
+  - operatorId
+  - ownerOrganizationId
+  tenancy_note: organizationId and companyId are the tenancy discriminators and appear on 43 schemas between them.
+    The JWT carries organization_ids and enterprise_group_ids claims that scope every request; a 404 on a valid
+    identifier usually means it is outside the caller organization.
+entities:
+- name: Organization
+  aliases:
+  - Enterprise
+  - Company
+  id_fields:
+  - organizationId
+  - companyId
+  - ownerOrganizationId
+  spec: openapi/aeris-enterprise-management-api-openapi.yaml
+  note: The tenancy root. Everything else hangs off it.
+- name: Subscription
+  id_fields:
+  - subscription-id (IMSI|ICCID|MSISDN)
+  spec: openapi/aeris-mds-esb-subscription-management-openapi.yaml
+  note: The central entity of the platform — a connectivity subscription on a SIM.
+- name: Device
+  aliases:
+  - eUICC
+  id_fields:
+  - euiccId
+  - iccId
+  - EID
+  spec: openapi/aeris-subscription-device-api-openapi.yaml
+- name: SubscriptionPackage
+  id_fields:
+  - subscriptionPackageId
+  spec: openapi/aeris-enterprise-management-api-openapi.yaml
+- name: SimSpecification
+  id_fields:
+  - simSpecificationId
+  - specificationId
+  - profileSpecificationId
+  - formSpecificationId
+  spec: openapi/aeris-sim-specification-management-api-openapi.yaml
+- name: Order
+  id_fields:
+  - requestId
+  - subscription_request_id
+  spec: openapi/aeris-operator-order-management-api-openapi.yaml
+  note: SIM stock orders, SIM orders, eUICC stock orders, eUICC orders and subscription profile stock orders.
+- name: CustomField
+  id_fields:
+  - id
+  spec: openapi/aeris-subscription-custom-fields-api-openapi.yaml
+  note: User-defined key-value pairs attached to subscriptions; the metadata mechanism of the platform.
+- name: LocalizationTable
+  id_fields:
+  - localizationTableId
+  - localeId
+  spec: openapi/aeris-euicc-setup-api-openapi.yaml
+- name: EuiccAgreement
+  id_fields:
+  - euiccAgreementId
+  - smsrId
+  spec: openapi/aeris-euicc-setup-api-openapi.yaml
+- name: ActivationCode
+  id_fields:
+  - id
+  spec: openapi/aeris-euicc-setup-api-openapi.yaml
+- name: OperatorNetwork
+  id_fields:
+  - operatorNetworkId
+  - operatorId
+  spec: openapi/aeris-resource-inventory-api-openapi.yaml
+  note: APNs, PDP/ESM contexts and QoS profiles, roaming profiles (2G/3G and 4G), network nodes.
+- name: NumberScheme
+  id_fields:
+  - numberSchemeId
+  - poolId
+  spec: openapi/aeris-subscription-number-management-api-openapi.yaml
+  note: IMSI ranges, MSISDN pools and MSISDN ranges.
+- name: Ruleset
+  id_fields:
+  - id
+  spec: openapi/aeris-business-automation-api-openapi.yaml
+  note: Conditions (ImsiLock, SharedBundleUsage, DataUsage, SmsUsage, NetworkEvent, NetworkAgreement, TimeBased)
+    that fire TriggeredActions.
+- name: TriggeredAction
+  spec: openapi/aeris-business-automation-api-openapi.yaml
+- name: SharedBundle
+  spec: openapi/aeris-shared-bundle-api-openapi.yaml
+- name: Purchase
+  id_fields:
+  - purchase_id
+  - product_id
+  spec: openapi/aeris-consumer-connectivity-openapi.yaml
+  note: The only surface in the estate with money movement, and the only one with a refund operation.
+- name: Report
+  aliases:
+  - Invoice
+  - Usage
+  id_fields:
+  - jobId
+  spec: openapi/aeris-business-analytics-report-api-openapi.yaml
+- name: SignallingEvent
+  spec: openapi/aeris-subscription-signalling-events-api-openapi.yaml
+  note: The xDR surface — per-subscription signalling events and aggregated usage.
+- name: Incident
+  aliases:
+  - ServiceRequest
+  id_fields:
+  - incident_id
+  - serviceRequestId
+  - activity_id
+  spec: openapi/aeris-incidents-external-api-openapi.yaml
+- name: Gateway
+  id_fields:
+  - gatewayId
+  spec: openapi/aeris-watchtower-api-openapi-openapi.yaml
+  note: IoT Watchtower. The only entity in the estate whose writes accept an Idempotency-Key.
+- name: DeviceGroup
+  id_fields:
+  - deviceGroupIds
+  spec: openapi/aeris-watchtower-api-openapi-openapi.yaml
+- name: EnforcementRule
+  aliases:
+  - ProtectionPolicy
+  - EventPolicy
+  - RateLimiter
+  - LocationList
+  id_fields:
+  - enforcementRuleId
+  - protectionPolicyId
+  - policyId
+  - rateLimiterId
+  - locationListId
+  spec: openapi/aeris-watchtower-api-openapi-openapi.yaml
+- name: ServicePlan
+  id_fields:
+  - servicePlanId
+  spec: openapi/aeris-enterprise-management-api-openapi.yaml
+- name: User
+  id_fields:
+  - userId
+  spec: openapi/aeris-enterprise-management-api-openapi.yaml
+relationships:
+- from: Organization
+  to: Subscription
+  type: has_many
+  via: organizationId
+- from: Organization
+  to: SubscriptionPackage
+  type: has_many
+  via: subscriptionPackageId
+- from: Organization
+  to: User
+  type: has_many
+  via: userId
+- from: Organization
+  to: ServicePlan
+  type: has_many
+  via: servicePlanId
+- from: Organization
+  to: SharedBundle
+  type: has_many
+  via: organizationId
+- from: Organization
+  to: Report
+  type: has_many
+  via: companyId
+- from: Subscription
+  to: Device
+  type: belongs_to
+  via: euiccId / iccId
+- from: Subscription
+  to: SubscriptionPackage
+  type: belongs_to
+  via: subscriptionPackageId
+- from: Subscription
+  to: CustomField
+  type: has_many
+  via: subscription-id
+- from: Subscription
+  to: SignallingEvent
+  type: has_many
+  via: subscription-id
+- from: Subscription
+  to: Purchase
+  type: has_many
+  via: subscription-id + company-id
+- from: Subscription
+  to: OperatorNetwork
+  type: belongs_to
+  via: operatorNetworkId
+- from: Device
+  to: EuiccAgreement
+  type: belongs_to
+  via: euiccAgreementId
+- from: Device
+  to: LocalizationTable
+  type: belongs_to
+  via: localizationTableId
+- from: LocalizationTable
+  to: Locale
+  type: has_many
+  via: localeId
+- from: Order
+  to: SimSpecification
+  type: belongs_to
+  via: simSpecificationId
+- from: Order
+  to: Organization
+  type: belongs_to
+  via: organizationId
+- from: Ruleset
+  to: TriggeredAction
+  type: has_many
+  via: ruleset id
+- from: Ruleset
+  to: Subscription
+  type: has_many
+  via: ImsiLockCondition / DataUsageCondition targets
+- from: NumberScheme
+  to: Subscription
+  type: has_many
+  via: IMSI/MSISDN allocation
+- from: Gateway
+  to: DeviceGroup
+  type: has_many
+  via: deviceGroupIds
+- from: DeviceGroup
+  to: EnforcementRule
+  type: has_many
+  via: deviceGroupIds
+- from: Incident
+  to: Organization
+  type: belongs_to
+  via: companyId
+gaps:
+- No shared components library across the 28 contracts — Problem, ErrorResponse and Error are all defined separately.
+- No published object reference documenting id prefixes or formats beyond the 3GPP-native IMSI/ICCID/MSISDN/EID
+  identifiers.
+- The AerAdmin, AerFrame and AerTraffic surfaces have no machine-readable schema at all and are not represented
+  in this graph.

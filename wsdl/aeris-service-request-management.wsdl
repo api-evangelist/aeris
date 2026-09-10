@@ -1,0 +1,279 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='ServiceRequestManagementService' targetNamespace='http://api.dcp.ericsson.net/ServiceRequestManagement' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/ServiceRequestManagement' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/ServiceRequestManagement' version='1.0' xmlns:tns='http://api.dcp.ericsson.net/ServiceRequestManagement' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='QueryServiceRequestActivities'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='serviceRequestId' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryServiceRequestActivitiesResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='activityLog' nillable='true' type='tns:activityLogData'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryServiceRequestAttachments'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='activityLogId' type='xs:string'/>
+      <xs:element minOccurs='0' name='timedOut' type='xs:int'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryServiceRequestAttachmentsResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='attachments' type='tns:attachments'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryServiceRequests'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element minOccurs='0' name='startDate' type='xs:dateTime'/>
+      <xs:element minOccurs='0' name='endDate' type='xs:dateTime'/>
+      <xs:element minOccurs='0' name='serviceRequestId' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryServiceRequestsResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='ServiceRequestResponseData' type='tns:serviceRequestResponseData'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='ServiceRequestAddActivity'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='serviceRequestId' type='xs:string'/>
+      <xs:element name='activitySummary' type='xs:string'/>
+      <xs:element minOccurs='0' name='activityNotes' type='xs:string'/>
+      <xs:element minOccurs='0' name='attachments' type='tns:attachments'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='ServiceRequestAddActivityResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='serviceRequestId' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:complexType name='attachments'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' name='attachment' type='tns:attachmentType'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='attachmentType'>
+    <xs:sequence>
+     <xs:element name='fileName' type='xs:string'/>
+     <xs:element name='attachmentData' ns1:expectedContentTypes='*/*' type='xs:base64Binary' xmlns:ns1='http://www.w3.org/2005/05/xmlmime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='arp'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='tadig' type='xs:string'/>
+     <xs:element name='modifiedTime' type='xs:dateTime'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='serviceRequestResponseData'>
+    <xs:sequence>
+     <xs:element name='serviceRequestId' type='xs:string'/>
+     <xs:element name='serviceRequestSummary' type='xs:string'/>
+     <xs:element minOccurs='0' name='serviceRequestNotes' type='xs:string'/>
+     <xs:element name='serviceRequestStatus' type='tns:serviceRequestStatus'/>
+     <xs:element name='submitDate' type='xs:dateTime'/>
+     <xs:element name='company' type='xs:string'/>
+     <xs:element name='customerNo' type='xs:string'/>
+     <xs:element name='initiatedBy' type='tns:name'/>
+     <xs:element minOccurs='0' name='serviceRequestType' type='xs:string'/>
+     <xs:element minOccurs='0' name='startIMSI' type='xs:string'/>
+     <xs:element minOccurs='0' name='endIMSI' type='xs:string'/>
+     <xs:element minOccurs='0' name='startMSISDN' type='xs:string'/>
+     <xs:element minOccurs='0' name='endMSISDN' type='xs:string'/>
+     <xs:element minOccurs='0' name='numberScheme' type='xs:string'/>
+     <xs:element minOccurs='0' name='serviceContract' type='xs:string'/>
+     <xs:element minOccurs='0' name='serviceContractDescription' type='xs:string'/>
+     <xs:element minOccurs='0' name='subscriptionPackageName' type='xs:string'/>
+     <xs:element minOccurs='0' name='subscriptionPackageDescription' type='xs:string'/>
+     <xs:element minOccurs='0' name='simSpecification' type='xs:string'/>
+     <xs:element minOccurs='0' name='simSpecificationDescription' type='xs:string'/>
+     <xs:element minOccurs='0' name='region' type='xs:string'/>
+     <xs:element minOccurs='0' name='regionDescription' type='xs:string'/>
+     <xs:element minOccurs='0' name='requestedSubcriptionsQuantity' type='xs:int'/>
+     <xs:element minOccurs='0' name='deliveryState' type='tns:deliveryState'/>
+     <xs:element minOccurs='0' name='requiredDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='closedDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='emailToSendSIMDetails' type='xs:string'/>
+     <xs:element minOccurs='0' name='customerContactName' type='xs:string'/>
+     <xs:element minOccurs='0' name='customerContactPhoneNumber' type='xs:string'/>
+     <xs:element minOccurs='0' name='packageMarking' type='xs:string'/>
+     <xs:element minOccurs='0' name='serviceLocationAddress' type='xs:string'/>
+     <xs:element minOccurs='0' name='urgency' type='tns:urgencyType'/>
+     <xs:element minOccurs='0' name='categoryLevel1' type='xs:string'/>
+     <xs:element minOccurs='0' name='categoryLevel2' type='xs:string'/>
+     <xs:element minOccurs='0' name='phoneNumber' type='xs:string'/>
+     <xs:element minOccurs='0' name='emailAddress' type='xs:string'/>
+     <xs:element minOccurs='0' name='newSubscriptionPackageName' type='xs:string'/>
+     <xs:element minOccurs='0' name='newRegion' type='xs:string'/>
+     <xs:element minOccurs='0' name='newCustomerLabel' type='xs:string'/>
+     <xs:element minOccurs='0' name='newTriggerPackage' type='xs:string'/>
+     <xs:element minOccurs='0' name='arp' type='tns:arp'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='name'>
+    <xs:sequence>
+     <xs:element name='firstName' type='xs:string'/>
+     <xs:element name='lastName' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='activityLogData'>
+    <xs:sequence>
+     <xs:element name='activityLogId' type='xs:string'/>
+     <xs:element minOccurs='0' name='activitySummary' type='xs:string'/>
+     <xs:element minOccurs='0' name='activityNotes' type='xs:string'/>
+     <xs:element minOccurs='0' name='submitDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='submittedBy' type='xs:string'/>
+     <xs:element minOccurs='0' name='attachmentNames' type='tns:attachmentNames'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='attachmentNames'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' name='attachmentName' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name='serviceRequestStatus'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Draft'/>
+     <xs:enumeration value='Pending'/>
+     <xs:enumeration value='Waiting Approval'/>
+     <xs:enumeration value='Planning'/>
+     <xs:enumeration value='In Progress'/>
+     <xs:enumeration value='Completed'/>
+     <xs:enumeration value='Rejected'/>
+     <xs:enumeration value='Closed'/>
+     <xs:enumeration value='Canceled'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='deliveryState'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Active'/>
+     <xs:enumeration value='Deactivated'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='urgencyType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='critical'/>
+     <xs:enumeration value='high'/>
+     <xs:enumeration value='medium'/>
+     <xs:enumeration value='low'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </types>
+ <message name='ServiceRequestManagement_QueryServiceRequestAttachments'>
+  <part element='tns:QueryServiceRequestAttachments' name='QueryServiceRequestAttachmentRequest'></part>
+ </message>
+ <message name='ServiceRequestManagement_ServiceRequestAddActivity'>
+  <part element='tns:ServiceRequestAddActivity' name='ServiceRequestAddActivityRequest'></part>
+ </message>
+ <message name='ServiceRequestManagement_QueryServiceRequests'>
+  <part element='tns:QueryServiceRequests' name='QueryServiceRequests'></part>
+ </message>
+ <message name='ServiceRequestManagement_ServiceRequestAddActivityResponse'>
+  <part element='tns:ServiceRequestAddActivityResponse' name='ServiceRequestAddActivityResponse'></part>
+ </message>
+ <message name='ServiceRequestManagement_QueryServiceRequestActivitiesResponse'>
+  <part element='tns:QueryServiceRequestActivitiesResponse' name='QueryServiceRequestActivitiesResponse'></part>
+ </message>
+ <message name='ServiceRequestManagement_QueryServiceRequestActivities'>
+  <part element='tns:QueryServiceRequestActivities' name='QueryServiceRequestActivitiesRequest'></part>
+ </message>
+ <message name='ServiceRequestManagement_QueryServiceRequestAttachmentsResponse'>
+  <part element='tns:QueryServiceRequestAttachmentsResponse' name='QueryServiceRequestAttachmentsResponse'></part>
+ </message>
+ <message name='ServiceRequestManagement_QueryServiceRequestsResponse'>
+  <part element='tns:QueryServiceRequestsResponse' name='QueryServiceRequestsResponse'></part>
+ </message>
+ <portType name='ServiceRequestManagement'>
+  <operation name='QueryServiceRequestActivities' parameterOrder='QueryServiceRequestActivitiesRequest'>
+   <input message='tns:ServiceRequestManagement_QueryServiceRequestActivities'></input>
+   <output message='tns:ServiceRequestManagement_QueryServiceRequestActivitiesResponse'></output>
+  </operation>
+  <operation name='QueryServiceRequestAttachments' parameterOrder='QueryServiceRequestAttachmentRequest'>
+   <input message='tns:ServiceRequestManagement_QueryServiceRequestAttachments'></input>
+   <output message='tns:ServiceRequestManagement_QueryServiceRequestAttachmentsResponse'></output>
+  </operation>
+  <operation name='QueryServiceRequests' parameterOrder='QueryServiceRequests'>
+   <input message='tns:ServiceRequestManagement_QueryServiceRequests'></input>
+   <output message='tns:ServiceRequestManagement_QueryServiceRequestsResponse'></output>
+  </operation>
+  <operation name='ServiceRequestAddActivity' parameterOrder='ServiceRequestAddActivityRequest'>
+   <input message='tns:ServiceRequestManagement_ServiceRequestAddActivity'></input>
+   <output message='tns:ServiceRequestManagement_ServiceRequestAddActivityResponse'></output>
+  </operation>
+ </portType>
+ <binding name='ServiceRequestManagementBinding' type='tns:ServiceRequestManagement'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='QueryServiceRequestActivities'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/ServiceRequestManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryServiceRequestAttachments'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/ServiceRequestManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryServiceRequests'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/ServiceRequestManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='ServiceRequestAddActivity'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/ServiceRequestManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='ServiceRequestManagementService'>
+  <port binding='tns:ServiceRequestManagementBinding' name='ServiceRequestManagementPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/ServiceRequestManagement'/>
+  </port>
+ </service>
+</definitions>

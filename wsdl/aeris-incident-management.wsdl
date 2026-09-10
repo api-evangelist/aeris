@@ -1,0 +1,420 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='IncidentManagementService' targetNamespace='http://api.dcp.ericsson.net/IncidentManagement' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/IncidentManagement' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/IncidentManagement' version='1.0' xmlns:tns='http://api.dcp.ericsson.net/IncidentManagement' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='DetailsQuery'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='incidentID' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='DetailsQuery_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='incidentID' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='DetailsResponse' type='tns:detailsResponse'/>
+   <xs:element name='DetailsResponse_v2' type='tns:detailsResponse_v2'/>
+   <xs:element name='LogIncidentActivity'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='incidentId' type='xs:string'/>
+      <xs:element name='summary' type='xs:string'/>
+      <xs:element minOccurs='0' name='notes' type='xs:string'/>
+      <xs:element minOccurs='0' name='attachments' type='tns:attachments'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='LogIncidentActivityResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='incidentId' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='LogIncidentRequest' type='tns:LogIncidentRequest'/>
+   <xs:element name='LogIncidentResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='incidentId' type='xs:string'/>
+      <xs:element minOccurs='0' name='serviceRequestID' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryCompanySiteDetails'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryCompanySiteDetailsResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='site' nillable='true' type='tns:site'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryIncidentAttachments'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='activityLogId' type='xs:string'/>
+      <xs:element minOccurs='0' name='timedOut' type='xs:int'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryIncidentAttachmentsResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='attachments' type='tns:attachments'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryIncidentCategoryList'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryIncidentCategoryListResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='categoryLevel1' nillable='true' type='tns:categoryLevel1'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='SummaryQuery' type='tns:summary'/>
+   <xs:element name='SummaryResponse' type='tns:summaryResponse'/>
+   <xs:complexType name='summary'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='startDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='endDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='requestID' type='xs:string'/>
+     <xs:element minOccurs='0' name='incidentID' type='xs:string'/>
+     <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='attachments'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' name='attachment' type='tns:attachmentType'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='attachmentType'>
+    <xs:sequence>
+     <xs:element name='fileName' type='xs:string'/>
+     <xs:element name='attachmentData' ns1:expectedContentTypes='*/*' type='xs:base64Binary' xmlns:ns1='http://www.w3.org/2005/05/xmlmime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='categoryLevel1'>
+    <xs:sequence>
+     <xs:element name='name' type='xs:string'/>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='categoryLevel2' nillable='true' type='tns:categoryLevel2'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='categoryLevel2'>
+    <xs:sequence>
+     <xs:element name='name' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='detailsResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='notes' type='xs:string'/>
+     <xs:element minOccurs='0' name='resolution' type='xs:string'/>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='activityLog' nillable='true' type='tns:activityLogData'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='activityLogData'>
+    <xs:sequence>
+     <xs:element name='id' type='xs:string'/>
+     <xs:element minOccurs='0' name='description' type='xs:string'/>
+     <xs:element minOccurs='0' name='detailedDescription' type='xs:string'/>
+     <xs:element minOccurs='0' name='submitDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='submitter' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='detailsResponse_v2'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='notes' type='xs:string'/>
+     <xs:element minOccurs='0' name='resolution' type='xs:string'/>
+     <xs:element name='serviceRequestID' type='xs:string'/>
+     <xs:element minOccurs='0' name='summary' type='xs:string'/>
+     <xs:element minOccurs='0' name='status' type='xs:string'/>
+     <xs:element minOccurs='0' name='statusReason' type='xs:string'/>
+     <xs:element minOccurs='0' name='submitDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='company' type='xs:string'/>
+     <xs:element minOccurs='0' name='site' type='xs:string'/>
+     <xs:element minOccurs='0' name='region' type='xs:string'/>
+     <xs:element minOccurs='0' name='siteGroup' type='xs:string'/>
+     <xs:element minOccurs='0' name='requesterFirstName' type='xs:string'/>
+     <xs:element minOccurs='0' name='requesterLastName' type='xs:string'/>
+     <xs:element minOccurs='0' name='assignedGroup' type='xs:string'/>
+     <xs:element minOccurs='0' name='assignee' type='xs:string'/>
+     <xs:element minOccurs='0' name='targetFixTime' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='resolvedDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='urgency' type='xs:string'/>
+     <xs:element minOccurs='0' name='impact' type='xs:string'/>
+     <xs:element minOccurs='0' name='categoryLevel1' type='xs:string'/>
+     <xs:element minOccurs='0' name='categoryLevel2' type='xs:string'/>
+     <xs:element minOccurs='0' name='lastModifiedDate' type='xs:dateTime'/>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='activityLog' nillable='true' type='tns:activityLogData'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='site'>
+    <xs:sequence>
+     <xs:element name='siteName' type='xs:string'/>
+     <xs:element minOccurs='0' name='siteAddress' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='summaryResponseData'>
+    <xs:sequence>
+     <xs:element name='serviceRequestID' type='xs:string'/>
+     <xs:element minOccurs='0' name='incidentID' type='xs:string'/>
+     <xs:element minOccurs='0' name='summary' type='xs:string'/>
+     <xs:element minOccurs='0' name='status' type='xs:string'/>
+     <xs:element minOccurs='0' name='statusReason' type='xs:string'/>
+     <xs:element minOccurs='0' name='submitDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='company' type='xs:string'/>
+     <xs:element minOccurs='0' name='site' type='xs:string'/>
+     <xs:element minOccurs='0' name='region' type='xs:string'/>
+     <xs:element minOccurs='0' name='siteGroup' type='xs:string'/>
+     <xs:element minOccurs='0' name='requesterFirstName' type='xs:string'/>
+     <xs:element minOccurs='0' name='requesterLastName' type='xs:string'/>
+     <xs:element minOccurs='0' name='assignedGroup' type='xs:string'/>
+     <xs:element minOccurs='0' name='assignee' type='xs:string'/>
+     <xs:element minOccurs='0' name='targetFixTime' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='resolvedDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='urgency' type='xs:string'/>
+     <xs:element minOccurs='0' name='impact' type='xs:string'/>
+     <xs:element minOccurs='0' name='categoryLevel1' type='xs:string'/>
+     <xs:element minOccurs='0' name='categoryLevel2' type='xs:string'/>
+     <xs:element minOccurs='0' name='lastModifiedDate' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='LogIncidentRequest'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+     <xs:element name='summary' type='xs:string'/>
+     <xs:element name='urgency' type='tns:urgencyType'/>
+     <xs:element minOccurs='0' name='impact' type='tns:impactType'/>
+     <xs:element name='categoryLevel1' type='xs:string'/>
+     <xs:element minOccurs='0' name='categoryLevel2' type='xs:string'/>
+     <xs:element minOccurs='0' name='notes' type='xs:string'/>
+     <xs:element name='site' type='xs:string'/>
+     <xs:element minOccurs='0' name='attachments' type='tns:attachments'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='summaryResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='responseData' nillable='true' type='tns:summaryResponseData'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name='urgencyType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='critical'/>
+     <xs:enumeration value='high'/>
+     <xs:enumeration value='medium'/>
+     <xs:enumeration value='low'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='impactType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Extensive/Widespread'/>
+     <xs:enumeration value='Significant/Large'/>
+     <xs:enumeration value='Moderate/Limited'/>
+     <xs:enumeration value='Minor/Localized'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </types>
+ <message name='IncidentManagement_QueryCompanySiteDetailsResponse'>
+  <part element='tns:QueryCompanySiteDetailsResponse' name='QueryCompanySiteDetailsResponse'></part>
+ </message>
+ <message name='IncidentManagement_detailsResponse'>
+  <part element='tns:DetailsResponse' name='detailResponse'></part>
+ </message>
+ <message name='IncidentManagement_summary'>
+  <part element='tns:SummaryQuery' name='summary'></part>
+ </message>
+ <message name='IncidentManagement_details'>
+  <part element='tns:DetailsQuery' name='details'></part>
+ </message>
+ <message name='IncidentManagement_LogIncidentActivity'>
+  <part element='tns:LogIncidentActivity' name='LogIncidentActivityRequest'></part>
+ </message>
+ <message name='IncidentManagement_summaryResponse'>
+  <part element='tns:SummaryResponse' name='summaryResponse'></part>
+ </message>
+ <message name='IncidentManagement_LogIncidentResponse'>
+  <part element='tns:LogIncidentResponse' name='LogIncidentResponse'></part>
+ </message>
+ <message name='IncidentManagement_QueryIncidentCategoryList'>
+  <part element='tns:QueryIncidentCategoryList' name='QueryIncidentCategoryList'></part>
+ </message>
+ <message name='IncidentManagement_LogIncident'>
+  <part element='tns:LogIncidentRequest' name='LogIncidentRequest'></part>
+ </message>
+ <message name='IncidentManagement_QueryCompanySiteDetails'>
+  <part element='tns:QueryCompanySiteDetails' name='QueryCompanySiteDetails'></part>
+ </message>
+ <message name='IncidentManagement_QueryIncidentAttachmentsResponse'>
+  <part element='tns:QueryIncidentAttachmentsResponse' name='QueryIncidentAttachmentsResponse'></part>
+ </message>
+ <message name='IncidentManagement_detailsV2'>
+  <part element='tns:DetailsQuery_v2' name='details_v2'></part>
+ </message>
+ <message name='IncidentManagement_detailsV2Response'>
+  <part element='tns:DetailsResponse_v2' name='detailResponse_v2'></part>
+ </message>
+ <message name='IncidentManagement_QueryIncidentCategoryListResponse'>
+  <part element='tns:QueryIncidentCategoryListResponse' name='QueryIncidentCategoryListResponse'></part>
+ </message>
+ <message name='IncidentManagement_QueryIncidentAttachments'>
+  <part element='tns:QueryIncidentAttachments' name='QueryIncidentAttachmentRequest'></part>
+ </message>
+ <message name='IncidentManagement_LogIncidentActivityResponse'>
+  <part element='tns:LogIncidentActivityResponse' name='LogIncidentActivityResponse'></part>
+ </message>
+ <portType name='IncidentManagement'>
+  <operation name='LogIncident' parameterOrder='LogIncidentRequest'>
+   <input message='tns:IncidentManagement_LogIncident'></input>
+   <output message='tns:IncidentManagement_LogIncidentResponse'></output>
+  </operation>
+  <operation name='LogIncidentActivity' parameterOrder='LogIncidentActivityRequest'>
+   <input message='tns:IncidentManagement_LogIncidentActivity'></input>
+   <output message='tns:IncidentManagement_LogIncidentActivityResponse'></output>
+  </operation>
+  <operation name='QueryCompanySiteDetails' parameterOrder='QueryCompanySiteDetails'>
+   <input message='tns:IncidentManagement_QueryCompanySiteDetails'></input>
+   <output message='tns:IncidentManagement_QueryCompanySiteDetailsResponse'></output>
+  </operation>
+  <operation name='QueryIncidentAttachments' parameterOrder='QueryIncidentAttachmentRequest'>
+   <input message='tns:IncidentManagement_QueryIncidentAttachments'></input>
+   <output message='tns:IncidentManagement_QueryIncidentAttachmentsResponse'></output>
+  </operation>
+  <operation name='QueryIncidentCategoryList' parameterOrder='QueryIncidentCategoryList'>
+   <input message='tns:IncidentManagement_QueryIncidentCategoryList'></input>
+   <output message='tns:IncidentManagement_QueryIncidentCategoryListResponse'></output>
+  </operation>
+  <operation name='details' parameterOrder='details'>
+   <input message='tns:IncidentManagement_details'></input>
+   <output message='tns:IncidentManagement_detailsResponse'></output>
+  </operation>
+  <operation name='detailsV2' parameterOrder='details_v2'>
+   <input message='tns:IncidentManagement_detailsV2'></input>
+   <output message='tns:IncidentManagement_detailsV2Response'></output>
+  </operation>
+  <operation name='summary' parameterOrder='summary'>
+   <input message='tns:IncidentManagement_summary'></input>
+   <output message='tns:IncidentManagement_summaryResponse'></output>
+  </operation>
+ </portType>
+ <binding name='IncidentManagementBinding' type='tns:IncidentManagement'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='LogIncident'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/IncidentManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='LogIncidentActivity'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/IncidentManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryCompanySiteDetails'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/IncidentManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryIncidentAttachments'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/IncidentManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryIncidentCategoryList'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/IncidentManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='details'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/IncidentManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='detailsV2'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/IncidentManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='summary'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/IncidentManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='IncidentManagementService'>
+  <port binding='tns:IncidentManagementBinding' name='IncidentManagementPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/IncidentManagement'/>
+  </port>
+ </service>
+</definitions>

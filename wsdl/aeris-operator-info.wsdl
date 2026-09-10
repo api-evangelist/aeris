@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='OperatorInfoService' targetNamespace='http://api.dcp.ericsson.net/OperatorInfo' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/OperatorInfo' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/OperatorInfo' version='1.0' xmlns:tns='http://api.dcp.ericsson.net/OperatorInfo' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='QueryCountries'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryCountriesResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='country' nillable='true' type='tns:CountryData'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryOperators'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryOperatorsResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='operator' nillable='true' type='tns:OperatorData'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:complexType name='CountryData'>
+    <xs:sequence>
+     <xs:element name='name' type='xs:string'/>
+     <xs:element name='code' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='OperatorData'>
+    <xs:sequence>
+     <xs:element name='name' type='xs:string'/>
+     <xs:element name='code' type='xs:string'/>
+     <xs:element name='countryCode' type='xs:string'/>
+     <xs:element minOccurs='0' name='callingCode' type='xs:string'/>
+     <xs:element minOccurs='0' name='countryName' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ <message name='OperatorInfo_QueryCountries'>
+  <part element='tns:QueryCountries' name='queryCountries'></part>
+ </message>
+ <message name='OperatorInfo_QueryOperatorsResponse'>
+  <part element='tns:QueryOperatorsResponse' name='queryOperatorsResponse'></part>
+ </message>
+ <message name='OperatorInfo_QueryCountriesResponse'>
+  <part element='tns:QueryCountriesResponse' name='queryCountriesResponse'></part>
+ </message>
+ <message name='OperatorInfo_QueryOperators'>
+  <part element='tns:QueryOperators' name='queryOperators'></part>
+ </message>
+ <portType name='OperatorInfo'>
+  <operation name='QueryCountries' parameterOrder='queryCountries'>
+   <input message='tns:OperatorInfo_QueryCountries'></input>
+   <output message='tns:OperatorInfo_QueryCountriesResponse'></output>
+  </operation>
+  <operation name='QueryOperators' parameterOrder='queryOperators'>
+   <input message='tns:OperatorInfo_QueryOperators'></input>
+   <output message='tns:OperatorInfo_QueryOperatorsResponse'></output>
+  </operation>
+ </portType>
+ <binding name='OperatorInfoBinding' type='tns:OperatorInfo'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='QueryCountries'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/OperatorInfo/QueryCountries'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryOperators'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/OperatorInfo/QueryOperators'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='OperatorInfoService'>
+  <port binding='tns:OperatorInfoBinding' name='OperatorInfoPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/OperatorInfo'/>
+  </port>
+ </service>
+</definitions>

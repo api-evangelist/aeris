@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='TriggerAlarmsService' targetNamespace='http://api.dcp.ericsson.net/TriggerAlarms' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/TriggerAlarms' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/TriggerAlarms' version='1.0' xmlns:tns='http://api.dcp.ericsson.net/TriggerAlarms' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='ClearAlarmStatus'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' name='alarmId' type='xs:string'/>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='ClearAlarmStatusResponse' type='tns:changeStatusResult'/>
+   <xs:element name='QueryTriggerAlarms'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element minOccurs='0' name='alarmFilter' type='tns:filterValues'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggerAlarmsResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='alarms' type='tns:alarms'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggerAlarmsSummary'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element minOccurs='0' name='alarmFilter' type='tns:filterValues'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggerAlarmsSummaryResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='alarmsSummaries' type='tns:alarmsSummaries'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:complexType name='alarm'>
+    <xs:sequence>
+     <xs:element name='id' type='xs:string'/>
+     <xs:element name='triggerId' type='xs:int'/>
+     <xs:element minOccurs='0' name='triggerDescription' type='xs:string'/>
+     <xs:element minOccurs='0' name='imsi' type='xs:string'/>
+     <xs:element minOccurs='0' name='msisdn' type='xs:string'/>
+     <xs:element minOccurs='0' name='thresholdValue' type='xs:string'/>
+     <xs:element minOccurs='0' name='timestamp' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='alarmType' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='alarmsSummaries'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='alarmsSummary' nillable='true' type='tns:alarmsSummary'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='alarmsSummary'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='triggerId' type='xs:int'/>
+     <xs:element minOccurs='0' name='description' type='xs:string'/>
+     <xs:element minOccurs='0' name='count' type='xs:int'/>
+     <xs:element minOccurs='0' name='latest' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='alarms'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='alarm' nillable='true' type='tns:alarm'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name='filterValues'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='alertTriggers'/>
+     <xs:enumeration value='actionTriggers'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='changeStatusResult'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Success'/>
+     <xs:enumeration value='DoesNotExist'/>
+     <xs:enumeration value='DoesNotBelong'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </types>
+ <message name='TriggerAlarms_QueryTriggerAlarmsResponse'>
+  <part element='tns:QueryTriggerAlarmsResponse' name='QueryTriggerAlarmsResponse'></part>
+ </message>
+ <message name='TriggerAlarms_QueryTriggerAlarms'>
+  <part element='tns:QueryTriggerAlarms' name='QueryTriggerAlarms'></part>
+ </message>
+ <message name='TriggerAlarms_ClearAlarmStatus'>
+  <part element='tns:ClearAlarmStatus' name='ClearAlarmStatus'></part>
+ </message>
+ <message name='TriggerAlarms_ClearAlarmStatusResponse'>
+  <part element='tns:ClearAlarmStatusResponse' name='ClearAlarmStatusResponse'></part>
+ </message>
+ <message name='TriggerAlarms_QueryTriggerAlarmsSummaryResponse'>
+  <part element='tns:QueryTriggerAlarmsSummaryResponse' name='QueryTriggerAlarmsSummaryResponse'></part>
+ </message>
+ <message name='TriggerAlarms_QueryTriggerAlarmsSummary'>
+  <part element='tns:QueryTriggerAlarmsSummary' name='QueryTriggerAlarmsSummary'></part>
+ </message>
+ <portType name='TriggerAlarms'>
+  <operation name='ClearAlarmStatus' parameterOrder='ClearAlarmStatus'>
+   <input message='tns:TriggerAlarms_ClearAlarmStatus'></input>
+   <output message='tns:TriggerAlarms_ClearAlarmStatusResponse'></output>
+  </operation>
+  <operation name='QueryTriggerAlarms' parameterOrder='QueryTriggerAlarms'>
+   <input message='tns:TriggerAlarms_QueryTriggerAlarms'></input>
+   <output message='tns:TriggerAlarms_QueryTriggerAlarmsResponse'></output>
+  </operation>
+  <operation name='QueryTriggerAlarmsSummary' parameterOrder='QueryTriggerAlarmsSummary'>
+   <input message='tns:TriggerAlarms_QueryTriggerAlarmsSummary'></input>
+   <output message='tns:TriggerAlarms_QueryTriggerAlarmsSummaryResponse'></output>
+  </operation>
+ </portType>
+ <binding name='TriggerAlarmsBinding' type='tns:TriggerAlarms'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='ClearAlarmStatus'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerAlarms/ClearAlarmStatus'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryTriggerAlarms'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerAlarms/QueryTriggerAlarms'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryTriggerAlarmsSummary'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerAlarms/QueryTriggerAlarmsSummary'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='TriggerAlarmsService'>
+  <port binding='tns:TriggerAlarmsBinding' name='TriggerAlarmsPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/TriggerAlarms'/>
+  </port>
+ </service>
+</definitions>

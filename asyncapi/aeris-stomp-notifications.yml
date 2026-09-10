@@ -1,0 +1,103 @@
+generated: '2026-09-10'
+method: searched
+source: https://iotdeveloper.aeris.net/hc/en-us/articles/25348570968732-Working-with-STOMP-notifications, https://iotdeveloper.aeris.net/hc/en-us/articles/25348558283676-Service-portal-API-setup-for-STOMP-trigger-notifications,
+  https://iotdeveloper.aeris.net/hc/en-us/articles/25348557814940-Get-subscription-updates-notifications, https://iotdeveloper.aeris.net/hc/en-us/articles/25348524721180-Get-real-time-subscription-network-activity,
+  https://support.aeris.net/hc/en-us/articles/4403148278679-Data-Stream-from-AerSight
+asyncapi_published: false
+note: Aeris runs real event surfaces but publishes no AsyncAPI document for any of them. This file is the honest
+  catalogue of what the event surface actually is; no AsyncAPI was fabricated.
+event_surfaces:
+- name: IoT Accelerator STOMP push notifications
+  protocol: STOMP 1.2 over secure WebSockets
+  transport: wss, TLS, port 443
+  spec_reference: https://stomp.github.io/stomp-specification-1.2.html
+  auth:
+    style: broker credentials
+    credentials:
+    - username
+    - password
+    - queueName
+    provisioning: Issued to the enterprise user during onboarding by the Operator Service Desk; not self-serve.
+  addressing:
+    queue_convention: dcp.<organizationId>.<serviceName>.<version>.<service specific queue name>
+    note: organizationId (also called companyId) identifies the organizational unit of the queue; serviceName and
+      version are set by the specific service.
+  event_categories:
+  - subscription update notifications
+  - real-time subscription network activity
+  - one-time trigger events
+  - eUICC profile localization events
+  configuration: Trigger notifications are configured through the Service Portal and the Business Automation API
+    (rulesets and triggered-actions).
+  client: Aeris states a sample STOMP client is provided in the Developer Portal. Customers must implement a standard
+    STOMP client themselves.
+  gated: true
+  gated_note: The event catalogue itself — the message names and payload schemas per category — is documented in
+    prose across the tutorial articles rather than in a machine-readable contract. No channel/message schema is
+    published.
+- name: AerSight data stream
+  protocol: CloudEvents 1.0 envelopes over Google Cloud Pub/Sub, landing in BigQuery
+  cadence: every 5 minutes
+  deployment: Installed into the customer's own GCP environment; data lands in the BigQuery dataset aersight_acp_ds.
+  envelope:
+    specversion: '1.0'
+    source: aeris/acp/ipstream
+    type: ipstream.data
+    datacontenttype: text/csv
+    attributes:
+    - data
+    - id
+    - source
+    - specversion
+    - type
+    - datacontenttype
+    - time
+  payload_fields:
+  - device_id
+  - imsi
+  - msisdn
+  - primary_min
+  - meid
+  - technology
+  - session_id
+  - session_start_time
+  - source_ip
+  - network_protocol
+  - destination_ip
+  - uplink_data
+  - downlink_data
+  - received_time
+  - eventdate
+  - matched_ip
+  - application_protocol
+  - source_port
+  - destination_port
+  - product_name
+  - destination_host
+  source: https://support.aeris.net/hc/en-us/articles/4403148278679-Data-Stream-from-AerSight
+- name: AerFrame notification channels
+  protocol: HTTP callback (webhook) plus long-poll
+  resources:
+  - POST /registration/v2/{accountId}/applications
+  - POST /notificationchannel/v2/{accountId}/channels
+  - /notificationchannel/v2/{accountId}/channels/{channelId}/callback
+  longpoll_host: https://longpoll.aerframe.aeris.com
+  events:
+  - MT-SMS delivery notifications
+  - inbound MO-SMS receipt
+  source: https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API
+  note: 'The closest thing Aeris has to a conventional webhook surface: an application registers, creates a notification
+    channel, and receives callbacks. Base URL confirmed in the first-party SDK aerisapisdk (aerisconfig.py).'
+- name: IoT Accelerator TriggerAlarms / TriggerPackageManagement (SOAP)
+  protocol: SOAP
+  documents:
+  - wsdl/aeris-trigger-alarms.wsdl
+  - wsdl/aeris-trigger-package-management.wsdl
+  operations: 17
+  status: deprecated
+  note: The legacy configuration surface for the same trigger/alarm events now driven by the Business Automation
+    REST API.
+gaps:
+- No AsyncAPI document for the STOMP surface, the AerSight stream or the AerFrame notification channels.
+- No published message schemas or event catalogue in machine-readable form.
+- STOMP broker credentials are issued manually during onboarding, so the event surface cannot be reached self-serve.

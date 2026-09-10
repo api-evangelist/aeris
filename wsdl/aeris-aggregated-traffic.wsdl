@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='AggregatedTrafficService' targetNamespace='http://api.dcp.ericsson.net/AggregatedTraffic' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/AggregatedTraffic' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/AggregatedTraffic' version='1.0' xmlns:tns='http://api.dcp.ericsson.net/AggregatedTraffic' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='Query'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='aggregateOn' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryAverageTrafficUsageHistory'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='startDate' type='xs:date'/>
+      <xs:element name='endDate' type='xs:date'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryAverageTrafficUsageHistoryResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='averageTrafficUsage' nillable='true' type='tns:averageTrafficUsageData'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='aggregatedOn' type='xs:string'/>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='traffic' nillable='true' type='tns:trafficData'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryResponse_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='aggregatedOn' type='xs:string'/>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='traffic' nillable='true' type='tns:trafficData_v2'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTopCountryTrafficUsage'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='trafficType' type='xs:string'/>
+      <xs:element name='resultLimit' type='xs:string'/>
+      <xs:element name='startDate' type='xs:date'/>
+      <xs:element name='endDate' type='xs:date'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTopCountryTrafficUsageResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='countryTrafficUsageData' nillable='true' type='tns:countryTrafficUsageData'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTopSubscriberTrafficUsage'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='trafficType' type='xs:string'/>
+      <xs:element name='resultLimit' type='xs:string'/>
+      <xs:element name='startDate' type='xs:date'/>
+      <xs:element name='endDate' type='xs:date'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTopSubscriberTrafficUsageResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='subscriberTrafficUsageData' nillable='true' type='tns:subscriberTrafficUsageData'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTrafficUsageHistory'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='startDate' type='xs:date'/>
+      <xs:element name='endDate' type='xs:date'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTrafficUsageHistoryResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' minOccurs='0' name='trafficUsage' nillable='true' type='tns:trafficUsageData'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='Query_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='aggregateOn' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:complexType name='trafficUsageData'>
+    <xs:sequence>
+     <xs:element name='aggregationDate' type='xs:date'/>
+     <xs:element name='gprsVolume' type='xs:string'/>
+     <xs:element name='smsVolume' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='trafficData_v2'>
+    <xs:sequence>
+     <xs:element name='aggregatedOn' type='xs:string'/>
+     <xs:element minOccurs='0' name='numberOfLUs' type='xs:long'/>
+     <xs:element minOccurs='0' name='activePDPContexts' type='xs:long'/>
+     <xs:element minOccurs='0' name='gprs' type='tns:gprs_v2'/>
+     <xs:element minOccurs='0' name='smsMo' type='tns:sms_v2'/>
+     <xs:element minOccurs='0' name='smsMt' type='tns:sms_v2'/>
+     <xs:element minOccurs='0' name='smsAo' type='tns:sms_v2'/>
+     <xs:element minOccurs='0' name='smsAt' type='tns:sms_v2'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='gprs_v2'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='tx' type='xs:long'/>
+     <xs:element minOccurs='0' name='lastTx' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='rx' type='xs:long'/>
+     <xs:element minOccurs='0' name='lastRx' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='errorCount' type='xs:long'/>
+     <xs:element minOccurs='0' name='lastError' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='sms_v2'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='count' type='xs:long'/>
+     <xs:element minOccurs='0' name='lastTimestamp' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='errorCount' type='xs:long'/>
+     <xs:element minOccurs='0' name='lastErrorTimestamp' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='countryTrafficUsageData'>
+    <xs:sequence>
+     <xs:element name='country' type='xs:string'/>
+     <xs:element name='volume' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='gprs'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='tx' type='xs:int'/>
+     <xs:element minOccurs='0' name='lastTx' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='rx' type='xs:int'/>
+     <xs:element minOccurs='0' name='lastRx' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='errorCount' type='xs:int'/>
+     <xs:element minOccurs='0' name='lastError' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='trafficData'>
+    <xs:sequence>
+     <xs:element name='aggregatedOn' type='xs:string'/>
+     <xs:element minOccurs='0' name='numberOfLUs' type='xs:int'/>
+     <xs:element minOccurs='0' name='activePDPContexts' type='xs:int'/>
+     <xs:element minOccurs='0' name='gprs' type='tns:gprs'/>
+     <xs:element minOccurs='0' name='smsMo' type='tns:sms'/>
+     <xs:element minOccurs='0' name='smsMt' type='tns:sms'/>
+     <xs:element minOccurs='0' name='smsAo' type='tns:sms'/>
+     <xs:element minOccurs='0' name='smsAt' type='tns:sms'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='sms'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='count' type='xs:int'/>
+     <xs:element minOccurs='0' name='lastTimestamp' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='errorCount' type='xs:int'/>
+     <xs:element minOccurs='0' name='lastErrorTimestamp' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='subscriberTrafficUsageData'>
+    <xs:sequence>
+     <xs:element name='imsi' type='xs:string'/>
+     <xs:element name='msisdn' type='xs:string'/>
+     <xs:element name='volume' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='averageTrafficUsageData'>
+    <xs:sequence>
+     <xs:element name='aggregationDate' type='xs:date'/>
+     <xs:element name='gprsVolume' type='xs:string'/>
+     <xs:element name='smsVolume' type='xs:string'/>
+     <xs:element name='activeSubscriptionsCount' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ <message name='AggregatedTraffic_QueryTopSubscriberTrafficUsageResponse'>
+  <part element='tns:QueryTopSubscriberTrafficUsageResponse' name='QueryTopSubscriberTrafficUsageResponse'></part>
+ </message>
+ <message name='AggregatedTraffic_QueryTrafficUsageHistory'>
+  <part element='tns:QueryTrafficUsageHistory' name='QueryTrafficUsageHistory'></part>
+ </message>
+ <message name='AggregatedTraffic_QueryAverageTrafficUsageHistory'>
+  <part element='tns:QueryAverageTrafficUsageHistory' name='QueryAverageTrafficUsageHistory'></part>
+ </message>
+ <message name='AggregatedTraffic_QueryTopCountryTrafficUsageResponse'>
+  <part element='tns:QueryTopCountryTrafficUsageResponse' name='QueryTopCountryTrafficUsageResponse'></part>
+ </message>
+ <message name='AggregatedTraffic_QueryResponse'>
+  <part element='tns:QueryResponse' name='parameters'></part>
+ </message>
+ <message name='AggregatedTraffic_QueryAverageTrafficUsageHistoryResponse'>
+  <part element='tns:QueryAverageTrafficUsageHistoryResponse' name='QueryAverageTrafficUsageHistoryResponse'></part>
+ </message>
+ <message name='AggregatedTraffic_QueryTopSubscriberTrafficUsage'>
+  <part element='tns:QueryTopSubscriberTrafficUsage' name='QueryTopSubscriberTrafficUsage'></part>
+ </message>
+ <message name='AggregatedTraffic_Query'>
+  <part element='tns:Query' name='parameters'></part>
+ </message>
+ <message name='AggregatedTraffic_QueryTrafficUsageHistoryResponse'>
+  <part element='tns:QueryTrafficUsageHistoryResponse' name='QueryTrafficUsageHistoryResponse'></part>
+ </message>
+ <message name='AggregatedTraffic_Query_v2'>
+  <part element='tns:Query_v2' name='parameters'></part>
+ </message>
+ <message name='AggregatedTraffic_QueryTopCountryTrafficUsage'>
+  <part element='tns:QueryTopCountryTrafficUsage' name='QueryTopCountryTrafficUsage'></part>
+ </message>
+ <message name='AggregatedTraffic_Query_v2Response'>
+  <part element='tns:QueryResponse_v2' name='parameters'></part>
+ </message>
+ <portType name='AggregatedTraffic'>
+  <operation name='Query' parameterOrder='parameters'>
+   <input message='tns:AggregatedTraffic_Query'></input>
+   <output message='tns:AggregatedTraffic_QueryResponse'></output>
+  </operation>
+  <operation name='QueryAverageTrafficUsageHistory' parameterOrder='QueryAverageTrafficUsageHistory'>
+   <input message='tns:AggregatedTraffic_QueryAverageTrafficUsageHistory'></input>
+   <output message='tns:AggregatedTraffic_QueryAverageTrafficUsageHistoryResponse'></output>
+  </operation>
+  <operation name='QueryTopCountryTrafficUsage' parameterOrder='QueryTopCountryTrafficUsage'>
+   <input message='tns:AggregatedTraffic_QueryTopCountryTrafficUsage'></input>
+   <output message='tns:AggregatedTraffic_QueryTopCountryTrafficUsageResponse'></output>
+  </operation>
+  <operation name='QueryTopSubscriberTrafficUsage' parameterOrder='QueryTopSubscriberTrafficUsage'>
+   <input message='tns:AggregatedTraffic_QueryTopSubscriberTrafficUsage'></input>
+   <output message='tns:AggregatedTraffic_QueryTopSubscriberTrafficUsageResponse'></output>
+  </operation>
+  <operation name='QueryTrafficUsageHistory' parameterOrder='QueryTrafficUsageHistory'>
+   <input message='tns:AggregatedTraffic_QueryTrafficUsageHistory'></input>
+   <output message='tns:AggregatedTraffic_QueryTrafficUsageHistoryResponse'></output>
+  </operation>
+  <operation name='Query_v2' parameterOrder='parameters'>
+   <input message='tns:AggregatedTraffic_Query_v2'></input>
+   <output message='tns:AggregatedTraffic_Query_v2Response'></output>
+  </operation>
+ </portType>
+ <binding name='AggregatedTrafficBinding' type='tns:AggregatedTraffic'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='Query'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/AggregatedTraffic/Query'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryAverageTrafficUsageHistory'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/AggregatedTraffic/QueryAverageTrafficUsageHistory'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryTopCountryTrafficUsage'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/AggregatedTraffic/QueryTopCountryTrafficUsage'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryTopSubscriberTrafficUsage'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/AggregatedTraffic/QueryTopSubscriberTrafficUsage'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryTrafficUsageHistory'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/AggregatedTraffic/QueryTrafficUsageHistory'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='Query_v2'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/AggregatedTraffic/Query_v2'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='AggregatedTrafficService'>
+  <port binding='tns:AggregatedTrafficBinding' name='AggregatedTrafficPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/AggregatedTraffic'/>
+  </port>
+ </service>
+</definitions>

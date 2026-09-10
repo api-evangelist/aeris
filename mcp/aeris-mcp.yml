@@ -1,0 +1,82 @@
+generated: '2026-09-10'
+method: derived
+source: No Aeris MCP server was found. Searched the Aeris website, the IoT Developer Portal (all 46 published articles),
+  support.aeris.net, and the aeristhings, aerisiot and Aeris-communications GitHub organizations; probed every Aeris
+  host for /.well-known/ai-plugin.json (all 404). The tool list below is DERIVED from Aeris OpenAPI operations as
+  a candidate only.
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+note: 'Aeris ships no MCP server, hosted or local. mode: none records that nobody publishes one — the tools[] below
+  are a candidate shape derived from the published OpenAPI operations, not a server an agent can reach. Do not treat
+  any endpoint as callable.'
+candidate_basis: openapi/aeris-subscription-search-api-openapi.yaml, openapi/aeris-subscription-device-api-openapi.yaml,
+  openapi/aeris-mds-esb-subscription-management-openapi.yaml, openapi/aeris-sms-messaging-api-openapi.yaml, openapi/aeris-business-analytics-report-api-openapi.yaml,
+  openapi/aeris-watchtower-api-openapi-openapi.yaml
+tools:
+- name: search_subscription_details
+  description: Search the subscription inventory and return matching subscription records.
+  rest:
+  - POST /details (Subscription Search API — the contract declares no operationId)
+  source_spec: openapi/aeris-subscription-search-api-openapi.yaml
+- name: get_subscription_details
+  description: Retrieve full detail for a batch of subscriptions by IMSI, ICCID or MSISDN.
+  rest:
+  - getSubscriptionDetails
+  source_spec: openapi/aeris-mds-esb-subscription-management-openapi.yaml
+  note: 'This operation carries deprecated: true in the contract.'
+- name: change_subscription_state
+  description: Request an activate, suspend, resume or terminate state change for a subscription.
+  rest:
+  - SubscriptionStateChange
+  source_spec: openapi/aeris-subscription-inventory-common-api-openapi.yaml
+- name: suspend_subscription
+  description: Suspend a single subscription.
+  rest:
+  - suspendSubscription
+  source_spec: openapi/aeris-mds-esb-subscription-management-openapi.yaml
+- name: list_devices
+  description: List eUICC and device inventory for the organization.
+  rest:
+  - listdevices
+  - deviceDetails
+  source_spec: openapi/aeris-subscription-device-api-openapi.yaml
+- name: get_subscription_location
+  description: Return the Cell Global Identity of a subscription.
+  rest:
+  - get-cell-global-identity-of-subscription
+  source_spec: openapi/aeris-subscription-location-api-openapi.yaml
+- name: send_sms
+  description: Send a mobile-terminated SMS to a device and poll its delivery status.
+  rest:
+  - sendSMS
+  - querySMS
+  source_spec: openapi/aeris-sms-messaging-api-openapi.yaml
+- name: query_usage_reports
+  description: List and download organization usage reports and invoices.
+  rest:
+  - QueryReports
+  - DownloadReport
+  - QueryInvoices
+  - DownloadInvoice
+  - QueryUsage
+  source_spec: openapi/aeris-business-analytics-report-api-openapi.yaml
+- name: search_security_events
+  description: Search IoT Watchtower security events.
+  rest:
+  - getEvents
+  - getEvent
+  source_spec: openapi/aeris-watchtower-api-openapi-openapi.yaml
+- name: search_device_groups
+  description: Search IoT Watchtower device groups.
+  rest:
+  - getDeviceGroups
+  - getDeviceGroup
+  source_spec: openapi/aeris-watchtower-api-openapi-openapi.yaml
+tools_note: Every rest[] value above is an operationId that exists verbatim in the named Aeris contract, or an explicit
+  note where the contract declares none. Nothing here is invented.

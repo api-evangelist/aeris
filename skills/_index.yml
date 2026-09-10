@@ -1,0 +1,32 @@
+generated: '2026-09-10'
+method: generated
+source: Generated from the 28 first-party Aeris OpenAPI definitions in openapi/ and the Aeris IoT Developer Portal
+  articles. Every operationId referenced in these skills exists verbatim in a published Aeris contract; none was
+  invented. Aeris publishes no skills/ or AGENTS.md of its own — searched the website, the IoT Developer Portal
+  (all 46 articles) and the aeristhings, aerisiot and Aeris-communications GitHub organizations.
+api: Aeris IoT Accelerator REST API
+skills:
+- name: aeris-authenticate-to-the-iot-accelerator-api
+  file: skills/aeris-authenticate-to-the-iot-accelerator-api.md
+  description: Obtain and reuse an access token, choosing the right mechanism for the API group. Aeris uses six
+    different authentication mechanisms across its estate, so this is the prerequisite for every other skill.
+- name: aeris-order-and-activate-a-subscription
+  file: skills/aeris-order-and-activate-a-subscription.md
+  description: Order SIMs or eUICC profiles, track the asynchronous request, handle approvals, and bring a subscription
+    into service. Covers the no-dry-run and no-idempotency-key hazards on the ordering surface.
+- name: aeris-send-sms-to-a-device
+  file: skills/aeris-send-sms-to-a-device.md
+  description: Send a mobile-terminated SMS over the OneAPI/OMA-shaped SMS Messaging API, poll delivery, and read
+    inbound messages.
+- name: aeris-investigate-a-device-connectivity-problem
+  file: skills/aeris-investigate-a-device-connectivity-problem.md
+  description: Diagnose an offline device from subscription record, change history, cell location and signalling
+    data, then raise an incident.
+- name: aeris-retrieve-usage-reports-and-invoices
+  file: skills/aeris-retrieve-usage-reports-and-invoices.md
+  description: Pull usage, traffic and invoice data using the list-then-download pattern, within the per-path rate
+    limits.
+not_covered:
+- The eUICC Setup, eIM Info and eIM ECO Operations surfaces, which need a CSP or Advanced Reseller role.
+- The IoT Watchtower security surface, which is a separate product with its own OAuth client-credentials flow.
+- The deprecated SOAP estate.

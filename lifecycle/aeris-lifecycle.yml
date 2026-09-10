@@ -1,0 +1,88 @@
+generated: '2026-09-10'
+method: searched
+source: 'https://iotdeveloper.aeris.net/hc/en-us/articles/25348517998364-IoT-Accelerator-SOAP-API and the deprecated:
+  true flags in openapi/.'
+versioning:
+  scheme: per-service semantic versioning carried in each OpenAPI info.version, with a path segment (/v1, /v2) on
+    some services and a vendor media type (application/vnd.dcp-v1+json) on others.
+  note: There is no single platform version. The 28 published contracts range from 0.2.3 to 3.9.3.
+  current_versions:
+    Enterprise Management API: 3.9.3
+    eUICC Setup API: 2.3.2
+    eIM Info API: 2.3.2
+    eIM ECO Operations API: 2.3.2
+    Subscription Signalling Events: 2.1.4
+    Resource Inventory: 2.0.7
+    Subscription signalling usages: 2.0.9
+    Device Localization API: 2.0.2
+    Shared Bundle API: 2.0.1
+    Consumer connectivity: 2.0.1
+    Business Automation API: 1.1.1
+    Subscription Management Additional Functions API: 1.0.6
+    Sim Specification Management API: 1.0.5
+    Number Management API: 1.0.5
+    Subscription Search API: 1.0.5
+    Business Analytics Report API: 1.0.5
+    Device API: 1.0.4
+    Subscription Custom Fields API: 1.0.4
+    Subscription API: 1.0.2
+    Subscription Location API: 1.0.2
+    Subscription change history: 1.0.2
+    Auth API: 1.0.1
+    Order Management: 1.0.1
+    Subscription Management API: 1.0.1
+    Organization Signaling Aggregations API: 1.0.0
+    Aeris IoT Watchtower API: 0.7.0
+    Incident Management API: 0.2.3
+    SMS Messaging API: v2
+deprecation_policy:
+  published: true
+  formal: false
+  statement: 'Aeris publishes a deprecation position for the SOAP estate: "As part of our continuing efforts to
+    enhance the Aeris IoT Accelerator REST API, we have steadily moved away from the SOAP API technology stack.
+    With many of the SOAP API functionalities now superseded by their REST API equivalents, we encourage you to
+    transition to these REST APIs if you haven''t already done so... Please consider our SOAP APIs as deprecated
+    with no further development or support being done for these."'
+  source: https://iotdeveloper.aeris.net/hc/en-us/articles/25348517998364-IoT-Accelerator-SOAP-API
+  gaps:
+  - No retirement or sunset date is published for the deprecated SOAP estate.
+  - No Sunset or Deprecation response header (RFC 8594) is declared on any of the 331 published operations.
+  - No notice period, no migration deadline and no general API deprecation policy document exist.
+  migration_guidance: Aeris publishes per-service "Use this REST API instead" pointers inside the SOAP article,
+    mapping individual SOAP services to their REST replacements, plus tutorials under https://iotdeveloper.aeris.net/hc/en-us/sections/25346615475868-Tutorials
+deprecated_surfaces:
+- surface: IoT Accelerator SOAP API (entire estate)
+  status: deprecated
+  retirement_date: null
+  operations: 70
+  documents: 15
+  note: Deprecated in prose, still published and still served. Aeris states no further development or support.
+- surface: ApiStatus SOAP service
+  status: deprecated-no-replacement
+  note: 'Aeris states explicitly: "This API will not be replaced with a REST API equivalent."'
+deprecated_operations:
+- operationId: getSubscriptionDetailsBySecondarykey
+  method: GET
+  path: /subscriptions/details/{key}/{value}
+  spec: openapi/aeris-mds-esb-subscription-management-openapi.yaml
+- operationId: getSubscriptionDetails
+  method: POST
+  path: /subscriptions/details
+  spec: openapi/aeris-mds-esb-subscription-management-openapi.yaml
+- operationId: updateAssignedImei
+  method: POST
+  path: /actions/assignImeis
+  spec: openapi/aeris-mds-esb-subscription-management-openapi.yaml
+status_page:
+  published: false
+  note: No public status page found. status.aeris.com and status.aeris.net do not resolve; no statuspage.io, Atlassian,
+    Instatus or Better Stack page is linked from the website, the developer portal or the support centre. Aeris
+    does publish an OverallStatus SOAP service and an Incident Management REST API, but both are authenticated customer
+    surfaces, not a public status page. No StatusPage pointer is emitted in apis.yml.
+sla:
+  published: false
+  note: No public SLA document found. The services terms of use at https://www.aeris.com/legal/services-terms-of-use/
+    do not publish uptime commitments.
+support:
+  url: https://support.aeris.net/hc/en-us
+  developer_portal: https://iotdeveloper.aeris.net/hc/en-us

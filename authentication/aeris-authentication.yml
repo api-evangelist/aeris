@@ -1,0 +1,129 @@
+generated: '2026-09-10'
+method: searched
+source: openapi/aeris-business-analytics-report-api-openapi.yaml, openapi/aeris-business-automation-api-openapi.yaml,
+  openapi/aeris-consumer-connectivity-openapi.yaml, openapi/aeris-eco-operations-api-openapi.yaml, openapi/aeris-eim-info-api-openapi.yaml,
+  openapi/aeris-enterprise-management-api-openapi.yaml, openapi/aeris-euicc-setup-api-openapi.yaml, openapi/aeris-incidents-external-api-openapi.yaml,
+  openapi/aeris-mds-esb-device-localization-openapi.yaml, openapi/aeris-mds-esb-subscription-management-openapi.yaml,
+  openapi/aeris-operator-order-management-api-openapi.yaml, openapi/aeris-organization-signaling-aggregations-api-openapi.yaml
+  ... — upgraded from the Aeris IoT Developer Portal API Quick start guide, which publishes the authentication mechanism
+  used by each API group.
+summary:
+  types:
+  - apiKey
+  - http
+  - oauth2
+  api_key_in:
+  - header
+  oauth2_flows:
+  - clientCredentials
+  - password
+schemes:
+- name: Oauth2_auth
+  type: oauth2
+  flows:
+  - flow: password
+    tokenUrl: /iot/api/auth/token
+    scopes: 17
+  sources:
+  - openapi/aeris-business-analytics-report-api-openapi.yaml
+  - openapi/aeris-business-automation-api-openapi.yaml
+  - openapi/aeris-consumer-connectivity-openapi.yaml
+  - openapi/aeris-enterprise-management-api-openapi.yaml
+  - openapi/aeris-incidents-external-api-openapi.yaml
+  - openapi/aeris-operator-order-management-api-openapi.yaml
+  - openapi/aeris-organization-signaling-aggregations-api-openapi.yaml
+  - openapi/aeris-resource-inventory-api-openapi.yaml
+  - openapi/aeris-shared-bundle-api-openapi.yaml
+  - openapi/aeris-sim-specification-management-api-openapi.yaml
+  - openapi/aeris-subscription-change-history-openapi.yaml
+  - openapi/aeris-subscription-custom-fields-api-openapi.yaml
+  - openapi/aeris-subscription-device-api-openapi.yaml
+  - openapi/aeris-subscription-device-reconnect-api-openapi.yaml
+  - openapi/aeris-subscription-inventory-common-api-openapi.yaml
+  - openapi/aeris-subscription-location-api-openapi.yaml
+  - openapi/aeris-subscription-number-management-api-openapi.yaml
+  - openapi/aeris-subscription-search-api-openapi.yaml
+  - openapi/aeris-subscription-signalling-events-api-openapi.yaml
+  - openapi/aeris-subscription-signalling-usages-api-openapi.yaml
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/aeris-business-automation-api-openapi.yaml
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+    scopes: 4
+  description: The resources in the API are protected using the OAuth 2.0 protocol
+  sources:
+  - openapi/aeris-eco-operations-api-openapi.yaml
+  - openapi/aeris-eim-info-api-openapi.yaml
+  - openapi/aeris-euicc-setup-api-openapi.yaml
+  - openapi/aeris-watchtower-api-openapi-openapi.yaml
+- name: token
+  type: apiKey
+  in: header
+  parameter: X-Access-Token
+  description: Input token directly or use login endpoints
+  sources:
+  - openapi/aeris-mds-esb-device-localization-openapi.yaml
+  - openapi/aeris-mds-esb-subscription-management-openapi.yaml
+- name: BasicAuth
+  type: http
+  scheme: basic
+  sources:
+  - openapi/aeris-sms-messaging-api-openapi.yaml
+docs:
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348574275868-JWT-Authentication-Best-Practices
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348572926236-Auth-API-1-0-1
+docs_findings:
+  token_endpoints:
+    bearer: POST /iot/api/auth and POST /iot/api/auth/token
+    x_access_token: POST /login (per API group)
+    marketplace_hub: POST /auth/login
+  by_api_group:
+    Service Portal (SOAP): wss-security UsernameToken
+    User Administration: X-access-token via POST /login
+    Consumer Connectivity: X-access-token via POST /login
+    Subscription Management: X-access-token via POST /login
+    Device Localization: X-access-token via POST /login
+    Shared bundle: Bearer via POST /token
+    Enterprise Management (CSP only): Bearer via POST /token
+    eUICC Setup (CSP and Advanced Resellers only): Bearer via POST /token
+    Device Reconnect: Bearer via POST /token
+    Subscription Change History: Bearer via POST /token
+    Subscription management - additional functions: Bearer via POST /token
+    Search Subscription Details: Bearer via POST /token
+    Ticketing service for incident management: Bearer via POST /token
+    SMS messaging: HTTP Basic Auth
+    Enterprise Provisioning for Marketplace HUB (CSP only): Bearer via POST /auth/login
+    Custom fields: Bearer via POST /token
+    Subscription location: Bearer via POST /token
+    Subscription signaling usages: Bearer via POST /token
+    Subscription signaling events: Bearer via POST /token
+    'Devices: eUICC inventory view': Bearer via POST /token
+    AerAdmin / AerFrame / AerTraffic (Aeris-native): apiKey query parameter
+  jwt_claims:
+  - sub
+  - iss
+  - aud
+  - azp
+  - upn
+  - email
+  - first_name
+  - last_name
+  - groups
+  - organization_ids
+  - enterprise_group_ids
+  - billing_organization_id
+  - exp
+  - iat
+  - jti
+  token_reuse_guidance: Aeris documents reading the exp claim and reusing the token rather than re-authenticating
+    per request; /iot/api/auth is rate limited to 5 req/s and 60 req/min.
+  onboarding: Credentials are issued by the Connectivity Service Provider on subscription; there is no self-serve
+    API key.

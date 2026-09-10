@@ -1,0 +1,173 @@
+generated: '2026-09-10'
+method: searched
+source: 'Derived from the 28 first-party OpenAPI definitions in openapi/ and enriched from the Aeris IoT Developer
+  Portal articles: API Quick start guide, JWT Authentication Best Practices, IoT Accelerator REST API Request Rate
+  Limits, and Best Practices for Avoiding Rate Limiting in API Requests.'
+docs:
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348574275868-JWT-Authentication-Best-Practices
+scope: Aeris IoT Accelerator REST API, SMS Messaging API and IoT Watchtower API. The Aeris-native AerAdmin, AerFrame
+  and AerTraffic APIs use a different, older convention set (apiKey query parameter) and are noted separately.
+auth:
+  style: Mixed by API group — this is the single largest integration hazard on this platform.
+  mechanisms:
+  - type: oauth2-password / bearer JWT
+    detail: 'POST /iot/api/auth (or /iot/api/auth/token) returns a JWT; send it as Authorization: Bearer <token>.
+      Used by most IoT Accelerator API groups.'
+  - type: apiKey header
+    detail: X-Access-Token header, obtained from a group POST /login. Used by User Administration, Consumer Connectivity,
+      Subscription Management and Device Localization.
+  - type: oauth2-clientCredentials
+    detail: Used by eUICC Setup, eIM Info, eIM ECO Operations and IoT Watchtower.
+  - type: http-basic
+    detail: Used by the SMS Messaging API only.
+  - type: wss-security
+    detail: WS-Security UsernameToken in the SOAP header, used by the legacy Service Portal SOAP API.
+  - type: apiKey query parameter
+    detail: The Aeris-native AerAdmin, AerFrame and AerTraffic APIs take ?apiKey=<key> on the query string.
+  token_reuse: Aeris explicitly documents that clients should read the JWT exp claim and reuse the token until it
+    expires rather than re-authenticating before every request, because /iot/api/auth is itself rate limited to
+    5 req/s.
+  reference: authentication/aeris-authentication.yml
+idempotency:
+  coverage: partial
+  mechanism: Optional client-supplied Idempotency-Key request header carrying a UUID. The contract states "Same
+    key replays the cached response."
+  header: Idempotency-Key
+  required: false
+  retention: Not documented. Aeris does not state how long a key is retained or what happens when the same key is
+    replayed with a different body.
+  scope:
+  - provisionGateway (POST /watchtower/v1/gateways)
+  - updateGateway (PUT /watchtower/v1/gateways/{gatewayId})
+  - deprovisionGateway (DELETE /watchtower/v1/gateways/{gatewayId})
+  - batchProvisionGateways (POST /watchtower/v1/batch/gateways)
+  measurement: 4 of 173 mutating operations across the 28 published OpenAPI definitions accept Idempotency-Key,
+    and all four are IoT Watchtower gateway operations. The entire IoT Accelerator REST estate — subscription state
+    changes, SIM orders, bulk provisioning, purchases and refunds — has no replay protection.
+  note: An agent retrying a failed POST /iot/api/sica/subscriptions/sim-orders or a bulk provisioning call has no
+    way to avoid duplicating it.
+reversibility:
+  grade: documented
+  summary: Reversal operations exist across the estate and are named plainly, but Aeris does not publish a time
+    window for any of them, so an agent can find out that an action is reversible without finding out for how long.
+  write_surface: 173 mutating operations across 28 OpenAPI definitions, plus 117 SOAP operations across 16 WSDLs.
+  reversals:
+  - action: Purchase a connectivity bucket
+    operation: createPurchase
+    reversal: refundPurchase (PUT /purchases/{company-id}/{subscription-id-type}/{subscription-id}/refund)
+    window: null
+    window_source: null
+    spec: openapi/aeris-consumer-connectivity-openapi.yaml
+  - action: Create a recurring purchase
+    operation: createRecurringPurchase
+    reversal: deleteRecurringPurchase (DELETE /recurring-purchases/...)
+    window: null
+    window_source: null
+    spec: openapi/aeris-consumer-connectivity-openapi.yaml
+  - action: Place a SIM order
+    operation: createSimOrder
+    reversal: executeCancelSimOrder (DELETE /sim-orders/{request-id})
+    window: null
+    window_source: null
+    spec: openapi/aeris-subscription-inventory-common-api-openapi.yaml
+    note: Aeris documents cancel for SIM stock order, SIM order, eUICC stock order, eUICC order and subscription
+      profile stock order, but states no cut-off point after which cancellation stops working.
+  - action: Activate a subscription package
+    operation: activateSubscriptionPackage
+    reversal: deactivateSubscriptionPackage (POST /enterprises/subscription_packages/{id}/deactivate)
+    window: null
+    window_source: null
+    spec: openapi/aeris-enterprise-management-api-openapi.yaml
+  - action: Activate an enforcement rule
+    operation: activateEnforcementRule
+    reversal: deactivateEnforcementRule (POST /watchtower/v1/enforcement-rules/{id}/deactivate)
+    window: null
+    window_source: null
+    spec: openapi/aeris-watchtower-api-openapi-openapi.yaml
+  - action: Provision a Watchtower gateway
+    operation: provisionGateway
+    reversal: deprovisionGateway (DELETE /watchtower/v1/gateways/{gatewayId})
+    window: null
+    window_source: null
+    spec: openapi/aeris-watchtower-api-openapi-openapi.yaml
+  - action: Suspend a device (AerAdmin SOAP)
+    operation: suspend / bulkSuspend
+    reversal: unsuspend / bulkUnsuspend
+    window: null
+    window_source: null
+    spec: wsdl/aeris-aeradmin-ws-5-0.wsdl
+  - action: Block device traffic (AerAdmin SOAP)
+    operation: blockTraffic / bulkBlockTraffic
+    reversal: trafficPolicy / bulkTrafficPolicy
+    window: null
+    window_source: null
+    spec: wsdl/aeris-aeradmin-ws-5-0.wsdl
+  irreversible:
+  - operation: retire / bulkRetire (AerAdmin SOAP)
+    note: Retiring a device has no published reverse operation; reprovision exists but Aeris does not state that
+      it restores a retired device.
+  - operation: cancel / bulkCancel (AerAdmin SOAP)
+    note: No published reversal.
+  note: No window is asserted anywhere in this block because Aeris publishes none. Grade is `documented` (reversal
+    paths exist) and not `verified` (no stated window).
+dry_run_mode:
+  supported: false
+  note: No dry-run, preview, validate-only or simulate parameter is declared on any of the 331 published operations.
+pagination:
+  style: mixed
+  note: Three different pagination idioms coexist across the estate, and which one applies depends on the API group.
+  variants:
+  - style: cursor
+    params:
+    - cursor
+    - limit
+    occurrences: 18
+    note: Used by the newer IoT Accelerator services and IoT Watchtower.
+  - style: page-number
+    params:
+    - page
+    - size
+    - per_page
+    - pageSize
+    occurrences: 12
+  - style: offset-limit
+    params:
+    - offset
+    - limit
+    occurrences: 5
+versioning:
+  style: mixed
+  path: Version is carried in the path for some services (/iot/api/business-analytics-service/v1, /watchtower/v1,
+    /dcpapi/smsmessaging/v1) and absent for others (/iot/api/subscriptions).
+  media_type: 'A vendor media type also carries a version: application/vnd.dcp-v1+json is declared on 160 responses
+    and application/vnd.dcp-v2+json on 2. application/json;version=2.0.0 appears on 10.'
+  contract_versions: Each published OpenAPI carries its own info.version, ranging from 0.2.3 (Incident Management)
+    to 3.9.3 (Enterprise Management).
+error_envelope:
+  primary: application/problem+json (RFC 7807 / RFC 9457) on 261 responses; the IoT Watchtower contract names "RFC
+    7807 error envelope" explicitly.
+  secondary: Bespoke JSON error objects on the remaining operations.
+  reference: errors/aeris-problem-types.yml
+rate_limit_signaling:
+  headers:
+  - X-RateLimit-Limit-Second
+  - X-RateLimit-Limit-Minute
+  - X-RateLimit-Remaining-Second
+  - X-RateLimit-Remaining-Minute
+  status: 429
+  note: Headers are returned on 200 as well as 429.
+  reference: rate-limits/aeris-rate-limits.yml
+request_tracing:
+  header: X-Watchtower-Trace-Id
+  scope: IoT Watchtower operations only (7 occurrences). No estate-wide request-id or correlation header is documented.
+concurrency:
+  mechanism: If-Match / ETag
+  scope: Enterprise Management API only. Not used elsewhere.
+metadata:
+  mechanism: Subscription Custom Fields API — user-defined key-value pairs attached to subscriptions, usable for
+    filtering and batch selection.
+  spec: openapi/aeris-subscription-custom-fields-api-openapi.yaml
+field_expansion:
+  supported: false
+  note: No expand or fields parameter is declared anywhere in the estate.

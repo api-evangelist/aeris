@@ -1,0 +1,127 @@
+generated: '2026-09-10'
+method: derived
+source: Derived from the 4xx/5xx responses declared across the 28 first-party OpenAPI definitions in openapi/, enriched
+  from the IoT Accelerator rate-limit and JWT best-practice articles on the Aeris IoT Developer Portal.
+summary:
+  specs_analysed: 28
+  operations_analysed: 331
+  error_responses_declared: 1559
+  problem_json_responses: 163
+  envelope: Mixed. 261 error responses across the estate declare application/problem+json (RFC 7807 / RFC 9457);
+    the Aeris IoT Watchtower contract names "RFC 7807 error envelope" explicitly. The remaining operations return
+    a bespoke JSON error object.
+  rate_limit_status: 429
+docs:
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348588408988-Best-Practices-for-Avoiding-Rate-Limiting-in-API-Requests
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348574275868-JWT-Authentication-Best-Practices
+problem_types:
+- status: 500
+  title: Internal Server Error
+  occurrences: 305
+  format: rfc9457
+  media_type: application/problem+json
+  spec_descriptions:
+  - Error in query
+  - Error in query.
+  - Internal Server Error
+  remediation: Retry with exponential backoff; if it persists, raise an incident through the Incident Management
+    API or support.
+- status: 400
+  title: Bad Request
+  occurrences: 287
+  format: rfc9457
+  media_type: application/problem+json
+  spec_descriptions:
+  - Bad Request
+  - Bad reqeust.
+  - Bad request
+  remediation: Validate the request body and query parameters against the OpenAPI schema before retrying; the response
+    body names the offending field.
+- status: 401
+  title: Unauthorized
+  occurrences: 279
+  format: rfc9457
+  media_type: application/problem+json
+  spec_descriptions:
+  - Authentication Failure
+  - Invalid client credentials
+  - Invalid credentials.
+  remediation: Request a fresh token from POST /iot/api/auth (Bearer) or the group login endpoint (X-Access-Token)
+    and retry. Do not re-authenticate before every call — reuse the token until its exp claim passes.
+- status: 429
+  title: Too Many Requests
+  occurrences: 233
+  format: rfc9457
+  media_type: application/problem+json
+  spec_descriptions:
+  - Too Many Requests
+  remediation: Back off using the X-RateLimit-Remaining-Second and X-RateLimit-Remaining-Minute headers, then retry.
+    Published per-path limits are in rate-limits/aeris-rate-limits.yml.
+- status: 403
+  title: Forbidden
+  occurrences: 183
+  spec_descriptions:
+  - Forbidden
+  remediation: The token is valid but the caller lacks the OAuth scope or organization membership for this resource;
+    check scopes/aeris-scopes.yml and the organization_ids claim.
+- status: 404
+  title: Not Found
+  occurrences: 158
+  format: rfc9457
+  media_type: application/problem+json
+  spec_descriptions:
+  - Company not found
+  - Company or product not found
+  - Company or subscription not found
+  remediation: Confirm the identifier and the organization scope; IoT Accelerator resources are scoped to the caller
+    organization.
+- status: 503
+  title: Service Unavailable
+  occurrences: 48
+  format: rfc9457
+  media_type: application/problem+json
+  spec_descriptions:
+  - Service Unavailable
+  - Service not available.
+  - Service unavailable
+  remediation: The service is temporarily unavailable; retry with backoff.
+- status: 405
+  title: Method Not Allowed
+  occurrences: 33
+  remediation: Use a method the path declares in the OpenAPI.
+- status: 413
+  title: Payload Too Large
+  occurrences: 14
+  remediation: Reduce the batch size; batch endpoints cap the number of subscriptions per request.
+- status: 406
+  title: Not Acceptable
+  occurrences: 4
+  remediation: Set Accept to application/json or the versioned application/vnd.dcp-v1+json media type the operation
+    declares.
+- status: 415
+  title: Unsupported Media Type
+  occurrences: 4
+  remediation: 'Send Content-Type: application/json.'
+- status: 529
+  title: Site Overloaded
+  occurrences: 4
+  format: rfc9457
+  media_type: application/problem+json
+  spec_descriptions:
+  - Service Overloaded
+  remediation: The site is overloaded; retry with backoff.
+- status: 409
+  title: Conflict
+  occurrences: 4
+  spec_descriptions:
+  - Conflict — an event policy with this name already exists for the account.
+  remediation: The resource is in a conflicting state or the change is already in flight; re-read the resource before
+    retrying.
+- status: 412
+  title: Precondition Failed
+  occurrences: 3
+  format: rfc9457
+  media_type: application/problem+json
+  spec_descriptions:
+  - Precondition Failed (entity-tag is missing or does not match the latest version)
+  remediation: An If-Match precondition failed; re-read the resource to obtain the current ETag.

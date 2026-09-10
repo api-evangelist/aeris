@@ -1,0 +1,678 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='TriggerPackageManagementService' targetNamespace='http://api.dcp.ericsson.net/TriggerPackageManagement' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/TriggerPackageManagement' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/TriggerPackageManagement' version='1.0' xmlns:tns='http://api.dcp.ericsson.net/TriggerPackageManagement' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='AddTriggerPackageToSubscriptionPackagesRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='triggerPackageNo' type='xs:string'/>
+      <xs:element name='subscriptionPackageNameList' type='tns:subscriptionPackageNameList'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='AddTriggerPackageToSubscriptionPackagesResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' name='SubscriptionPackageTriggerPackageLinkResult' type='tns:SubscriptionPackageTriggerPackageLinkResult'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='ChangeCustomerEmailAddressRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='emailAddress' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='ChangeCustomerEmailAddressResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='DeleteTriggerPackageFromSubscriptionPackageResponse' nillable='true'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' name='SubscriptionPackageTriggerPackageLinkResult' type='tns:SubscriptionPackageTriggerPackageLinkResult'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='DeleteTriggerPackageFromSubscriptionPackagesRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='subscriptionPackageNameList' type='tns:subscriptionPackageNameList'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='DeleteTriggerPackageFromSubscriptionPackagesResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' name='SubscriptionPackageTriggerPackageLinkResult' type='tns:SubscriptionPackageTriggerPackageLinkResult'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryCustomerEmailAddressRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryCustomerEmailAddressResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='emailAddress' type='xs:string'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryNetworkGroupsRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryNetworkGroupsResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='networkGroups' type='tns:networkGroups'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggerPackagesRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggerPackagesRequest_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggerPackagesResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='triggerPackages' type='tns:triggerPackages'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggerPackagesResponse_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='triggerPackages' type='tns:triggerPackages_v2'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggersRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggersRequest_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggersResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' name='triggers' type='tns:trigger'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryTriggersResponse_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element maxOccurs='unbounded' name='triggers' type='tns:trigger_v2'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageChangeRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='triggerPackage' type='tns:triggerPackage'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageChangeRequest_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='triggerPackage' type='tns:triggerPackage_v2'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageChangeResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='triggerPackage' type='tns:triggerPackage'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageChangeResponse_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='triggerPackage' type='tns:triggerPackage_v2'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageCreateRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='name' type='xs:string'/>
+      <xs:element minOccurs='0' name='description' type='xs:string'/>
+      <xs:element minOccurs='0' name='triggerMetrics' type='tns:triggerMetrics'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageCreateRequest_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='name' type='xs:string'/>
+      <xs:element minOccurs='0' name='description' type='xs:string'/>
+      <xs:element minOccurs='0' name='triggerMetrics' type='tns:triggerMetrics_v2'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageCreateResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='triggerPackage' type='tns:triggerPackage'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageCreateResponse_v2'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='triggerPackage' type='tns:triggerPackage_v2'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageDeleteRequest'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name='customerNo' type='xs:string'/>
+      <xs:element name='packageNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='TriggerPackageDeleteResponse' type='xs:string'/>
+   <xs:complexType name='triggerMetrics'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' name='triggerMetric' type='tns:triggerMetric'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='triggerMetric'>
+    <xs:sequence>
+     <xs:element name='triggerNumber' type='xs:string'/>
+     <xs:element minOccurs='0' name='triggerName' type='xs:string'/>
+     <xs:element minOccurs='0' name='timeFrame' type='xs:string'/>
+     <xs:element minOccurs='0' name='alertActive' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='alertValue' type='xs:string'/>
+     <xs:element minOccurs='0' name='actionActive' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='actionValue' type='xs:string'/>
+     <xs:element minOccurs='0' name='lastChange' type='xs:date'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='SubscriptionPackageTriggerPackageLinkResult'>
+    <xs:sequence>
+     <xs:element name='subscriptionPackageName' type='xs:string'/>
+     <xs:element name='resultCode' type='xs:string'/>
+     <xs:element minOccurs='0' name='serviceRequestId' type='xs:string'/>
+     <xs:element minOccurs='0' name='requestId' type='xs:string'/>
+     <xs:any namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='triggerMetrics_v2'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' name='triggerMetric' type='tns:triggerMetric_v2'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='triggerMetric_v2'>
+    <xs:sequence>
+     <xs:element name='triggerNumber' type='xs:string'/>
+     <xs:element minOccurs='0' name='triggerName' type='xs:string'/>
+     <xs:element minOccurs='0' name='timeFrame' type='xs:string'/>
+     <xs:element minOccurs='0' name='timeFrameUnit' type='tns:timeFrameUnitType'/>
+     <xs:element minOccurs='0' name='alertActive' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='alertValue' type='xs:string'/>
+     <xs:element minOccurs='0' name='actionActive' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='actionValue' type='xs:string'/>
+     <xs:element minOccurs='0' name='lastChange' type='xs:date'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='networkGroupMembers'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='networkGroupMember' nillable='true' type='tns:networkGroupMember'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='networkGroupMember'>
+    <xs:sequence>
+     <xs:element name='countryName' type='xs:string'/>
+     <xs:element name='operatorName' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='triggerPackage_v2'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+     <xs:element name='packageNo' type='xs:string'/>
+     <xs:element name='name' type='xs:string'/>
+     <xs:element minOccurs='0' name='description' type='xs:string'/>
+     <xs:element minOccurs='0' name='lastChange' type='xs:date'/>
+     <xs:element minOccurs='0' name='triggerMetrics' type='tns:triggerMetrics_v2'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='subscriptionPackageNameList'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' name='subscriptionPackageName' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='trigger_v2'>
+    <xs:sequence>
+     <xs:element name='triggerNumber' type='xs:string'/>
+     <xs:element minOccurs='0' name='triggerName' type='xs:string'/>
+     <xs:element name='timeFrameAllowed' type='xs:boolean'/>
+     <xs:element name='alertThresholdValueAllowed' type='xs:boolean'/>
+     <xs:element name='actionThresholdAllowed' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='thresholdUnit' type='xs:string'/>
+     <xs:element name='triggerType' type='tns:triggerType'/>
+     <xs:element minOccurs='0' name='lastChange' type='xs:date'/>
+     <xs:element name='timeFrameRanges' type='tns:timeFrameRanges'/>
+     <xs:element minOccurs='0' name='minValue' type='xs:long'/>
+     <xs:element minOccurs='0' name='maxValue' type='xs:integer'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='timeFrameRanges'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' name='timeFrameRange' type='tns:timeFrameRange'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='timeFrameRange'>
+    <xs:sequence>
+     <xs:element name='minTimeFrameValue' type='xs:long'/>
+     <xs:element name='maxTimeFrameValue' type='xs:long'/>
+     <xs:element name='timeFrameUnit' type='tns:timeFrameUnitType'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='trigger'>
+    <xs:sequence>
+     <xs:element name='triggerNumber' type='xs:string'/>
+     <xs:element minOccurs='0' name='triggerName' type='xs:string'/>
+     <xs:element name='timeFrameAllowed' type='xs:boolean'/>
+     <xs:element name='alertThresholdValueAllowed' type='xs:boolean'/>
+     <xs:element name='actionThresholdAllowed' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='thresholdUnit' type='xs:string'/>
+     <xs:element name='triggerType' type='tns:triggerType'/>
+     <xs:element minOccurs='0' name='lastChange' type='xs:date'/>
+     <xs:element minOccurs='0' name='minTimeFrameValue' type='xs:long'/>
+     <xs:element minOccurs='0' name='maxTimeFrameValue' type='xs:long'/>
+     <xs:element minOccurs='0' name='minValue' type='xs:long'/>
+     <xs:element minOccurs='0' name='maxValue' type='xs:integer'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='triggerPackages'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' name='triggerPackage' type='tns:triggerPackage'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='triggerPackage'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+     <xs:element name='packageNo' type='xs:string'/>
+     <xs:element name='name' type='xs:string'/>
+     <xs:element minOccurs='0' name='description' type='xs:string'/>
+     <xs:element minOccurs='0' name='lastChange' type='xs:date'/>
+     <xs:element minOccurs='0' name='triggerMetrics' type='tns:triggerMetrics'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='networkGroups'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='networkGroup' nillable='true' type='tns:networkGroup'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='networkGroup'>
+    <xs:sequence>
+     <xs:element name='networkGroupNo' type='xs:string'/>
+     <xs:element minOccurs='0' name='networkGroupMembers' type='tns:networkGroupMembers'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='triggerPackages_v2'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' name='triggerPackage' type='tns:triggerPackage_v2'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name='timeFrameUnitType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='hour'/>
+     <xs:enumeration value='month'/>
+     <xs:enumeration value='week'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='triggerType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Underrun'/>
+     <xs:enumeration value='Overrun'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </types>
+ <message name='TriggerPackageManagement_ChangeTriggerPackage_v2Response'>
+  <part element='tns:TriggerPackageChangeResponse_v2' name='ChangeTriggerPackageResponse_v2'></part>
+ </message>
+ <message name='TriggerPackageManagement_ChangeCustomerEmailAddressResponse'>
+  <part element='tns:ChangeCustomerEmailAddressResponse' name='ChangeCustomerEmailAddressResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_DeleteTriggerPackageFromSubscriptionPackagesResponse'>
+  <part element='tns:DeleteTriggerPackageFromSubscriptionPackageResponse' name='DeleteTriggerPackageFromSubscriptionPackagesResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_CreateTriggerPackageResponse'>
+  <part element='tns:TriggerPackageCreateResponse' name='CreateTriggerPackageResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryTriggers_v2'>
+  <part element='tns:QueryTriggersRequest_v2' name='QueryTriggersRequest_v2'></part>
+ </message>
+ <message name='TriggerPackageManagement_ChangeTriggerPackage'>
+  <part element='tns:TriggerPackageChangeRequest' name='ChangeTriggerPackageRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryTriggerPackages_v2'>
+  <part element='tns:QueryTriggerPackagesRequest_v2' name='QueryTriggerPackagesRequest_v2'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryTriggerPackages'>
+  <part element='tns:QueryTriggerPackagesRequest' name='QueryTriggerPackagesRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_DeleteTriggerPackageResponse'>
+  <part element='tns:TriggerPackageDeleteResponse' name='DeleteTriggerPackageResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_CreateTriggerPackage_v2Response'>
+  <part element='tns:TriggerPackageCreateResponse_v2' name='CreateTriggerPackageResponse_v2'></part>
+ </message>
+ <message name='TriggerPackageManagement_ChangeTriggerPackage_v2'>
+  <part element='tns:TriggerPackageChangeRequest_v2' name='ChangeTriggerPackageRequest_v2'></part>
+ </message>
+ <message name='TriggerPackageManagement_CreateTriggerPackage'>
+  <part element='tns:TriggerPackageCreateRequest' name='CreateTriggerPackageRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_AddTriggerPackageToSubscriptionPackages'>
+  <part element='tns:AddTriggerPackageToSubscriptionPackagesRequest' name='AddTriggerPackageToSubscriptionPackagesRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryTriggers'>
+  <part element='tns:QueryTriggersRequest' name='QueryTriggersRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_ChangeTriggerPackageResponse'>
+  <part element='tns:TriggerPackageChangeResponse' name='ChangeTriggerPackageResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_DeleteTriggerPackage'>
+  <part element='tns:TriggerPackageDeleteRequest' name='DeleteTriggerPackageRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_AddTriggerPackageToSubscriptionPackagesResponse'>
+  <part element='tns:AddTriggerPackageToSubscriptionPackagesResponse' name='AddTriggerPackageToSubscriptionPackagesResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_CreateTriggerPackage_v2'>
+  <part element='tns:TriggerPackageCreateRequest_v2' name='CreateTriggerPackageRequest_v2'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryNetworkGroupsResponse'>
+  <part element='tns:QueryNetworkGroupsResponse' name='QueryNetworkGroupsResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryTriggersResponse'>
+  <part element='tns:QueryTriggersResponse' name='QueryTriggersResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryNetworkGroups'>
+  <part element='tns:QueryNetworkGroupsRequest' name='QueryNetworkGroupsRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_ChangeCustomerEmailAddress'>
+  <part element='tns:ChangeCustomerEmailAddressRequest' name='ChangeCustomerEmailAddressRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryCustomerEmailAddressResponse'>
+  <part element='tns:QueryCustomerEmailAddressResponse' name='QueryCustomerEmailAddressResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_DeleteTriggerPackageFromSubscriptionPackages'>
+  <part element='tns:DeleteTriggerPackageFromSubscriptionPackagesRequest' name='DeleteTriggerPackageFromSubscriptionPackagesRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryCustomerEmailAddress'>
+  <part element='tns:QueryCustomerEmailAddressRequest' name='QueryCustomerEmailAddressRequest'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryTriggers_v2Response'>
+  <part element='tns:QueryTriggersResponse_v2' name='QueryTriggersResponse_v2'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryTriggerPackagesResponse'>
+  <part element='tns:QueryTriggerPackagesResponse' name='QueryTriggerPackagesResponse'></part>
+ </message>
+ <message name='TriggerPackageManagement_QueryTriggerPackages_v2Response'>
+  <part element='tns:QueryTriggerPackagesResponse_v2' name='QueryTriggerPackagesResponse_v2'></part>
+ </message>
+ <portType name='TriggerPackageManagement'>
+  <operation name='AddTriggerPackageToSubscriptionPackages' parameterOrder='AddTriggerPackageToSubscriptionPackagesRequest'>
+   <input message='tns:TriggerPackageManagement_AddTriggerPackageToSubscriptionPackages'></input>
+   <output message='tns:TriggerPackageManagement_AddTriggerPackageToSubscriptionPackagesResponse'></output>
+  </operation>
+  <operation name='ChangeCustomerEmailAddress' parameterOrder='ChangeCustomerEmailAddressRequest'>
+   <input message='tns:TriggerPackageManagement_ChangeCustomerEmailAddress'></input>
+   <output message='tns:TriggerPackageManagement_ChangeCustomerEmailAddressResponse'></output>
+  </operation>
+  <operation name='ChangeTriggerPackage' parameterOrder='ChangeTriggerPackageRequest'>
+   <input message='tns:TriggerPackageManagement_ChangeTriggerPackage'></input>
+   <output message='tns:TriggerPackageManagement_ChangeTriggerPackageResponse'></output>
+  </operation>
+  <operation name='ChangeTriggerPackage_v2' parameterOrder='ChangeTriggerPackageRequest_v2'>
+   <input message='tns:TriggerPackageManagement_ChangeTriggerPackage_v2'></input>
+   <output message='tns:TriggerPackageManagement_ChangeTriggerPackage_v2Response'></output>
+  </operation>
+  <operation name='CreateTriggerPackage' parameterOrder='CreateTriggerPackageRequest'>
+   <input message='tns:TriggerPackageManagement_CreateTriggerPackage'></input>
+   <output message='tns:TriggerPackageManagement_CreateTriggerPackageResponse'></output>
+  </operation>
+  <operation name='CreateTriggerPackage_v2' parameterOrder='CreateTriggerPackageRequest_v2'>
+   <input message='tns:TriggerPackageManagement_CreateTriggerPackage_v2'></input>
+   <output message='tns:TriggerPackageManagement_CreateTriggerPackage_v2Response'></output>
+  </operation>
+  <operation name='DeleteTriggerPackage' parameterOrder='DeleteTriggerPackageRequest'>
+   <input message='tns:TriggerPackageManagement_DeleteTriggerPackage'></input>
+   <output message='tns:TriggerPackageManagement_DeleteTriggerPackageResponse'></output>
+  </operation>
+  <operation name='DeleteTriggerPackageFromSubscriptionPackages' parameterOrder='DeleteTriggerPackageFromSubscriptionPackagesRequest'>
+   <input message='tns:TriggerPackageManagement_DeleteTriggerPackageFromSubscriptionPackages'></input>
+   <output message='tns:TriggerPackageManagement_DeleteTriggerPackageFromSubscriptionPackagesResponse'></output>
+  </operation>
+  <operation name='QueryCustomerEmailAddress' parameterOrder='QueryCustomerEmailAddressRequest'>
+   <input message='tns:TriggerPackageManagement_QueryCustomerEmailAddress'></input>
+   <output message='tns:TriggerPackageManagement_QueryCustomerEmailAddressResponse'></output>
+  </operation>
+  <operation name='QueryNetworkGroups' parameterOrder='QueryNetworkGroupsRequest'>
+   <input message='tns:TriggerPackageManagement_QueryNetworkGroups'></input>
+   <output message='tns:TriggerPackageManagement_QueryNetworkGroupsResponse'></output>
+  </operation>
+  <operation name='QueryTriggerPackages' parameterOrder='QueryTriggerPackagesRequest'>
+   <input message='tns:TriggerPackageManagement_QueryTriggerPackages'></input>
+   <output message='tns:TriggerPackageManagement_QueryTriggerPackagesResponse'></output>
+  </operation>
+  <operation name='QueryTriggerPackages_v2' parameterOrder='QueryTriggerPackagesRequest_v2'>
+   <input message='tns:TriggerPackageManagement_QueryTriggerPackages_v2'></input>
+   <output message='tns:TriggerPackageManagement_QueryTriggerPackages_v2Response'></output>
+  </operation>
+  <operation name='QueryTriggers' parameterOrder='QueryTriggersRequest'>
+   <input message='tns:TriggerPackageManagement_QueryTriggers'></input>
+   <output message='tns:TriggerPackageManagement_QueryTriggersResponse'></output>
+  </operation>
+  <operation name='QueryTriggers_v2' parameterOrder='QueryTriggersRequest_v2'>
+   <input message='tns:TriggerPackageManagement_QueryTriggers_v2'></input>
+   <output message='tns:TriggerPackageManagement_QueryTriggers_v2Response'></output>
+  </operation>
+ </portType>
+ <binding name='TriggerPackageManagementBinding' type='tns:TriggerPackageManagement'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='AddTriggerPackageToSubscriptionPackages'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/AddTriggerPackageToSubscriptionPackages'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='ChangeCustomerEmailAddress'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/ChangeCustomerEmailAddress'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='ChangeTriggerPackage'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/ChangeTriggerPackage'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='ChangeTriggerPackage_v2'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/ChangeTriggerPackage_v2'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='CreateTriggerPackage'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/CreateTriggerPackage'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='CreateTriggerPackage_v2'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/CreateTriggerPackage_v2'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='DeleteTriggerPackage'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/DeleteTriggerPackage'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='DeleteTriggerPackageFromSubscriptionPackages'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/DeleteTriggerPackageFromSubscriptionPackages'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryCustomerEmailAddress'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/QueryCustomerEmailAddress'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryNetworkGroups'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/NetworkGroupManagement/QueryNetworkGroups'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryTriggerPackages'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/QueryTriggerPackages'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryTriggerPackages_v2'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/QueryTriggerPackages_v2'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryTriggers'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/QueryTriggers'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='QueryTriggers_v2'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/TriggerPackageManagement/QueryTriggers_v2'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='TriggerPackageManagementService'>
+  <port binding='tns:TriggerPackageManagementBinding' name='TriggerPackageManagementPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/TriggerPackageManagement'/>
+  </port>
+ </service>
+</definitions>

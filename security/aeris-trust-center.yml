@@ -1,0 +1,42 @@
+generated: '2026-09-10'
+method: searched
+source: https://www.aeris.com/trust-center/ and https://www.aeris.com/trust-center/aeris-certifications/
+trust_center:
+  url: https://www.aeris.com/trust-center/
+  status: 200
+  sections:
+  - Security
+  - Compliance
+  - Data Privacy and Protection
+  - Aeris Certifications
+  - Artificial Intelligence
+  - Contact and Support
+certifications:
+- name: ISO/IEC 27001:2022
+  category: information-security
+  scope: The design, development and delivery of software. The provision of secure Internet of Things (IoT) Platforms
+    and Connected Vehicle (Automotive) services.
+  evidence: https://www.aeris.com/trust-center/aeris-certifications/
+- name: ISO 9001:2015
+  category: quality-management
+  scope: GPS-based tracking solutions and telematics services.
+  evidence: https://www.aeris.com/trust-center/aeris-certifications/
+- name: M2M Service Provider Registration
+  category: regulatory-registration
+  scope: Granted by the Department of Telecommunications, Government of India, certifying Aeris as an M2M Service
+    Provider and WLAN/WPAN Connectivity Provider.
+  evidence: https://www.aeris.com/trust-center/aeris-certifications/
+not_found:
+- SOC 2
+- PCI DSS
+- HIPAA
+- FedRAMP
+- CSA STAR
+- TISAX
+vulnerability_disclosure:
+  found: false
+  note: No security.txt on any Aeris host (see well-known/aeris-well-known.yml — 50 probes, 0 documents), no bug-bounty
+    programme on HackerOne, Bugcrowd or Intigriti, and no responsible-disclosure policy page found under the trust
+    center. The trust center offers only a general "Contact and Support" page. No Security pointer is emitted in
+    apis.yml because there is no published disclosure programme to point at.
+contact: https://www.aeris.com/trust-center/contact-and-support/

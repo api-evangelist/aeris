@@ -1,0 +1,141 @@
+generated: '2026-09-10'
+method: searched
+source: The 28 first-party OpenAPI definitions in openapi/, the 16 WSDLs in wsdl/, the Aeris IoT Developer Portal
+  articles, and https://www.aeris.com/trust-center/aeris-certifications/.
+conformance:
+- id: openapi-3.0
+  conforms: true
+  evidence: '28 published definitions declare openapi: 3.0.0 through 3.0.3. No OpenAPI 3.1 document is published.'
+  artifact: openapi/
+- id: wsdl-1.1
+  conforms: true
+  evidence: 16 published WSDL 1.1 documents declaring 117 SOAP operations in total, 15 linked from https://iotdeveloper.aeris.net/hc/en-us/articles/25348517998364-IoT-Accelerator-SOAP-API
+    and one served live at https://aeradminapi.aeris.com/AerAdmin_WS_5_0/ws?wsdl
+  artifact: wsdl/
+- id: oauth2
+  conforms: true
+  evidence: 24 oauth2 securitySchemes across the estate, using the password and clientCredentials flows against
+    https://iot-api.aeris.com/iot/api/auth/token.
+  artifact: authentication/aeris-authentication.yml
+- id: oidc
+  conforms: true
+  evidence: 'enterprise-management-api.yaml securitySchemes description: "The Enterprise API uses OAuth2 and OIDC
+    for authentication and authorization." No /.well-known/openid-configuration is served on any Aeris host, so
+    the discovery half of OIDC is not published.'
+  artifact: openapi/aeris-enterprise-management-api-openapi.yaml
+- id: jwt
+  conforms: true
+  evidence: 'BearerAuth securityScheme with bearerFormat: JWT; the JWT Authentication Best Practices article documents
+    the exp, iss, aud, sub, groups and organization_ids claims.'
+  artifact: https://iotdeveloper.aeris.net/hc/en-us/articles/25348574275868-JWT-Authentication-Best-Practices
+- id: rfc9457
+  conforms: true
+  evidence: 261 error responses across the estate declare application/problem+json. The IoT Watchtower contract
+    labels its error schema "RFC 7807 error envelope (FS section 4.7)". RFC 9457 obsoletes RFC 7807 and the media
+    type is unchanged.
+  artifact: errors/aeris-problem-types.yml
+- id: http-basic-auth
+  conforms: true
+  evidence: sms-messaging-api.yaml declares a BasicAuth http/basic securityScheme.
+  artifact: openapi/aeris-sms-messaging-api-openapi.yaml
+- id: idempotency
+  conforms: false
+  evidence: Only 4 of 173 mutating operations accept an Idempotency-Key header, all of them IoT Watchtower gateway
+    operations. Coverage is partial, not estate-wide.
+  artifact: conventions/aeris-conventions.yml
+- id: pagination
+  conforms: false
+  evidence: Three incompatible idioms coexist (cursor+limit, page+size, offset+limit). No single convention is applied
+    across the estate.
+  artifact: conventions/aeris-conventions.yml
+- id: ws-security
+  conforms: true
+  evidence: The API Quick start guide documents wss-security UsernameToken authentication for the Service Portal
+    SOAP API, citing the OASIS wss-wssecurity-secext-1.0 schema.
+  artifact: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+- id: stomp-1.2
+  conforms: true
+  evidence: The Working with STOMP notifications article states IoT Accelerator pushes notifications over STOMP
+    on secure WebSockets (TLS, port 443) and cites https://stomp.github.io/stomp-specification-1.2.html
+  artifact: asyncapi/aeris-stomp-notifications.yml
+- id: iso-27001
+  conforms: true
+  evidence: ISO/IEC 27001:2022 certification published at https://www.aeris.com/trust-center/aeris-certifications/
+    scoped to software design, development and delivery and the provision of secure IoT platforms and Connected
+    Vehicle services.
+  artifact: security/aeris-trust-center.yml
+- id: iso-9001
+  conforms: true
+  evidence: ISO 9001:2015 certification published at https://www.aeris.com/trust-center/aeris-certifications/ scoped
+    to GPS-based tracking solutions and telematics services.
+  artifact: security/aeris-trust-center.yml
+- id: asyncapi
+  conforms: false
+  evidence: Aeris runs two real event surfaces (STOMP push notifications and the AerSight data stream) but publishes
+    no AsyncAPI document for either.
+  artifact: asyncapi/aeris-stomp-notifications.yml
+- id: rfc8594-sunset
+  conforms: false
+  evidence: 'Three operations carry deprecated: true and Aeris declares the whole SOAP estate deprecated in prose,
+    but no Sunset or Deprecation response header is declared on any operation and no retirement date is published.'
+  artifact: lifecycle/aeris-lifecycle.yml
+- id: fhir
+  conforms: false
+  evidence: Not applicable — Aeris is a cellular IoT connectivity provider, not a healthcare data provider.
+- id: scim
+  conforms: false
+  evidence: No urn:ietf:params:scim schema URN appears in any published contract; enterprise user management is
+    bespoke.
+- id: odata
+  conforms: false
+  evidence: No $metadata surface and no OData query options in any published contract.
+domain_standards:
+- id: oneapi-sms
+  name: GSMA OneAPI SMS / OMA REST NetAPI for SMS v1
+  conforms: true
+  market: telecom messaging
+  evidence: 'openapi/aeris-sms-messaging-api-openapi.yaml, info.description lines 7-8: "The IoT Accelerator SMS
+    Messaging API is based on the following OneAPI SMS interface: - OMA REST NetAPIs v1". The contract implements
+    the standard resource shape — servers[] https://sms.iot-api.aeris.com/dcpapi/smsmessaging/v1 with /outbound/tel:{senderAddress}/requests,
+    /outbound/.../deliveryInfos and /inbound/registrations/{id}/messages.'
+  why_it_matters: A buyer whose platform already speaks OMA REST NetAPI for SMS can integrate Aeris messaging with
+    an existing connector rather than a bespoke one.
+  artifact: openapi/aeris-sms-messaging-api-openapi.yaml
+- id: oma-dm-sms
+  name: OMA-DM standard SMS API
+  conforms: true
+  market: telecom messaging
+  evidence: 'The AerFrame reference states "The SMS API is based on the OMA-DM standard SMS API", and the surface
+    is organised into the OneAPI-style /registration/v2, /notificationchannel/v2 and /networkservices/v2 resource
+    groups. Source: https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API'
+  artifact: null
+  note: Aeris publishes no machine-readable contract for AerFrame, so this is a documented claim rather than a contract
+    signature.
+- id: cloudevents-1.0
+  name: CloudEvents 1.0
+  conforms: true
+  market: event interchange
+  evidence: The AerSight data stream emits CloudEvents envelopes. The published payload example in https://support.aeris.net/hc/en-us/articles/4403148278679-Data-Stream-from-AerSight
+    carries specversion "1.0", id, source "aeris/acp/ipstream", type "ipstream.data", datacontenttype "text/csv"
+    and time — the CloudEvents 1.0 core attribute set.
+  artifact: asyncapi/aeris-stomp-notifications.yml
+- id: 3gpp-identifiers
+  name: 3GPP network identifiers
+  conforms: true
+  market: cellular networking
+  evidence: resource-inventory-api.yaml and operator-order-management-api.yaml model APNs, PDP/ESM contexts and
+    roaming profiles using 3GPP-native identifiers, e.g. epc.mnc860.mcc354.3gppnetwork.org realm strings and IMSI/ICCID/MSISDN
+    key types. The subscription APIs address resources by subscription-id-type of IMSI, ICCID or MSISDN.
+  artifact: openapi/aeris-resource-inventory-api-openapi.yaml
+not_claimed:
+- GSMA SGP.22
+- GSMA SGP.32
+- TM Forum Open API
+- ETSI M2M
+- PSD2
+- FAPI
+- JSON:API
+not_claimed_note: Aeris runs a substantial eSIM/eUICC surface — eUICC Setup, eIM Info and eIM ECO Operations — which
+  is the natural home for a GSMA SGP.22 or SGP.32 conformance claim, and Order Management and Resource Inventory
+  are the natural home for TM Forum TMF622/TMF639. No published contract cites any of them, so none is recorded.
+  This is a gap in what Aeris declares, not an assertion that the implementations diverge.

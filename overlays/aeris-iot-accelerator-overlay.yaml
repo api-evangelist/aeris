@@ -1,0 +1,73 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Aeris IoT Accelerator REST API
+  version: 1.0.0
+x-generated: '2026-09-10'
+x-method: generated
+x-source: Generated from artifacts in this repository. Does not modify the original Aeris contracts in openapi/_original/.
+extends: openapi/aeris-mds-esb-subscription-management-openapi.yaml
+x-also-applies-to:
+- openapi/aeris-auth-3.0-openapi.yaml
+- openapi/aeris-business-analytics-report-api-openapi.yaml
+- openapi/aeris-business-automation-api-openapi.yaml
+- openapi/aeris-consumer-connectivity-openapi.yaml
+- openapi/aeris-eco-operations-api-openapi.yaml
+- openapi/aeris-eim-info-api-openapi.yaml
+- openapi/aeris-enterprise-management-api-openapi.yaml
+- openapi/aeris-euicc-setup-api-openapi.yaml
+- openapi/aeris-incidents-external-api-openapi.yaml
+- openapi/aeris-mds-esb-device-localization-openapi.yaml
+- openapi/aeris-mds-esb-subscription-management-openapi.yaml
+- openapi/aeris-operator-order-management-api-openapi.yaml
+- openapi/aeris-organization-signaling-aggregations-api-openapi.yaml
+- openapi/aeris-resource-inventory-api-openapi.yaml
+- openapi/aeris-shared-bundle-api-openapi.yaml
+- openapi/aeris-sim-specification-management-api-openapi.yaml
+- openapi/aeris-subscription-change-history-openapi.yaml
+- openapi/aeris-subscription-custom-fields-api-openapi.yaml
+- openapi/aeris-subscription-device-api-openapi.yaml
+- openapi/aeris-subscription-device-reconnect-api-openapi.yaml
+- openapi/aeris-subscription-inventory-common-api-openapi.yaml
+- openapi/aeris-subscription-location-api-openapi.yaml
+- openapi/aeris-subscription-number-management-api-openapi.yaml
+- openapi/aeris-subscription-search-api-openapi.yaml
+- openapi/aeris-subscription-signalling-events-api-openapi.yaml
+- openapi/aeris-subscription-signalling-usages-api-openapi.yaml
+actions:
+- target: $.info
+  description: Record the provenance of this contract as API Evangelist observed it.
+  update:
+    x-apis-io-provenance:
+      harvested: '2026-09-10'
+      harvested_from: https://storage.googleapis.com/iota_devportal/yaml/
+      linked_from: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+      operator: Aeris Communications, Inc.
+      heritage: IoT Accelerator platform, acquired from Ericsson by Aeris in February 2023; the SOAP WSDLs on this
+        platform still carry api.dcp.ericsson.net target namespaces while the REST servers[] are on iot-api.aeris.com.
+- target: $.info
+  description: Point at the runtime semantics Aeris documents outside the contract.
+  update:
+    x-conventions: conventions/aeris-conventions.yml
+    x-rate-limits: rate-limits/aeris-rate-limits.yml
+    x-error-catalog: errors/aeris-problem-types.yml
+    x-authentication: authentication/aeris-authentication.yml
+- target: $.components.securitySchemes[?(@.type=='oauth2')]
+  description: Record the scopes reference derived from the estate.
+  update:
+    x-scopes-reference: scopes/aeris-scopes.yml
+- target: $.paths.*.*.responses.429
+  description: Attach the published rate-limit response headers, which the contracts declare a 429 for but do not
+    document headers on.
+  update:
+    x-rate-limit-headers:
+    - X-RateLimit-Limit-Second
+    - X-RateLimit-Limit-Minute
+    - X-RateLimit-Remaining-Second
+    - X-RateLimit-Remaining-Minute
+    x-rate-limit-source: https://iotdeveloper.aeris.net/hc/en-us/articles/25348588280220-IoT-Accelerator-REST-API-Request-Rate-Limits
+- target: $.paths.*[?(@.deprecated==true)]
+  description: Flag that no Sunset or Deprecation header and no retirement date accompany the deprecated flag.
+  update:
+    x-sunset: null
+    x-deprecation-note: Marked deprecated in the contract. Aeris publishes no retirement date and declares no RFC
+      8594 Sunset or Deprecation response header.

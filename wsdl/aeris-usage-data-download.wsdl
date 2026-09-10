@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='UsageDataDownloadService' targetNamespace='http://api.dcp.ericsson.net/UsageDataDownload' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/UsageDataDownload' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/UsageDataDownload' version='1.0' xmlns:tns='http://api.dcp.ericsson.net/UsageDataDownload' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='Query' type='tns:query'/>
+   <xs:element name='QueryResponse' type='tns:queryResponse'/>
+   <xs:complexType name='query'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='customerno' type='xs:string'/>
+     <xs:element minOccurs='0' name='startdate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='enddate' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='usageData'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='date' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='size' type='xs:int'/>
+     <xs:element minOccurs='0' name='path' type='xs:string'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='queryResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='usageData' nillable='true' type='tns:usageData'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ <message name='UsageDataDownload_query'>
+  <part element='tns:Query' name='query'></part>
+ </message>
+ <message name='UsageDataDownload_queryResponse'>
+  <part element='tns:QueryResponse' name='queryResponse'></part>
+ </message>
+ <portType name='UsageDataDownload'>
+  <operation name='query' parameterOrder='query'>
+   <input message='tns:UsageDataDownload_query'></input>
+   <output message='tns:UsageDataDownload_queryResponse'></output>
+  </operation>
+ </portType>
+ <binding name='UsageDataDownloadBinding' type='tns:UsageDataDownload'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='query'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/usagedatadownload'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='UsageDataDownloadService'>
+  <port binding='tns:UsageDataDownloadBinding' name='UsageDataDownloadPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/UsageDataDownload'/>
+  </port>
+ </service>
+</definitions>

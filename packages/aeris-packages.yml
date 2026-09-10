@@ -1,0 +1,60 @@
+generated: '2026-09-10'
+method: searched
+source: PyPI registry metadata (pypi.org/pypi/<pkg>/json) and the Aeris GitHub organizations github.com/aeristhings
+  and github.com/aerisiot.
+summary:
+  official_count: 2
+  registries_searched:
+  - pypi
+  - npm
+  - maven-central
+  - nuget
+  - pkg.go.dev
+  - rubygems
+  - packagist
+  - crates.io
+  note: 'Only PyPI returned first-party Aeris client libraries. No first-party Aeris package was found on npm, Maven
+    Central, NuGet, pkg.go.dev, RubyGems, Packagist or crates.io. Both published packages are stale: the connectivity
+    API SDK has not shipped a release since March 2020 and the module SDK since February 2022, while the IoT Accelerator
+    REST estate they do not cover has continued to version (Enterprise Management API is at 3.9.3).'
+packages:
+- name: aerisapisdk
+  registry: pypi
+  official: true
+  version: 0.1.5
+  published: '2020-03-31'
+  url: https://pypi.org/project/aerisapisdk/
+  repository: https://github.com/aeristhings/aeris-apisdk-py
+  language: python
+  license: Apache-2.0
+  covers:
+  - AerAdmin API Services
+  - AerFrame API Services
+  - AerTraffic API Services
+  note: First-party SDK and CLI (aeriscli) for the Aeris-native connectivity APIs, published by the Aeris GitHub
+    organization aeristhings and copyright Aeris Communications Inc. Its aerisconfig.py is the authoritative published
+    source for the AerFrame, AerFrame longpoll, AerAdmin and AerTraffic base URLs recorded in this profile. Aeris
+    states in the repository README that "this is not production code" and that no formal support is provided. Four
+    releases total; latest 2020-03-31.
+- name: aerismodsdk
+  registry: pypi
+  official: true
+  version: 0.1.5
+  published: '2022-02-13'
+  url: https://pypi.org/project/aerismodsdk/
+  repository: https://github.com/aeristhings/aeris-modsdk-py
+  language: python
+  license: Apache-2.0
+  covers:
+  - cellular radio module control for modules connecting to the Aeris network
+  note: First-party SDK and CLI for radio modules connecting to the Aeris network. Five releases total; latest 2022-02-13.
+    Not a client for any of the HTTP APIs in this profile.
+not_found:
+- registry: npm
+  note: No first-party Aeris client library found. @aeris/sdk, aeris-iot and aerisapisdk all 404 on registry.npmjs.org.
+- registry: maven-central
+  note: No first-party Aeris client library found, despite the SOAP/WSDL surface being the natural home for a generated
+    Java client.
+gap: Aeris publishes 28 OpenAPI definitions and 16 WSDLs but ships no first-party SDK for the IoT Accelerator REST
+  API, the SMS Messaging API or the IoT Watchtower API. The two packages that exist cover only the older Aeris-native
+  connectivity APIs and are three to six years old.

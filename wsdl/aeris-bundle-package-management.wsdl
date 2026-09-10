@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='BundlePackageManagementService' targetNamespace='http://api.dcp.ericsson.net/BundlePackageManagement' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://api.dcp.ericsson.net/BundlePackageManagement' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://api.dcp.ericsson.net/BundlePackageManagement' version='1.0' xmlns:tns='http://api.dcp.ericsson.net/BundlePackageManagement' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='QueryBlockedSubscriptions'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='QueryBlockedSubscriptionsResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='blockedSubscriptionDetails' type='tns:BlockedSubscriptionDetails'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='RequestUnblockSubscription'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='customerNo' type='xs:string'/>
+      <xs:element name='resource' type='tns:resource'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:element name='RequestUnblockSubscriptionResponse'>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element minOccurs='0' name='serviceRequestId' type='xs:string'/>
+      <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+     </xs:sequence>
+    </xs:complexType>
+   </xs:element>
+   <xs:complexType name='BlockedSubscriptionDetails'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='blockedSubscriptionDetail' nillable='true' type='tns:BlockedSubscriptionDetail'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='BlockedSubscriptionDetail'>
+    <xs:sequence>
+     <xs:element name='imsi' type='xs:string'/>
+     <xs:element minOccurs='0' name='msisdn' type='xs:string'/>
+     <xs:element minOccurs='0' name='icc' type='xs:string'/>
+     <xs:element minOccurs='0' name='customerLabel' type='xs:string'/>
+     <xs:element minOccurs='0' name='bundleName' type='xs:string'/>
+     <xs:element minOccurs='0' name='status' type='tns:StatusType'/>
+     <xs:element minOccurs='0' name='trafficType' type='tns:TrafficType'/>
+     <xs:element minOccurs='0' name='thresholdLimit' type='xs:string'/>
+     <xs:element minOccurs='0' name='thresholdUnit' type='xs:string'/>
+     <xs:element minOccurs='0' name='networkGroup' type='xs:string'/>
+     <xs:element minOccurs='0' name='blockedDate' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='unBlockedDate' type='xs:dateTime'/>
+     <xs:any maxOccurs='unbounded' minOccurs='0' namespace='##other' processContents='lax'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='resource'>
+    <xs:sequence>
+     <xs:element name='id' type='xs:string'/>
+     <xs:element name='type' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name='StatusType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Activation In Progress'/>
+     <xs:enumeration value='Active'/>
+     <xs:enumeration value='Deactivated'/>
+     <xs:enumeration value='Pause'/>
+     <xs:enumeration value='Terminated'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='TrafficType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='gprs'/>
+     <xs:enumeration value='sms'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </types>
+ <message name='BundlePackageManagement_QueryBlockedSubscriptionsResponse'>
+  <part element='tns:QueryBlockedSubscriptionsResponse' name='QueryBlockedSubscriptionsResponse'></part>
+ </message>
+ <message name='BundlePackageManagement_QueryBlockedSubscriptions'>
+  <part element='tns:QueryBlockedSubscriptions' name='QueryBlockedSubscriptions'></part>
+ </message>
+ <message name='BundlePackageManagement_RequestUnblockSubscription'>
+  <part element='tns:RequestUnblockSubscription' name='RequestUnblockSubscription'></part>
+ </message>
+ <message name='BundlePackageManagement_RequestUnblockSubscriptionResponse'>
+  <part element='tns:RequestUnblockSubscriptionResponse' name='RequestUnblockSubscriptionResponse'></part>
+ </message>
+ <portType name='BundlePackageManagement'>
+  <operation name='QueryBlockedSubscriptions' parameterOrder='QueryBlockedSubscriptions'>
+   <input message='tns:BundlePackageManagement_QueryBlockedSubscriptions'></input>
+   <output message='tns:BundlePackageManagement_QueryBlockedSubscriptionsResponse'></output>
+  </operation>
+  <operation name='RequestUnblockSubscription' parameterOrder='RequestUnblockSubscription'>
+   <input message='tns:BundlePackageManagement_RequestUnblockSubscription'></input>
+   <output message='tns:BundlePackageManagement_RequestUnblockSubscriptionResponse'></output>
+  </operation>
+ </portType>
+ <binding name='BundlePackageManagementBinding' type='tns:BundlePackageManagement'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='QueryBlockedSubscriptions'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/BundlePackageManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='RequestUnblockSubscription'>
+   <soap:operation soapAction='http://api.dcp.ericsson.net/BundlePackageManagement'/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='BundlePackageManagementService'>
+  <port binding='tns:BundlePackageManagementBinding' name='BundlePackageManagementPort'>
+   <soap:address location='https://m2m.dcp.ericsson.net/dcpapi/BundlePackageManagement'/>
+  </port>
+ </service>
+</definitions>

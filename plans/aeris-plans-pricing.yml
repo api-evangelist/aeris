@@ -1,0 +1,19 @@
+generated: '2026-09-10'
+method: searched
+source: https://www.aeris.com/ — site navigation and footer searched for a pricing or plans page on 2026-09-10;
+  https://www.aeris.com/pricing/ returns HTTP 404.
+plan_count: 0
+model: enterprise-contract
+note: 'Aeris publishes no public pricing, plan tiers, quotas or rate cards. Connectivity is sold through an enterprise
+  sales motion and, for the IoT Accelerator platform, through Connectivity Service Providers: the Aeris quick-start
+  guide states that an account is obtained "subscribing to the service from your Connectivity Service Provider"
+  and that "the base URL for all API calls will be provided by your Service Provider when you subscribe to the service".
+  There is no self-serve signup, no free tier and no trial. The only published usage numbers are the per-endpoint
+  request-rate limits in rate-limits/aeris-rate-limits.yml, which are throttles rather than a priced quota.'
+evidence:
+- url: https://www.aeris.com/pricing/
+  status: 404
+- url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  status: 200
+  via: Zendesk Help Center API; the HTML view returns 403 to non-browser clients.
+plans: []

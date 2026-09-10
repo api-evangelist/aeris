@@ -1,0 +1,213 @@
+generated: '2026-09-10'
+method: searched
+source: https://iotdeveloper.aeris.net/hc/en-us/articles/25348588280220-IoT-Accelerator-REST-API-Request-Rate-Limits
+docs:
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348588280220-IoT-Accelerator-REST-API-Request-Rate-Limits
+- https://iotdeveloper.aeris.net/hc/en-us/articles/25348588408988-Best-Practices-for-Avoiding-Rate-Limiting-in-API-Requests
+applies_to: Aeris IoT Accelerator REST API (https://iot-api.aeris.com). Aeris states these limits apply to enterprise
+  users of the IoT-A cloud environment.
+limit_count: 44
+scope: per-endpoint
+exhaustion:
+  status: 429
+  reason: Too Many Requests
+  retry_after_header: null
+  note: Aeris documents 429 as the exhaustion status. No Retry-After header is documented; clients are told to read
+    the X-RateLimit-Remaining-* headers instead.
+response_headers:
+- name: X-RateLimit-Limit-Second
+  type: integer
+  description: The maximum number of requests allowed in a second.
+- name: X-RateLimit-Limit-Minute
+  type: integer
+  description: The maximum number of requests allowed in a minute.
+- name: X-RateLimit-Remaining-Second
+  type: integer
+  description: The number of requests remaining in a second.
+- name: X-RateLimit-Remaining-Minute
+  type: integer
+  description: The number of requests remaining in a minute.
+header_note: Aeris states the rate-limit headers are returned on both 200 and 429 responses, so an agent can steer
+  before it is throttled.
+limits:
+- path: iot/api/auth
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 60
+- path: iot/api/business-analytics-service/v1/aggregated-traffic-usages/top-usage-subscriptions
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/business-analytics-service/v1/invoices
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/business-analytics-service/v1/reports
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/business-analytics-service/v1/usages
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/business-automation/triggered-actions
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/business-automation/rulesets
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/consumer-connectivity
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/ecm/enterprises
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/localization-tables
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/euicc-agreements
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/activation-codes
+  scope: per-endpoint
+  per_second: 2
+  per_minute: 20
+- path: iot/api/subscriptions/imsi-ranges
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/subscriptions/msisdn-pools
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/subscriptions/msisdn-ranges
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/subscriptions/number-schemes
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/diagnostic-analytics/signaling-aggregations/traffic-usages
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/apns
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/esm-context-qos
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/esm-contexts
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/esm-profile-qos
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/esm-profiles
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/network-nodes
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/operator-networks
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/pdp-context-profiles
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/pdp-context-qos
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/roaming-profiles-2g3g
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/roaming-profiles-4g
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/shared-bundles
+  scope: per-endpoint
+  per_second: 15
+  per_minute: 300
+- path: iot/api/file-shares
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/specifications
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 50
+- path: iot/api/sica/subscriptions/sim-orders
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/subscriptions/locations
+  scope: per-endpoint
+  per_second: 15
+  per_minute: 300
+- path: iot/api/subscriptions
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/subscriptions/details
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 150
+- path: iot/api/subscriptions/devices
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: /iot/api/subscriptions/devices/
+  scope: per-endpoint
+  per_second: 20
+  per_minute: 500
+- path: iot/api/sica/subscriptions/regions
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/sica/subscriptions/sim-resource
+  scope: per-endpoint
+  per_second: 30
+  per_minute: 1000
+- path: iot/api/sica/subscriptions/sim-resources
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/sica/subscriptions/sims
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 150
+- path: iot/api/sica/subscriptions/requests
+  scope: per-endpoint
+  per_second: 10
+  per_minute: 100
+- path: iot/api/xdr/events
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 25
+- path: iot/api/xdr/reports
+  scope: per-endpoint
+  per_second: 5
+  per_minute: 25
+other_surfaces:
+  watchtower: The Aeris IoT Watchtower contract declares 429 responses and exposes rate-limiter resources (/watchtower/v1/rate-limiters)
+    that customers configure themselves; Aeris publishes no default numeric limits for it.
+  aeradmin_aerframe_aertraffic: No published request-rate limits found for the Aeris-native AerAdmin, AerFrame or
+    AerTraffic APIs.
