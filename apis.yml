@@ -1,18 +1,20 @@
 aid: aeris
 name: Aeris
-description: Aeris is a cellular IoT connectivity company, founded in 1992 and headquartered in San Jose, California, that
-  operates a global network and connectivity management platform purpose-built for machines rather than phones. Aeris provides
-  SIM and eSIM/eUICC lifecycle management, device provisioning and activation, rate-plan and bundle management, usage and
-  signalling analytics, SMS messaging, and IoT security monitoring to automotive, utilities, logistics, medical-device and
-  industrial customers. In February 2023 Aeris acquired Ericsson's IoT Accelerator and Connected Vehicle Cloud businesses,
-  and the IoT Accelerator platform now runs under the Aeris name and serves the bulk of its published API surface alongside
-  the older Aeris-native AerAdmin, AerFrame and AerTraffic connectivity APIs and the Aeris IoT Watchtower security API.
+description: Aeris is a cellular IoT connectivity company, founded in 1992 and headquartered in San Jose,
+  California, that operates a global network and connectivity management platform purpose-built for machines
+  rather than phones. Aeris provides SIM and eSIM/eUICC lifecycle management, device provisioning and
+  activation, rate-plan and bundle management, usage and signalling analytics, SMS messaging, and IoT
+  security monitoring to automotive, utilities, logistics, medical-device and industrial customers. In
+  February 2023 Aeris acquired Ericsson's IoT Accelerator and Connected Vehicle Cloud businesses, and
+  the IoT Accelerator platform now runs under the Aeris name and serves the bulk of its published API
+  surface alongside the older Aeris-native AerAdmin, AerFrame and AerTraffic connectivity APIs and the
+  Aeris IoT Watchtower security API.
 image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
 url: https://raw.githubusercontent.com/api-evangelist/aeris/refs/heads/main/apis.yml
 specificationVersion: '0.20'
 position: Producing
 created: '2026-09-10'
-modified: '2026-09-10'
+modified: '2026-09-16'
 tags:
 - IoT
 - Cellular Connectivity
@@ -26,6 +28,7 @@ tags:
 - SMS Messaging
 - eUICC
 - Fleet Telematics
+- Machine-to-Machine
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -33,11 +36,12 @@ maintainers:
   email: info@apis.io
 apis:
 - name: Aeris IoT Accelerator REST API
-  description: The primary REST API of the Aeris IoT Accelerator platform (acquired from Ericsson in 2023), covering subscription
-    and SIM inventory, subscription search and change history, device and eUICC inventory, eSIM localization, eUICC setup
-    and eIM/ECO operations, enterprise management, order management, number management, custom fields, shared bundles, business
-    automation rulesets and triggers, signalling events and usage reporting, business analytics reports and invoices, consumer
-    connectivity purchases, resource inventory and incident management. Authenticates with a JWT bearer token from POST /iot/api/auth
+  description: The primary REST API of the Aeris IoT Accelerator platform (acquired from Ericsson in 2023),
+    covering subscription and SIM inventory, subscription search and change history, device and eUICC
+    inventory, eSIM localization, eUICC setup and eIM/ECO operations, enterprise management, order management,
+    number management, custom fields, shared bundles, business automation rulesets and triggers, signalling
+    events and usage reporting, business analytics reports and invoices, consumer connectivity purchases,
+    resource inventory and incident management. Authenticates with a JWT bearer token from POST /iot/api/auth
     or an X-Access-Token session token.
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
   humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
@@ -126,10 +130,10 @@ apis:
   - type: Postman
     url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
 - name: Aeris IoT Accelerator SMS Messaging API
-  description: RESTful SMS messaging API for sending mobile-terminated SMS to devices, retrieving delivery status, and retrieving
-    inbound mobile-originated messages for a registration. The contract states it is based on the OneAPI SMS interface and
-    OMA REST NetAPIs v1, and uses the standard /smsmessaging/v1/outbound/{senderAddress}/requests resource shape. Authenticates
-    with HTTP Basic.
+  description: RESTful SMS messaging API for sending mobile-terminated SMS to devices, retrieving delivery
+    status, and retrieving inbound mobile-originated messages for a registration. The contract states
+    it is based on the OneAPI SMS interface and OMA REST NetAPIs v1, and uses the standard /smsmessaging/v1/outbound/{senderAddress}/requests
+    resource shape. Authenticates with HTTP Basic.
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
   humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
   baseURL: https://sms.iot-api.aeris.com/dcpapi/smsmessaging/v1
@@ -144,10 +148,10 @@ apis:
   - type: OpenAPI
     url: openapi/aeris-sms-messaging-api-openapi.yaml
 - name: Aeris IoT Watchtower API
-  description: 'IoT security API for the Aeris IoT Watchtower product: device groups, applications, gateways, flows and activity
-    logs, event configuration and policies, enforcement rules, protection policies, rate limiters, location lists and security
-    reporting. Uses OAuth 2.0 client credentials, an Idempotency-Key header on gateway writes, and an RFC 7807 problem+json
-    error envelope.'
+  description: 'IoT security API for the Aeris IoT Watchtower product: device groups, applications, gateways,
+    flows and activity logs, event configuration and policies, enforcement rules, protection policies,
+    rate limiters, location lists and security reporting. Uses OAuth 2.0 client credentials, an Idempotency-Key
+    header on gateway writes, and an RFC 7807 problem+json error envelope.'
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
   humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
   baseURL: https://watchtower-api-prd.aeriscloud.com
@@ -163,10 +167,11 @@ apis:
   - type: Idempotency
     url: conventions/aeris-conventions.yml
 - name: Aeris IoT Accelerator SOAP API
-  description: The legacy SOAP/WSDL service portal API of the IoT Accelerator platform, covering subscription management,
-    trigger and bundle package management, aggregated and subscription traffic, usage data download, report download, incident
-    and service-request management, realtime trace, operator info, device reconnect and API status. Aeris documents this surface
-    as deprecated in favour of the REST equivalents; the WSDLs remain published.
+  description: The legacy SOAP/WSDL service portal API of the IoT Accelerator platform, covering subscription
+    management, trigger and bundle package management, aggregated and subscription traffic, usage data
+    download, report download, incident and service-request management, realtime trace, operator info,
+    device reconnect and API status. Aeris documents this surface as deprecated in favour of the REST
+    equivalents; the WSDLs remain published.
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
   humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348517998364-IoT-Accelerator-SOAP-API
   baseURL: https://iot-api.aeris.net
@@ -209,10 +214,11 @@ apis:
   - type: WSDL
     url: wsdl/aeris-usage-data-download.wsdl
 - name: Aeris AerAdmin Device Management API
-  description: The Aeris-native SOAP web service used to provision, activate, suspend, cancel, retire and re-provision devices
-    on the Aeris network, change rate plans and service profiles, update device attributes and traffic policy, query device
-    detail, network status and location, and run the same operations in bulk. The WSDL is published unauthenticated at /AerAdmin_WS_5_0/ws?wsdl
-    and declares 47 operations. A REST facade over the same system is documented as the AerAdmin 5.0 REST API.
+  description: The Aeris-native SOAP web service used to provision, activate, suspend, cancel, retire
+    and re-provision devices on the Aeris network, change rate plans and service profiles, update device
+    attributes and traffic policy, query device detail, network status and location, and run the same
+    operations in bulk. The WSDL is published unauthenticated at /AerAdmin_WS_5_0/ws?wsdl and declares
+    47 operations. A REST facade over the same system is documented as the AerAdmin 5.0 REST API.
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
   humanURL: https://support.aeris.net/hc/en-us/articles/360037124333-AerAdmin-Device-Management-API-SOAP-and-XML
   baseURL: https://aeradminapi.aeris.com
@@ -229,10 +235,11 @@ apis:
   - type: WSDL
     url: wsdl/aeris-aeradmin-ws-5-0.wsdl
 - name: Aeris AerFrame Device Communication and Control API
-  description: 'RESTful SMS and device-control API on the Aeris network: send mobile-terminated SMS, receive delivery notifications,
-    receive and acknowledge mobile-originated SMS, reset network registration, retrieve a local dialable number and query
-    network location. Organised as application registration, notification-channel and network-services resources, and documented
-    as based on the OMA-DM standard SMS API. Authenticates with an account API key.'
+  description: 'RESTful SMS and device-control API on the Aeris network: send mobile-terminated SMS, receive
+    delivery notifications, receive and acknowledge mobile-originated SMS, reset network registration,
+    retrieve a local dialable number and query network location. Organised as application registration,
+    notification-channel and network-services resources, and documented as based on the OMA-DM standard
+    SMS API. Authenticates with an account API key.'
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
   humanURL: https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API
   baseURL: https://api.aerframe.aeris.com
@@ -245,10 +252,10 @@ apis:
   - type: Documentation
     url: https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API
 - name: Aeris AerTraffic Reports API
-  description: 'Web service interface for retrieving device traffic and billing data from the Aeris AerTraffic system: create
-    online and scheduled report templates, poll report status, download online, scheduled and archived reports, manage report
-    recipients and retrieve trend and account-level reports. Mirrors the reporting available in the AerPort web UI. Authenticates
-    with an account API key.'
+  description: 'Web service interface for retrieving device traffic and billing data from the Aeris AerTraffic
+    system: create online and scheduled report templates, poll report status, download online, scheduled
+    and archived reports, manage report recipients and retrieve trend and account-level reports. Mirrors
+    the reporting available in the AerPort web UI. Authenticates with an account API key.'
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
   humanURL: https://support.aeris.net/hc/en-us/articles/360037394973-AerTraffic-Reports-API
   baseURL: https://aertrafficapi.aeris.com/v1
