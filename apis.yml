@@ -35,143 +35,13 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- name: Aeris IoT Accelerator REST API
-  description: The primary REST API of the Aeris IoT Accelerator platform (acquired from Ericsson in 2023),
-    covering subscription and SIM inventory, subscription search and change history, device and eUICC
-    inventory, eSIM localization, eUICC setup and eIM/ECO operations, enterprise management, order management,
-    number management, custom fields, shared bundles, business automation rulesets and triggers, signalling
-    events and usage reporting, business analytics reports and invoices, consumer connectivity purchases,
-    resource inventory and incident management. Authenticates with a JWT bearer token from POST /iot/api/auth
-    or an X-Access-Token session token.
-  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
-  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
-  baseURL: https://iot-api.aeris.com
-  tags:
-  - IoT
-  - Cellular Connectivity
-  - SIM Management
-  - eSIM
-  - eUICC
-  - Device Management
-  - Connectivity Management Platform
-  properties:
-  - type: Documentation
-    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
-  - type: APIReference
-    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
-  - type: GettingStarted
-    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
-  - type: OpenAPI
-    url: openapi/aeris-auth-3.0-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-business-analytics-report-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-business-automation-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-consumer-connectivity-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-eco-operations-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-eim-info-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-enterprise-management-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-euicc-setup-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-incidents-external-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-mds-esb-device-localization-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-mds-esb-subscription-management-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-operator-order-management-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-organization-signaling-aggregations-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-resource-inventory-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-shared-bundle-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-sim-specification-management-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-change-history-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-custom-fields-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-device-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-device-reconnect-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-inventory-common-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-location-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-number-management-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-search-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-signalling-events-api-openapi.yaml
-  - type: OpenAPI
-    url: openapi/aeris-subscription-signalling-usages-api-openapi.yaml
-  - type: Authentication
-    url: authentication/aeris-authentication.yml
-  - type: OAuthScopes
-    url: scopes/aeris-scopes.yml
-  - type: Conventions
-    url: conventions/aeris-conventions.yml
-  - type: ErrorCatalog
-    url: errors/aeris-problem-types.yml
-  - type: DataModel
-    url: data-model/aeris-data-model.yml
-  - type: RateLimits
-    url: rate-limits/aeris-rate-limits.yml
-  - type: Overlay
-    url: overlays/aeris-iot-accelerator-overlay.yaml
-  - type: Postman
-    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
-- name: Aeris IoT Accelerator SMS Messaging API
-  description: RESTful SMS messaging API for sending mobile-terminated SMS to devices, retrieving delivery
-    status, and retrieving inbound mobile-originated messages for a registration. The contract states
-    it is based on the OneAPI SMS interface and OMA REST NetAPIs v1, and uses the standard /smsmessaging/v1/outbound/{senderAddress}/requests
-    resource shape. Authenticates with HTTP Basic.
-  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
-  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
-  baseURL: https://sms.iot-api.aeris.com/dcpapi/smsmessaging/v1
-  tags:
-  - SMS Messaging
-  - IoT
-  - Telecom
-  - M2M
-  properties:
-  - type: Documentation
-    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
-  - type: OpenAPI
-    url: openapi/aeris-sms-messaging-api-openapi.yaml
-- name: Aeris IoT Watchtower API
-  description: 'IoT security API for the Aeris IoT Watchtower product: device groups, applications, gateways,
-    flows and activity logs, event configuration and policies, enforcement rules, protection policies,
-    rate limiters, location lists and security reporting. Uses OAuth 2.0 client credentials, an Idempotency-Key
-    header on gateway writes, and an RFC 7807 problem+json error envelope.'
-  image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
-  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
-  baseURL: https://watchtower-api-prd.aeriscloud.com
-  tags:
-  - IoT Security
-  - IoT
-  - Device Management
-  properties:
-  - type: Documentation
-    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
-  - type: OpenAPI
-    url: openapi/aeris-watchtower-api-openapi-openapi.yaml
-  - type: Idempotency
-    url: conventions/aeris-conventions.yml
 - name: Aeris IoT Accelerator SOAP API
-  description: The legacy SOAP/WSDL service portal API of the IoT Accelerator platform, covering subscription
-    management, trigger and bundle package management, aggregated and subscription traffic, usage data
-    download, report download, incident and service-request management, realtime trace, operator info,
-    device reconnect and API status. Aeris documents this surface as deprecated in favour of the REST
-    equivalents; the WSDLs remain published.
+  description: >-
+    The legacy SOAP/WSDL service portal API of the IoT Accelerator platform, covering subscription management,
+    trigger and bundle package management, aggregated and subscription traffic, usage data download, report
+    download, incident and service-request management, realtime trace, operator info, device reconnect
+    and API status. Aeris documents this surface as deprecated in favour of the REST equivalents; the
+    WSDLs remain published.
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
   humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348517998364-IoT-Accelerator-SOAP-API
   baseURL: https://iot-api.aeris.net
@@ -214,13 +84,15 @@ apis:
   - type: WSDL
     url: wsdl/aeris-usage-data-download.wsdl
 - name: Aeris AerAdmin Device Management API
-  description: The Aeris-native SOAP web service used to provision, activate, suspend, cancel, retire
-    and re-provision devices on the Aeris network, change rate plans and service profiles, update device
-    attributes and traffic policy, query device detail, network status and location, and run the same
-    operations in bulk. The WSDL is published unauthenticated at /AerAdmin_WS_5_0/ws?wsdl and declares
-    47 operations. A REST facade over the same system is documented as the AerAdmin 5.0 REST API.
+  description: >-
+    The Aeris-native SOAP web service used to provision, activate, suspend, cancel, retire and re-provision
+    devices on the Aeris network, change rate plans and service profiles, update device attributes and
+    traffic policy, query device detail, network status and location, and run the same operations in bulk.
+    The WSDL is published unauthenticated at /AerAdmin_WS_5_0/ws?wsdl and declares 47 operations. A REST
+    facade over the same system is documented as the AerAdmin 5.0 REST API.
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
-  humanURL: https://support.aeris.net/hc/en-us/articles/360037124333-AerAdmin-Device-Management-API-SOAP-and-XML
+  humanURL: >-
+    https://support.aeris.net/hc/en-us/articles/360037124333-AerAdmin-Device-Management-API-SOAP-and-XML
   baseURL: https://aeradminapi.aeris.com
   tags:
   - Device Management
@@ -229,19 +101,22 @@ apis:
   - SOAP
   properties:
   - type: Documentation
-    url: https://support.aeris.net/hc/en-us/articles/360037124333-AerAdmin-Device-Management-API-SOAP-and-XML
+    url: >-
+      https://support.aeris.net/hc/en-us/articles/360037124333-AerAdmin-Device-Management-API-SOAP-and-XML
   - type: APIReference
     url: https://support.aeris.net/hc/en-us/articles/360037274334-AerAdmin-5-0-REST-API-Reference
   - type: WSDL
     url: wsdl/aeris-aeradmin-ws-5-0.wsdl
 - name: Aeris AerFrame Device Communication and Control API
-  description: 'RESTful SMS and device-control API on the Aeris network: send mobile-terminated SMS, receive
-    delivery notifications, receive and acknowledge mobile-originated SMS, reset network registration,
-    retrieve a local dialable number and query network location. Organised as application registration,
-    notification-channel and network-services resources, and documented as based on the OMA-DM standard
-    SMS API. Authenticates with an account API key.'
+  description: >-
+    RESTful SMS and device-control API on the Aeris network: send mobile-terminated SMS, receive delivery
+    notifications, receive and acknowledge mobile-originated SMS, reset network registration, retrieve
+    a local dialable number and query network location. Organised as application registration, notification-channel
+    and network-services resources, and documented as based on the OMA-DM standard SMS API. Authenticates
+    with an account API key.
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
-  humanURL: https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API
+  humanURL: >-
+    https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API
   baseURL: https://api.aerframe.aeris.com
   tags:
   - SMS Messaging
@@ -250,12 +125,14 @@ apis:
   - IoT
   properties:
   - type: Documentation
-    url: https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API
+    url: >-
+      https://support.aeris.net/hc/en-us/articles/360036914654-AerFrame-Device-Communication-and-Control-API
 - name: Aeris AerTraffic Reports API
-  description: 'Web service interface for retrieving device traffic and billing data from the Aeris AerTraffic
-    system: create online and scheduled report templates, poll report status, download online, scheduled
-    and archived reports, manage report recipients and retrieve trend and account-level reports. Mirrors
-    the reporting available in the AerPort web UI. Authenticates with an account API key.'
+  description: >-
+    Web service interface for retrieving device traffic and billing data from the Aeris AerTraffic system:
+    create online and scheduled report templates, poll report status, download online, scheduled and archived
+    reports, manage report recipients and retrieve trend and account-level reports. Mirrors the reporting
+    available in the AerPort web UI. Authenticates with an account API key.
   image: https://www.aeris.com/wp-content/uploads/cropped-Favicon-16x16-1-192x192.png
   humanURL: https://support.aeris.net/hc/en-us/articles/360037394973-AerTraffic-Reports-API
   baseURL: https://aertrafficapi.aeris.com/v1
@@ -267,7 +144,2537 @@ apis:
   properties:
   - type: Documentation
     url: https://support.aeris.net/hc/en-us/articles/360037394973-AerTraffic-Reports-API
+- aid: aeris:aeris-actions-api
+  name: Aeris Actions API
+  description: Get triggered actions filtered list, details and summary
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Actions
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-actions-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-activation-codes-api
+  name: Aeris Activation codes API
+  description: Consumer and IoT profile activation code management
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Activation codes
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-activation-codes-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-activities-api
+  name: Aeris Activities API
+  description: The Activities API from Aeris — 2 operation(s) for activities.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Activities
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-activities-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-activity-logs-api
+  name: Aeris Activity Logs API
+  description: Endpoints for Activity Logs
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Activity Logs
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-activity-logs-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-aggregated-traffics-api
+  name: Aeris Aggregated traffics API
+  description: The Aggregated traffics API from Aeris — 1 operation(s) for aggregated traffics.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Aggregated traffics
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-aggregated-traffics-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-applications-api
+  name: Aeris Applications API
+  description: Endpoints for Enforcement Applications
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Applications
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-applications-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-attachments-api
+  name: Aeris Attachments API
+  description: The Attachments API from Aeris — 4 operation(s) for attachments.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Attachments
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-attachments-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-auth-api
+  name: Aeris Auth API
+  description: Endpoints for authentication and authorization.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-auth-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-cell-global-identities-api
+  name: Aeris Cell Global Identities API
+  description: The Cell Global Identities API from Aeris — 1 operation(s) for cell global identities.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Cell Global Identities
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-cell-global-identities-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-data-balances-api
+  name: Aeris Data balances API
+  description: The Data balances API from Aeris — 1 operation(s) for data balances.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Data balances
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-data-balances-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-device-api
+  name: Aeris Device API
+  description: The Device API
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Device
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-device-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-device-groups-api
+  name: Aeris Device Groups API
+  description: Endpoints for Device Groups
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Device Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-device-groups-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-device-reconnect-api
+  name: Aeris Device Reconnect API
+  description: The Device Reconnect API from Aeris — 1 operation(s) for device reconnect.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Device Reconnect
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-device-reconnect-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-devices-api
+  name: Aeris Devices API
+  description: >-
+    Endpoints for Devices (IMEI changes) and per-device deep forensics analytics: Data Transactions, Data
+    Volume, DNS Queries, Destination Endpoints, IP Flow Metrics.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Devices
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-devices-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-eimecooperation-api
+  name: Aeris Eim Eco Operation API
+  description: eCO eIM order operations and job status
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - EimEcoOperation
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-eimecooperation-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-eiminfo-api
+  name: Aeris Eim Info API
+  description: eIM information
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - EimInfo
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-eiminfo-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-enforcement-rules-api
+  name: Aeris Enforcement Rules API
+  description: Endpoints for Enforcement Rules
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Enforcement Rules
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-enforcement-rules-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-enterprise-api
+  name: Aeris Enterprise API
+  description: The Enterprise API from Aeris — 6 operation(s) for enterprise.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Enterprise
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-enterprise-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-enterprisegroup-api
+  name: Aeris Enterprise Group API
+  description: The EnterpriseGroup API from Aeris — 1 operation(s) for enterprisegroup.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - EnterpriseGroup
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-enterprisegroup-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-euiccagreement-api
+  name: Aeris Euicc Agreement API
+  description: eUICC Agreement
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - EuiccAgreement
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-euiccagreement-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-event-policies-api
+  name: Aeris Event Policies API
+  description: Endpoints for Awareness Event Policies
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Event Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-event-policies-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-events-api
+  name: Aeris Events API
+  description: Signalling events for subscriptions.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-events-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-events-configuration-api
+  name: Aeris Events Configuration API
+  description: Endpoints for configuring Security Events
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Events Configuration
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-events-configuration-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-file-shares-api
+  name: Aeris File Shares API
+  description: >-
+    File Shares APIs are for user to get necessary file share info for creating or modifying a specification
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - File Shares
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-file-shares-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-flows-api
+  name: Aeris Flows API
+  description: Endpoints for flows - IP flows/Blocked flows/Allowed traffic
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-flows-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-gateway-api
+  name: Aeris Gateway API
+  description: Watchtower Configuration APIs for Gateway management
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Gateway
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-gateway-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-imsirange-api
+  name: Aeris Imsi Range API
+  description: IMSI Range API
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - ImsiRange
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-imsirange-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-incidents-api
+  name: Aeris Incidents API
+  description: The Incidents API from Aeris — 5 operation(s) for incidents.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Incidents
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-incidents-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-invoices-api
+  name: Aeris Invoices API
+  description: The Invoices API from Aeris — 2 operation(s) for invoices.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Invoices
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-invoices-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-locale-api
+  name: Aeris Locale API
+  description: Locale
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Locale
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-locale-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-localization-api
+  name: Aeris Localization API
+  description: The Localization API from Aeris — 19 operation(s) for localization.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Localization
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-localization-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-localizationtable-api
+  name: Aeris Localization Table API
+  description: Localization table
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - LocalizationTable
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-localizationtable-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-location-lists-api
+  name: Aeris Location Lists API
+  description: Endpoints for Location Lists
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Location Lists
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-location-lists-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-login-api
+  name: Aeris Login API
+  description: The Login API from Aeris — 3 operation(s) for login.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Login
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-login-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-management-api
+  name: Aeris Management API
+  description: Manage rulesets and its life-cycle status
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Management
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-management-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-monitoring-api
+  name: Aeris Monitoring API
+  description: The Monitoring API from Aeris — 1 operation(s) for monitoring.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Monitoring
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-monitoring-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-msisdnpool-api
+  name: Aeris Msisdn Pool API
+  description: MSISDN Pool API
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - MsisdnPool
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-msisdnpool-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-msisdnrange-api
+  name: Aeris Msisdn Range API
+  description: MSISDN Range API
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - MsisdnRange
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-msisdnrange-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-network-group-api
+  name: Aeris Network group API
+  description: The Network group API from Aeris — 1 operation(s) for network group.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Network group
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-network-group-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-numberscheme-api
+  name: Aeris Number Scheme API
+  description: Number scheme API
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - NumberScheme
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-numberscheme-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-operator-network-nodes-api
+  name: Aeris Operator network nodes API
+  description: The Operator network nodes API from Aeris — 1 operation(s) for operator network nodes.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Operator network nodes
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-operator-network-nodes-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-operator-networks-api
+  name: Aeris Operator networks API
+  description: The Operator networks API from Aeris — 1 operation(s) for operator networks.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Operator networks
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-operator-networks-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-order-api
+  name: Aeris Order API
+  description: The Order API from Aeris — 11 operation(s) for order.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Order
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-order-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-order-management-api
+  name: Aeris Order management API
+  description: Order management APIs.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Order management
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-order-management-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-organization-signaling-reports-api
+  name: Aeris Organization Signaling Reports API
+  description: Organization Signaling Aggregations APIs.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Organization Signaling Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-organization-signaling-reports-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-products-api
+  name: Aeris Products API
+  description: The Products API from Aeris — 4 operation(s) for products.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-products-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-protection-policies-api
+  name: Aeris Protection Policies API
+  description: Endpoints for Enforcement Protection Policies
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Protection Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-protection-policies-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-purchases-api
+  name: Aeris Purchases API
+  description: The Purchases API from Aeris — 5 operation(s) for purchases.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Purchases
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-purchases-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-querysms-api
+  name: Aeris Query SMS API
+  description: The querySMS API from Aeris — 1 operation(s) for querysms.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - querySMS
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-querysms-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-rate-limiters-api
+  name: Aeris Rate Limiters API
+  description: Endpoints for Rate Limiters
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Rate Limiters
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-rate-limiters-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-recurring-purchases-api
+  name: Aeris Recurring purchases API
+  description: The Recurring purchases API from Aeris — 4 operation(s) for recurring purchases.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Recurring purchases
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-recurring-purchases-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-reports-api
+  name: Aeris Reports API
+  description: The Reports API from Aeris — 4 operation(s) for reports.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-reports-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-requests-api
+  name: Aeris Requests API
+  description: The Requests API from Aeris — 2 operation(s) for requests.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-requests-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-resource-inventory-api
+  name: Aeris Resource Inventory API
+  description: Inventory queries for network resources
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Resource Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-resource-inventory-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-retrievesms-api
+  name: Aeris Retrieve SMS API
+  description: The retrieveSMS API from Aeris — 1 operation(s) for retrievesms.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - retrieveSMS
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-retrievesms-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-scheduled-reports-api
+  name: Aeris Scheduled Reports API
+  description: Endpoints for downloading Scheduled Reports
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Scheduled Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-scheduled-reports-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-security-report-api
+  name: Aeris Security Report API
+  description: Endpoints for Security Reports
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Security Report
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-security-report-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-sendsms-api
+  name: Aeris Send SMS API
+  description: The sendSMS API from Aeris — 1 operation(s) for sendsms.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - sendSMS
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-sendsms-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-sim-specification-api
+  name: Aeris SIM specification API
+  description: The SIM specification API from Aeris — 1 operation(s) for sim specification.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - SIM specification
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-sim-specification-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-specifications-api
+  name: Aeris Specifications API
+  description: Specification Management APIs are for user to get specifications info
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Specifications
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-specifications-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-subscription-custom-fields-api
+  name: Aeris Subscription Custom Fields API
+  description: >-
+    Custom fields are user-defined key-value pairs. They can be used for
+
+    advanced filtering capabilities on single subscriptions as well as batch
+
+    jobs. Custom fields can be created, modified and attached to
+
+    subscriptions using this api.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Subscription Custom Fields
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-subscription-custom-fields-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-subscription-management-additional-functions-api
+  name: Aeris Subscription management - additional functions API
+  description: >-
+    The Subscription management - additional functions API from Aeris — 12 operation(s) for subscription
+    management - additional functions.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Subscription management - additional functions
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-subscription-management-additional-functions-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-subscription-search-api-api
+  name: Aeris Subscription Search API
+  description: The Subscription Search API API from Aeris — 1 operation(s) for subscription search api.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Subscription Search API
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-subscription-search-api-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-subscriptioninventory-api
+  name: Aeris Subscription Inventory API
+  description: The SubscriptionInventory  API from Aeris — 12 operation(s) for subscriptioninventory .
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - 'SubscriptionInventory '
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-subscriptioninventory-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-subscriptions-api
+  name: Aeris Subscriptions API
+  description: The Subscriptions API from Aeris — 2 operation(s) for subscriptions.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-subscriptions-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-tac-codes-api
+  name: Aeris TAC Codes API
+  description: The TAC Codes API from Aeris — 2 operation(s) for tac codes.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - TAC Codes
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-tac-codes-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-token-api
+  name: Aeris Token API
+  description: Endpoint to Acquire and Revoke Token
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Token
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-token-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-usages-api
+  name: Aeris Usages API
+  description: The Usages API from Aeris — 2 operation(s) for usages.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  baseURL: https://iot-api.aeris.com
+  tags:
+  - Usages
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-usages-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
 common:
+- type: Overlay
+  url: overlays/aeris-iot-accelerator-overlay.yaml
 - type: Website
   url: https://www.aeris.com/
 - type: DeveloperPortal
