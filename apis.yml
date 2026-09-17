@@ -2256,43 +2256,6 @@ apis:
       https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
   - type: Idempotency
     url: conventions/aeris-conventions.yml
-- aid: aeris:aeris-sendsms-api
-  name: Aeris Send SMS API
-  description: The sendSMS API from Aeris — 1 operation(s) for sendsms.
-  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
-  baseURL: https://iot-api.aeris.com
-  tags:
-  - sendSMS
-  properties:
-  - type: OpenAPI
-    url: openapi/aeris-sendsms-api-openapi.yml
-  - type: Documentation
-    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
-  - type: APIReference
-    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
-  - type: GettingStarted
-    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
-  - type: Authentication
-    url: authentication/aeris-authentication.yml
-  - type: OAuthScopes
-    url: scopes/aeris-scopes.yml
-  - type: Conventions
-    url: conventions/aeris-conventions.yml
-  - type: ErrorCatalog
-    url: errors/aeris-problem-types.yml
-  - type: DataModel
-    url: data-model/aeris-data-model.yml
-  - type: RateLimits
-    url: rate-limits/aeris-rate-limits.yml
-  - type: Postman
-    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
-  - type: Documentation
-    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
-  - type: Documentation
-    url: >-
-      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
-  - type: Idempotency
-    url: conventions/aeris-conventions.yml
 - aid: aeris:aeris-sim-specification-api
   name: Aeris SIM specification API
   description: The SIM specification API from Aeris — 1 operation(s) for sim specification.
@@ -2645,6 +2608,43 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/aeris-usages-api-openapi.yml
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
+  - type: APIReference
+    url: https://iotdeveloper.aeris.net/hc/en-us/sections/25346615432988-IoT-Accelerator-APIs
+  - type: GettingStarted
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348523998748-API-Quick-start-guide
+  - type: Authentication
+    url: authentication/aeris-authentication.yml
+  - type: OAuthScopes
+    url: scopes/aeris-scopes.yml
+  - type: Conventions
+    url: conventions/aeris-conventions.yml
+  - type: ErrorCatalog
+    url: errors/aeris-problem-types.yml
+  - type: DataModel
+    url: data-model/aeris-data-model.yml
+  - type: RateLimits
+    url: rate-limits/aeris-rate-limits.yml
+  - type: Postman
+    url: https://storage.googleapis.com/iota_devportal/assets/dev_app_pmcoll_iota_rest_api.zip
+  - type: Documentation
+    url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348587487644-SMS-Messaging-API-v2
+  - type: Documentation
+    url: >-
+      https://iotdeveloper.aeris.net/hc/en-us/articles/25348562311580-Aeris-IoT-Watchtower-API-0-6-0
+  - type: Idempotency
+    url: conventions/aeris-conventions.yml
+- aid: aeris:aeris-send-sms-api
+  name: Aeris Send SMS API
+  description: The Send SMS API from Aeris — 1 operation(s) for send sms.
+  humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348517998364-IoT-Accelerator-SOAP-API
+  baseURL: https://iot-api.aeris.net
+  tags:
+  - Send SMS
+  properties:
+  - type: OpenAPI
+    url: openapi/aeris-send-sms-api-openapi.yml
   - type: Documentation
     url: https://iotdeveloper.aeris.net/hc/en-us/articles/25348533091228-IoT-Accelerator-REST-API
   - type: APIReference
