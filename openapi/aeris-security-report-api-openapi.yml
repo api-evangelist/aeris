@@ -1,0 +1,1680 @@
+openapi: 3.2.0
+info:
+  version: 0.7.0
+  title: Aeris IoT Watchtower™ Security Report API
+  description: '## Introduction
+
+
+    The Aeris IoT Watchtower™ API provides access to resources such as real-time events, aggregated events, risk assessment reports, and device group operations.'
+  termsOfService: https://www.aeris.com/services-terms-of-use/
+  contact:
+    email: support@aeris.net
+    url: https://www.aeris.com/support/
+  license:
+    name: Aeris License
+    url: https://www.aeris.com/services-terms-of-use/
+  x-audience: external-public
+servers:
+- url: https://watchtower-api-prd.aeriscloud.com
+security:
+- oAuth2ClientCredentials: []
+tags:
+- name: Security Report
+  description: Endpoints for Security Reports
+paths:
+  /watchtower/v1/security-report/export:
+    get:
+      tags:
+      - Security Report
+      summary: Get Monthly Security Report PDF
+      operationId: getSecurityReportPDF
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/month'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledReport'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/security-report/summary:
+    get:
+      tags:
+      - Security Report
+      summary: Get Security Report Summary
+      description: Get Summary section from Security Report
+      operationId: getSecurityReportSummary
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/month'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityReportSummary'
+              example:
+                total_low: 19
+                total_medium: 3
+                total_high: 3
+                overall_severity: High
+                summary_text: During the month of April 2025, Aeris IoT Watchtower™ conducted a security assessment of your 105,899 provisioned devices, of which 5 were active, on the Aeris network. We encountered a total of 25 issues with 3 considered to be high risk, 3 medium risk, and 19 low risks across the categories below. In this summary, we list only the most important in each category.
+                disclaimer: The results presented in this report are a point-in-time risk assessment and represent the state of security on the date it was produced. Aeris makes no representation on the completeness of the risks assessed. The risks analyzed in the section titled Security Risk Assessment Details constitute the entire analysis performed. This report is prepared for the intended recipient only and no other parties may rely on it for any purposes.
+                disclaimer_no2: ICMP, DNS and NTP protocols are excluded from endpoint locations map.
+                sections:
+                  application_security:
+                    high: 1
+                    medium: 1
+                    low: 0
+                    highest_severity: High
+                    recommended_action: Verify the legitimacy of traffic for devices communicating in non-designated / OFAC countries.
+                  data_protection:
+                    high: 2
+                    medium: 0
+                    low: 2
+                    highest_severity: High
+                    recommended_action: We recommend configuring your IoT devices to use encrypted protocols (HTTPS and SFTP) rather than unencrypted protocols (HTTP and FTP).
+                  device_security:
+                    high: 0
+                    medium: 0
+                    low: 15
+                    highest_severity: Low
+                    recommended_action: No action required at this time.
+                  inventory_control_devices:
+                    high: 0
+                    medium: 0
+                    low: 2
+                    highest_severity: Low
+                    recommended_action: No action required at this time.
+                  net_work_security:
+                    high: 0
+                    medium: 2
+                    low: 0
+                    highest_severity: Medium
+                    recommended_action: We recommend an end-to-end encrypted channel to be used for data flow between IOT devices and the customer’s application server.
+                device_activated_summary:
+                - - Unknown
+                  - 5
+                  - 462612618
+                trend_low:
+                  content: +18.75%
+                  direction: trend_up
+                  current_value: 19
+                  previous_value: 16
+                trend_medium:
+                  content: 0%
+                  direction: trend_flat
+                  current_value: 3
+                  previous_value: 3
+                trend_high:
+                  content: -50%
+                  direction: trend_down
+                  current_value: 3
+                  previous_value: 6
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/security-report/detail:
+    get:
+      tags:
+      - Security Report
+      summary: Get Security Report Detail
+      description: Get Details section from Security Report
+      operationId: getSecurityReportDetail
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/month'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityReportDetail'
+              example:
+                sections:
+                  inventory_control_devices:
+                  - sec_no: '90'
+                    tds:
+                    - content: 1.1 Devices located according to expectations
+                      column: security_item
+                    - content: Number of devices outside their designated home location
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices outside of designated home country: Low < 5%; Medium 5% to 10%; High > 10%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '95'
+                    tds:
+                    - content: 1.2 Non-IoT devices in use
+                      column: security_item
+                    - content: Use of Non-IoT devices
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% of non-IoT devices: Low < 5%; Medium 5% to 10%; High > 10%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  data_protection:
+                  - sec_no: '100'
+                    tds:
+                    - content: 2.1 Encrypt Data flow to private applications
+                      column: security_item
+                    - content: Number of enterprise cellular connections towards applications deployed in the enterprise’s private network not using encrypted channels (ex- https or TLS)?
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% of devices using unencrypted channels: Low < 5%; Medium 5% to 10%; High > 10%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '105'
+                    tds:
+                    - content: 2.2 Encrypt Data flow to public applications
+                      column: security_item
+                    - content: Number of enterprise cellular connections towards applications deployed in the enterprise’s public network not using encrypted channels (ex- https or TLS)?
+                      column: description
+                    - content: +100%
+                      direction: trend_up
+                      current_value: 1
+                      previous_value: 0
+                      column: trend
+                    - content: '1'
+                      column: occurrence_count
+                    - content: '1'
+                      column: device_impacted
+                    - content: '% of devices using unencrypted channels: Low < 5%; Medium 5% to 10%; High > 10%'
+                      column: assessment_criteria
+                    - content: High
+                      column: assessed_severity
+                    - content: We recommend configuring your IoT devices to use encrypted protocols (HTTPS and SFTP) rather than unencrypted protocols (HTTP and FTP).
+                      column: recommended_action
+                  - sec_no: '110'
+                    tds:
+                    - content: 2.3 Use of untrusted DNS servers
+                      column: security_item
+                    - content: Number of devices connecting to a recursive DNS that is public or untrusted
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% of devices using a public recursive DNS: Low < 5%; Medium 5% to 10%; High > 10%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '115'
+                    tds:
+                    - content: 2.4 Data Sovereignty
+                      column: security_item
+                    - content: Number of devices communicating with applications located outside the home country
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% of devices communicating with applications outside their home country: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  net_work_security:
+                  - sec_no: '120'
+                    tds:
+                    - content: 3.1 Devices utilizing a secure connection
+                      column: security_item
+                    - content: Devices utilizing VPN to connect to enterprise’s servers
+                      column: description
+                    - content: +100%
+                      direction: trend_up
+                      current_value: 1
+                      previous_value: 0
+                      column: trend
+                    - content: '1'
+                      column: occurrence_count
+                    - content: '1'
+                      column: device_impacted
+                    - content: '% devices use VPN:
+
+                        Low > 30%
+
+                        Medium Otherwise'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '160'
+                    tds:
+                    - content: 3.2 Devices utilizing private APN
+                      column: security_item
+                    - content: The devices are using a private APN to connect to private applications, private cloud hosted applications or to internet.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices utilizing private APN: Low ≥ 0%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '165'
+                    tds:
+                    - content: 3.3 Devices utilizing internet APN
+                      column: security_item
+                    - content: The devices are using an Internet APN to connect to public cloud hosted applications or to internet.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices utilizing internet APN: Low ≥ 0%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '1200'
+                    tds:
+                    - content: 3.4 Manage security access controls
+                      column: security_item
+                    - content: Number of enforcement security policies for device traffic
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: Low if any network policy configured, Medium otherwise
+                      column: assessment_criteria
+                    - content: Medium
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  application_security:
+                  - sec_no: '125'
+                    tds:
+                    - content: '4.1 Non-compliant communications: OFAC'
+                      column: security_item
+                    - content: Devices communicating to endpoints in OFAC countries.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: 'Devices communicating to endpoints in OFAC countries: Low = 0; High > 0'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '130'
+                    tds:
+                    - content: 4.2 Public applications
+                      column: security_item
+                    - content: Applications reachable via the public Internet
+                      column: description
+                    - content: +100%
+                      direction: trend_up
+                      current_value: 54
+                      previous_value: 0
+                      column: trend
+                    - content: '54'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: 'Number of applications reachable on the public Internet: Low = 0; Medium > 0'
+                      column: assessment_criteria
+                    - content: Medium
+                      column: assessed_severity
+                    - content: We recommend secure VPN communication instead of public internet for application communication.
+                      column: recommended_action
+                  device_security:
+                  - sec_no: '55'
+                    tds:
+                    - content: 5.1 Malicious Endpoint
+                      column: security_item
+                    - content: Devices communicating with well-known malicious endpoints identified by their IP address
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% of devices communicating with Malicious endpoints by IP: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '60'
+                    tds:
+                    - content: 5.2 Botnet and C&C
+                      column: security_item
+                    - content: Devices communicated with an endpoint related to a malicious bot, infecting the hosts and connecting them to a central server or servers that act as a command and control (C&C) center.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing Botnet and C&C: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '65'
+                    tds:
+                    - content: 5.3 Cryptocurrency
+                      column: security_item
+                    - content: Devices communicated with an endpoint related to cryptocurrencies.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing Cryptocurrency: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '70'
+                    tds:
+                    - content: 5.4 Data Exfiltration
+                      column: security_item
+                    - content: Devices communicated with an endpoint participating in data exfiltration.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing Data Exfiltration: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '80'
+                    tds:
+                    - content: 5.5 Phishing
+                      column: security_item
+                    - content: Devices communicated with email messages that look like they are from a trusted business but are actually connected to phishing websites.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing Phishing: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '85'
+                    tds:
+                    - content: 5.6 Ransomware
+                      column: security_item
+                    - content: Devices communicated with an endpoint known to have ransomware.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing Ransomware: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '10'
+                    tds:
+                    - content: 5.7 Suspicious device behavior - Address Scan
+                      column: security_item
+                    - content: Devices scanning the addresses of other devices in their subnet
+                      column: description
+                    - content: +100%
+                      direction: trend_up
+                      current_value: 1
+                      previous_value: 0
+                      column: trend
+                    - content: '1'
+                      column: occurrence_count
+                    - content: '1'
+                      column: device_impacted
+                    - content: '% devices showing address scan events: Low = 0%; Medium 0% to 0.1%; High > 0.1%'
+                      column: assessment_criteria
+                    - content: High
+                      column: assessed_severity
+                    - content: Verify the integrity of these devices that have been performing unusual address scans.
+                      column: recommended_action
+                  - sec_no: '30'
+                    tds:
+                    - content: 5.8 Suspicious device behavior - Port Scan
+                      column: security_item
+                    - content: Devices scanning ports beyond their normal connection to the endpoint
+                      column: description
+                    - content: +100%
+                      direction: trend_up
+                      current_value: 1
+                      previous_value: 0
+                      column: trend
+                    - content: '1'
+                      column: occurrence_count
+                    - content: '1'
+                      column: device_impacted
+                    - content: '% devices showing port scan events: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: High
+                      column: assessed_severity
+                    - content: Verify the integrity of these devices that have been performing unusual port scans.
+                      column: recommended_action
+                  - sec_no: '35'
+                    tds:
+                    - content: 5.9 Suspicious Behavior - SIM misuse
+                      column: security_item
+                    - content: Devices having their SIM swapped
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing SIM misuse alarm: Low = 0%; Medium 0% to 0.1%; High > 0.1%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '75'
+                    tds:
+                    - content: 5.10 Suspicious Endpoint
+                      column: security_item
+                    - content: Devices communicated with a domain that has not been established and is serving temporary content on its base page (a parked domain).
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing Suspicious Endpoint: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '20'
+                    tds:
+                    - content: 5.11 Anomalous Behavior - New destination IPs
+                      column: security_item
+                    - content: Devices attached to unexpected new destination IP addresses on the network
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing new IP addresses: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '40'
+                    tds:
+                    - content: 5.12 Anomalous Behavior - TCP Bad Flags
+                      column: security_item
+                    - content: Devices having unexpected use of TCP flags.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: 'Frequency of TCP bad flag events per week: Low < 10; Medium 10 to 100; High > 100'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '45'
+                    tds:
+                    - content: 5.13 Anomalous Behavior - TCP large flow count
+                      column: security_item
+                    - content: Devices having unexpected large count of TCP flows.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing large TCP flow count: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '50'
+                    tds:
+                    - content: 5.14 Anomalous Behavior - Traffic Spike
+                      column: security_item
+                    - content: Devices having unexpected large occurrence of traffic spike.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% devices showing traffic spike: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '175'
+                    tds:
+                    - content: 5.15 Anomalous Mobility Event - Moving Outside a Location List
+                      column: security_item
+                    - content: The device has been identified outside the location list associated with one of the device groups this device belongs to.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% anomalous mobility events - moving outside location list: Low < 0.1%; Medium 0.1% to 0.5%; Critical > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '180'
+                    tds:
+                    - content: 5.16 Anomalous Mobility Event - Impossible Mobility
+                      column: security_item
+                    - content: The device has been moving across different locations at a speed that is beyond reasonable (900 km/h).
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% anomalous mobility events - impossible mobility: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                  - sec_no: '140'
+                    tds:
+                    - content: 5.17 Blocked Flows
+                      column: security_item
+                    - content: Blocked Flows by a security policy.
+                      column: description
+                    - content: 0%
+                      direction: trend_flat
+                      current_value: 0
+                      previous_value: 0
+                      column: trend
+                    - content: '0'
+                      column: occurrence_count
+                    - content: '0'
+                      column: device_impacted
+                    - content: '% showing Blocked Flows: Low < 0.1%; Medium 0.1% to 0.5%; High > 0.5%'
+                      column: assessment_criteria
+                    - content: Low
+                      column: assessed_severity
+                    - content: No action required at this time.
+                      column: recommended_action
+                category:
+                  inventory_control_devices: 1. Inventory and Control of Devices
+                  data_protection: 2. Data Protection
+                  net_work_security: 3. Network Security
+                  application_security: 4. Application Security
+                  device_security: 5. Device Security
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/security-report/device-location:
+    get:
+      tags:
+      - Security Report
+      summary: Get Security Report Device Location Tables
+      description: Get Device Location section from Security Report
+      operationId: getSecurityReportDevice
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/month'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityReportDeviceUsage'
+              example:
+                total: 1
+                data:
+                - - active_devices: 0
+                    device_country: string
+                    data_usage_bytes: 0
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/security-report/endpoint-location:
+    get:
+      tags:
+      - Security Report
+      summary: Get Security Report Endpoint Location Tables
+      description: Get Endpoint Location section from Security Report
+      operationId: getSecurityReportEndpoint
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/month'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityReportEndpoint'
+              example:
+                total: 1
+                data:
+                - - endpoint_country: United States
+                    device_count: 5
+                    endpoint_count: 385
+                    data_usage_bytes: 12131923
+                    ip_flows: 8320
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/security-report/appendix/search:
+    post:
+      tags:
+      - Security Report
+      summary: Get Security Report Appendix
+      description: Get Appendix report of an account for a specific month
+      operationId: getSecurityReportAppendix
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/month'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SecurityReportAppendixRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedSecurityReportAppendix'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/security-report/appendix/export:
+    post:
+      summary: Export Security Report Appendix
+      tags:
+      - Security Report
+      operationId: exportSecurityReportAppendix
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/month'
+      - $ref: '#/components/parameters/sort'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SecurityReportAppendixTrigger'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledReport'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  responses:
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '413':
+      description: Requested data too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 413
+            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  schemas:
+    SecurityReportAppendixTrigger:
+      properties:
+        request_by:
+          type: string
+          title: Request By
+        account_name:
+          type: string
+          title: Account Name
+      type: object
+      title: SecurityReportAppendixTrigger
+    SecurityReportDetail:
+      properties:
+        sections:
+          $ref: '#/components/schemas/SecurityReportSections'
+        category:
+          $ref: '#/components/schemas/SecurityReportCategory'
+      type: object
+      required:
+      - sections
+      - category
+      title: SecurityReportDetail
+    TrendData:
+      properties:
+        content:
+          type: string
+          title: Content
+        direction:
+          $ref: '#/components/schemas/TrendDirection'
+        current_value:
+          type: integer
+          title: Current Value
+        previous_value:
+          type: integer
+          title: Previous Value
+      type: object
+      required:
+      - content
+      - direction
+      - current_value
+      - previous_value
+      title: TrendData
+      description: Schema for a trend object.
+    SecurityReportDeviceUsage:
+      properties:
+        total:
+          type: integer
+          title: Total
+        data:
+          items:
+            items:
+              $ref: '#/components/schemas/DeviceUsageData'
+            type: array
+          type: array
+          title: Rows
+      type: object
+      required:
+      - total
+      - data
+      title: DeviceUsageResponse
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    EndpointData:
+      properties:
+        endpoint_country:
+          type: string
+          title: Endpoint Country
+        device_count:
+          type: integer
+          title: Device Count
+        endpoint_count:
+          type: integer
+          title: Endpoint Count
+        data_usage_bytes:
+          type: integer
+          title: Data Usage Bytes
+        ip_flows:
+          type: integer
+          title: Ip Flows
+      type: object
+      required:
+      - endpoint_country
+      - device_count
+      - endpoint_count
+      - data_usage_bytes
+      - ip_flows
+      title: EndpointData
+    SecurityEventData:
+      type: object
+      title: SecurityEventData
+      properties:
+        account_id:
+          type: string
+          title: Account Id
+        report_date:
+          type: string
+          format: date
+          title: Report Date
+        security_item:
+          type: string
+          title: Security Item
+        iccid:
+          type: string
+          title: Iccid
+        category:
+          type: string
+          title: Category
+        current_ts:
+          type: string
+          format: date-time
+          title: Current Ts
+        imsi:
+          type: string
+          title: Imsi
+        device_location:
+          type: string
+          title: Device Location
+        device_type:
+          type: string
+          title: Device Type
+        network_protocol:
+          type: string
+          title: Network Protocol
+        protocol:
+          type: string
+          title: Protocol
+        server_port:
+          type: string
+          title: Server Port
+        endpoint_location:
+          type: string
+          title: Endpoint Location
+        fqdn:
+          type: string
+          title: Fqdn
+        dns_server_ip:
+          type: string
+          title: Dns Server Ip
+        scanned_subnet_port:
+          type: string
+          title: Scanned Subnet Port
+        unencrypted_protocol:
+          type: string
+          title: Unencrypted Protocol
+        occurrence_count:
+          type: integer
+          title: Occurrence Count
+        apn:
+          type: array
+          title: Apn
+          items:
+            type: string
+        apn_type:
+          type: array
+          title: Apn Type
+          items:
+            type: string
+        device_groups:
+          type: array
+          title: Device Groups
+          items:
+            type: object
+            properties:
+              group_id:
+                type: string
+                title: Group Id
+              name:
+                type: string
+                title: Name
+              color_code:
+                type: string
+                title: Color Code
+              device_assigning_type:
+                type: string
+                title: Device Assigning Type
+      required:
+      - account_id
+      - report_date
+      - security_item
+      - iccid
+      - category
+      - current_ts
+      - imsi
+      - device_location
+      - device_type
+      - network_protocol
+      - protocol
+      - server_port
+      - endpoint_location
+      - fqdn
+      - dns_server_ip
+      - scanned_subnet_port
+      - unencrypted_protocol
+      - device_groups
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    SecurityReportAppendixRequest:
+      title: SecurityReportAppendixRequest
+      type: object
+      required:
+      - year
+      - month
+      properties:
+        year:
+          type: integer
+          title: Year
+        month:
+          type: integer
+          title: Month
+        category:
+          type: string
+          title: Category
+        security_item:
+          type: string
+          title: Security Item
+        iccid:
+          type: string
+          title: Iccid
+        imsi:
+          type: string
+          title: Imsi
+        start_ts:
+          type: string
+          title: Start Ts
+        end_ts:
+          type: string
+          title: End Ts
+        device_location:
+          type: string
+          title: Device Location
+        device_type:
+          type: string
+          title: Device Type
+        network_protocol:
+          type: string
+          title: Network Protocol
+        protocol:
+          type: string
+          title: Protocol
+        unencrypted_protocol:
+          type: string
+          title: Unencrypted Protocol
+        server_port:
+          type: string
+          title: Server Port
+        endpoint_location:
+          type: string
+          title: Endpoint Location
+        fqdn:
+          type: string
+          title: Fqdn
+        dns_server_ip:
+          type: string
+          title: Dns Server Ip
+        scanned_subnet_port:
+          type: string
+          title: Scanned Subnet Port
+        apn:
+          type: array
+          title: Apn
+          items:
+            type: string
+        apn_type:
+          type: array
+          title: Apn Type
+          items:
+            type: string
+        device_group_id:
+          items:
+            type: string
+          type: array
+          title: Device Group Id
+    PagedSecurityReportAppendix:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/SecurityEventData'
+    TrendDirection:
+      type: string
+      enum:
+      - trend_up
+      - trend_down
+      - trend_flat
+      title: TrendDirection
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    SectionSummary:
+      properties:
+        high:
+          type: integer
+          title: High
+        medium:
+          type: integer
+          title: Medium
+        low:
+          type: integer
+          title: Low
+        highest_severity:
+          $ref: '#/components/schemas/Severity'
+        recommended_action:
+          type: string
+          title: Recommended Action
+      type: object
+      required:
+      - high
+      - medium
+      - low
+      - highest_severity
+      - recommended_action
+      title: SectionSummary
+    SecurityReportSectionItem:
+      properties:
+        sec_no:
+          type: string
+          title: Sec No
+        tds:
+          items:
+            $ref: '#/components/schemas/TdsItem'
+          type: array
+          title: Tds
+        alert_type:
+          type: string
+          title: Event Type
+      type: object
+      required:
+      - sec_no
+      - tds
+      title: SectionItem
+    SecurityReportEndpoint:
+      properties:
+        total:
+          type: integer
+          title: Total
+        data:
+          items:
+            items:
+              $ref: '#/components/schemas/EndpointData'
+            type: array
+          type: array
+          title: Data
+      type: object
+      required:
+      - total
+      - data
+      title: EndpointResponse
+    SecurityReportCategory:
+      properties:
+        inventory_control_devices:
+          type: string
+          title: Inventory Control Devices
+        data_protection:
+          type: string
+          title: Data Protection
+        net_work_security:
+          type: string
+          title: Net Work Security
+        application_security:
+          type: string
+          title: Application Security
+        device_security:
+          type: string
+          title: Device Security
+      type: object
+      required:
+      - inventory_control_devices
+      - data_protection
+      - net_work_security
+      - application_security
+      - device_security
+      title: Category
+    TdsItem:
+      properties:
+        content:
+          type: string
+          title: Content
+        column:
+          type: string
+          title: Column
+        direction:
+          type: string
+          title: Direction
+        current_value:
+          type: number
+          title: Current Value
+        previous_value:
+          type: number
+          title: Previous Value
+      type: object
+      required:
+      - content
+      - column
+      title: TdsItem
+    DeviceUsageData:
+      properties:
+        active_devices:
+          type: integer
+          title: Active Devices
+        device_country:
+          type: string
+          title: Device Country
+        data_usage_bytes:
+          type: integer
+          title: Data Usage Bytes
+      type: object
+      required:
+      - active_devices
+      - device_country
+      - data_usage_bytes
+      title: DeviceUsageData
+    SecurityReportSections:
+      properties:
+        inventory_control_devices:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Inventory Control Devices
+        data_protection:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Data Protection
+        net_work_security:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Net Work Security
+        application_security:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Application Security
+        device_security:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Device Security
+      type: object
+      required:
+      - inventory_control_devices
+      - data_protection
+      - net_work_security
+      - application_security
+      - device_security
+      title: Sections
+    SectionsSummary:
+      properties:
+        application_security:
+          $ref: '#/components/schemas/SectionSummary'
+        data_protection:
+          $ref: '#/components/schemas/SectionSummary'
+        device_security:
+          $ref: '#/components/schemas/SectionSummary'
+        inventory_control_devices:
+          $ref: '#/components/schemas/SectionSummary'
+        net_work_security:
+          $ref: '#/components/schemas/SectionSummary'
+      type: object
+      required:
+      - application_security
+      - data_protection
+      - device_security
+      - inventory_control_devices
+      - net_work_security
+      title: SectionsSummary
+    SecurityReportSummary:
+      properties:
+        total_low:
+          type: integer
+          title: Total Low
+        total_medium:
+          type: integer
+          title: Total Medium
+        total_high:
+          type: integer
+          title: Total High
+        overall_severity:
+          $ref: '#/components/schemas/Severity'
+        summary_text:
+          type: string
+          title: Summary Text
+        disclaimer:
+          type: string
+          title: Disclaimer
+        disclaimer_no2:
+          type: string
+          title: Disclaimer No2
+        sections:
+          $ref: '#/components/schemas/SectionsSummary'
+        device_activated_summary:
+          title: Device Activated Summary
+          type: array
+          items:
+            type: array
+            minItems: 3
+            maxItems: 3
+            items: {}
+        trend_low:
+          $ref: '#/components/schemas/TrendData'
+        trend_medium:
+          $ref: '#/components/schemas/TrendData'
+        trend_high:
+          $ref: '#/components/schemas/TrendData'
+      type: object
+      required:
+      - total_low
+      - total_medium
+      - total_high
+      - overall_severity
+      - summary_text
+      - disclaimer
+      - disclaimer_no2
+      - sections
+      - device_activated_summary
+      - trend_low
+      - trend_medium
+      - trend_high
+      title: SecurityReportSummary
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    ReportStatus:
+      description: Report status
+      type: string
+      example: Processing
+      enum:
+      - Success
+      - Processing
+      - Error
+      - NotStarted
+    Severity:
+      type: string
+      enum:
+      - High
+      - Medium
+      - Low
+      title: Severity
+      example: High
+    ScheduledReport:
+      type: object
+      properties:
+        reportId:
+          description: Report Id
+          type: string
+          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        statusEndpoint:
+          description: Report Status URL
+          type: string
+          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+  parameters:
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+    month:
+      name: month
+      description: Month
+      in: query
+      required: true
+      schema:
+        type: integer
+        maximum: 12
+        minimum: 1
+    year:
+      name: year
+      description: Year
+      in: query
+      required: true
+      schema:
+        type: integer
+        maximum: 2099
+        minimum: 2000
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    sort:
+      name: sort
+      in: query
+      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
+      example: deviceId,updateTime:desc
+      schema:
+        type: string
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      description: This API uses OAuth 2 with the Client Credentials flow.
+      flows:
+        clientCredentials:
+          tokenUrl: /watchtower/v1/auth/token
+          scopes: {}

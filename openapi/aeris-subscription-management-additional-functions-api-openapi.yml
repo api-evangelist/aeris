@@ -1,0 +1,1538 @@
+openapi: 3.2.0
+info:
+  title: Subscription Management Additional Functions Subscription…
+  version: 1.0.6
+  description: Subscription management - additional functions.
+  x-audience: external-public
+  x-api-id: 96f61af0-7bba-45df-8f12-005042cf1e47
+servers:
+- url: https://iot-api.aeris.com/iot/api/sica/subscriptions
+  description: API server
+tags:
+- name: Subscription management - additional functions
+  description: ''
+paths:
+  /requests/owner-changes:
+    parameters:
+    - name: Authorization
+      in: header
+      description: A valid token string in the form Bearer \<token string\>
+      schema:
+        type: string
+      required: true
+    post:
+      summary: Create an owner change request
+      description: 'This API request creates a change subscription owner request.
+
+        The change can be requested for one or many subscription(s).'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerChangeRequest'
+            examples:
+              owner-change-example:
+                value:
+                  subscriptions:
+                    identifier_type: IMSI
+                    identifiers:
+                    - '100000123456001'
+                    - '100000123456002'
+                  change:
+                    owner:
+                      organization_id: 3.78.38
+                  on_behalf_of:
+                    organization_id: 1.23.4
+        required: true
+      tags:
+      - Subscription management - additional functions
+      responses:
+        '201':
+          $ref: '#/components/responses/SubscriptionRequestResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.write
+      operationId: SubscriptionOwnerChange
+  /requests/package-changes:
+    parameters:
+    - name: Authorization
+      description: A valid token string in the form Bearer \<token string\>
+      in: header
+      schema:
+        type: string
+      required: true
+    post:
+      summary: Create a package change request
+      description: 'This API request creates a change subscription package request.
+
+        The change can be requested for one or many subscription(s).'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackageChangeRequest'
+            examples:
+              package-change-example:
+                value:
+                  subscriptions:
+                    identifier_type: IMSI
+                    identifiers:
+                    - '100000123456001'
+                    - '100000123456002'
+                  change:
+                    subscription_package_id: 200200207_SP_01
+                  on_behalf_of:
+                    organization_id: 1.23.4
+        required: true
+      tags:
+      - Subscription management - additional functions
+      responses:
+        '201':
+          $ref: '#/components/responses/SubscriptionRequestResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.write
+      operationId: SubscriptionPackageChange
+  /requests/state-changes:
+    parameters:
+    - name: Authorization
+      description: A valid token string in the form Bearer \<token string\>
+      in: header
+      schema:
+        type: string
+      required: true
+    post:
+      summary: Create a state change request
+      description: 'This API request creates a change subscription state request.
+
+        The change can be requested for one or many subscription(s).'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StateChangeRequest'
+            examples:
+              state-change-example:
+                value:
+                  subscriptions:
+                    identifier_type: IMSI
+                    identifiers:
+                    - '100000123456001'
+                    - '100000123456002'
+                  change:
+                    state: ACTIVE
+                  on_behalf_of:
+                    organization_id: 1.23.4
+        required: true
+      tags:
+      - Subscription management - additional functions
+      responses:
+        '201':
+          $ref: '#/components/responses/SubscriptionRequestResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.write
+      operationId: SubscriptionStateChange
+  /requests/region-changes:
+    parameters:
+    - name: Authorization
+      description: A valid token string in the form Bearer \<token string\>
+      in: header
+      schema:
+        type: string
+      required: true
+    post:
+      summary: Create a region change request
+      description: 'This API request creates a change subscription region request.
+
+        The change can be requested for one or many subscription(s).'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegionChangeRequest'
+            examples:
+              region-change-example:
+                value:
+                  subscriptions:
+                    identifier_type: IMSI
+                    identifiers:
+                    - '100000123456001'
+                    - '100000123456002'
+                  change:
+                    region: ABC
+                  on_behalf_of:
+                    organization_id: 1.23.4
+        required: true
+      tags:
+      - Subscription management - additional functions
+      responses:
+        '201':
+          $ref: '#/components/responses/SubscriptionRequestResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.write
+      operationId: SubscriptionRegionChange
+  /requests/arp-changes:
+    parameters:
+    - name: Authorization
+      description: A valid token string in the form Bearer \<token string\>
+      in: header
+      schema:
+        type: string
+      required: true
+    post:
+      summary: Change subscription ARP (alternative roaming providers) requests
+      description: 'This API request creates a subscription ARP (alternative roaming
+
+        providers) requests.
+
+        The change can be requested for one subscription.'
+      tags:
+      - Subscription management - additional functions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeArpRequest'
+            examples:
+              change-arp-example:
+                value:
+                  subscription:
+                    identifier_type: IMSI
+                    identifier: '100000123456001'
+                  change:
+                    arp_tadig_code: FRAF1
+                  on_behalf_of:
+                    organization_id: 1.23.4
+        required: true
+      responses:
+        '201':
+          $ref: '#/components/responses/SubscriptionRequestResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.write
+      operationId: SubscriptionArpChange
+  /regions:
+    get:
+      summary: Query available regions request
+      operationId: AvailableRegionsQuery
+      description: This API request creates a query available regions request.
+      tags:
+      - Subscription management - additional functions
+      parameters:
+      - name: Authorization
+        description: A valid token string in the form Bearer \<token string\>
+        in: header
+        schema:
+          type: string
+        required: true
+      - name: identifier_type
+        in: query
+        description: Identifier type (IMSI, ICC, MSISDN), it is case insensitive
+        required: true
+        schema:
+          type: string
+          x-extensible-enum:
+          - IMSI
+          - ICC
+          - MSISDN
+      - name: identifier
+        in: query
+        description: Value for identifier
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter regios by status (ACTIVE,INACTIVE), it is case insensitive
+        required: false
+        schema:
+          type: string
+          x-extensible-enum:
+          - ACTIVE
+          - INACTIVE
+      responses:
+        '200':
+          $ref: '#/components/responses/AvailableRegionQueryResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.read
+  /sims/{id}:
+    get:
+      summary: Query sims with identifier
+      description: 'With this operation, it is possible to retrieve information about one
+
+        or multiple SIM resources by entering a valid IMSI, MSISDN, IMEI,
+
+        ICC and optionally, a range.'
+      tags:
+      - Subscription management - additional functions
+      parameters:
+      - name: Authorization
+        in: header
+        description: A valid token string in the form Bearer \<token string\>
+        schema:
+          type: string
+        required: true
+      - name: id
+        in: path
+        required: true
+        description: 'The identifier of the sim resource. The type of the identifier
+
+          is given by the property "identifier_type".'
+        schema:
+          type: string
+      - name: identifier_type
+        in: query
+        required: true
+        description: 'The type of the values for the items.
+
+          it is case insensitive, Value can be: IMSI, IMEI, MSISDN, ICC'
+        schema:
+          type: string
+          x-extensible-enum:
+          - IMSI
+          - IMEI
+          - MSISDN
+          - ICC
+      - name: range
+        in: query
+        required: false
+        description: 'Optional. An integer that defines the number of resources to query.
+
+          For example, 2 returns the specified resource plus
+
+          the next in range. Values of 1–500 are allowed.'
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SimResourceResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.read
+      operationId: getSimsById
+      x-operation-id-source: derived
+  /sims:
+    get:
+      summary: Query sims with customer label
+      description: 'With this operation, it is possible to retrieve information about
+
+        multiple SIM resources by entering a valid customer label with paging
+
+        is provided with start number and chunk size'
+      tags:
+      - Subscription management - additional functions
+      parameters:
+      - name: Authorization
+        in: header
+        description: A valid token string in the form Bearer \<token string\>
+        schema:
+          type: string
+        required: true
+      - name: label
+        in: query
+        required: true
+        description: Name of the label
+        schema:
+          type: string
+      - name: organization_id
+        in: query
+        required: false
+        description: Id of organization, either companyId or organizationId must be provided
+        schema:
+          type: string
+      - name: company_id
+        in: query
+        required: false
+        description: Id of company, either companyId or organizationId must be provided
+        schema:
+          type: string
+      - name: start_number
+        in: query
+        required: true
+        description: The first number in the result set. Start from zero.
+        schema:
+          type: string
+      - name: chunk_size
+        in: query
+        required: true
+        description: 'size of results to return after the start number index. The maximum
+
+          value of chunkSize is 500, which means that the operation can
+
+          return a maximum of 500 SIM resources in one response.'
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SimResourceResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.read
+      operationId: getSims
+      x-operation-id-source: derived
+  /sim-resource/{id}:
+    get:
+      summary: Query single sim with identifier
+      description: 'With this operation, it is possible to retrieve information about one
+
+        SIM resource by entering a valid IMSI, MSISDN, IMEI, ICC.'
+      tags:
+      - Subscription management - additional functions
+      parameters:
+      - name: Authorization
+        in: header
+        description: A valid token string in the form Bearer \<token string\>
+        schema:
+          type: string
+        required: true
+      - name: id
+        in: path
+        required: true
+        description: 'The identifier of the sim resource. The type of the identifier
+
+          is given by the property "identifier_type".'
+        schema:
+          type: string
+      - name: identifier_type
+        in: query
+        required: true
+        description: 'The type of the values for the items.
+
+          it is case insensitive, Value can be: IMSI, IMEI, MSISDN, ICC'
+        schema:
+          type: string
+          x-extensible-enum:
+          - IMSI
+          - IMEI
+          - MSISDN
+          - ICC
+      responses:
+        '200':
+          $ref: '#/components/responses/SimResourceResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.read
+      operationId: getSimResourceById
+      x-operation-id-source: derived
+  /sim-resources/{id}:
+    get:
+      summary: Query sims with identifier
+      description: 'With this operation, it is possible to retrieve information about one
+
+        or multiple SIM resources by entering a valid IMSI, IMEI, MSISDN,
+
+        ICC and optionally, a range.'
+      tags:
+      - Subscription management - additional functions
+      parameters:
+      - name: Authorization
+        in: header
+        description: A valid token string in the form Bearer \<token string\>
+        schema:
+          type: string
+        required: true
+      - name: id
+        in: path
+        required: true
+        description: 'The identifier of the sim resource. The type of the identifier
+
+          is given by the property "identifier_type".'
+        schema:
+          type: string
+      - name: identifier_type
+        in: query
+        required: true
+        description: 'The type of the values for the items.
+
+          it is case insensitive, Value can be: IMSI, IMEI, MSISDN, ICC'
+        schema:
+          type: string
+          x-extensible-enum:
+          - IMSI
+          - IMEI
+          - MSISDN
+          - ICC
+      - name: range
+        in: query
+        required: false
+        description: 'Optional. An integer that defines the number of resources to query.
+
+          For example, 2 returns the specified resource plus
+
+          the next in range. Values of 1–50 are allowed.'
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SimResourceResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.read
+      operationId: getSimResourcesById
+      x-operation-id-source: derived
+  /sim-resources:
+    get:
+      summary: Query sims with customer label
+      description: 'With this operation, it is possible to retrieve information about
+
+        multiple SIM resources by entering a valid customer label with paging
+
+        is provided with start number and chunk size'
+      tags:
+      - Subscription management - additional functions
+      parameters:
+      - name: Authorization
+        in: header
+        description: A valid token string in the form Bearer \<token string\>
+        schema:
+          type: string
+        required: true
+      - name: label
+        in: query
+        required: true
+        description: Name of the label
+        schema:
+          type: string
+      - name: organization_id
+        in: query
+        required: false
+        description: Id of organization, either companyId or organizationId must be provided
+        schema:
+          type: string
+      - name: company_id
+        in: query
+        required: false
+        description: Id of company, either companyId or organizationId must be provided
+        schema:
+          type: string
+      - name: start_number
+        in: query
+        required: true
+        description: The first number in the result set. Start from zero.
+        schema:
+          type: string
+      - name: chunk_size
+        in: query
+        required: true
+        description: 'size of results to return after the start number index. The maximum
+
+          value of chunkSize is 50, which means that the operation can
+
+          return a maximum of 50 SIM resources in one response.'
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SimResourceResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.read
+      operationId: getSimResources
+      x-operation-id-source: derived
+  /sim-orders/{request-id}:
+    summary: Delete sim order.
+    description: Provides an endpoint for handling sims orders changes.
+    delete:
+      parameters:
+      - name: Authorization
+        description: A valid token string in the form Bearer \<token string\>
+        in: header
+        schema:
+          type: string
+        required: true
+      - name: request-id
+        in: path
+        description: Specifies the ID of the order.
+        required: true
+        schema:
+          type: string
+      - name: Enterprise-ID
+        in: header
+        description: Specifies the company id. This may be injected in API GW
+        required: true
+        schema:
+          type: string
+      tags:
+      - Subscription management - additional functions
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelSimOrderResponse'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '429':
+          $ref: '#/components/responses/Response_429'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        default:
+          $ref: '#/components/responses/Response_default'
+      security:
+      - Oauth2_auth:
+        - subscription-service.write
+      operationId: executeCancelSimOrder
+      summary: Cancel sim order with provided id
+      description: Executes the cancel sim order with the provided request id.
+components:
+  schemas:
+    ChangeArpRequest:
+      description: The model for a subscription arp change request.
+      required:
+      - subscription
+      - change
+      type: object
+      properties:
+        subscription:
+          $ref: '#/components/schemas/ArpSubscription'
+        change:
+          $ref: '#/components/schemas/ArpChange'
+        on_behalf_of:
+          $ref: '#/components/schemas/OrganizationType'
+      example:
+        subscription:
+          identifier_type: IMSI
+          identifier: 100000123456001
+        change:
+          arp_tadig_code: FRAF1
+        on_behalf_of:
+          organization_id: 1.23.4
+          company_id: 100002304
+    ArpChange:
+      title: ArpChangeData
+      description: 'The subscrition ARP to change to. Using TADIG (Transferred Account
+
+        Data Interchange Group) code. Use alphanumeric characters only
+
+        (maximum 10). Please note that the ARP code is case sensitive.'
+      required:
+      - arp_tadig_code
+      type: object
+      properties:
+        arp_tadig_code:
+          type: string
+    CancelSimOrderResponse:
+      description: Defines response of cancel sim order request.
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+      example:
+        status: success
+    SubscriptionList:
+      title: SubscriptionList
+      description: 'Used to identify a list of subscriptions.
+
+        The identifier can be of the type:
+
+        - IMSI
+
+        - MSISDN
+
+        - ICC'
+      required:
+      - identifiers
+      - identifier_type
+      type: object
+      properties:
+        identifier_type:
+          description: "The type of the values for the items.\n it is case insensitive, Value can be: IMSI, MSISDN, ICC"
+          type: string
+          x-extensible-enum:
+          - IMSI
+          - MSISDN
+          - ICC
+        identifiers:
+          description: 'The identifier of the subscription. The type of the identifier
+
+            is given by the property "identifier_type".'
+          type: array
+          items:
+            type: string
+      example:
+        identifier_type: IMSI
+        identifiers:
+        - '100000123456001'
+        - '100000123456002'
+        - '100000123456003'
+    RegionChange:
+      title: RegionChangeData
+      description: Contains the data for a region change.
+      required:
+      - region
+      type: object
+      properties:
+        region:
+          description: The name of the region to change to.
+          type: string
+      example:
+        region: ABC
+    FixedIp:
+      type: object
+      properties:
+        ip:
+          description: The fixed IP addresses assigned to the subscription.
+          type: string
+        ip_version:
+          description: The version of the IP. It can be IPV_4 or IPV_6.
+          type: string
+          x-extensible-enum:
+          - IPV4
+          - IPV6
+        radius:
+          description: 'The name of the RADIUS server, which handles the
+
+            IP allocation.'
+          type: string
+          x-extensible-enum:
+          - RADIUS1
+          - RADIUS2
+        apn_name:
+          description: The APN associated with the IP address.
+          type: string
+        sub_net:
+          description: The subnet to which the fixed IP address belongs.
+          type: string
+    OwnerChange:
+      title: OwnerChangeData
+      description: Contains the data for an owner change.
+      required:
+      - owner
+      type: object
+      properties:
+        owner:
+          $ref: '#/components/schemas/SubscriptionOwner'
+      example:
+        owner:
+          organization_id: 3.78.38
+    RegionChangeRequest:
+      description: The model for a subscription region change request.
+      required:
+      - subscriptions
+      - change
+      type: object
+      properties:
+        subscriptions:
+          $ref: '#/components/schemas/SubscriptionList'
+        change:
+          $ref: '#/components/schemas/RegionChange'
+        on_behalf_of:
+          $ref: '#/components/schemas/OrganizationType'
+      example:
+        subscriptions:
+          identifier_type: IMSI
+          identifiers:
+          - '100000123456001'
+          - '100000123456002'
+        change:
+          region: ABC
+        on_behalf_of:
+          organization_id: 1.23.4
+    SubscriptionOwner:
+      oneOf:
+      - $ref: '#/components/schemas/CompanyId'
+      - $ref: '#/components/schemas/OrganizationId'
+      - $ref: '#/components/schemas/PackageChange'
+      title: OrganizationType
+      description: 'Mandatory, Either one of the properties ''organization_id'' or
+
+        ''company_id'' must be given.
+
+        the property ''subscription_package_id'' must be given.'
+      type: object
+      example: "{\n    \"organization_id\": \"3.78.37\",\n}"
+    OrganizationId:
+      description: Organization_id type
+      type: object
+      properties:
+        organization_id:
+          description: 'Id of the organization.
+
+            Format: "1.23.4"'
+          type: string
+      example:
+        organization_id: 3.78.37
+    PackageChangeRequest:
+      description: The model for a subscription package change request.
+      required:
+      - subscriptions
+      - change
+      type: object
+      properties:
+        subscriptions:
+          $ref: '#/components/schemas/SubscriptionList'
+        change:
+          $ref: '#/components/schemas/PackageChange'
+        on_behalf_of:
+          $ref: '#/components/schemas/OrganizationType'
+      example:
+        subscriptions:
+          identifier_type: IMSI
+          identifiers:
+          - '100000123456001'
+          - '100000123456002'
+        change:
+          subscription_package_id: 200200207_SP_01
+        on_behalf_of:
+          organization_id: 1.23.4
+    Apn:
+      type: object
+      properties:
+        name:
+          description: Apn name
+          type: string
+        description:
+          description: Description of Apn
+          type: string
+    OwnerChangeRequest:
+      description: The model for a subscription owner change request.
+      required:
+      - subscriptions
+      - change
+      type: object
+      properties:
+        subscriptions:
+          $ref: '#/components/schemas/SubscriptionList'
+        change:
+          $ref: '#/components/schemas/OwnerChange'
+        on_behalf_of:
+          $ref: '#/components/schemas/OrganizationType'
+      example:
+        subscriptions:
+          identifier_type: IMSI
+          identifiers:
+          - '100000123456001'
+          - '100000123456002'
+        change:
+          owner:
+            organization_id: 3.78.38
+        on_behalf_of:
+          organization_id: 1.23.4
+    PackageChange:
+      title: PackageChangeData
+      description: Contains the data for a package change.
+      required:
+      - subscription_package_id
+      type: object
+      properties:
+        subscription_package_id:
+          description: The Subscription Package to change to.
+          type: string
+      example:
+        subscription_package_id: 200200207_SP_01
+    ArpSubscription:
+      title: Subscription
+      required:
+      - identifier
+      - identifier_type
+      properties:
+        identifier_type:
+          description: "The type of the values for the items.\n it is case insensitive, Value can be: IMSI, MSISDN"
+          type: string
+          x-extensible-enum:
+          - IMSI
+          - MSISDN
+        identifier:
+          description: 'The identifier of the subscription. The type of the identifier
+
+            is given by the property "identifier_type".'
+          type: string
+    SimResource:
+      type: object
+      properties:
+        fixed_ips:
+          type: array
+          items:
+            $ref: '#/components/schemas/FixedIp'
+        access_control_class:
+          type: string
+        apns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Apn'
+        assigned_imei:
+          type: string
+        charge_code_for_pp_move:
+          type: boolean
+        charge_code_non_pp_move:
+          type: boolean
+        clip:
+          type: boolean
+        consumer_connectivity:
+          type: boolean
+        csd:
+          type: boolean
+        customer_label:
+          type: string
+        customer_no:
+          type: string
+        delivery_date:
+          type: string
+          format: date-time
+        device_terminal_type:
+          type: string
+        disposal_date:
+          type: string
+          format: date-time
+        first_activation_date:
+          type: string
+          format: date-time
+        freeze_duration:
+          type: string
+        gprs:
+          type: boolean
+        icc:
+          type: string
+        imei:
+          type: string
+        imsi:
+          type: string
+        installation_date:
+          type: string
+          format: date-time
+        last_subscription_date_change:
+          type: string
+          format: date-time
+        move_to_permitted:
+          type: boolean
+        msisdn:
+          type: string
+        pbr_exit_date:
+          type: string
+          format: date-time
+        pdp_context_profile_name:
+          type: string
+        pin1:
+          type: string
+        pin2:
+          type: string
+        price_profile_desc:
+          type: string
+        price_profile_name:
+          type: string
+        product_offer_name:
+          type: string
+        puk1:
+          type: string
+        puk2:
+          type: string
+        region_short_name:
+          type: string
+        roam_profile_desc:
+          type: string
+        roam_profile_name:
+          type: string
+        sim_card_description:
+          type: string
+        sim_resource_status:
+          type: string
+          enum:
+          - BEING_ASSEMBLED
+          - DELETE
+          - DEPLOYED
+          - DISPOSED
+          - DOWN
+          - END_OF_LIFE
+          - IN_INVENTORY
+          - IN_REPAIR
+          - ON_LOAN
+          - ORDERED
+          - RECEIVED
+          - RESERVED
+          - RETURN_TO_VENDOR
+          - TRANSFERRED
+        sim_specification:
+          type: string
+        sim_subscription_status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - TERMINATED_PENDING
+        site:
+          type: string
+        sms_mo:
+          type: boolean
+        sms_mt:
+          type: boolean
+        trigger_package:
+          type: string
+        voice:
+          type: boolean
+        lte:
+          type: boolean
+        user_profile_id:
+          type: string
+        tenant_id:
+          type: string
+        arp_tadig:
+          type: string
+        arp_assignment_time:
+          type: string
+          format: date-time
+        customer_name:
+          type: string
+        subscription_package_description:
+          type: string
+        operator_id:
+          type: string
+        enable_5g:
+          type: boolean
+    StateChange:
+      title: StateChangeData
+      description: Contains the data for a state change.
+      required:
+      - state
+      type: object
+      properties:
+        state:
+          description: 'The subscrition state to change to, only uppercase, including
+
+            ACTIVE/PAUSE/TERMINATED/DEACTIVATED/ACTIVE_NO_BILLING
+
+            /DEACTIVATED_NO_BILLING.'
+          type: string
+          x-extensible-enum:
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - ACTIVE_NO_BILLING
+          - DEACTIVATED_NO_BILLING
+      example:
+        state: PAUSE
+    AvailableRegionQueryResponseType:
+      title: AvailableRegionQueryResponseType
+      description: 'Response type for a successful query available region request.
+
+        The regions in the response can be used in a request to the change
+
+        subscription region.'
+      required:
+      - regions
+      type: object
+      properties:
+        regions:
+          description: The array of regions.
+          required:
+          - short_name
+          items:
+            $ref: '#/components/schemas/Region'
+          type: array
+      example:
+        regions:
+        - short_name: REQ201234567890
+          description: ABC
+          quarantine_period: 60
+          number_length: 15
+          pool_id: ZZFXXXXXXP00099
+          status: ACTIVE
+    CompanyId:
+      description: Company_id type
+      type: object
+      properties:
+        company_id:
+          deprecated: true
+          description: 'Id of the company.
+
+            Format: "12345678".
+
+            Deprecated.'
+          type: string
+      example:
+        company_id: '78000037'
+    StateChangeRequest:
+      description: The model for a subscription state change request.
+      required:
+      - subscriptions
+      - change
+      type: object
+      properties:
+        subscriptions:
+          $ref: '#/components/schemas/SubscriptionList'
+        change:
+          $ref: '#/components/schemas/StateChange'
+        on_behalf_of:
+          $ref: '#/components/schemas/OrganizationType'
+      example:
+        subscriptions:
+          identifier_type: IMSI
+          identifiers:
+          - '100000123456001'
+          - '100000123456002'
+        change:
+          state: PAUSE
+        on_behalf_of:
+          organization_id: 1.23.4
+    Region:
+      description: The values for one region
+      type: object
+      properties:
+        short_name:
+          description: Short name of region
+          type: string
+        description:
+          description: Description of region
+          type: string
+        quarantine_period:
+          description: After Termination, MSISDN enters a 'quarantine period' as defined in MSISDN-POOL setup. Within this time frame, it is guaranteed that reactivation of a certain subscription will get the same MSISDN
+          type: integer
+        number_length:
+          description: 'Number length assigned from MSISDN-POOL for instance the MSISDN
+
+            200883000000002 has a length of 15'
+          type: integer
+        pool_id:
+          description: pool id of region
+          type: string
+        status:
+          description: region status of region
+          type: string
+      example:
+        short_name: REQ201234567890
+        description: ABC
+        quarantine_period: 60
+        number_length: 15
+        pool_id: ZZFXXXXXXP00099
+        status: ACTIVE
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://zalando.github.io/problem/constraint-violation
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and
+
+            readable for engineers (usually not suited for non technical
+
+            stakeholders and not localized); example: Service Unavailable
+
+            '
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this
+
+            occurrence of the problem.
+
+            '
+          minimum: 100
+          maximum: 600
+          example: 503
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Connection to database timed out
+        instance:
+          type: string
+          description: 'Identifies the specific occurrence of the
+
+            problem. It may or may not yield further information if
+
+            dereferenced.
+
+            '
+        code:
+          type: string
+          description: 'An extension field to record special codes referring
+
+            to some specific errors or responses.
+
+            '
+    OrganizationType:
+      oneOf:
+      - $ref: '#/components/schemas/CompanyId'
+      - $ref: '#/components/schemas/OrganizationId'
+      title: OrganizationType
+      description: 'Optional, Used to identify the organization.
+
+        But if exist, Either one of the properties ''organization_id'' or
+
+        ''company_id'' must be given.
+
+        If both exist at the same time then using organization_id as default.'
+      type: object
+      example: "{\n    \"organization_id\": \"3.78.37\",\n}"
+    SubscriptionRequestResponseType:
+      title: SubscriptionRequestResponseType
+      description: 'Response type for successfully created subscription request.
+
+        The subscription_request_id in the response can be used in a query to
+
+        the endpoint ''GET /subscriptions/requests/{requestId}'' to get the
+
+        status of subscription request job.'
+      required:
+      - subscription_request_id
+      type: object
+      properties:
+        subscription_request_id:
+          description: The request id returned for the subscription change request.
+          type: string
+      example:
+        subscription_request_id: REQ201234567890
+    SimResourceResponse:
+      title: SimResourceResponse
+      description: Response type for a successful query sim resourse
+      type: object
+      properties:
+        sims:
+          type: array
+          description: List of sim resources
+          items:
+            $ref: '#/components/schemas/SimResource'
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    Response_400:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 400
+                detail: 'Missing mandatory request parameters
+
+                  and/or incorrect parameter format'
+    Response_404:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 404
+                detail: Resource not found
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    Response_500:
+      description: 'Internal Server Error, Error occurred -
+
+        see status code and problem object for more'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 500
+                detail: Internal Server Error.
+    AvailableRegionQueryResponse:
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AvailableRegionQueryResponseType'
+          examples:
+            available-region-query-response-example-1:
+              value:
+                regions:
+                - short_name: REQ201234567890
+                  description: ABC
+                  quarantine_period: 60
+                  number_length: 15
+                  pool_id: ZZFXXXXXXP00099
+                  status: ACTIVE
+      description: The response from a sucessfully query request.
+    Response_403:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 403
+                detail: Forbidden
+    Response_401:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 401
+                detail: Unauthorized.
+    Response_429:
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 429
+                detail: Too Many Requests
+    Response_default:
+      description: 'Internal Server Error, Error occurred -
+
+        see status code and problem object for more'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 500
+                detail: Internal Server Error.
+    SubscriptionRequestResponse:
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SubscriptionRequestResponseType'
+          examples:
+            subscription-request-response-example-1:
+              value:
+                subscription_request_id: REQ201234567890
+      description: The response from a sucessfully created request.
+    SimResourceResponse:
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SimResourceResponse'
+      description: The response from a sucessfull query sim resource request.
+  securitySchemes:
+    Oauth2_auth:
+      flows:
+        password:
+          tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+          scopes:
+            subscription-service.read: Access right needed to read from the Subscription service.
+            subscription-service.write: Access right needed to write to the Subscription service.
+      type: oauth2

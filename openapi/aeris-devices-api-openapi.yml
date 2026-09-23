@@ -1,0 +1,906 @@
+openapi: 3.2.0
+info:
+  version: 0.7.0
+  title: Aeris IoT Watchtower™ Devices API
+  description: '## Introduction
+
+
+    The Aeris IoT Watchtower™ API provides access to resources such as real-time events, aggregated events, risk assessment reports, and device group operations.'
+  termsOfService: https://www.aeris.com/services-terms-of-use/
+  contact:
+    email: support@aeris.net
+    url: https://www.aeris.com/support/
+  license:
+    name: Aeris License
+    url: https://www.aeris.com/services-terms-of-use/
+  x-audience: external-public
+servers:
+- url: https://watchtower-api-prd.aeriscloud.com
+security:
+- oAuth2ClientCredentials: []
+tags:
+- name: Devices
+  description: 'Endpoints for Devices (IMEI changes) and per-device deep forensics analytics: Data Transactions, Data Volume, DNS Queries, Destination Endpoints, IP Flow Metrics.'
+paths:
+  /watchtower/v1/devices/imei-change:
+    get:
+      summary: Retrieve Devices' Last IMEI changes
+      description: This endpoint provides a list of Devices' last IMEI changes within the time range.
+      operationId: getDevicesChanges
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Devices
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedDeviceImeiChanges'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/devices/{deviceId}/imei-change:
+    get:
+      summary: Retrieve IMEI change history of a device
+      description: This endpoint provides IMEI change history for a device within the time range.
+      operationId: getDeviceChanges
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/deviceId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Devices
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedDeviceImeiChanges'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/devices/flow-aggregates/metrics/search:
+    post:
+      summary: Get Device Metrics Chart
+      description: 'Returns hourly time-series of device network metrics for a single device. Use `metricGroup` to select which group of metrics to retrieve:
+
+        - `DATA_TRANSACTIONS` — average data per transaction
+
+        (`avgMoDataBytes`, `avgMtDataBytes`).
+
+
+        - `DATA_VOLUME` — total data volume
+
+        (`sumMoDataBytes`, `sumMtDataBytes`).
+
+
+        - `DNS_QUERIES` — DNS activity metrics
+
+        (`privateOccurrences`, `publicOccurrences`).
+
+        Optional DNS filter fields: `isPublicDns`, `domainHosts`, `domainHostsOperation`.
+
+
+        - `DESTINATION_ENDPOINTS` — unique destination count
+
+        (`uniqueServerIpCount`).
+
+
+        - `IP_FLOWS` — IP flow event count (`occurrences`).
+
+        Optional IP-flow filter fields: `sourceIp`, `sourcePort`, `destinationPort`.
+
+
+        Only metric fields belonging to the requested group are populated in the response; all other metric fields are `null`. A `400` is returned if group-specific filter fields are used with the wrong group.'
+      operationId: getDeviceFlowAggregatesMetrics
+      tags:
+      - Devices
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceMetricsChartRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceMetricsChartResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/devices/flow-aggregates/search:
+    post:
+      summary: Get Flow Aggregates Table
+      description: Returns a paginated breakdown of network flow aggregates for a specific device, grouped by destination endpoint (server FQDN, IP, protocol, port), including occurrence counts and total MO/MT/combined byte volumes per group. Scope the query to a device via `iccid` in the request body and apply optional filters by destination FQDN, IP, application protocol, or port.
+      operationId: getDeviceFlowAggregatesTable
+      tags:
+      - Devices
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceFlowTableRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedFlowAggregatesTable'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/devices/dns-queries/search:
+    post:
+      summary: Get DNS Queries Table
+      description: Returns a paginated breakdown of DNS Queries for a specific device, grouped by DNS server (FQDN, IP, protocol, port, public/private type). Scope to a device via `iccid`, optionally filter by DNS FQDN/IP, protocol, port, or public/private type. Use `domainHosts` with `domainHostsOperation` to include or exclude specific DNS servers (max 1000 entries); `domainHostsOperation` defaults to `in` when omitted.
+      operationId: getDeviceDnsQueriesTable
+      tags:
+      - Devices
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DnsQueriesTableRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedDnsQueriesTable'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/devices/ip-flows/search:
+    post:
+      summary: Search Device IP Flows
+      description: 'Returns a paginated list of raw IP flow records for a specific device, with per-flow timing, source/destination endpoint, and data volume detail. Scope to a device via `iccid` and filter optionally by destination/source FQDN, IP, protocol, or port. Default sort: `startTime:asc`.
+
+        **Distinct from `POST /watchtower/v1/ip-flows/search`:** - This endpoint is **device-scoped** via `iccid` and returns raw per-flow
+
+        metric records (timing, bytes, source/destination) without enforcement context.
+
+        - The account-level `/ip-flows/search` searches across all devices and returns
+
+        structured `BLOCKED`/`ALLOWED` flow DTOs with policy enforcement detail.'
+      operationId: getDeviceIpFlows
+      tags:
+      - Devices
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceIpFlowFilter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedIpFlowMetricsTable'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  responses:
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '413':
+      description: Requested data too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 413
+            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '404':
+      description: Not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  schemas:
+    DeviceMetricsChartRequest:
+      allOf:
+      - $ref: '#/components/schemas/DeviceDnsFilter'
+      - type: object
+        required:
+        - interval
+        - metricGroup
+        properties:
+          interval:
+            type: string
+            description: Time bucket size in ISO 8601 duration format. Only `PT1H` is currently supported.
+            example: PT1H
+          metricGroup:
+            $ref: '#/components/schemas/MetricGroup'
+          sourceIp:
+            type: string
+            description: Filter by source (device) IP address. Valid only for the `IP_FLOWS` metric group; a `400` is returned if used with any other group.
+          sourcePort:
+            type: integer
+            description: Filter by source (device) port number. Valid only for the `IP_FLOWS` metric group; a `400` is returned if used with any other group.
+          destinationPort:
+            type: integer
+            description: Filter by destination server port number. Valid only for the `IP_FLOWS` metric group; a `400` is returned if used with any other group.
+    DeviceImeiChange:
+      type: object
+      properties:
+        deviceId:
+          $ref: '#/components/schemas/deviceId'
+        iccid:
+          $ref: '#/components/schemas/iccid'
+        imei:
+          $ref: '#/components/schemas/imei'
+        previousImei:
+          $ref: '#/components/schemas/imei'
+        changeTime:
+          $ref: '#/components/schemas/dateTime'
+        deviceType:
+          description: Device type info derived from IMEI/TAC.
+          type: string
+          example: Modem
+        deviceBrand:
+          description: Device brand info derived from IMEI/TAC.
+          type: string
+          example: Apple
+        deviceModel:
+          description: Device model derived info from IMEI/TAC.
+          type: string
+          example: iPhone 7
+      required:
+      - iccid
+      - imei
+      - previousImei
+      - changeTime
+    imei:
+      description: IMEI (International Mobile Equipment Identity) of the device.
+      type: string
+      minLength: 14
+      maxLength: 15
+      example: '86715704097269'
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    PagedIpFlowMetricsTable:
+      allOf:
+      - $ref: '#/components/schemas/DeepForensicsPagedBase'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/IpFlowMetricsTableRow'
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    deviceId:
+      description: Internal Device ID.
+      type: integer
+      format: int32
+      example: 10407778
+      minimum: 0
+    DeviceFlowTableRequest:
+      $ref: '#/components/schemas/DeviceFlowFilter'
+    DeviceMetricsChartRow:
+      type: object
+      description: One time-bucket row in the device metrics chart response. Only the fields corresponding to the requested `metrics` are populated; others are omitted.
+      properties:
+        eventHour:
+          type: string
+          format: date-time
+          description: Start of the time bucket (UTC).
+        avgMoDataBytes:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Average mobile-originated data bytes per transaction.
+        avgMtDataBytes:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Average mobile-terminated data bytes per transaction.
+        sumMoDataBytes:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: Total mobile-originated data bytes in the time bucket.
+        sumMtDataBytes:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: Total mobile-terminated data bytes in the time bucket.
+        uniqueServerIpCount:
+          type:
+          - integer
+          - 'null'
+          description: Count of unique destination server IPs in the time bucket.
+        privateOccurrences:
+          type:
+          - integer
+          - 'null'
+          description: Count of private DNS queries in the time bucket.
+        publicOccurrences:
+          type:
+          - integer
+          - 'null'
+          description: Count of public DNS queries in the time bucket.
+        occurrences:
+          type:
+          - integer
+          - 'null'
+          description: Count of IP flow events in the time bucket.
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    DeviceDnsFilter:
+      allOf:
+      - $ref: '#/components/schemas/DeviceFlowFilter'
+      - type: object
+        properties:
+          isPublicDns:
+            type: boolean
+            description: When `true`, returns only public DNS queries. When `false`, returns only private DNS queries. Omit to return both.
+          domainHosts:
+            type: array
+            maxItems: 1000
+            items:
+              type: string
+            description: List of DNS server FQDNs or IPs to match against. When `domainHostsOperation` is omitted, defaults to `in` (include).
+            example:
+            - dns.google
+            - 1.1.1.1
+            - 8.8.8.8
+          domainHostsOperation:
+            type: string
+            enum:
+            - in
+            - ni
+            default: in
+            description: '`in` — return only queries to hosts in the `domainHosts` list. `ni` — exclude queries to those hosts. Defaults to `in` when omitted.'
+    PagedDeviceImeiChanges:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            description: Array of IMEI change events
+            items:
+              $ref: '#/components/schemas/DeviceImeiChange'
+    DnsQueriesTableRow:
+      type: object
+      properties:
+        serverFqdn:
+          type:
+          - string
+          - 'null'
+        serverIp:
+          type: string
+        applicationProtocol:
+          type: string
+        serverPort:
+          type:
+          - integer
+          - 'null'
+        isPrivateIp:
+          type: boolean
+          description: True when the DNS server IP is a private/RFC-1918 address.
+        networkProtocol:
+          type: string
+        occurrences:
+          type: integer
+          format: int64
+        sumMoDataBytes:
+          type: integer
+          format: int64
+        sumMtDataBytes:
+          type: integer
+          format: int64
+        sumDataBytes:
+          type: integer
+          format: int64
+    IpFlowMetricsTableRow:
+      type: object
+      properties:
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        serverFqdn:
+          type:
+          - string
+          - 'null'
+        serverIp:
+          type: string
+        deviceIp:
+          type: string
+        devicePort:
+          type:
+          - integer
+          - 'null'
+        serverPort:
+          type:
+          - integer
+          - 'null'
+        networkProtocol:
+          type: string
+        applicationProtocol:
+          type: string
+        sumMoDataBytes:
+          type: integer
+          format: int64
+        sumMtDataBytes:
+          type: integer
+          format: int64
+        sumDataBytes:
+          type: integer
+          format: int64
+        occurrences:
+          type: integer
+    PagedDnsQueriesTable:
+      allOf:
+      - $ref: '#/components/schemas/DeepForensicsPagedBase'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/DnsQueriesTableRow'
+    DeviceIpFlowFilter:
+      type: object
+      description: Filter parameters for device-scoped IP Flow Metrics queries. `iccid` is required to scope the query to a single device.
+      required:
+      - iccid
+      properties:
+        iccid:
+          type: string
+          description: ICCID of the device to scope this query to.
+          example: '99987240680301008462'
+        destinationFqdn:
+          type: string
+          description: Filter by destination server FQDN.
+        destinationIp:
+          type: string
+          description: Filter by destination server IP address.
+        sourceIp:
+          type: string
+          description: Filter by source (device) IP address.
+        sourcePort:
+          type: integer
+          description: Filter by source (device) port number.
+        applicationProtocol:
+          type: string
+          description: Filter by application-layer protocol.
+        destinationPort:
+          type: integer
+          description: Filter by destination server port number.
+        networkProtocol:
+          type: array
+          description: Filter by one or more network transport protocols.
+          items:
+            type: string
+            enum:
+            - TCP
+            - UDP
+            - ICMP
+          example:
+          - TCP
+          - UDP
+    DeepForensicsPagedBase:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of matching records across all pages.
+        offset:
+          type: integer
+        limit:
+          type: integer
+    DnsQueriesTableRequest:
+      $ref: '#/components/schemas/DeviceDnsFilter'
+    iccid:
+      description: Integrated Circuit Card Identifier.
+      type: string
+      minLength: 18
+      maxLength: 22
+      example: '891004234814455936'
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    FlowAggregatesTableRow:
+      type: object
+      description: Per-destination endpoint aggregate row, used by the Flow Aggregates table.
+      properties:
+        serverFqdn:
+          type:
+          - string
+          - 'null'
+        serverIp:
+          type: string
+        applicationProtocol:
+          type: string
+        serverPort:
+          type:
+          - integer
+          - 'null'
+        networkProtocol:
+          type: string
+        occurrences:
+          type: integer
+          format: int64
+          description: Number of unique connection occurrences to this destination endpoint.
+        sumMoDataBytes:
+          type: integer
+          format: int64
+        sumMtDataBytes:
+          type: integer
+          format: int64
+        sumDataBytes:
+          type: integer
+          format: int64
+    DeviceFlowFilter:
+      type: object
+      description: Filter parameters for device-scoped flow aggregate queries. `iccid` is required to scope the query to a single device.
+      required:
+      - iccid
+      properties:
+        iccid:
+          type: string
+          description: ICCID of the device to scope this query to.
+          example: '99987240680301008462'
+        destinationFqdn:
+          type: string
+          description: Filter by destination server FQDN (partial match).
+          example: eicar.host
+        destinationIp:
+          type: string
+          description: Filter by destination server IP address.
+          example: 103.126.211.51
+        applicationProtocol:
+          type: string
+          description: Filter by application-layer protocol (e.g. HTTPS, DNS, ICMP).
+          example: HTTPS
+        serverPort:
+          type: integer
+          description: Filter by destination server port number.
+          example: 443
+        networkProtocol:
+          type: array
+          description: Filter by one or more network transport protocols.
+          items:
+            type: string
+            enum:
+            - TCP
+            - UDP
+            - ICMP
+          example:
+          - TCP
+          - UDP
+    PagedFlowAggregatesTable:
+      allOf:
+      - $ref: '#/components/schemas/DeepForensicsPagedBase'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/FlowAggregatesTableRow'
+    MetricGroup:
+      type: string
+      description: 'Selects which group of metrics to retrieve for the `/devices/flow-aggregates/metrics/search` endpoint. Each group maps to a fixed set of response fields:
+
+        `DATA_TRANSACTIONS` — `avgMoDataBytes`, `avgMtDataBytes`.
+
+        `DATA_VOLUME` — `sumMoDataBytes`, `sumMtDataBytes`.
+
+        `DNS_QUERIES` — `privateOccurrences`, `publicOccurrences`. DNS filter fields apply.
+
+        `DESTINATION_ENDPOINTS` — `uniqueServerIpCount`.
+
+        `IP_FLOWS` — `occurrences`. IP-flow filter fields apply.'
+      enum:
+      - DATA_TRANSACTIONS
+      - DATA_VOLUME
+      - DNS_QUERIES
+      - DESTINATION_ENDPOINTS
+      - IP_FLOWS
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
+    DeviceMetricsChartResponse:
+      type: object
+      description: Response for the device metrics chart endpoint. Contains all matching time-series rows; no pagination.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceMetricsChartRow'
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+  parameters:
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+    startTime:
+      name: startTime
+      in: query
+      required: true
+      description: The start timestamp. (inclusive)
+      example: '2021-07-01T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    endTime:
+      name: endTime
+      in: query
+      required: true
+      description: The end timestamp. (exclusive)
+      example: '2021-07-05T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    sort:
+      name: sort
+      in: query
+      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
+      example: deviceId,updateTime:desc
+      schema:
+        type: string
+    deviceId:
+      name: deviceId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/deviceId'
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      description: This API uses OAuth 2 with the Client Credentials flow.
+      flows:
+        clientCredentials:
+          tokenUrl: /watchtower/v1/auth/token
+          scopes: {}

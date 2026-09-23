@@ -1,0 +1,236 @@
+openapi: 3.2.0
+info:
+  description: This API provides the IoT Accelerator SMS Messaging API.
+  version: v2
+  title: SMS Messaging Send SMS API
+  x-audience: external-public
+servers:
+- url: https://sms.iot-api.aeris.com/dcpapi/smsmessaging/v1
+  description: SMS API server
+security:
+- BasicAuth: []
+tags:
+- name: Send SMS
+paths:
+  /outbound/{senderAddress}/requests:
+    post:
+      summary: Sends an SMS message to one or more devices
+      tags:
+      - Send SMS
+      operationId: sendSMS
+      parameters:
+      - name: senderAddress
+        description: A string that represents the address of the enterprise that sends the SMS. For example tel:12345678
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Authorization
+        description: Should contain a base64 Basic auth string
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OutboundSMSMessageRequestHolder'
+            example:
+              outboundSMSMessageRequest:
+                address:
+                - tel:13500000991
+                - tel:13500000992
+                senderAddress: tel:12345678
+                senderName: Me
+                outboundSMSTextMessage:
+                  message: Hello World
+      responses:
+        '201':
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutboundSMSMessageRequestHolder'
+              example:
+                outboundSMSMessageRequest:
+                  address:
+                  - tel:13500000991
+                  - tel:13500000992
+                  deliveryInfoList:
+                    deliveryInfo:
+                    - address: tel:13500000991
+                      deliveryStatus: DeliveredToTerminal
+                    - address: tel:13500000992
+                      deliveryStatus: DeliveredToNetwork
+                    resourceURL: https://sms.iot-api.aeris.com/dcpapi/smsmessaging/v1/outbound/tel:12345/requests/dcp1234567/deliveryInfos
+                  senderAddress: tel:12345
+                  senderName: Me
+                  outboundSMSTextMessage:
+                    message: Deep Purple
+                  resourceURL: https://sms.iot-api.aeris.com/dcpapi/smsmessaging/v1/outbound/tel:12345/requests/dcp1234567/
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+              example:
+                requestError:
+                  serviceException:
+                    messageId: SVC0004
+                    text: No valid addresses provided inmessage part %1
+                    variables: address, (each address must be prefixed with tel:)
+        '401':
+          description: Authentication Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+              example:
+                requestError:
+                  policyException:
+                    messageId: POL0010
+                    text: User has not been provisioned for %1
+                    variables: SMSMessaging
+        '404':
+          description: No Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+components:
+  schemas:
+    OutboundSMSMessageRequest:
+      type: object
+      required:
+      - address
+      - senderAddress
+      properties:
+        address:
+          type: array
+          description: 'The recipients MSISDN including the ‘tel:'' protocol identifier and the country code. For example: tel:16309700001'
+          items:
+            type: string
+        deliveryInfoList:
+          $ref: '#/components/schemas/DeliveryInfoList'
+        senderAddress:
+          type: string
+          description: 'A string that represents the address of the enterprise that sends the SMS. For example: tel:12345678'
+        outboundSMSTextMessage:
+          $ref: '#/components/schemas/OutboundSMSTextMessage'
+        outboundSMSBinaryMessage:
+          $ref: '#/components/schemas/OutboundSMSBinaryMessage'
+        senderName:
+          type: string
+          description: The name of the sender
+        validityPeriod:
+          type: integer
+          format: int32
+          description: The SMSC expiration time, after which the message is discarded if still not delivered to the destination.
+        resourceURL:
+          type: string
+        subAddress:
+          type: string
+          description: 'A string that represents the sub-address of the device to send the message to. Supports only SIM card. For example: subAddress:sim'
+    OutboundSMSMessageRequestHolder:
+      type: object
+      required:
+      - outboundSMSMessageRequest
+      properties:
+        outboundSMSMessageRequest:
+          $ref: '#/components/schemas/OutboundSMSMessageRequest'
+    DeliveryInfoList:
+      type: object
+      required:
+      - deliveryInfo
+      - resourceURL
+      properties:
+        deliveryInfo:
+          type: array
+          description: List of deliveryInfos
+          items:
+            $ref: '#/components/schemas/DeliveryInfo'
+        resourceURL:
+          type: string
+          description: Link to the successful response.
+    RequestError:
+      type: object
+      properties:
+        requestError:
+          type: object
+          properties:
+            serviceException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
+            policyException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
+    DeliveryInfo:
+      type: object
+      required:
+      - address
+      - deliveryStatus
+      properties:
+        address:
+          type: string
+          description: 'The recipients MSISDN including the tel: protocol identifier. For example: tel:16309700001'
+        deliveryStatus:
+          type: string
+          description: 'Delivery status for the recipient identified by address. '
+          enum:
+          - DeliveredToTerminal
+          - DeliveryUncertain
+          - DeliveryImpossible
+          - MessageWaiting
+          - DeliveredToNetwork
+    OutboundSMSTextMessage:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Regular text string of up to 160 characters.
+    OutboundSMSBinaryMessage:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Base64 coded string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

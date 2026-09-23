@@ -1,0 +1,2754 @@
+openapi: 3.2.0
+info:
+  title: Order management API
+  description: '#### Copyright
+
+    @ Aeris Communications, Inc.'
+  version: 1.0.1
+  x-api-id: 3c82242f-95ff-4484-b84a-c96a9b2c43d3
+  x-audience: external-partner
+servers:
+- url: https://iot-api.aeris.com/iot/api
+  description: API server
+tags:
+- name: Order Management
+  description: Order management APIs.
+paths:
+  /orders:
+    get:
+      tags:
+      - Order Management
+      summary: Get order list
+      description: Query order list.
+      operationId: getOrderList
+      parameters:
+      - name: cursor
+        in: query
+        description: "Opaque string returned within the meta object response on endpoints which support pagination.\n Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results.\n  The last page of results will not have a 'next' present.\n"
+        schema:
+          type: string
+        example: DFVSDB3434%DFB%EYY445
+      - name: limit
+        in: query
+        description: The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used.
+        schema:
+          type: integer
+          example: 100
+          default: 100
+      - name: q
+        in: query
+        description: "Filter parameter which supports the RSQL filter syntax.\nRSQL is a super-set of the Feed Item Query Language (FIQL).\nNote! The query string must be URL encoded.\nSupported fields:\n  - status\n  - type\n"
+        schema:
+          type: string
+          example: status==DRAFT;type==CREATE_2G3G_RP
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrderListResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Bad Request
+                status: 400
+                detail: Invalid request parameter
+                instance: https://hostname/iot/api/some-path
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Unauthorized
+                status: 401
+                detail: The request has not been applied because the server requires user authentication.
+                instance: https://hostname/iot/api/some-path
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Internal Server Error.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Internal Server Error
+                status: 500
+                detail: The server has encountered a situation that it does not know how to handle.
+                instance: https://hostname/iot/api/some-path
+        default:
+          description: Internal Server Error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - oauth2:
+        - om_view_order
+    post:
+      tags:
+      - Order Management
+      summary: Create an order to create, update, delete or deprecate network resources and…
+      description: This API is used to create a new order. Parameter "type" indicates the purpose.
+      operationId: postOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostOrderRequest'
+            examples:
+              Create order to create 2G3G roaming profile:
+                $ref: '#/components/examples/Create2g3gRoamingProfileExample'
+              Create order to update 2G3G roaming profile:
+                $ref: '#/components/examples/Update2g3gRoamingProfileExample'
+              Create order to create 4G roaming profile:
+                $ref: '#/components/examples/Create4gRoamingProfileExample'
+              Create order to update 4G roaming profile:
+                $ref: '#/components/examples/Update4gRoamingProfileExample'
+              Create order to create dedicated internet data service:
+                $ref: '#/components/examples/CreateDedicatedInternetServiceExample'
+              Create order to update dedicated internet data service:
+                $ref: '#/components/examples/UpdateDedicatedInternetServiceExample'
+              Create order to create sim specification:
+                $ref: '#/components/examples/CreateSimSpecificationExample'
+              Create order to update sim specification:
+                $ref: '#/components/examples/UpdateSimSpecificationExample'
+              Create order to create form specification:
+                $ref: '#/components/examples/CreateFormSpecificationExample'
+              Create order to update form specification:
+                $ref: '#/components/examples/UpdateFormSpecificationExample'
+              Create order to create profile specification:
+                $ref: '#/components/examples/CreateProfileSpecificationExample'
+              Create order to update profile specification:
+                $ref: '#/components/examples/UpdateProfileSpecificationExample'
+              Create order to delete inventory item:
+                $ref: '#/components/examples/DeleteInventoryExample'
+        required: true
+      responses:
+        '201':
+          description: Created
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostOrderResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Bad Request
+                status: 400
+                detail: Invalid request parameter
+                instance: https://hostname/iot/api/some-path
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Unauthorized
+                status: 401
+                detail: The request has not been applied because the server requires user authentication.
+                instance: https://hostname/iot/api/some-path
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Internal Server Error.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Internal Server Error
+                status: 500
+                detail: The server has encountered a situation that it does not know how to handle.
+                instance: https://hostname/iot/api/some-path
+        default:
+          description: Internal Server Error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - oauth2:
+        - om_manage_order
+  /orders/{id}:
+    get:
+      tags:
+      - Order Management
+      summary: Query the order detail by id
+      description: Get the order detail information by order id
+      operationId: getOrderById
+      parameters:
+      - name: id
+        in: path
+        description: the id of order
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrderResponse'
+              examples:
+                Get 2G3G roaming profile order:
+                  $ref: '#/components/examples/Get2g3gRoamingProfileExample'
+                Get 4G roaming profile order:
+                  $ref: '#/components/examples/Get4gRoamingProfileExample'
+                Get dedicated internet service order:
+                  $ref: '#/components/examples/GetDedicatedInternetServiceExample'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Bad Request
+                status: 400
+                detail: Invalid request parameter
+                instance: https://hostname/iot/api/some-path
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Unauthorized
+                status: 401
+                detail: The request has not been applied because the server requires user authentication.
+                instance: https://hostname/iot/api/some-path
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+              example:
+                type: https://your.api.documentation.url
+                title: Not Found
+                status: 404
+                detail: The server has not found anything matching the Request-URI.
+                instance: https://hostname/iot/api/some-path
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Internal Server Error.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Internal Server Error
+                status: 500
+                detail: The server has encountered a situation that it does not know how to handle.
+                instance: https://hostname/iot/api/some-path
+        default:
+          description: Internal Server Error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - oauth2:
+        - om_view_order
+    delete:
+      tags:
+      - Order Management
+      summary: Delete an order which is in "DRAFT" or "CANCELED" status
+      description: Only DRAFT or CANCELED order can be deleted.
+      operationId: deleteOrderById
+      parameters:
+      - name: id
+        in: path
+        description: the id of order
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Bad Request
+                status: 400
+                detail: Invalid request parameter
+                instance: https://hostname/iot/api/some-path
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Unauthorized
+                status: 401
+                detail: The request has not been applied because the server requires user authentication.
+                instance: https://hostname/iot/api/some-path
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+              example:
+                type: https://your.api.documentation.url
+                title: Not Found
+                status: 404
+                detail: The server has not found anything matching the Request-URI.
+                instance: https://hostname/iot/api/some-path
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Internal Server Error.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Internal Server Error
+                status: 500
+                detail: The server has encountered a situation that it does not know how to handle.
+                instance: https://hostname/iot/api/some-path
+        default:
+          description: Internal Server Error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - oauth2:
+        - om_manage_order
+    patch:
+      tags:
+      - Order Management
+      summary: Update an order which has not been fulfilled
+      description: Update, partial replacement of an order, only mentioned fields are expected to be updated.
+      operationId: patchOrderById
+      parameters:
+      - name: id
+        in: path
+        description: the id of order
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/PatchOrderRequest'
+            examples:
+              Patch 2G3G roaming profile:
+                $ref: '#/components/examples/Patch2g3gRoamingProfileExample'
+              Patch 4G roaming profile:
+                $ref: '#/components/examples/Patch4gRoamingProfileExample'
+              Patch dedicated internet service order:
+                $ref: '#/components/examples/PatchDedicatedInternetServiceExample'
+      responses:
+        '204':
+          description: No Content
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Bad Request
+                status: 400
+                detail: Invalid request parameter
+                instance: https://hostname/iot/api/some-path
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Unauthorized
+                status: 401
+                detail: The request has not been applied because the server requires user authentication.
+                instance: https://hostname/iot/api/some-path
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+              example:
+                type: https://your.api.documentation.url
+                title: Not Found
+                status: 404
+                detail: The server has not found anything matching the Request-URI.
+                instance: https://hostname/iot/api/some-path
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Internal Server Error.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Internal Server Error
+                status: 500
+                detail: The server has encountered a situation that it does not know how to handle.
+                instance: https://hostname/iot/api/some-path
+        default:
+          description: Internal Server Error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - oauth2:
+        - om_manage_order
+  /orders/{id}/actions:
+    post:
+      tags:
+      - Order Management
+      summary: Post actions on order
+      description: 'Post actions on order to trigger the order flow moving forward.
+
+
+        SUBMIT: Submit an order for approval or implmentation
+
+
+        CANCEL: Cancel an order
+
+
+        APPROVE: Approve an order
+
+
+        REJECT: Reject an order
+
+
+        ACCEPT_VERIFICATION: Customers accept the verification when the implementation is done. The order will be closed successfully
+
+
+        REJECT_VERIFICATION: Customers reject the verification when the implementation is done. The problems will be addressed and fixed by the operation team'
+      operationId: postOrderActionById
+      parameters:
+      - name: id
+        in: path
+        description: the id of order
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostActionsRequest'
+            examples:
+              Submit order:
+                value:
+                  action: SUBMIT
+              Cancel order:
+                value:
+                  action: CANCEL
+              Approve order:
+                value:
+                  action: APPROVE
+                  comments: OK
+              Reject order:
+                value:
+                  action: REJECT
+                  comments: Something wrong
+              Accept verification:
+                value:
+                  action: ACCEPT_VERIFICATION
+                  comments: OK
+              Reject verification:
+                value:
+                  action: REJECT_VERIFICATION
+                  comments: Something wrong
+      responses:
+        '204':
+          description: No Content
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Bad Request
+                status: 400
+                detail: Invalid request parameter
+                instance: https://hostname/iot/api/some-path
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Unauthorized
+                status: 401
+                detail: The request has not been applied because the server requires user authentication.
+                instance: https://hostname/iot/api/some-path
+        '404':
+          description: Not Found
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+              example:
+                type: https://your.api.documentation.url
+                title: Not Found
+                status: 404
+                detail: The server has not found anything matching the Request-URI.
+                instance: https://hostname/iot/api/some-path
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Internal Server Error.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Internal Server Error
+                status: 500
+                detail: The server has encountered a situation that it does not know how to handle.
+                instance: https://hostname/iot/api/some-path
+        default:
+          description: Internal Server Error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - oauth2:
+        - om_manage_order
+        - om_resource_approval
+        - om_service_approval
+  /orders/approvals:
+    get:
+      tags:
+      - Order Management
+      summary: Get order approval list
+      description: Query order approval list.
+      operationId: getApprovalList
+      parameters:
+      - name: q
+        in: query
+        description: "Filter parameter which supports the RSQL filter syntax.\nRSQL is a super-set of the Feed Item Query Language (FIQL).\nNote! The query string must be URL encoded.\nSupported fields:\n  - status\n  - approvalStage\n  - order.id\n  - order.type\n  - order.orderedFor\n"
+        schema:
+          type: string
+          example: status==PENDING;approvalStage==OPERATOR
+      - name: cursor
+        in: query
+        description: "Opaque string returned within the meta object response on endpoints which support pagination.\n Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results.\n  The last page of results will not have a 'next' present.\n"
+        schema:
+          type: string
+        example: DFVSDB3434%DFB%EYY445
+      - name: limit
+        in: query
+        description: The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used.
+        schema:
+          type: integer
+          example: 100
+          default: 100
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetApprovalListResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Bad Request
+                status: 400
+                detail: Invalid request parameter
+                instance: https://hostname/iot/api/some-path
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Unauthorized
+                status: 401
+                detail: The request has not been applied because the server requires user authentication.
+                instance: https://hostname/iot/api/some-path
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Internal Server Error.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Internal Server Error
+                status: 500
+                detail: The server has encountered a situation that it does not know how to handle.
+                instance: https://hostname/iot/api/some-path
+        default:
+          description: Internal Server Error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - oauth2:
+        - om_view_order
+  /orders/revisions:
+    get:
+      tags:
+      - Order Management
+      summary: Get order revision list
+      description: Query order revision list.
+      operationId: getRevisionList
+      parameters:
+      - name: q
+        in: query
+        description: "Filter parameter which supports the RSQL filter syntax.\nRSQL is a super-set of the Feed Item Query Language (FIQL).\nNote! The query string must be URL encoded.\nSupported fields:\n  - status\n  - revisionStage\n  - order.id\n  - order.type\n  - order.orderedFor\n"
+        schema:
+          type: string
+          example: status==PENDING;revisionStage==OPERATOR
+      - name: cursor
+        in: query
+        description: "Opaque string returned within the meta object response on endpoints which support pagination.\n Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results.\n  The last page of results will not have a 'next' present.\n"
+        schema:
+          type: string
+        example: DFVSDB3434%DFB%EYY445
+      - name: limit
+        in: query
+        description: The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used.
+        schema:
+          type: integer
+          example: 100
+          default: 100
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRevisionListResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Bad Request
+                status: 400
+                detail: Invalid request parameter
+                instance: https://hostname/iot/api/some-path
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Unauthorized
+                status: 401
+                detail: The request has not been applied because the server requires user authentication.
+                instance: https://hostname/iot/api/some-path
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Internal Server Error.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Internal Server Error
+                status: 500
+                detail: The server has encountered a situation that it does not know how to handle.
+                instance: https://hostname/iot/api/some-path
+        default:
+          description: Internal Server Error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - oauth2:
+        - om_view_order
+  /orders/verifications:
+    get:
+      tags:
+      - Order Management
+      summary: Get order verification list
+      description: Query order verification list.
+      operationId: getVerificationList
+      parameters:
+      - name: q
+        in: query
+        description: "Filter parameter which supports the RSQL filter syntax.\nRSQL is a super-set of the Feed Item Query Language (FIQL).\nNote! The query string must be URL encoded.\nSupported fields:\n  - status\n  - order.id\n  - order.type\n  - order.orderedFor\n"
+        schema:
+          type: string
+          example: status==PENDING
+      - name: cursor
+        in: query
+        description: "Opaque string returned within the meta object response on endpoints which support pagination.\n Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results.\n  The last page of results will not have a 'next' present.\n"
+        schema:
+          type: string
+        example: DFVSDB3434%DFB%EYY445
+      - name: limit
+        in: query
+        description: The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used.
+        schema:
+          type: integer
+          example: 100
+          default: 100
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVerificationListResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Bad Request
+                status: 400
+                detail: Invalid request parameter
+                instance: https://hostname/iot/api/some-path
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Unauthorized
+                status: 401
+                detail: The request has not been applied because the server requires user authentication.
+                instance: https://hostname/iot/api/some-path
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Internal Server Error.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://your.api.documentation.url
+                title: Internal Server Error
+                status: 500
+                detail: The server has encountered a situation that it does not know how to handle.
+                instance: https://hostname/iot/api/some-path
+        default:
+          description: Internal Server Error.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - oauth2:
+        - om_view_order
+components:
+  schemas:
+    ApproveAction:
+      required:
+      - action
+      type: object
+      properties:
+        action:
+          type: string
+          example: APPROVE
+        comments:
+          type: string
+          example: OK
+    Get4gRoamingProfileResponse:
+      allOf:
+      - $ref: '#/components/schemas/OrderBase'
+      - type: object
+        properties:
+          parameters:
+            $ref: '#/components/schemas/Create4gRoamingProfile'
+    CreateProfileSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_PROFILE_SPEC
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/SsmProfileSpecification'
+    Update4gRoamingProfile:
+      allOf:
+      - required:
+        - id
+        type: object
+        properties:
+          id:
+            type: string
+            description: inventory id
+            example: '1'
+          status:
+            type: string
+            description: The value of status could be ACTIVE or DEPRECATED. Set status to 'ACTIVE' to update an active roaming profile, set status to 'DEPRECATED' to deprecate an active roaming profile. If other parameters are changed for the roaming profile, the roaming profile are updated before it becomes 'ACTIVE' or 'DEPRECATED'.
+            example: ACTIVE
+            x-extensible-enum:
+            - ACTIVE
+            - DEPRECATED
+      - $ref: '#/components/schemas/RoamingProfile4g'
+    OrderBase:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          example: FOO_TYPE_OF_ORDER
+        status:
+          type: string
+          example: DRAFT
+          x-extensible-enum:
+          - DRAFT
+          - CANCELED
+          - IMPLEMENTING
+          - SUCCEEDED
+          - FAILED
+          - PENDING_APPROVAL
+          - PENDING_REVISION
+          - PENDING_VERIFICATION
+          - PENDING_RESOLUTION
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    SsmFormSpecification:
+      allOf:
+      - $ref: '#/components/schemas/SsmCommSpecification'
+      - type: object
+        properties:
+          maxQuantity:
+            minimum: 0
+            type: integer
+            format: int32
+          minQuantity:
+            minimum: 0
+            type: integer
+            format: int32
+          minOrderVolume:
+            minimum: 0
+            type: integer
+            format: int32
+          orderIncrement:
+            minimum: 0
+            type: integer
+            format: int32
+          earliestDeliveryDays:
+            minimum: 0
+            type: integer
+            description: how many days the order needs to be delivered
+            format: int32
+          smsrId:
+            maxLength: 100
+            minLength: 1
+            type: string
+            description: Subscription Manager Secure Routing
+            example: 1.2.3.4
+          bootstrapProfileType:
+            type: string
+            example: VIRTUAL
+            x-extensible-enum:
+            - BOOTSTRAP
+            - VIRTUAL
+            - PROVISIONING
+            - OPERATIONAL
+          formSpecificationType:
+            type: string
+            example: M2M
+            x-extensible-enum:
+            - M2M
+            - CONSUMER
+          profileSpecificationIds:
+            type: array
+            description: Profile specifications that linked to this spec
+            example:
+            - '564393'
+            items:
+              type: string
+    GetOrderListResponse:
+      allOf:
+      - type: object
+        properties:
+          orders:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderBase'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /orders?cursor=DFVSDB3434%DFB%EYY445
+    FirewallConfigItem:
+      type: object
+      properties:
+        ipAddress:
+          type: string
+          example: 111.222.111.222
+        portStart:
+          type: integer
+          format: int32
+          example: 1810
+        portEnd:
+          type: integer
+          format: int32
+          example: 1820
+        protocol:
+          type: string
+          example: TCP
+          x-extensible-enum:
+          - TCP
+          - UDP
+          - ICMP
+          - SCTP
+          - ESP
+          - ANY
+    OrderApprovalItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 4745ceda-6a00-4b0f-a94f-01a8725eed1e
+        status:
+          type: string
+          example: PENDING
+          x-extensible-enum:
+          - PENDING
+          - APPROVED
+          - REJECTED
+          - CANCELED
+        approvalStage:
+          type: string
+          example: OPERATOR
+          x-extensible-enum:
+          - OPERATOR
+          - ADMIN
+        comments:
+          type: string
+          example: OK
+        order:
+          $ref: '#/components/schemas/OrderBaseInfo'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    UpdateSimSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_SIM_SPEC
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/UpdateSimSpecification'
+    UpdateFormSpecification:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4507777'
+        description:
+          maxLength: 240
+          minLength: 1
+          type: string
+          example: Plastic SIM
+        maxQuantity:
+          minimum: 0
+          type: integer
+          format: int32
+        minQuantity:
+          minimum: 0
+          type: integer
+          format: int32
+        minOrderVolume:
+          minimum: 0
+          type: integer
+          format: int32
+        orderIncrement:
+          minimum: 0
+          type: integer
+          format: int32
+        earliestDeliveryDays:
+          minimum: 0
+          type: integer
+          description: how many days the order needs to be delivered
+          format: int32
+        smsrId:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: Subscription Manager Secure Routing
+          example: 1.2.3.4
+        profileSpecificationIds:
+          type: array
+          description: Profile specifications that linked to this spec
+          example:
+          - '564393'
+          items:
+            type: string
+    PatchOrderRequest:
+      anyOf:
+      - $ref: '#/components/schemas/Patch2g3gRoamingProfileRequest'
+      - $ref: '#/components/schemas/Patch4gRoamingProfileRequest'
+      - $ref: '#/components/schemas/PatchDedicatedInternetServiceRequest'
+    UpdateProfileSpecification:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4507778'
+        description:
+          maxLength: 240
+          minLength: 1
+          type: string
+          example: Plastic SIM
+        priceCategory:
+          minimum: 0
+          type: integer
+          format: int32
+        stockOrderFileShareId:
+          type: string
+          example: '75654'
+        manufacturerOrderFileShareId:
+          type: string
+          example: '75655'
+        warehouseOrderFileShareId:
+          type: string
+          example: '75656'
+        profileStockOrderFileShareId:
+          type: string
+          example: '75657'
+        smdpId:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: Subscription Manager Data Preparation
+          example: 5.6.7.8
+        formSpecificationIds:
+          type: array
+          description: Form specifications that linked to this spec
+          example:
+          - '663679'
+          - '665200'
+          - '564305'
+          items:
+            type: string
+    Create2g3gRoamingProfile:
+      allOf:
+      - $ref: '#/components/schemas/RoamingProfile2g3g'
+      - type: object
+        properties:
+          operatorNetworkId:
+            type: string
+            example: '538'
+    Create4gRoamingProfile:
+      allOf:
+      - $ref: '#/components/schemas/RoamingProfile4g'
+      - type: object
+        properties:
+          operatorNetworkId:
+            type: string
+            example: '538'
+    DedicatedInternetServiceRequest:
+      required:
+      - apn
+      - enabled2g3g
+      - enabled4g
+      - enabled5gNsa
+      - ipVersion
+      - numberOfSimultaneousSessions
+      - subscriptionPackages
+      type: object
+      properties:
+        apn:
+          type: string
+          description: The name of the APN.
+          example: foo.com
+        enabled2g3g:
+          type: boolean
+          description: A boolean indicating whether 2G3G is enabled.
+          example: true
+        enabled4g:
+          type: boolean
+          description: A boolean indicating whether 4G is enabled.
+          example: true
+        enabled5gNsa:
+          type: boolean
+          description: A boolean indicating whether 5GNSA is enabled.
+          example: true
+        ipVersion:
+          type: string
+          description: "The IP version that the devices can use.\n<ul>\n  <li>IPV4: Devices can use IPv4 addressing only.</li>\n  <li>IPV6: Devices can use IPv6 addressing only.</li>\n  <li>IPV4_AND_IPV6: Devices can use both IPv4 and IPv6 in the same bearer.</li>\n  <li>IPV4_OR_IPV6: Devices can use both IPv4 and IPv6, but in different bearers.</li>\n</ul>\n"
+          example: IPV4
+          x-extensible-enum:
+          - IPV4
+          - IPV6
+          - IPV4_AND_IPV6
+          - IPV4_OR_IPV6
+        uplinkBandwidth:
+          type: integer
+          description: An uplink bandwidth(kbps) limit to apply a speed profile on the subscriptions connecting through this APN. If no value is entered, the default value applies, which is defined by the QoS configured by the Operator.
+          format: int32
+          example: 1024
+        downlinkBandwidth:
+          type: integer
+          description: A downlink bandwidth(kbps) limit to apply a speed profile on the subscriptions connecting through this APN. If no value is entered, the default value applies, which is defined by the QoS configured by the Operator.
+          format: int32
+          example: 2048
+        useSupplierDnsIpV4:
+          type: boolean
+          description: A boolean indicating whether to set devices' IPv4 DNS. Note! If it is true and no IPv4 DNS addresses are provided, Ericsson will add by default the IoTA IPv4 DNS. The default value is false.
+          example: true
+        primaryDnsIpV4:
+          type: string
+          description: The IPv4 address of the primary DNS server.
+          example: 8.8.8.8
+        secondaryDnsIpV4:
+          type: string
+          description: The IPv4 address of the secondary DNS server.
+          example: 8.8.4.4
+        useSupplierDnsIpV6:
+          type: boolean
+          description: A boolean indicating whether to set devices' IPv6 DNS. Note! If it is true and no IPv6 DNS addresses are provided, Ericsson will add by default the IoTA IPv6 DNS. The default value is false.
+          example: true
+        primaryDnsIpV6:
+          type: string
+          description: The IPv6 address of the primary DNS server.
+          example: 2001:4860:4860::8888
+        secondaryDnsIpV6:
+          type: string
+          description: The IPv6 address of the secondary DNS server.
+          example: 2001:4860:4860::8844
+        numberOfSimultaneousSessions:
+          type: integer
+          description: The estimation of simultaneous connection sessions. It will be used for IP address pool pre-allocation in IoTA.
+          format: int32
+          example: 1000
+        sessionTimeout:
+          type: string
+          description: The session timeout configuration. If not provided, then system will use default value
+          default: NO_SUPERVISION
+          x-extensible-enum:
+          - NO_SUPERVISION
+          - TIMER
+        idleTimeout:
+          type: string
+          description: The idle timeout configuration.
+          default: TIMER
+          x-extensible-enum:
+          - NO_SUPERVISION
+          - TIMER
+        sendIpV4Dns:
+          type: boolean
+          description: 'A boolean indicating whether IPV4 DNS is used on the APN.
+
+            Default is false, If ipVersion is ipV6, it must be false.
+
+            Only when it''s true, useSupplierDnsIpV4, primaryDnsIpV4 and secondaryDnsIpV4 are valid.
+
+            '
+          default: false
+        sendIpV6Dns:
+          type: boolean
+          description: 'A boolean indicating whether IPV6 DNS is used on the APN.
+
+            Default is false, If ipVersion is ipV4, it must be false.
+
+            Only when it''s true, useSupplierDnsIpV6, primaryDnsIpV6 and secondaryDnsIpV6 are valid.
+
+            '
+          default: false
+        restrictM2MAccess:
+          type: boolean
+          description: A boolean indicating whether communication between terminals is restricted.
+          example: true
+        firewallAllowlist:
+          type: array
+          description: The configuration to restrict communication on the internet.
+          items:
+            $ref: '#/components/schemas/FirewallConfigItem'
+        subscriptionPackages:
+          type: array
+          description: The ID of the subscription package.
+          items:
+            type: string
+            example: foo_SP_01
+    DeleteInventoryRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: DELETE_DEDICATED_INTERNET_DATA_SERVICE
+          x-extensible-enum:
+          - DELETE_2G3G_RP
+          - DELETE_4G_RP
+          - DELETE_DEDICATED_INTERNET_DATA_SERVICE
+          - DELETE_SIM_SPEC
+          - DELETE_SIM_SPEC
+          - DELETE_PROFILE_SPEC
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/DeleteInventoryRequest_parameters'
+    UpdateProfileSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_PROFILE_SPEC
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/UpdateProfileSpecification'
+    GetRevisionListResponse:
+      allOf:
+      - type: object
+        properties:
+          revisions:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderRevisionItem'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /orders/revisions?cursor=cursorstring
+    PatchDedicatedInternetServiceRequest:
+      required:
+      - parameters
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
+    Create4gRoamingProfileRequest:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_4G_RP
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/Create4gRoamingProfile'
+    PostOrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          example: FOO_TYPE_OF_ORDER
+        status:
+          type: string
+          example: DRAFT
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        createdAt:
+          type: string
+          format: date-time
+    OrderBaseInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          example: FOO_TYPE_OF_ORDER
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+    GlobalTitles:
+      type: object
+      properties:
+        globalTitles:
+          uniqueItems: true
+          type: array
+          description: Global Titles
+          example:
+          - '164780001'
+          - '2250505987'
+          - '32468'
+          - '32475'
+          - '7901106'
+          - '7901154'
+          - '790116'
+          - '7901472'
+          - '790160'
+          - '799426'
+          - '99292'
+          - '99293'
+          items:
+            type: string
+    UpdateSimSpecification:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4507776'
+        description:
+          maxLength: 240
+          minLength: 1
+          type: string
+          example: Plastic SIM
+        maxQuantity:
+          minimum: 0
+          type: integer
+          format: int32
+        minQuantity:
+          minimum: 0
+          type: integer
+          format: int32
+        minOrderVolume:
+          minimum: 0
+          type: integer
+          format: int32
+        orderIncrement:
+          minimum: 0
+          type: integer
+          format: int32
+        earliestDeliveryDays:
+          minimum: 0
+          type: integer
+          description: how many days the order needs to be delivered
+          format: int32
+        priceCategory:
+          minimum: 0
+          type: integer
+          format: int32
+        stockOrderFileShareId:
+          type: string
+          example: '75654'
+        manufacturerOrderFileShareId:
+          type: string
+          example: '75655'
+        warehouseOrderFileShareId:
+          type: string
+          example: '75656'
+    NotFound:
+      description: 'Network Resource with provided ID not found.
+
+        '
+    SsmSimSpecification:
+      allOf:
+      - $ref: '#/components/schemas/SsmCommSpecification'
+      - type: object
+        properties:
+          maxQuantity:
+            minimum: 0
+            type: integer
+            format: int32
+          minQuantity:
+            minimum: 0
+            type: integer
+            format: int32
+          minOrderVolume:
+            minimum: 0
+            type: integer
+            format: int32
+          orderIncrement:
+            minimum: 0
+            type: integer
+            format: int32
+          earliestDeliveryDays:
+            minimum: 0
+            type: integer
+            description: how many days the order needs to be delivered
+            format: int32
+          priceCategory:
+            minimum: 0
+            type: integer
+            format: int32
+          numberSchemeId:
+            type: string
+            example: ZZRSCHEME00021
+          earlyBinding:
+            type: boolean
+    Patch2g3gRoamingProfileRequest:
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/Create2g3gRoamingProfile'
+    Create2g3gRoamingProfileRequest:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_2G3G_RP
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/Create2g3gRoamingProfile'
+    Patch4gRoamingProfileRequest:
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/Create4gRoamingProfile'
+    UpdateDedicatedInternetServiceRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_DEDICATED_INTERNET_DATA_SERVICE
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
+          - type: object
+            properties:
+              id:
+                type: string
+                example: '123456789'
+      discriminator:
+        propertyName: type
+    GetVerificationListResponse:
+      allOf:
+      - type: object
+        properties:
+          verifications:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderVerificationItem'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /orders/verifications?cursor=cursorstring
+    OrderRevisionItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 4745ceda-6a00-4b0f-a94f-01a8725eed1e
+        status:
+          type: string
+          example: PENDING
+          x-extensible-enum:
+          - PENDING
+          - COMPLETED
+          - CANCELED
+        revisionStage:
+          type: string
+          example: OPERATOR
+          x-extensible-enum:
+          - OPERATOR
+          - ADMIN
+        comments:
+          type: string
+          example: OK
+        order:
+          $ref: '#/components/schemas/OrderBaseInfo'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    UpdateFormSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_FORM_SPEC
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/UpdateFormSpecification'
+    CreateSimSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_SIM_SPEC
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/SsmSimSpecification'
+    RejectAction:
+      required:
+      - action
+      - comments
+      type: object
+      properties:
+        action:
+          type: string
+          example: REJECT
+        comments:
+          type: string
+          example: Something wrong
+    GetOrderResponse:
+      anyOf:
+      - $ref: '#/components/schemas/Get2g3gRoamingProfileResponse'
+      - $ref: '#/components/schemas/Get4gRoamingProfileResponse'
+      - $ref: '#/components/schemas/GetDedicatedInternetServiceResponse'
+    ExtendedDedicatedInternetServiceRequest:
+      required:
+      - packetGws
+      allOf:
+      - $ref: '#/components/schemas/DedicatedInternetServiceRequest'
+      - type: object
+        properties:
+          name:
+            type: string
+            description: The name of the APN in Service portal.
+            example: Ericsson-foo.com
+          description:
+            type: string
+            description: The description of the APN in Service portal.
+            example: Some description
+          supplierDnsHosted:
+            type: boolean
+            description: 'A boolean indicating whether the APN is resolved by the IoTA DNS or the DNS of the operator.
+
+              If it is true, the Ericsson DNS will be responsible for resolving the APN.
+
+              Then the dnsPlmnIds parameters need to be provided in order to know the DNS zone, and the APN must end with a specific suffix.
+
+              '
+            example: true
+          dnsPlmnIds:
+            type: array
+            description: When supplierDnsHosted is true, the dnsPlmnIds needs to be provided.
+            example:
+            - '123456'
+            - '777888'
+            items:
+              type: string
+          packetGws:
+            type: array
+            description: the EPGs where the APN are created.
+            items:
+              $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest_packetGws'
+          sessionTimeoutTimer:
+            type: integer
+            description: "The number of minutes that the session timer timed out. Set to 0 means that the session will not time out.\n The default value is 0.\n"
+            format: int32
+            example: 0
+          idleTimeoutTimer:
+            type: integer
+            description: "The number of minutes that the idle timer timeout.\n When the traffic idle time exceeds the specified value, the session will be reset.\n The default value is 60.\n"
+            format: int32
+            example: 60
+          isDefaultAPN:
+            type: boolean
+            description: A boolean indicating whether the APN of the ESM Context should set to default.
+            example: false
+          apnOiReplacement:
+            type: string
+            description: This attribute indicates the domain name to replace the APN Operator Identifier when constructing the PDN Gateway (GW) Full Qualified Domain Name (FQDN) upon which to perform a DNS resolution.
+            example: mncfoo.mccfoo.gprs
+          esmContextQosId:
+            type: string
+            description: The id of the ESM context Qos.
+            example: '123456'
+          esmProfileQosId:
+            type: string
+            description: The id of the ESM profile QoS.
+            example: '123456'
+          pdpQosId:
+            type: string
+            description: The id of the PDP Qos.
+            example: '123456'
+    OrderVerificationItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: c4f485a5-3275-43a0-9ee7-c0891f96fc17
+        status:
+          type: string
+          example: PENDING
+          x-extensible-enum:
+          - PENDING
+          - ACCEPTED
+          - REJECTED
+        comments:
+          type: string
+          example: OK
+        order:
+          $ref: '#/components/schemas/OrderBaseInfo'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    GetDedicatedInternetServiceResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/OrderBase'
+      - type: object
+        properties:
+          parameters:
+            allOf:
+            - $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
+            - type: object
+              properties:
+                operatorNetworkId:
+                  type: string
+                  description: Network group ID
+                  example: '538'
+    RoamingProfile4g:
+      allOf:
+      - $ref: '#/components/schemas/RoamingAreas'
+      - required:
+        - name
+        type: object
+        properties:
+          name:
+            maxLength: 255
+            minLength: 1
+            type: string
+            example: RP996LTE
+          description:
+            maxLength: 500
+            type: string
+            example: RP996LTE Offering
+    ExtendedDedicatedInternetServiceRequest_packetGws:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '26'
+        isPrimary:
+          type: boolean
+          example: true
+      example: null
+    CreateFormSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_FORM_SPEC
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/SsmFormSpecification'
+    SsmProfileSpecification:
+      allOf:
+      - $ref: '#/components/schemas/SsmCommSpecification'
+      - type: object
+        properties:
+          priceCategory:
+            minimum: 0
+            type: integer
+            format: int32
+          profileStockOrderFileShareId:
+            type: string
+            example: '75654'
+          numberSchemeId:
+            type: string
+            example: ZZRSCHEME00021
+          smdpId:
+            maxLength: 100
+            minLength: 1
+            type: string
+            description: Subscription Manager Data Preparation
+            example: 5.6.7.8
+          bootstrapProfileType:
+            type: string
+            example: VIRTUAL
+            x-extensible-enum:
+            - BOOTSTRAP
+            - VIRTUAL
+            - PROVISIONING
+            - OPERATIONAL
+          formSpecificationIds:
+            type: array
+            description: Form specifications that linked to this spec
+            example:
+            - '663679'
+            - '665200'
+            - '564305'
+            items:
+              type: string
+    RejectVerificationAction:
+      required:
+      - action
+      - comments
+      type: object
+      properties:
+        action:
+          type: string
+          example: REJECT_VERIFICATION
+        comments:
+          type: string
+          example: Something wrong
+    CreateDedicatedInternetServiceRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_DEDICATED_INTERNET_DATA_SERVICE
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
+          - type: object
+            properties:
+              operatorNetworkId:
+                type: string
+                description: Network group ID
+                example: '538'
+      discriminator:
+        propertyName: type
+    AcceptVerificationAction:
+      required:
+      - action
+      type: object
+      properties:
+        action:
+          type: string
+          example: ACCEPT_VERIFICATION
+        comments:
+          type: string
+          example: OK
+    PostOrderRequest:
+      anyOf:
+      - $ref: '#/components/schemas/Create2g3gRoamingProfileRequest'
+      - $ref: '#/components/schemas/Update2g3gRoamingProfileRequest'
+      - $ref: '#/components/schemas/Create4gRoamingProfileRequest'
+      - $ref: '#/components/schemas/Update4gRoamingProfileRequest'
+      - $ref: '#/components/schemas/CreateDedicatedInternetServiceRequest'
+      - $ref: '#/components/schemas/UpdateDedicatedInternetServiceRequest'
+      - $ref: '#/components/schemas/CreateSimSpecificationRequest'
+      - $ref: '#/components/schemas/UpdateSimSpecificationRequest'
+      - $ref: '#/components/schemas/CreateFormSpecificationRequest'
+      - $ref: '#/components/schemas/UpdateFormSpecificationRequest'
+      - $ref: '#/components/schemas/CreateProfileSpecificationRequest'
+      - $ref: '#/components/schemas/UpdateProfileSpecificationRequest'
+      - $ref: '#/components/schemas/DeleteInventoryRequest'
+    SsmCommSpecification:
+      type: object
+      properties:
+        name:
+          type: string
+          example: PS OpTest1
+        specificationId:
+          type: string
+          example: PS OpTest1
+        description:
+          maxLength: 240
+          minLength: 1
+          type: string
+          example: Plastic SIM
+        stockOrderFileShareId:
+          type: string
+          example: '75654'
+        manufacturerOrderFileShareId:
+          type: string
+          example: '75655'
+        warehouseOrderFileShareId:
+          type: string
+          example: '75656'
+        operatorNetworkId:
+          type: string
+          example: '75657'
+    RoamingAreas:
+      type: object
+      properties:
+        realms:
+          uniqueItems: true
+          type: array
+          description: Realms of roaming profile 4G
+          example:
+          - epc.mnc860.mcc354.3gppnetwork.org
+          - epc.mnc010.mcc440.3gppnetwork.org
+          - epc.mnc020.mcc412.3gppnetwork.org
+          items:
+            type: string
+    RoamingProfile2g3g:
+      allOf:
+      - $ref: '#/components/schemas/GlobalTitles'
+      - required:
+        - name
+        type: object
+        properties:
+          name:
+            maxLength: 255
+            minLength: 1
+            type: string
+            example: RP996
+          description:
+            maxLength: 500
+            type: string
+            example: RP996
+    DeleteInventoryRequest_parameters:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          example: '123456789'
+      example: null
+    GetApprovalListResponse:
+      allOf:
+      - type: object
+        properties:
+          approvals:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderApprovalItem'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /orders/approvals?cursor=cursorstring
+    PostActionsRequest:
+      anyOf:
+      - $ref: '#/components/schemas/SubmitAction'
+      - $ref: '#/components/schemas/CancelAction'
+      - $ref: '#/components/schemas/ApproveAction'
+      - $ref: '#/components/schemas/RejectAction'
+      - $ref: '#/components/schemas/AcceptVerificationAction'
+      - $ref: '#/components/schemas/RejectVerificationAction'
+    Update2g3gRoamingProfile:
+      allOf:
+      - required:
+        - id
+        type: object
+        properties:
+          id:
+            type: string
+            description: inventory id
+            example: '1'
+          status:
+            type: string
+            description: The value of status could be ACTIVE or DEPRECATED. Set status to 'ACTIVE' to update an active roaming profile, set status to 'DEPRECATED' to deprecate an active roaming profile. If other parameters are changed for the roaming profile, the roaming profile are updated before it becomes 'ACTIVE' or 'DEPRECATED'.
+            example: ACTIVE
+            x-extensible-enum:
+            - ACTIVE
+            - DEPRECATED
+      - $ref: '#/components/schemas/RoamingProfile2g3g'
+    Update2g3gRoamingProfileRequest:
+      required:
+      - orderedFor
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_2G3G_RP
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        schema:
+          $ref: '#/components/schemas/Update2g3gRoamingProfile'
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'An absolute URI that identifies the problem type. When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          format: uri
+          example: https://your.api.documentation.url
+          default: about:blank
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized).
+
+            '
+          example: Internal Server Error
+        status:
+          minimum: 100
+          type: integer
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          format: int32
+          example: 500
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: The server has encountered a situation that it does not know how to handle.
+        instance:
+          type: string
+          description: 'An absolute URI that identifies the specific occurrence of the problem.
+
+            It may or may not yield further information if dereferenced.
+
+            '
+    Update4gRoamingProfileRequest:
+      required:
+      - orderedFor
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_4G_RP
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        schema:
+          $ref: '#/components/schemas/Update4gRoamingProfile'
+    CancelAction:
+      required:
+      - action
+      type: object
+      properties:
+        action:
+          type: string
+          example: CANCEL
+    Get2g3gRoamingProfileResponse:
+      allOf:
+      - $ref: '#/components/schemas/OrderBase'
+      - type: object
+        properties:
+          parameters:
+            $ref: '#/components/schemas/Create2g3gRoamingProfile'
+    SubmitAction:
+      required:
+      - action
+      type: object
+      properties:
+        action:
+          type: string
+          example: SUBMIT
+  examples:
+    UpdateFormSpecificationExample:
+      value:
+        type: UPDATE_FORM_SPEC
+        orderedFor: '3.77'
+        parameters:
+          id: '75654'
+          description: Form Spec OpTest1 001
+          maxQuantity: 3
+          minQuantity: 100
+          minOrderVolume: 2
+          orderIncrement: 1
+          earliestDeliveryDays: 8
+          smsrId: 1.2.3.4
+          profileSpecificationIds:
+          - '564393'
+          - '766095'
+    Update4gRoamingProfileExample:
+      value:
+        type: UPDATE_4G_RP
+        orderedFor: '3.77'
+        parameters:
+          id: '1'
+          status: ACTIVE
+          name: RP998LTE
+          description: RP998LTE Offering
+          realms:
+          - epc.mnc860.mcc354.3gppnetwork.org
+          - epc.mnc010.mcc440.3gppnetwork.org
+          - epc.mnc020.mcc412.3gppnetwork.org
+    Create2g3gRoamingProfileExample:
+      value:
+        type: CREATE_2G3G_RP
+        orderedFor: '3.77'
+        parameters:
+          name: RP90
+          description: RP90
+          globalTitles:
+          - '22505987'
+          - '32468146810'
+          - '324681990'
+          - '324681991'
+          - '324750'
+          - '3247510'
+          - '3247513'
+          - '3247516'
+          - '4178777'
+          - '4178931'
+          - '7901164'
+          - '7901165'
+          - '7901167'
+          - '7901604'
+          - '97695318000'
+          operatorNetworkId: '538'
+    Create4gRoamingProfileExample:
+      value:
+        type: CREATE_4G_RP
+        orderedFor: '3.77'
+        parameters:
+          name: RP998LTE
+          description: RP998LTE Offering
+          realms:
+          - epc.mnc860.mcc354.3gppnetwork.org
+          - epc.mnc010.mcc440.3gppnetwork.org
+          - epc.mnc002.mcc219.3gppnetwork.org
+          operatorNetworkId: '538'
+    Patch4gRoamingProfileExample:
+      value:
+        parameters:
+          name: RP998LTE
+          description: RP998LTE Offering
+          realms:
+          - epc.mnc860.mcc354.3gppnetwork.org
+          - epc.mnc010.mcc440.3gppnetwork.org
+          - epc.mnc002.mcc219.3gppnetwork.org
+          operatorNetworkId: '538'
+    DeleteInventoryExample:
+      value:
+        type: DELETE_DEDICATED_INTERNET_DATA_SERVICE
+        orderedFor: '3.77'
+        parameters:
+          id: '1'
+    CreateDedicatedInternetServiceExample:
+      value:
+        type: CREATE_DEDICATED_INTERNET_DATA_SERVICE
+        orderedFor: '3.77'
+        parameters:
+          apn: foo.com
+          enabled2g3g: true
+          enabled4g: true
+          enabled5gNsa: true
+          ipVersion: IPV4
+          uplinkBandwidth: 1024
+          downlinkBandwidth: 2048
+          useSupplierDnsIpV4: true
+          primaryDnsIpV4: 8.8.8.8
+          secondaryDnsIpV4: 8.8.4.4
+          useSupplierDnsIpV6: true
+          primaryDnsIpV6: 2001:4860:4860::8888
+          secondaryDnsIpV6: 2001:4860:4860::8844
+          numberOfSimultaneousSessions: 1000
+          sessionTimeout: No_SUPERVISION
+          idleTimeout: TIMER
+          sendIpV4Dns: false
+          sendIpV6Dns: false
+          restrictM2MAccess: true
+          firewallAllowlist:
+          - ipAddress: 111.222.111.222
+            portStart: 1810
+            portEnd: 1820
+            protocol: TCP
+          subscriptionPackages:
+          - foo_SP_01
+          name: Ericsson-foo.com
+          description: Some description
+          supplierDnsHosted: true
+          dnsPlmnIds:
+          - '123456'
+          - '777888'
+          packetGws:
+          - id: '26'
+            isPrimary: true
+          - id: '27'
+            isPrimary: false
+          sessionTimeoutTimer: 0
+          idleTimeoutTimer: 60
+          isDefaultAPN: false
+          apnOiReplacement: mncfoo.mccfoo.gprs
+          esmContextQosId: '123456'
+          esmProfileQosId: '123456'
+          pdpQosId: '123456'
+          operatorNetworkId: '538'
+    PatchDedicatedInternetServiceExample:
+      value:
+        parameters:
+          apn: foo.com
+          enabled2g3g: true
+          enabled4g: true
+          enabled5gNsa: true
+          ipVersion: IPV4
+          uplinkBandwidth: 1024
+          downlinkBandwidth: 2048
+          useSupplierDnsIpV4: true
+          primaryDnsIpV4: 8.8.8.8
+          secondaryDnsIpV4: 8.8.4.4
+          useSupplierDnsIpV6: true
+          primaryDnsIpV6: 2001:4860:4860::8888
+          secondaryDnsIpV6: 2001:4860:4860::8844
+          numberOfSimultaneousSessions: 1000
+          sessionTimeout: No_SUPERVISION
+          idleTimeout: TIMER
+          sendIpV4Dns: false
+          sendIpV6Dns: false
+          restrictM2MAccess: true
+          firewallAllowlist:
+          - ipAddress: 111.222.111.222
+            portStart: 1810
+            portEnd: 1820
+            protocol: TCP
+          subscriptionPackages:
+          - foo_SP_01
+          name: Ericsson-foo.com
+          description: Some description
+          supplierDnsHosted: true
+          dnsPlmnIds:
+          - '123456'
+          - '777888'
+          packetGws:
+          - id: '26'
+            isPrimary: true
+          - id: '27'
+            isPrimary: false
+          sessionTimeoutTimer: 0
+          idleTimeoutTimer: 60
+          isDefaultAPN: false
+          apnOiReplacement: mncfoo.mccfoo.gprs
+          esmContextQosId: '123456'
+          esmProfileQosId: '123456'
+          pdpQosId: '123456'
+    Get2g3gRoamingProfileExample:
+      value:
+        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        type: CREATE_2G3G_RP
+        status: DRAFT
+        orderedFor: '3.77'
+        createdAt: 2022-07-04 01:52:18.058000+00:00
+        updatedAt: 2022-07-04 01:52:18.058000+00:00
+        parameters:
+          name: RP90
+          description: RP90
+          globalTitles:
+          - '22505987'
+          - '32468146810'
+          - '324681990'
+          - '4178777'
+          - '4178931'
+          - '7901164'
+          - '7901165'
+          - '7901167'
+          - '7901604'
+          - '97695318000'
+          operatorNetworkId: '538'
+    CreateSimSpecificationExample:
+      value:
+        type: CREATE_SIM_SPEC
+        orderedFor: '3.77'
+        parameters:
+          name: 010_ZZRSCHEME00021
+          specificationId: 010_ZZRSCHEME00021
+          description: Plastic SIM
+          maxQuantity: 0
+          minQuantity: 10
+          minOrderVolume: 1
+          orderIncrement: 0
+          earliestDeliveryDays: 14
+          priceCategory: 1
+          stockOrderFileShareId: '75654'
+          manufacturerOrderFileShareId: '75655'
+          warehouseOrderFileShareId: '75656'
+          numberSchemeId: ZZRSCHEME00021
+          earlyBinding: false
+          operatorNetworkId: '51426'
+    UpdateDedicatedInternetServiceExample:
+      value:
+        type: UPDATE_DEDICATED_INTERNET_DATA_SERVICE
+        orderedFor: '3.77'
+        parameters:
+          id: '123456789'
+          apn: foo.com
+          enabled2g3g: true
+          enabled4g: true
+          enabled5gNsa: true
+          ipVersion: IPV4
+          uplinkBandwidth: 1024
+          downlinkBandwidth: 2048
+          useSupplierDnsIpV4: true
+          primaryDnsIpV4: 8.8.8.8
+          secondaryDnsIpV4: 8.8.4.4
+          useSupplierDnsIpV6: true
+          primaryDnsIpV6: 2001:4860:4860::8888
+          secondaryDnsIpV6: 2001:4860:4860::8844
+          numberOfSimultaneousSessions: 1000
+          sessionTimeout: No_SUPERVISION
+          idleTimeout: TIMER
+          sendIpV4Dns: false
+          sendIpV6Dns: false
+          restrictM2MAccess: true
+          firewallAllowlist:
+          - ipAddress: 111.222.111.222
+            portStart: 1810
+            portEnd: 1820
+            protocol: TCP
+          subscriptionPackages:
+          - foo_SP_01
+          name: Ericsson-foo.com
+          description: Some description
+          supplierDnsHosted: true
+          dnsPlmnIds:
+          - '123456'
+          - '777888'
+          packetGws:
+          - id: '26'
+            isPrimary: true
+          - id: '27'
+            isPrimary: false
+          sessionTimeoutTimer: 0
+          idleTimeoutTimer: 60
+          isDefaultAPN: false
+          apnOiReplacement: mncfoo.mccfoo.gprs
+          esmContextQosId: '123456'
+          esmProfileQosId: '123456'
+          pdpQosId: '123456'
+    Get4gRoamingProfileExample:
+      value:
+        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        type: CREATE_4G_RP
+        status: DRAFT
+        orderedFor: '3.77'
+        createdAt: 2022-07-04 01:52:18.058000+00:00
+        updatedAt: 2022-07-04 01:52:18.058000+00:00
+        parameters:
+          name: RP998LTE
+          description: RP998LTE Offering
+          realms:
+          - epc.mnc860.mcc354.3gppnetwork.org
+          - epc.mnc010.mcc440.3gppnetwork.org
+          - epc.mnc002.mcc219.3gppnetwork.org
+          operatorNetworkId: '538'
+    CreateProfileSpecificationExample:
+      value:
+        type: CREATE_PROFILE_SPEC
+        orderedFor: '3.77'
+        parameters:
+          specificationId: PS OpTest1
+          name: PS OpTest1
+          description: Profile Spec for OpTest1
+          priceCategory: 1
+          stockOrderFileShareId: '564269'
+          manufacturerOrderFileShareId: '564268'
+          warehouseOrderFileShareId: '564270'
+          profileStockOrderFileShareId: '564271'
+          numberSchemeId: ZZRSCHEME00021
+          smdpId: 5.6.7.8
+          bootstrapProfileType: BOOTSTRAP
+          operatorNetworkId: '75654'
+          formSpecificationIds:
+          - '665200'
+          - '663679'
+          - '564305'
+    CreateFormSpecificationExample:
+      value:
+        type: CREATE_FORM_SPEC
+        orderedFor: '3.77'
+        parameters:
+          specificationId: FS OpTest1 001
+          name: FS OpTest1 001
+          description: Form Spec OpTest1 001
+          maxQuantity: 3
+          minQuantity: 100
+          minOrderVolume: 2
+          orderIncrement: 1
+          earliestDeliveryDays: 8
+          smsrId: 1.2.3.4
+          formSpecificationType: M2M
+          operatorNetworkId: '75654'
+          profileSpecificationIds:
+          - '564393'
+          - '766095'
+    Update2g3gRoamingProfileExample:
+      value:
+        type: UPDATE_2G3G_RP
+        orderedFor: '3.77'
+        parameters:
+          id: '1'
+          status: ACTIVE
+          name: RP90
+          description: RP90
+          globalTitles:
+          - '164780001'
+          - '2250505987'
+          - '32468'
+          - '32475'
+          - '7901106'
+          - '7901154'
+          - '790116'
+          - '7901472'
+          - '790160'
+          - '799426'
+          - '99292'
+          - '99293'
+    UpdateProfileSpecificationExample:
+      value:
+        type: UPDATE_PROFILE_SPEC
+        orderedFor: '3.77'
+        parameters:
+          id: '564393'
+          description: Profile Spec for OpTest1
+          priceCategory: 1
+          stockOrderFileShareId: '564269'
+          manufacturerOrderFileShareId: '564268'
+          warehouseOrderFileShareId: '564270'
+          profileStockOrderFileShareId: '564271'
+          smdpId: 5.6.7.8
+          formSpecificationIds:
+          - '665200'
+          - '663679'
+          - '564305'
+    UpdateSimSpecificationExample:
+      value:
+        type: UPDATE_SIM_SPEC
+        orderedFor: '3.77'
+        parameters:
+          id: '316'
+          description: Plastic SIM
+          maxQuantity: 0
+          minQuantity: 10
+          minOrderVolume: 1
+          orderIncrement: 0
+          earliestDeliveryDays: 14
+          priceCategory: 1
+          stockOrderFileShareId: '75654'
+          manufacturerOrderFileShareId: '75655'
+          warehouseOrderFileShareId: '75656'
+    Patch2g3gRoamingProfileExample:
+      value:
+        parameters:
+          name: RP90
+          description: RP90
+          globalTitles:
+          - '22505987'
+          - '32468146810'
+          - '324681990'
+          - '324681991'
+          - '324750'
+          - '3247510'
+          - '3247513'
+          - '3247516'
+          - '4178777'
+          - '4178931'
+          - '7901164'
+          - '7901165'
+          - '7901167'
+          - '7901604'
+          - '97695318000'
+          operatorNetworkId: '538'
+    GetDedicatedInternetServiceExample:
+      value:
+        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        type: CREATE_DEDICATED_INTERNET_DATA_SERVICE
+        status: DRAFT
+        orderedFor: '3.77'
+        createdAt: 2022-07-12 03:48:02.759000+00:00
+        updatedAt: 2022-07-12 03:48:02.759000+00:00
+        parameters:
+          operatorNetworkId: '538'
+          apn: foo.com
+          enabled2g3g: true
+          enabled4g: true
+          enabled5gNsa: true
+          ipVersion: IPV4
+          uplinkBandwidth: 1024
+          downlinkBandwidth: 2048
+          useSupplierDnsIpV4: true
+          primaryDnsIpV4: 8.8.8.8
+          secondaryDnsIpV4: 8.8.4.4
+          useSupplierDnsIpV6: true
+          primaryDnsIpV6: 2001:4860:4860::8888
+          secondaryDnsIpV6: 2001:4860:4860::8844
+          numberOfSimultaneousSessions: 1000
+          sessionTimeout: No_SUPERVISION
+          idleTimeout: TIMER
+          sendIpV4Dns: false
+          sendIpV6Dns: false
+          restrictM2MAccess: true
+          firewallAllowlist:
+          - ipAddress: 111.222.111.222
+            portStart: 1810
+            portEnd: 1820
+            protocol: TCP
+          subscriptionPackages:
+          - foo_SP_01
+          name: Ericsson-foo.com
+          description: Some description
+          supplierDnsHosted: true
+          dnsPlmnIds:
+          - '123456'
+          - '777888'
+          packetGws:
+          - id: '26'
+            isPrimary: true
+          - id: '27'
+            isPrimary: false
+          sessionTimeoutTimer: 0
+          idleTimeoutTimer: 60
+          isDefaultAPN: false
+          apnOiReplacement: mncfoo.mccfoo.gprs
+          esmContextQosId: '123456'
+          esmProfileQosId: '123456'
+          pdpQosId: '123456'
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: The API uses OAuth2 and OIDC for authentication and authorization.
+      flows:
+        password:
+          tokenUrl: https://<baseURL>/iot/api/auth/token
+          scopes:
+            om_view_order: View order
+            om_manage_order: Manage order
+            om_resource_approval: Approve or reject resource order
+            om_service_approval: Approve or reject service order

@@ -1,0 +1,187 @@
+openapi: 3.2.0
+info:
+  description: This API provides the IoT Accelerator SMS Messaging API.
+  version: v2
+  title: SMS Messaging Retrieve SMS API
+  x-audience: external-public
+servers:
+- url: https://sms.iot-api.aeris.com/dcpapi/smsmessaging/v1
+  description: SMS API server
+security:
+- BasicAuth: []
+tags:
+- name: retrieveSMS
+paths:
+  /inbound/registrations/{registrationID}/messages:
+    get:
+      summary: Retrieves an SMS sent to a web application
+      tags:
+      - retrieveSMS
+      operationId: retrieveSMS
+      parameters:
+      - name: registrationID
+        description: Identity provided by DCP that grants with unique access to the received SMS messages.
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: maxBatchSize
+        description: The maximum number of messages to retrieve in the request.
+        in: query
+        required: false
+        schema:
+          type: string
+          default: '2147483647'
+      - name: Authorization
+        description: Should contain a base64 Basic auth string
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InboundSMSMessageRequest'
+              example:
+                inboundSMSMessageList:
+                  inboundSMSMessage:
+                  - dateTime: '2009-11-19T12:00:00'
+                    destinationAddress: '3456'
+                    messageId: msg1
+                    message: Come on Barca!
+                    resourceURL: http://example.com/smsmessaging/v1/inbound/registrations/3456/messages/msg1
+                    senderAddress: '+447825123456'
+                  - dateTime: '2009-11-19T12:00:00'
+                    destinationAddress: '3456'
+                    messageId: msg2
+                    message: aDffiuek5fjj=
+                    resourceURL: http://example.com/smsmessaging/v1/inbound/registrations/3456/messages/msg2
+                    senderAddress: '+447825789123'
+                    messageType: binary
+                  numberOfMessagesInThisBatch: '2'
+                  resourceURL: http://example.com/smsmessaging/v1/inbound/registrations/3456/messages
+                  totalNumberOfPendingMessages: '20'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+              example:
+                requestError:
+                  serviceException:
+                    messageId: SVC0003
+                    text: Invalid input value for message part <text>, valid values are %2
+                    variables: maxBatchSize, (positive integer)
+        '401':
+          description: Authentication Failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+              example:
+                requestError:
+                  policyException:
+                    messageId: POL0010
+                    text: User has not been provisioned for %1
+                    variables: SMSMessaging
+        '404':
+          description: No Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+components:
+  schemas:
+    InboundSMSMessage:
+      type: object
+      properties:
+        dateTime:
+          type: string
+          description: Date and time when the successful response is created.
+        destinationAddress:
+          type: string
+          description: The number associated with your service. It corresponds to the registrationID.
+        messageId:
+          type: string
+          description: Message identifier generated automatically by the server.
+        message:
+          type: string
+          description: 'For Text SMS: a string with maximum 160 characters. For Binary SMS: a Base64 (RFC4648) encoded string with up to 140 bytes of binary data. For example: AQIDBAUGBwgJCg=='
+        resourceURL:
+          type: string
+          description: Link to the SMS message.
+        senderAddress:
+          type: string
+          description: The name of the enterprise that sent the SMS.
+        messageType:
+          type: string
+          description: 'The type of SMS message. For Binary SMS: use ''binary''. When field is not present, the message is a text message'
+    InboundSMSMessageRequest:
+      type: object
+      properties:
+        inboundSMSMessageList:
+          type: object
+          properties:
+            inboundSMSMessage:
+              type: array
+              items:
+                $ref: '#/components/schemas/InboundSMSMessage'
+            numberOfMessagesInThisBatch:
+              type: string
+              description: The number of SMS messages retrieved in the successful response.
+            resourceURL:
+              type: string
+              description: Link to the successful response.
+            totalNumberOfPendingMessages:
+              type: string
+              description: Total number of SMS messages that are awaiting for retrieval from storage.
+    RequestError:
+      type: object
+      properties:
+        requestError:
+          type: object
+          properties:
+            serviceException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
+            policyException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

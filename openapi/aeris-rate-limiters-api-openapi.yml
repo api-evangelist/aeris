@@ -1,0 +1,505 @@
+openapi: 3.2.0
+info:
+  version: 0.7.0
+  title: Aeris IoT Watchtower™ Rate Limiters API
+  description: '## Introduction
+
+
+    The Aeris IoT Watchtower™ API provides access to resources such as real-time events, aggregated events, risk assessment reports, and device group operations.'
+  termsOfService: https://www.aeris.com/services-terms-of-use/
+  contact:
+    email: support@aeris.net
+    url: https://www.aeris.com/support/
+  license:
+    name: Aeris License
+    url: https://www.aeris.com/services-terms-of-use/
+  x-audience: external-public
+servers:
+- url: https://watchtower-api-prd.aeriscloud.com
+security:
+- oAuth2ClientCredentials: []
+tags:
+- name: Rate Limiters
+  description: Endpoints for Rate Limiters
+paths:
+  /watchtower/v1/rate-limiters:
+    post:
+      summary: Create rate limiter definitions
+      description: Creates rate limiters (one per config entry) for the given account under a shared name.
+      operationId: createRateLimiter
+      tags:
+      - Rate Limiters
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalRateLimiterCreateRequest'
+      responses:
+        '201':
+          description: Rate limiters created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalRateLimiterListResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/rate-limiters/search:
+    post:
+      summary: Search rate limiters
+      description: Retrieves rate limiters for the given account, with optional filtering.
+      operationId: searchRateLimiters
+      tags:
+      - Rate Limiters
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalRateLimitersQueryRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedRateLimiters'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/rate-limiters/{rateLimiterId}:
+    get:
+      summary: Get a rate limiter by ID
+      operationId: getRateLimiter
+      tags:
+      - Rate Limiters
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/rateLimiterId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimiter'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      summary: Update a rate limiter definition
+      operationId: updateRateLimiter
+      tags:
+      - Rate Limiters
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/rateLimiterId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalRateLimiterUpdateRequest'
+      responses:
+        '204':
+          description: No content, the resource was successfully updated.
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      summary: Delete a rate limiter definition
+      operationId: deleteRateLimiter
+      tags:
+      - Rate Limiters
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/rateLimiterId'
+      responses:
+        '204':
+          description: No content, the resource was successfully deleted.
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  responses:
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  schemas:
+    PagedRateLimiters:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/RateLimiter'
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    ExternalRateLimiterUpdateRequest:
+      type: object
+      required:
+      - upstreamRate
+      - upstreamBurstSize
+      - downstreamRate
+      - downstreamBurstSize
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: Name of the rate limiter.
+        upstreamRate:
+          type: integer
+          format: int64
+          description: Upstream rate in kbps.
+        upstreamBurstSize:
+          type: integer
+          format: int64
+          description: Upstream burst size in kbps.
+        downstreamRate:
+          type: integer
+          format: int64
+          description: Downstream rate in kbps.
+        downstreamBurstSize:
+          type: integer
+          format: int64
+          description: Downstream burst size in kbps.
+    downstreamRate:
+      type: integer
+      format: int64
+      minimum: 0
+      description: Downstream rate in kbps.
+    downstreamBurstSize:
+      type: integer
+      format: int64
+      minimum: 0
+      description: Downstream burst size in kbps.
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    ExternalRateLimiterListResponse:
+      type: object
+      properties:
+        rateLimiters:
+          type: array
+          items:
+            $ref: '#/components/schemas/RateLimiter'
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    upstreamRate:
+      type: integer
+      format: int64
+      minimum: 0
+      description: Upstream rate in kbps.
+    ExternalRateLimitersQueryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: Filter by name of the rate limiter.
+        limitTypes:
+          type: array
+          items:
+            type: string
+          description: Filter by the limit type.
+    upstreamBurstSize:
+      type: integer
+      format: int64
+      minimum: 0
+      description: Upstream burst size in kbps.
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    ExternalRateLimiterCreateRequest:
+      type: object
+      required:
+      - name
+      - configs
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: Name of the rate limiter group.
+        configs:
+          type: array
+          description: List of rate limiter configurations to create (one per limit type).
+          items:
+            $ref: '#/components/schemas/ExternalRateLimiterConfig'
+    ExternalRateLimiterConfig:
+      type: object
+      required:
+      - limitType
+      - upstreamRate
+      - upstreamBurstSize
+      - downstreamRate
+      - downstreamBurstSize
+      properties:
+        limitType:
+          type: string
+          description: The limit type.
+          enum:
+          - SESSION_LEVEL
+          - AGGREGATE
+        upstreamRate:
+          type: integer
+          format: int64
+          description: Upstream rate in kbps.
+        upstreamBurstSize:
+          type: integer
+          format: int64
+          description: Upstream burst size in kbps.
+        downstreamRate:
+          type: integer
+          format: int64
+          description: Downstream rate in kbps.
+        downstreamBurstSize:
+          type: integer
+          format: int64
+          description: Downstream burst size in kbps.
+    RateLimiter:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The rate limiter ID.
+        serviceConfigurationId:
+          type: integer
+          format: int64
+          description: The linked service configuration ID.
+        name:
+          type: string
+          description: Name of the rate limiter.
+        limitType:
+          type: string
+          description: The limit type.
+          enum:
+          - SESSION_LEVEL
+          - AGGREGATE
+        upstreamRate:
+          $ref: '#/components/schemas/upstreamRate'
+        upstreamBurstSize:
+          $ref: '#/components/schemas/upstreamBurstSize'
+        downstreamRate:
+          $ref: '#/components/schemas/downstreamRate'
+        downstreamBurstSize:
+          $ref: '#/components/schemas/downstreamBurstSize'
+        createdBy:
+          type: string
+          description: The user who created the rate limiter.
+        createdTime:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+          description: The user who last updated the rate limiter.
+        updatedTime:
+          type: string
+          format: date-time
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+  parameters:
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    rateLimiterId:
+      name: rateLimiterId
+      in: path
+      required: true
+      description: The ID of the rate limiter
+      schema:
+        type: integer
+        format: int64
+    sort:
+      name: sort
+      in: query
+      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
+      example: deviceId,updateTime:desc
+      schema:
+        type: string
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      description: This API uses OAuth 2 with the Client Credentials flow.
+      flows:
+        clientCredentials:
+          tokenUrl: /watchtower/v1/auth/token
+          scopes: {}

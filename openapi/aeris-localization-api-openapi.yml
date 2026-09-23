@@ -1,0 +1,2058 @@
+openapi: 3.2.0
+info:
+  version: 2.0.2
+  title: Device Localization API
+  description: '#### Copyright
+
+    © Aeris Communications, Inc.'
+  x-audience: external-public
+servers:
+- url: https://iot-api.aeris.com/dcpapi/rest
+tags:
+- name: Localization
+paths:
+  /actions/allocate-profiles:
+    post:
+      tags:
+      - Localization
+      summary: Initiate allocation of a subscription profile for M2M eUICCs
+      description: Initiates the allocation of a subscription profile to a locale belonging to a specified eUICC agreement for M2M eUICCs.
+      operationId: allocateProfilesV1
+      requestBody:
+        description: Profile allocation details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileAllocation'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/ProfileAllocation'
+        required: true
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/EuiccProfile'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /actions/prepare-esim-profile:
+    post:
+      tags:
+      - Localization
+      summary: Prepare Consumer, IOT e-sim profile
+      description: Prepares a Consumer, IOT e-sim profile
+      operationId: prepareEsimProfileV1
+      requestBody:
+        description: Prepare Consumer, IOT e-sim profile details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrepareEsimProfileDto'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/PrepareEsimProfileDto'
+        required: true
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /euiccs/{id}:
+    get:
+      tags:
+      - Localization
+      summary: Get details for a single eUICC
+      description: Returns details for a single eUICC.
+      operationId: getEuiccV1
+      parameters:
+      - $ref: '#/components/parameters/Header-Accept'
+      - name: id
+        in: path
+        description: 20-30 or 32 hexadecimal digit eUICC ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Euicc'
+            application/vnd.dcp-v2+json:
+              schema:
+                $ref: '#/components/schemas/EuiccV2'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /actions/prepare-unlinked-esim-profile:
+    post:
+      tags:
+      - Localization
+      summary: Prepare unlinked Consumer, IOT e-sim profile
+      description: Prepares unlinked Consumer, IOT e-sim profile
+      operationId: prepareUnlinkedEsimProfileV1
+      requestBody:
+        description: Prepare unlinked Consumer, IOT e-sim profile details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrepareUnlinkedEsimProfileDto'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/PrepareUnlinkedEsimProfileDto'
+        required: true
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /euiccs/{id}/extended:
+    get:
+      tags:
+      - Localization
+      summary: Get extended details for a single eUICC
+      description: Returns extended details for a single eUICC.
+      operationId: getEuiccExtendedV1
+      parameters:
+      - $ref: '#/components/parameters/Header-Accept'
+      - name: id
+        in: path
+        description: 20-30 or 32 hexadecimal digit eUICC ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/EuiccExtended'
+            application/vnd.dcp-v2+json:
+              schema:
+                $ref: '#/components/schemas/EuiccExtendedV2'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /locales:
+    get:
+      tags:
+      - Localization
+      summary: Get locales available in a localization table
+      description: Returns the locales that are available in a localization table
+      operationId: getListLocaleV1
+      parameters:
+      - name: localizationTableId
+        in: query
+        description: Localization table ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EuiccLocale'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccs/{id}/localization:
+    post:
+      tags:
+      - Localization
+      summary: Initiate localization of an eUICC
+      description: 'Initiates the localization of an eUICC to the specified locale and returns details of the service request. Relocalization of eUICCs is also supported, which means assigning an already localized eUICC to another locale.
+
+
+        Relocalization requires the user to have a separate permission. In addition, any localization limits defined in the DCP Service Portal also apply when attempting localization through the Device Localization API.'
+      operationId: localizeV1
+      parameters:
+      - name: id
+        in: path
+        description: 20-30 or 32 hexadecimal digit eUICC ID
+        required: true
+        schema:
+          type: string
+      - name: localeId
+        in: query
+        description: Locale ID
+        schema:
+          type: string
+      - name: companyId
+        in: query
+        description: Company ID of the requester
+        required: true
+        schema:
+          type: string
+      - name: localizationTableId
+        in: query
+        description: Localization table ID (not used)
+        schema:
+          type:
+          - integer
+          - 'null'
+          format: int64
+      - name: executorEimId
+        in: query
+        description: Executor EIM ID
+        required: false
+        schema:
+          type: string
+      - name: downloadMode
+        in: query
+        description: Download mode. Allowed values DIRECT and INDIRECT. Defaults to DIRECT if not specified.
+        required: false
+        schema:
+          type: string
+          enum:
+          - DIRECT
+          - INDIRECT
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccs/{id}/delocalize:
+    post:
+      tags:
+      - Localization
+      summary: Initiate delocalization of an eUICC
+      description: 'Initiates the delocalization of an eUICC and returns details of the service request.
+
+
+        Delocalization requires the user to have a separate permission. In addition, any delocalization limits defined in the DCP Service Portal also apply when attempting delocalization through the Device Localization API.'
+      operationId: delocalizeV1
+      parameters:
+      - name: id
+        in: path
+        description: 20-30 or 32 hexadecimal digit eUICC ID
+        required: true
+        schema:
+          type: string
+      - name: companyId
+        in: query
+        description: Company ID of the requester
+        required: true
+        schema:
+          type: string
+      - name: localizationTableId
+        in: query
+        description: Localization table ID (not used)
+        schema:
+          type:
+          - integer
+          - 'null'
+          format: int64
+      - name: executorEimId
+        in: query
+        description: Executor EIM ID
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccs/{id}/download:
+    post:
+      tags:
+      - Localization
+      summary: Initiate the download of a subscription profile to an eUICC
+      description: Initiates the download of a subscription profile to an eUICC, without the eUICC being localized or relocalized during the process. A download fee applies. Later, the eUICC can be localized to the locale that matches the downloaded subscriptions. In this case, only an enable fee applies during the localization. This way, a two-step localization can be achieved.
+      operationId: downloadV1
+      parameters:
+      - name: id
+        in: path
+        description: 20-30 or 32 hexadecimal digit eUICC ID
+        required: true
+        schema:
+          type: string
+      - name: localeId
+        in: query
+        description: Locale ID
+        required: true
+        schema:
+          type: string
+      - name: companyId
+        in: query
+        description: Company ID of the requester
+        required: true
+        schema:
+          type: string
+      - name: localizationTableId
+        in: query
+        description: Localization table ID (not used)
+        schema:
+          type:
+          - integer
+          - 'null'
+          format: int64
+      - name: executorEimId
+        in: query
+        description: Executor EIM ID
+        required: false
+        schema:
+          type: string
+      - name: downloadMode
+        in: query
+        description: Download mode. Allowed values DIRECT and INDIRECT. Defaults to DIRECT if not specified.
+        required: false
+        schema:
+          type: string
+          enum:
+          - DIRECT
+          - INDIRECT
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccs/{id}/delete:
+    post:
+      tags:
+      - Localization
+      summary: Initiate the deletion of a subscription profile from an eUICC
+      description: 'Initiates the deletion of a subscription profile from an eUICC. Only disabled subscription profiles can be deleted from the eUICC. The bootstrap subscription profile cannot be deleted. To delete an enabled subscription profile, you have to disable it first by localizing the eUICC to a locale that does not match with the currently enabled subscription profile.
+
+
+        Details of the related service request are returned indicating if initiating the profile deletion was successful. Finishing the actual profile deletion can take more time.
+
+
+        To be permitted to delete a subscription profile, the user needs access rights to the currently enabled profile and to the profile to be deleted.
+
+
+        In version v1 of the API, the localeId is required, while in v2 either localeId or iccId is required.'
+      operationId: deleteV1
+      parameters:
+      - $ref: '#/components/parameters/Header-Accept'
+      - name: id
+        in: path
+        description: 20-30 or 32 hexadecimal digit eUICC ID
+        required: true
+        schema:
+          type: string
+      - name: localeId
+        in: query
+        description: Locale ID
+        schema:
+          type: string
+      - name: companyId
+        in: query
+        description: Company or Organization ID of the requester
+        required: true
+        schema:
+          type: string
+      - name: localizationTableId
+        in: query
+        description: Localization table ID (not used)
+        schema:
+          type:
+          - integer
+          - 'null'
+          format: int64
+      - name: iccId
+        in: query
+        description: ICC Id of the profile to delete
+        schema:
+          type: string
+      - name: executorEimId
+        in: query
+        description: Executor EIM ID
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccs/{id}/disable:
+    post:
+      tags:
+      - Localization
+      summary: Initiate the disabling of the active subscription profile of an eUICC
+      description: 'Initiates the disabling of the active subscription profile of an eUICC. The bootstrap subscription profile cannot be disabled.
+
+
+        To be permitted to disable a subscription profile, the user needs access rights to it.'
+      operationId: disableV1
+      parameters:
+      - name: id
+        in: path
+        description: 20-30 or 32 hexadecimal digit eUICC ID
+        required: true
+        schema:
+          type: string
+      - name: companyId
+        in: query
+        description: Company ID of the requester
+        required: true
+        schema:
+          type: string
+      - name: executorEimId
+        in: query
+        description: Executor EIM ID
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccAgreements:
+    get:
+      tags:
+      - Localization
+      summary: Get list of eUICC agreements
+      description: Returns list of eUICC agreements with form and profile specification and service contract information.
+      operationId: getEuiccAgreementListV1
+      parameters:
+      - $ref: '#/components/parameters/Header-Accept'
+      - name: companyId
+        in: query
+        description: Company ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/EuiccAgreementList'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/{imsi}:
+    get:
+      tags:
+      - Localization
+      summary: Get details for a single subscription
+      description: Returns a single subscription.
+      operationId: getSubscriptionV1
+      parameters:
+      - name: imsi
+        in: path
+        description: IMSI
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Subscription fetched successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Subcription'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/{imsi}/extended:
+    get:
+      tags:
+      - Localization
+      summary: Get extended details for a single subscription
+      description: Returns a single subscription.
+      operationId: getSubscriptionExtendedV1
+      parameters:
+      - name: imsi
+        in: path
+        description: IMSI
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Subscription fetched successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Subcription'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /allowedCompanies:
+    get:
+      tags:
+      - Localization
+      summary: Get list of companies the user is allowed to perform operations on
+      description: Returns name and ID for all companies the user has permissions to. No parameters are needed for the operation.
+      operationId: getAllowedCompaniesV1
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /serviceRequests/{id}:
+    get:
+      tags:
+      - Localization
+      summary: Get details for a single service request
+      description: Returns details of a single service request.
+      operationId: getServiceRequestV1
+      parameters:
+      - name: id
+        in: path
+        description: Service request ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Service request fetched successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequest'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccs/label:
+    put:
+      tags:
+      - Localization
+      summary: Initiate the update for labels of one or more eUICCs
+      description: Initiates the update of the label of one or more eUICCs. Returns details of the service request.
+      operationId: updateLabelV1
+      requestBody:
+        description: eUICC label update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelUpdate'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/LabelUpdate'
+        required: true
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /euiccs/{id}/set-fallback-attribute:
+    post:
+      tags:
+      - Localization
+      summary: Initiate the setting of fallback attribute on an for M2M eUICCs
+      operationId: setFallbackAttributeV1
+      parameters:
+      - name: id
+        in: path
+        description: 20-30 or 32 hexadecimal digit eUICC ID
+        required: true
+        schema:
+          type: string
+      - name: iccId
+        in: query
+        description: ICC ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccs/{id}/migrate:
+    post:
+      tags:
+      - Localization
+      summary: Initiate the migration on an eUICC for M2M eUICCs
+      operationId: migrateEuiccV1
+      parameters:
+      - name: id
+        in: path
+        description: 20-30 or 32 hexadecimal digit eUICC ID
+        required: true
+        schema:
+          type: string
+      - name: localeId
+        in: query
+        description: Locale ID
+        required: true
+        schema:
+          type: string
+      - name: targetAgreementId
+        in: query
+        description: Target agreement ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ServiceRequestResponse'
+        '400':
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+components:
+  schemas:
+    EuiccSubscriptionExtended:
+      required:
+      - iccid
+      - localeList
+      - operatorId
+      - profileStatus
+      - state
+      type: object
+      properties:
+        imsi:
+          type:
+          - string
+          - 'null'
+        state:
+          type: string
+          enum:
+          - NEW
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - PENDING_TERMINATION
+          - REMOVED
+          - OPERATOR_BLOCKED
+          - ACTIVE_NO_BILLING
+          - DEACTIVATED_NO_BILLING
+          - UNKNOWN
+          - EXTERNAL_PROFILE
+        operatorId:
+          type: string
+        operatorName:
+          type:
+          - string
+          - 'null'
+        msisdn:
+          type:
+          - string
+          - 'null'
+        iccid:
+          type: string
+        profileStatus:
+          type: string
+          enum:
+          - OPERATIONAL
+          - DOWNLOAD_FAILED
+          - ALLOCATED
+        localeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuiccLocale'
+      description: Model for subscription information when fetching euicc information
+    ServiceContract:
+      required:
+      - id
+      - name
+      - subscriptionPackages
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        subscriptionPackages:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionPackage'
+      description: ServiceContract response model
+    Euicc:
+      required:
+      - companyId
+      - enabledIcc
+      - euiccId
+      - localizationTableId
+      - state
+      - subscriptions
+      type: object
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuiccSubscription'
+        euiccId:
+          type: string
+        companyId:
+          type: string
+        companyName:
+          type:
+          - string
+          - 'null'
+        state:
+          type: string
+          enum:
+          - ORDERED
+          - MANUFACTURED
+          - UNLOCALIZED
+          - UNLOCALIZING
+          - TERMINATED
+          - PREPARING
+          - TERMINATING
+          - LOCALIZED
+          - ENABLING
+          - DOWNLOADING
+          - DELETING
+          - ENABLED
+          - DISABLING
+          - SETTING_FALLBACK
+          - CHANGING_SM_SR
+          - PREPARING_SM_SR_CHANGE
+          - SM_SR_CHANGED
+          - PREPARED_SM_SR_CHANGE
+          - UNKNOWN
+        label:
+          type:
+          - string
+          - 'null'
+        localeName:
+          type:
+          - string
+          - 'null'
+        bootstrapIcc:
+          type:
+          - string
+          - 'null'
+        enabledIcc:
+          type:
+          - string
+          - 'null'
+        bootstrapCompanyId:
+          type:
+          - string
+          - 'null'
+        localizationTableId:
+          type: integer
+          format: int64
+      description: Euicc response model
+    ServiceRequestResponse:
+      required:
+      - serviceRequestId
+      - success
+      type: object
+      properties:
+        serviceRequestId:
+          type: string
+        success:
+          type: boolean
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Error message in case of unsuccesfull service request
+      description: Service request response model
+    PrepareEsimProfileDto:
+      required:
+      - euiccAgreementId
+      - euiccIds
+      - localeId
+      type: object
+      properties:
+        euiccIds:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        euiccAgreementId:
+          type: string
+        localeId:
+          type: string
+    EuiccProfile:
+      required:
+      - iccid
+      type: object
+      properties:
+        iccid:
+          type: string
+        imsi:
+          type:
+          - string
+          - 'null'
+        msisdn:
+          type:
+          - string
+          - 'null'
+      description: Profile allocation response model
+    EuiccLocale:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      description: Euicc locale response model
+    EuiccExtendedV2:
+      required:
+      - organizationId
+      - euiccId
+      - localizationTableId
+      - state
+      - subscriptions
+      type: object
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuiccSubscriptionExtended'
+        euiccId:
+          type: string
+        organizationId:
+          type: string
+        organizationName:
+          type:
+          - string
+          - 'null'
+        state:
+          type: string
+          enum:
+          - ORDERED
+          - MANUFACTURED
+          - UNLOCALIZED
+          - UNLOCALIZING
+          - TERMINATED
+          - PREPARING
+          - TERMINATING
+          - LOCALIZED
+          - ENABLING
+          - DOWNLOADING
+          - DELETING
+          - ENABLED
+          - DISABLING
+          - SETTING_FALLBACK
+          - CHANGING_SM_SR
+          - PREPARING_SM_SR_CHANGE
+          - SM_SR_CHANGED
+          - PREPARED_SM_SR_CHANGE
+          - UNKNOWN
+        label:
+          type:
+          - string
+          - 'null'
+        localeName:
+          type:
+          - string
+          - 'null'
+        bootstrapIcc:
+          type:
+          - string
+          - 'null'
+        enabledIcc:
+          type:
+          - string
+          - 'null'
+        bootstrapOrganizationId:
+          type:
+          - string
+          - 'null'
+        localizationTableId:
+          type: integer
+          format: int64
+      description: Euicc extended response model
+    FormSpecification:
+      required:
+      - earliestDeliveryDate
+      - lowOrderThreshold
+      - minimumOrderVolume
+      - orderIncrement
+      type: object
+      properties:
+        description:
+          type: string
+        earliestDeliveryDate:
+          type: integer
+          format: int32
+        lowOrderThreshold:
+          type: integer
+          format: int32
+        minimumOrderVolume:
+          type: integer
+          format: int32
+        orderIncrement:
+          type: integer
+          format: int32
+      description: FormSpecification response model
+    EuiccSubscription:
+      required:
+      - iccid
+      - localeList
+      - operatorId
+      - state
+      type: object
+      properties:
+        imsi:
+          type:
+          - string
+          - 'null'
+        state:
+          type: string
+          enum:
+          - NEW
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - PENDING_TERMINATION
+          - REMOVED
+          - OPERATOR_BLOCKED
+          - ACTIVE_NO_BILLING
+          - DEACTIVATED_NO_BILLING
+          - UNKNOWN
+          - EXTERNAL_PROFILE
+        operatorId:
+          type: string
+        operatorName:
+          type: string
+        msisdn:
+          type:
+          - string
+          - 'null'
+        iccid:
+          type: string
+        localeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuiccLocale'
+      description: Model for minimal subscription information when fetching euicc information
+    LabelUpdate:
+      required:
+      - companyId
+      - euiccIds
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: Company id of the requester
+        label:
+          type: string
+          description: Updated label or omitted for clearing the label
+        euiccIds:
+          maxItems: 10000
+          minItems: 1
+          type: array
+          description: One or more 32 hexadecimal digit eUICC IDs
+          items:
+            type: string
+      description: eUICC label update request model
+    Error:
+      required:
+      - code
+      - detailedMessage
+      - httpStatus
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          format: int32
+          example: 2040
+        httpStatus:
+          type: integer
+          description: Response HTTP status
+          format: int32
+          example: 401
+        message:
+          type: string
+          description: Error message
+          example: Request validation failed
+        detailedMessage:
+          type: string
+          description: Detailed error message
+          example: Could not parse JSON body
+      description: Error response model
+    EuiccAgreementList:
+      required:
+      - euiccAgreements
+      - serviceContracts
+      type: object
+      properties:
+        euiccAgreements:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuiccAgreement'
+        serviceContracts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceContract'
+      description: Euicc agreement list response model
+    EuiccAgreement:
+      required:
+      - id
+      - leadOperator
+      - name
+      - profileSpecifications
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        formSpecification:
+          allOf:
+          - $ref: '#/components/schemas/FormSpecification'
+        leadOperator:
+          type: string
+        profileSpecifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileSpecification'
+      description: EuiccAgreement response model
+    ProfileSpecification:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+      description: ProfileSpecification response model
+    EuiccV2:
+      required:
+      - organizationId
+      - euiccId
+      - localizationTableId
+      - state
+      - subscriptions
+      type: object
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuiccSubscription'
+        euiccId:
+          type: string
+        organizationId:
+          type: string
+        organizationName:
+          type:
+          - string
+          - 'null'
+        state:
+          type: string
+          enum:
+          - ORDERED
+          - MANUFACTURED
+          - UNLOCALIZED
+          - UNLOCALIZING
+          - TERMINATED
+          - PREPARING
+          - TERMINATING
+          - LOCALIZED
+          - ENABLING
+          - DOWNLOADING
+          - DELETING
+          - ENABLED
+          - DISABLING
+          - SETTING_FALLBACK
+          - CHANGING_SM_SR
+          - PREPARING_SM_SR_CHANGE
+          - SM_SR_CHANGED
+          - PREPARED_SM_SR_CHANGE
+          - UNKNOWN
+        label:
+          type:
+          - string
+          - 'null'
+        localeName:
+          type:
+          - string
+          - 'null'
+        bootstrapIcc:
+          type:
+          - string
+          - 'null'
+        enabledIcc:
+          type:
+          - string
+          - 'null'
+        bootstrapOrganizationId:
+          type:
+          - string
+          - 'null'
+        localizationTableId:
+          type: integer
+          format: int64
+      description: Euicc response model
+    ProfileAllocation:
+      required:
+      - euiccAgreementId
+      - euiccId
+      - localeId
+      type: object
+      properties:
+        euiccId:
+          type: string
+        euiccAgreementId:
+          type: string
+        localeId:
+          type: string
+      description: Profile allocation request model
+    PrepareUnlinkedEsimProfileDto:
+      required:
+      - count
+      - euiccAgreementId
+      - localeId
+      type: object
+      properties:
+        count:
+          maximum: 10000
+          minimum: 1
+          type: integer
+          format: int64
+        euiccAgreementId:
+          type: string
+        localeId:
+          type: string
+    EuiccExtended:
+      required:
+      - companyId
+      - euiccId
+      - localizationTableId
+      - state
+      - subscriptions
+      type: object
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuiccSubscriptionExtended'
+        euiccId:
+          type: string
+        companyId:
+          type: string
+        companyName:
+          type:
+          - string
+          - 'null'
+        state:
+          type: string
+          enum:
+          - ORDERED
+          - MANUFACTURED
+          - UNLOCALIZED
+          - UNLOCALIZING
+          - TERMINATED
+          - PREPARING
+          - TERMINATING
+          - LOCALIZED
+          - ENABLING
+          - DOWNLOADING
+          - DELETING
+          - ENABLED
+          - DISABLING
+          - SETTING_FALLBACK
+          - CHANGING_SM_SR
+          - PREPARING_SM_SR_CHANGE
+          - SM_SR_CHANGED
+          - PREPARED_SM_SR_CHANGE
+          - UNKNOWN
+        label:
+          type:
+          - string
+          - 'null'
+        localeName:
+          type:
+          - string
+          - 'null'
+        bootstrapIcc:
+          type:
+          - string
+          - 'null'
+        enabledIcc:
+          type:
+          - string
+          - 'null'
+        bootstrapCompanyId:
+          type:
+          - string
+          - 'null'
+        localizationTableId:
+          type: integer
+          format: int64
+      description: Euicc extended response model
+    Company:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      description: Company model
+    Instant:
+      type: object
+      properties:
+        epochSecond:
+          type: integer
+          format: int64
+        nano:
+          type: integer
+          format: int64
+    ServiceRequest:
+      required:
+      - companyId
+      - companyName
+      - createdBy
+      - lastUpdated
+      - serviceRequestId
+      - serviceRequestState
+      - serviceRequestType
+      - size
+      - timeCreated
+      type: object
+      properties:
+        serviceRequestId:
+          type: string
+        serviceRequestType:
+          type: string
+          enum:
+          - CESS
+          - CHANGE_SUBSCRIPTIONOWNER
+          - CHANGE_SUBSCRIPTIONREGION
+          - CHANGE_SUBSCRIPTIONSTATE
+          - CHANGE_SUBSCRIPTIONPACKAGE
+          - CHANGE_SUBSCRIPTIONLABEL
+          - CHANGE_SUBSCRIPTIONSTATE_PARENT
+          - CHANGE_SUBSCRIPTIONPACKAGE_PARENT
+          - CHANGE_SUBSCRIPTIONOWNER_PARENT
+          - CHANGE_SUBSCRIPTIONREGION_PARENT
+          - CHANGE_SUBSCRIPTION_NOTE
+          - CHANGE_ALTROAMINGPROVIDER
+          - CHANGE_SUBSCRIPTIONIP
+          - DEVICE_RECONNECT
+          - EUICC_ORDER
+          - EUICC_PROFILE_ORDER
+          - EUICC_STOCK_ORDER
+          - EUICC_UPDATE_LABEL
+          - EUICC_LOCALIZATION
+          - EUICC_DELOCALIZATION
+          - EUICC_LOCALIZATION_BATCH
+          - EUICC_DELOCALIZATION_BATCH
+          - EUICC_ADD_LOCALE
+          - EUICC_ADD_LOCALE_BATCH
+          - EUICC_REMOVE_LOCALE
+          - EUICC_DOWNLOAD_PROFILE
+          - EUICC_DELETE_PROFILE
+          - EUICC_RESET_COUNTERS
+          - EUICC_SET_FALLBACK_ATTR
+          - SIM_ORDER
+          - STOCK_ORDER
+          - TRIGGERPACKAGE_ASSIGN
+          - TRIGGERPACKAGE_REMOVE
+          - INDIVIDUAL_APN_UPDATE
+          - SECURITY_LOCK_STATE
+          - SECURITY_UNLOCK_STATE
+          - LOCK_SUBSCRIPTIONSTATE
+          - UNLOCK_SUBSCRIPTIONSTATE
+          - PREPARE_CONSUMER_PROFILE
+          - UNKNOWN
+        serviceRequestState:
+          type: string
+          enum:
+          - IN_PROGRESS
+          - PENDING
+          - CANCELED
+          - REJECTED
+          - COMPLETED
+          - COMPLETED_PARTIALLY
+          - FAILED
+          - FIXED
+          - ARCHIVED
+          - NOT_REQUIRED
+          - UNKNOWN
+        createdBy:
+          type: string
+        companyId:
+          type: string
+        companyName:
+          type: string
+        timeCreated:
+          $ref: '#/components/schemas/Instant'
+        lastUpdated:
+          $ref: '#/components/schemas/Instant'
+        size:
+          type: integer
+          format: int32
+      description: ServiceRequest response model
+    Subcription:
+      required:
+      - companyId
+      - companyName
+      - iccid
+      - imsi
+      - installationDate
+      - operatorId
+      - pin1
+      - pin2
+      - puk1
+      - puk2
+      - specification
+      - specificationType
+      - state
+      type: object
+      properties:
+        imsi:
+          type: string
+        state:
+          type: string
+          enum:
+          - NEW
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - PENDING_TERMINATION
+          - REMOVED
+          - OPERATOR_BLOCKED
+          - ACTIVE_NO_BILLING
+          - DEACTIVATED_NO_BILLING
+          - UNKNOWN
+          - EXTERNAL_PROFILE
+        operatorId:
+          type: string
+        operatorName:
+          type: string
+        msisdn:
+          type:
+          - string
+          - 'null'
+        iccid:
+          type: string
+        localeList:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EuiccLocale'
+        label:
+          type:
+          - string
+          - 'null'
+        companyId:
+          type: string
+        companyName:
+          type: string
+        pin1:
+          type: string
+        pin2:
+          type: string
+        puk1:
+          type: string
+        puk2:
+          type: string
+        region:
+          type:
+          - string
+          - 'null'
+        pbrExitDate:
+          allOf:
+          - $ref: '#/components/schemas/Instant'
+        installationDate:
+          $ref: '#/components/schemas/Instant'
+        specification:
+          type: string
+        specificationType:
+          type: string
+          enum:
+          - SIM_SPECIFICATION
+          - FORM_SPECIFICATION
+          - PROFILE_SPECIFICATION
+          - UNKNOWN
+        arpAssignMentDate:
+          allOf:
+          - $ref: '#/components/schemas/Instant'
+        arpName:
+          type:
+          - string
+          - 'null'
+        euiccId:
+          type:
+          - string
+          - 'null'
+        profileStatus:
+          type:
+          - string
+          - 'null'
+      description: Model for subscription
+    SubscriptionPackage:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+      description: SubscriptionPackage response model
+  parameters:
+    Header-Accept:
+      name: Accept
+      in: header
+      description: Accept content-type by the client
+      schema:
+        type: string
+        enum:
+        - application/vnd.dcp-v1+json
+        - application/vnd.dcp-v2+json
+  securitySchemes:
+    token:
+      type: apiKey
+      description: Input token directly or use login endpoints
+      name: X-Access-Token
+      in: header
+x-original-swagger-version: '2.0'

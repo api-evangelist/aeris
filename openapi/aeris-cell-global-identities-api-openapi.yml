@@ -1,0 +1,289 @@
+openapi: 3.2.0
+info:
+  title: Subscription Location Cell Global Identities API
+  version: 1.0.2
+  description: '#### Copyright
+
+    © Aeris Communications, Inc.'
+  x-availability: limited
+  x-availability-scope: Swisscom only — requires HLR/VLR signalling support at network level
+  x-api-id: 01db42b6-605c-4db5-937b-1b5e4f385012
+  x-audience: external-partner
+servers:
+- url: https://iot-api.aeris.com/iot/api/subscriptions
+  description: API server
+security:
+- Oauth2_auth: []
+tags:
+- name: Cell Global Identities
+paths:
+  /locations/cell-global-identities:
+    get:
+      tags:
+      - Cell Global Identities
+      summary: Get cell global identity information of a subscription
+      description: '> **Limited Availability — Not globally accessible.**
+
+        > This endpoint requires network-level HLR/VLR signalling support and is
+
+        > currently only available for Swisscom. It is not configurable for other operators.
+
+        > Contact your Aeris account team before attempting to use this endpoint.
+
+
+        Returns cell global identity information of a subscription.'
+      operationId: get-cell-global-identity-of-subscription
+      security:
+      - Oauth2_auth:
+        - sulo.cell-global-identities.read
+      parameters:
+      - name: Authorization
+        in: header
+        description: 'Token 3 (JWT) as: Bearer <token>'
+        schema:
+          type: string
+        required: true
+      - name: subscriptionIdType
+        in: query
+        description: Subscription ID type
+        required: true
+        schema:
+          $ref: '#/components/schemas/SubscriptionIdTypeEnum'
+      - name: subscriptionId
+        in: query
+        description: Subscription ID
+        required: true
+        schema:
+          type: string
+      - name: networkGen
+        in: query
+        description: Mobile network generation(3G/4G)
+        required: false
+        schema:
+          type: string
+          default: 4G
+          description: Network generation
+          enum:
+          - 3G
+          - 4G
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CellGlobalIdentity'
+              examples:
+                cgi-example:
+                  value:
+                    subscriptionIdType: IMSI
+                    subscriptionId: '901210000000075'
+                    mcc: '241'
+                    mnc: 09
+                    lac: '422'
+                    cellId: '17531'
+                    radioType: WCDMA
+                    updatedAt: '2022-02-11T11:27:27+01:00'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Handle Content-Type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                undefined-subscription-id-type:
+                  value:
+                    type: https://www.iana.org/assignments/http-status-codes/
+                    title: Bad Request
+                    status: 400
+                    detail: Subscription id type must be one of [IMSI, MSISDN, ICC]
+                    instance: 423e4567-e89b-12d3-a456-426614175000
+                undefined-network-generation:
+                  value:
+                    type: https://www.iana.org/assignments/http-status-codes/
+                    title: Bad Request
+                    status: 400
+                    detail: 'Undefined networkGen value: foo. Allowed values: [3G, 4G]'
+                    instance: 423e4567-e89b-12d3-a456-426614175000
+        '429':
+          description: Too Many Requests
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                problem-response-example:
+                  value:
+                    type: about:blank
+                    title: Too Many Requests
+                    status: 429
+                    detail: Too Many Requests
+                    instance: null
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Handle Content-Type
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              examples:
+                bad-request-example:
+                  value:
+                    type: https://www.iana.org/assignments/http-status-codes/
+                    title: Internal Server Error
+                    status: 500
+                    detail: Internal Server Error occurred while processing the request.
+                    instance: 523e4567-e89b-12d3-a456-426614175000
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+components:
+  responses:
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+  headers:
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+  schemas:
+    SubscriptionIdTypeEnum:
+      type: string
+      description: Subscription ID type
+      enum:
+      - IMSI
+      - MSISDN
+      - ICC
+    CellGlobalIdentity:
+      type: object
+      properties:
+        subscriptionIdType:
+          $ref: '#/components/schemas/SubscriptionIdTypeEnum'
+        subscriptionId:
+          type: string
+        mcc:
+          type: string
+        mnc:
+          type: string
+        lac:
+          type: string
+        cellId:
+          type: string
+        radioType:
+          $ref: '#/components/schemas/RadioTypeEnum'
+        updatedAt:
+          type: string
+          format: date-time
+      description: Cell Global Identities
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+        title:
+          type: string
+          description: 'A short summary of the problem type in english and readable for
+
+            engineers.
+
+            '
+          example: Bad request
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this
+
+            occurrence of the problem.
+
+            '
+          minimum: 100
+          example: 400
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Unknown subscription-id-type
+        instance:
+          type: string
+          description: 'An absolute URI that identifies the specific occurrence of the
+
+            problem. It may or may not yield further information if
+
+            dereferenced.
+
+            '
+    RadioTypeEnum:
+      type: string
+      description: Radio types
+      enum:
+      - GSM
+      - WCDMA
+      - LTE
+  securitySchemes:
+    Oauth2_auth:
+      flows:
+        password:
+          tokenUrl: '/iot/api/auth/token
+
+            '
+          scopes:
+            sulo.cell-global-identities.read: Access cell global identity
+      type: oauth2

@@ -1,0 +1,1250 @@
+openapi: 3.2.0
+info:
+  version: 0.7.0
+  title: Aeris IoT Watchtower™ Flows API
+  description: '## Introduction
+
+
+    The Aeris IoT Watchtower™ API provides access to resources such as real-time events, aggregated events, risk assessment reports, and device group operations.'
+  termsOfService: https://www.aeris.com/services-terms-of-use/
+  contact:
+    email: support@aeris.net
+    url: https://www.aeris.com/support/
+  license:
+    name: Aeris License
+    url: https://www.aeris.com/services-terms-of-use/
+  x-audience: external-public
+servers:
+- url: https://watchtower-api-prd.aeriscloud.com
+security:
+- oAuth2ClientCredentials: []
+tags:
+- name: Flows
+  description: Endpoints for flows - IP flows/Blocked flows/Allowed traffic
+paths:
+  /watchtower/v1/ip-flows/search:
+    post:
+      summary: Search IP Flows (Account-level)
+      description: 'Retrieves structured IP flow records (BLOCKED or ALLOWED) across all devices in the account. Requires a `flowType` discriminator (`BLOCKED` or `ALLOWED`) in the request body to select the appropriate filter schema.
+
+        **Distinct from `POST /watchtower/v1/devices/ip-flows/search`:** - This endpoint is **account-scoped** — it searches across all devices and returns
+
+        structured `BLOCKED`/`ALLOWED` flow DTOs with enforcement policy context.
+
+        - The device-scoped `/devices/ip-flows/search` is **device-scoped** via `iccid` and
+
+        returns raw per-flow metric records (timing, data volume, source/destination detail)
+
+        without enforcement context.'
+      operationId: getIPFlows
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      tags:
+      - Flows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/BlockedIPFlowsSearchRequest'
+              - $ref: '#/components/schemas/AllowedIPFlowsSearchRequest'
+              discriminator:
+                propertyName: flowType
+                mapping:
+                  BLOCKED: '#/components/schemas/BlockedIPFlowsSearchRequest'
+                  ALLOWED: '#/components/schemas/AllowedIPFlowsSearchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedFlows'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/ip-flows/export:
+    post:
+      summary: API for exporting IP Flows
+      description: This endpoint exports IP Flows as scheduled report
+      operationId: exportIPFlows
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/sort'
+      tags:
+      - Flows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/BlockedIPFlowsSearchRequest'
+              - $ref: '#/components/schemas/AllowedIPFlowsSearchRequest'
+              discriminator:
+                propertyName: flowType
+                mapping:
+                  BLOCKED: '#/components/schemas/BlockedIPFlowsSearchRequest'
+                  ALLOWED: '#/components/schemas/AllowedIPFlowsSearchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledReport'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/blocked-flows/search:
+    post:
+      summary: API to get Blocked Flows
+      description: This endpoint retrieves Blocked Flows
+      operationId: searchBlockedFlows
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      tags:
+      - Flows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockedFlowsSearchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedBlockedFlows'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/blocked-flows/export:
+    post:
+      summary: API to export Blocked Flows
+      description: This endpoint exports Blocked Flows as CSV with Scheduled Report
+      operationId: exportBlockedFlows
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      tags:
+      - Flows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockedFlowsSearchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledReport'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/allowed-traffic/search:
+    post:
+      summary: API to get Allowed Traffic
+      description: This endpoint retrieves Allowed Traffic
+      operationId: searchAllowedTraffic
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      tags:
+      - Flows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllowedTrafficSearchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedAllowedTraffic'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/allowed-traffic/export:
+    post:
+      summary: API to export Allowed Traffic
+      description: This endpoint exports Allowed Traffic as CSV with Scheduled Report
+      operationId: exportAllowedTraffic
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sort'
+      tags:
+      - Flows
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllowedTrafficSearchRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledReport'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '413':
+          $ref: '#/components/responses/413'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/flow-aggregates/metrics/search:
+    post:
+      summary: Get Account Flow Aggregates Metrics
+      description: 'Returns daily aggregated security metrics for an account across a date range.
+
+        Supported metrics: unique_endpoint_ip_count, unique_endpoint_fqdn_count,
+
+        avg_mo_data_bytes_per_transaction, avg_mt_data_bytes_per_transaction,
+
+        imei_change_event_count, public_dns_query_count, private_dns_query_count,
+
+        total_mo_data_bytes, total_mt_data_bytes.
+
+
+        The maximum allowed period between `startDate` and `endDate` is 90 days. Requests exceeding this limit return `400 Bad Request`.'
+      operationId: getFlowAggregatesMetrics
+      tags:
+      - Flows
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/startDate'
+      - $ref: '#/components/parameters/endDate'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountDailyMetricsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedSummaryTableData'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  responses:
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '413':
+      description: Requested data too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 413
+            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  schemas:
+    BlockedIPFlowsSearchRequest:
+      type: object
+      properties:
+        flowType:
+          type: string
+        blockTypes:
+          type: array
+          items:
+            type: string
+        blockedBy:
+          type: string
+          description: Name of the enforcement rule that blocked the flow
+        destinationIp:
+          type: string
+        destinationPorts:
+          type: array
+          items:
+            type: string
+        networkProtocols:
+          type: array
+          items:
+            type: string
+        protocols:
+          type: array
+          items:
+            type: string
+        enforcementRule:
+          type: string
+        iccid:
+          type: string
+        imsi:
+          type: string
+        msisdn:
+          type: string
+        sourceIp:
+          type: string
+        sourcePorts:
+          type: array
+          items:
+            type: string
+        destinationFQDN:
+          type: string
+        confidenceLevel:
+          type: integer
+        threatLevel:
+          type: integer
+        threatType:
+          type: string
+        threatClass:
+          type: string
+        threatDiagnostic:
+          type: string
+        deviceGroup:
+          type: string
+        servicePlan:
+          type: string
+        servicePlanId:
+          type: string
+        countryOfDevice:
+          type: string
+        mccMnc:
+          type: string
+        deviceType:
+          type: string
+    msisdn:
+      description: Mobile Station International Subscriber Directory Number.
+      type: string
+      maxLength: 15
+      example: '8801500121121'
+    Field:
+      type: object
+      properties:
+        name:
+          description: The field name.
+          type: string
+        type:
+          description: The data type of the field.
+          type: string
+          enum:
+          - BOOLEAN
+          - DATE
+          - TIMESTAMP
+          - STRING
+          - INTEGER
+          - FLOAT
+          - DOUBLE
+          - ARRAY
+      required:
+      - name
+      - type
+    BlockedIPFlowData:
+      type: object
+      properties:
+        flowType:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        destinationIp:
+          type: string
+        destinationFQDN:
+          type: string
+        blockedBy:
+          type: string
+          description: Name of the enforcement rule that blocked the flow
+        blockedById:
+          type: integer
+          format: int64
+        blockType:
+          type: string
+        destinationPort:
+          type: string
+        networkProtocol:
+          type: string
+        protocol:
+          type: string
+        enforcementRuleName:
+          type: string
+        enforcementRuleId:
+          type: integer
+          format: int64
+        deviceGroup:
+          $ref: '#/components/schemas/DeviceGroupInfo'
+        iccid:
+          $ref: '#/components/schemas/iccid'
+        imsi:
+          $ref: '#/components/schemas/imsi'
+        msisdn:
+          $ref: '#/components/schemas/msisdn'
+        sourceIp:
+          type: string
+        sourcePort:
+          type: string
+        confidenceLevel:
+          type: integer
+        threatLevel:
+          type: integer
+        threatClass:
+          type: string
+        threatDiagnostic:
+          type: string
+        servicePlan:
+          type: string
+        servicePlanId:
+          type: string
+        countryOfDevice:
+          type: string
+        mccMnc:
+          type: integer
+          format: int64
+        deviceType:
+          type: string
+    AllowedTrafficSearchRequest:
+      type: object
+      properties:
+        allowedBy:
+          type: string
+          description: Name of the application
+        destinationIp:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        destinationPorts:
+          type: array
+          items:
+            type: string
+        networkProtocols:
+          type: array
+          items:
+            type: string
+        protocols:
+          type: array
+          items:
+            type: string
+        enforcementRule:
+          type: string
+        iccid:
+          $ref: '#/components/schemas/iccid'
+        imsi:
+          $ref: '#/components/schemas/imsi'
+        msisdn:
+          $ref: '#/components/schemas/msisdn'
+        sourceIp:
+          type: string
+        sourcePorts:
+          type: array
+          items:
+            type: string
+        destinationFQDN:
+          type: string
+        deviceGroup:
+          type: string
+        allowedTypes:
+          type: array
+          items:
+            type: string
+        servicePlan:
+          type: string
+        servicePlanId:
+          type: string
+        countryOfDevice:
+          type: string
+        mccMnc:
+          type: string
+        deviceType:
+          type: string
+    AccountDailyMetricsRequest:
+      type: object
+      required:
+      - metrics
+      properties:
+        metrics:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/AccountDailyMetric'
+          example:
+          - unique_endpoint_ip_count
+          - public_dns_query_count
+          - total_mo_data_bytes
+          - total_mt_data_bytes
+    AllowedIPFlowData:
+      type: object
+      properties:
+        flowType:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        allowedBy:
+          type: string
+        allowedType:
+          type: string
+        applicationId:
+          type: integer
+          format: int64
+        destinationIp:
+          type: string
+        destinationFQDN:
+          type: string
+        destinationPort:
+          type: string
+        networkProtocol:
+          type: string
+        protocol:
+          type: string
+        enforcementRuleName:
+          type: string
+        enforcementRuleId:
+          type: integer
+          format: int64
+        deviceGroup:
+          $ref: '#/components/schemas/DeviceGroupInfo'
+        iccid:
+          $ref: '#/components/schemas/iccid'
+        imsi:
+          $ref: '#/components/schemas/imsi'
+        msisdn:
+          $ref: '#/components/schemas/msisdn'
+        sourceIp:
+          type: string
+        sourcePort:
+          type: string
+        servicePlan:
+          type: string
+        servicePlanId:
+          type: string
+        countryOfDevice:
+          type: string
+        mccMnc:
+          type: integer
+          format: int64
+        deviceType:
+          type: string
+    BlockedFlowDetail:
+      type: object
+      properties:
+        destinationFQDN:
+          type: string
+          example: dns.google
+        ipAddresses:
+          type: array
+          items:
+            type: string
+            example: 1.1.1.1
+        networkProtocol:
+          type: string
+          example: TCP
+        protocol:
+          type: string
+          example: HTTPS
+        port:
+          type: string
+          example: '80'
+        sessionAttempts:
+          type: integer
+          example: 53
+        blockedDevices:
+          type: integer
+          example: 222
+        attemptTime:
+          type: string
+          format: date-time
+          example: '2025-10-01T23:59:02Z'
+        enforcementRule:
+          type: string
+        totalFlowsUp:
+          type: integer
+          format: int64
+        totalFlowsDown:
+          type: integer
+          format: int64
+        attemptsFromDevices:
+          type: integer
+          format: int64
+        attemptsToDevices:
+          type: integer
+          format: int64
+        confidenceLevel:
+          type: integer
+        threatLevel:
+          type: integer
+        threatClass:
+          type: string
+        threatDiagnostic:
+          type: string
+    AllowedTrafficUsageDetail:
+      type: object
+      properties:
+        destinationIp:
+          type: string
+        destinationFQDN:
+          type: string
+        networkProtocol:
+          type: string
+        protocol:
+          type: string
+        port:
+          type: string
+        flowCount:
+          type: integer
+          format: int64
+        deviceCount:
+          type: integer
+          format: int64
+        fromDevices:
+          type: integer
+          format: int64
+        toDevices:
+          type: integer
+          format: int64
+        flowsToDevices:
+          type: integer
+          format: int64
+        flowsFromDevices:
+          type: integer
+          format: int64
+        totalData:
+          type: number
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    AllowedIPFlowsSearchRequest:
+      type: object
+      properties:
+        flowType:
+          type: string
+        allowedBy:
+          type: string
+          description: Name of the application
+        destinationIp:
+          type: string
+        destinationPorts:
+          type: array
+          items:
+            type: string
+        networkProtocols:
+          type: array
+          items:
+            type: string
+        protocols:
+          type: array
+          items:
+            type: string
+        enforcementRule:
+          type: string
+        iccid:
+          $ref: '#/components/schemas/iccid'
+        imsi:
+          $ref: '#/components/schemas/imsi'
+        msisdn:
+          $ref: '#/components/schemas/msisdn'
+        sourceIp:
+          type: string
+        sourcePorts:
+          type: array
+          items:
+            type: string
+        destinationFQDN:
+          type: string
+        deviceGroup:
+          type: string
+        allowedTypes:
+          type: array
+          items:
+            type: string
+        servicePlan:
+          type: string
+        servicePlanId:
+          type: string
+        countryOfDevice:
+          type: string
+        mccMnc:
+          type: string
+        deviceType:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    AllowedTrafficData:
+      type: object
+      properties:
+        isParentComponent:
+          type: boolean
+        parentAccountId:
+          type: integer
+          format: int64
+        allowedBy:
+          type: string
+        allowedType:
+          type: string
+        applicationId:
+          type: integer
+          format: int64
+        enforcementRules:
+          type: integer
+          format: int64
+        lastActivity:
+          type: string
+          format: date-time
+        totalFqdn:
+          type: integer
+          format: int64
+        totalIp:
+          type: integer
+          format: int64
+        totalEnforcementRule:
+          type: integer
+          format: int64
+        flowCount:
+          type: integer
+          format: int64
+        deviceCount:
+          type: integer
+          format: int64
+        fromDevices:
+          type: integer
+          format: int64
+        toDevices:
+          type: integer
+          format: int64
+        flowsFromDevices:
+          type: integer
+          format: int64
+        flowsToDevices:
+          type: integer
+          format: int64
+        totalData:
+          type: number
+        usages:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllowedTrafficUsageDetail'
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    PagedFlows:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              oneOf:
+              - $ref: '#/components/schemas/BlockedIPFlowData'
+              - $ref: '#/components/schemas/AllowedIPFlowData'
+              discriminator:
+                propertyName: flowType
+                mapping:
+                  BLOCKED: '#/components/schemas/BlockedIPFlowData'
+                  ALLOWED: '#/components/schemas/AllowedIPFlowData'
+    PagedBlockedFlows:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/BlockedFlowData'
+    BlockedFlowData:
+      type: object
+      properties:
+        isParentComponent:
+          type: boolean
+        parentAccountId:
+          type: integer
+          format: int64
+        blockedById:
+          type: integer
+          format: int64
+        enforcementRuleId:
+          type: array
+          items:
+            type: integer
+            format: int4
+        blockedBy:
+          type: string
+        blockedType:
+          type: string
+        totalIp:
+          type: integer
+          format: int64
+        totalFQDN:
+          type: integer
+          format: int64
+        sessionAttempts:
+          type: integer
+          format: int64
+        devicesCount:
+          type: integer
+          format: int64
+        attemptsFromDevices:
+          type: integer
+          format: int64
+        attemptsToDevices:
+          type: integer
+          format: int64
+        totalFlowsUp:
+          type: integer
+          format: int64
+        totalFlowsDown:
+          type: integer
+          format: int64
+        blockedFlows:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockedFlowDetail'
+    imsi:
+      description: International Mobile Subscriber Identifier of the device.
+      type: string
+      maxLength: 15
+      example: '310009133100012'
+    PagedAllowedTraffic:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/AllowedTrafficData'
+    DeviceGroupInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        colorCode:
+          type: string
+        deviceGroupType:
+          type: string
+    SummaryDataSchema:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+    iccid:
+      description: Integrated Circuit Card Identifier.
+      type: string
+      minLength: 18
+      maxLength: 22
+      example: '891004234814455936'
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    ReportStatus:
+      description: Report status
+      type: string
+      example: Processing
+      enum:
+      - Success
+      - Processing
+      - Error
+      - NotStarted
+    AccountDailyMetric:
+      type: string
+      description: Supported daily metric names.
+      enum:
+      - unique_endpoint_ip_count
+      - unique_endpoint_fqdn_count
+      - avg_mo_data_bytes_per_transaction
+      - avg_mt_data_bytes_per_transaction
+      - imei_change_event_count
+      - public_dns_query_count
+      - private_dns_query_count
+      - total_mo_data_bytes
+      - total_mt_data_bytes
+    PagedSummaryTableData:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/SummaryDataSchema'
+        data:
+          $ref: '#/components/schemas/SummaryDataRows'
+    BlockedFlowsSearchRequest:
+      type: object
+      properties:
+        blockTypes:
+          type: array
+          items:
+            type: string
+        blockedBy:
+          type: string
+          description: Name of the enforcement rule that blocked the flow
+        destinationIp:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        destinationPorts:
+          type: array
+          items:
+            type: string
+        networkProtocols:
+          type: array
+          items:
+            type: string
+        protocols:
+          type: array
+          items:
+            type: string
+        enforcementRule:
+          type: string
+        iccid:
+          $ref: '#/components/schemas/iccid'
+        imsi:
+          $ref: '#/components/schemas/imsi'
+        msisdn:
+          $ref: '#/components/schemas/msisdn'
+        sourceIp:
+          type: string
+        sourcePorts:
+          type: array
+          items:
+            type: string
+        destinationFQDN:
+          type: string
+        confidenceLevel:
+          type: integer
+        threatLevel:
+          type: integer
+        threatType:
+          type: string
+        threatClass:
+          type: string
+        threatDiagnostic:
+          type: string
+        deviceGroup:
+          type: string
+        servicePlan:
+          type: string
+        servicePlanId:
+          type: string
+        countryOfDevice:
+          type: string
+        mccMnc:
+          type: string
+        deviceType:
+          type: string
+    ScheduledReport:
+      type: object
+      properties:
+        reportId:
+          description: Report Id
+          type: string
+          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        statusEndpoint:
+          description: Report Status URL
+          type: string
+          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+    SummaryDataRows:
+      type: array
+      items:
+        type: array
+        items: {}
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+  parameters:
+    startDate:
+      name: startDate
+      in: query
+      required: true
+      description: The inclusive start date (UTC), format YYYY-MM-DD. Maximum period between startDate and endDate is 90 days.
+      example: '2026-05-29'
+      schema:
+        type: string
+        format: date
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    endDate:
+      name: endDate
+      in: query
+      required: true
+      description: The inclusive end date (UTC), format YYYY-MM-DD. Maximum period between startDate and endDate is 90 days.
+      example: '2026-06-05'
+      schema:
+        type: string
+        format: date
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    endTime:
+      name: endTime
+      in: query
+      required: true
+      description: The end timestamp. (exclusive)
+      example: '2021-07-05T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    sort:
+      name: sort
+      in: query
+      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
+      example: deviceId,updateTime:desc
+      schema:
+        type: string
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    startTime:
+      name: startTime
+      in: query
+      required: true
+      description: The start timestamp. (inclusive)
+      example: '2021-07-01T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      description: This API uses OAuth 2 with the Client Credentials flow.
+      flows:
+        clientCredentials:
+          tokenUrl: /watchtower/v1/auth/token
+          scopes: {}

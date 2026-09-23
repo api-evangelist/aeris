@@ -1,0 +1,269 @@
+openapi: 3.2.0
+info:
+  version: 0.7.0
+  title: Aeris IoT Watchtower™ Token API
+  description: '## Introduction
+
+
+    The Aeris IoT Watchtower™ API provides access to resources such as real-time events, aggregated events, risk assessment reports, and device group operations.'
+  termsOfService: https://www.aeris.com/services-terms-of-use/
+  contact:
+    email: support@aeris.net
+    url: https://www.aeris.com/support/
+  license:
+    name: Aeris License
+    url: https://www.aeris.com/services-terms-of-use/
+  x-audience: external-public
+servers:
+- url: https://watchtower-api-prd.aeriscloud.com
+security:
+- oAuth2ClientCredentials: []
+tags:
+- name: Token
+  description: Endpoint to Acquire and Revoke Token
+paths:
+  /watchtower/v1/auth/token:
+    post:
+      tags:
+      - Token
+      summary: Acquire Access token
+      description: Endpoint to obtain an access token using Client Credentials flow
+      operationId: getToken
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - grant_type
+              - client_id
+              - client_secret
+              properties:
+                grant_type:
+                  type: string
+                  enum:
+                  - client_credentials
+                  default: client_credentials
+                client_id:
+                  type: string
+                  example: operator1.enterprise1.application1
+                client_secret:
+                  type: string
+                  format: password
+                  example: tg69jPfKPtBEMzoPP1gNfI2HrCOZylpO
+      responses:
+        '200':
+          description: Successful token acquisition
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+                  expires_in:
+                    type: integer
+                    example: 35998
+                  refresh_expires_in:
+                    type: integer
+                    example: 0
+                  token_type:
+                    type: string
+                    example: Bearer
+                  not-before-policy:
+                    type: integer
+                    example: 0
+                  scope:
+                    type: string
+                    example: profile email
+                  authorized_account_ids:
+                    type: array
+                    items:
+                      type: integer
+                    example:
+                    - 100000001
+                    - 100000002
+                    - 100000003
+                  authorized_account_id_pattern:
+                    type: string
+                    description: Wildcard pattern for CSP Partner Admin credentials. Present only for wildcard credentials; authorized_account_ids is absent in this case.
+                    example: 020*
+        '400':
+          description: 'Missing required parameter: ...'
+        '401':
+          description: Invalid client credentials
+  /watchtower/v1/auth/accounts:
+    get:
+      tags:
+      - Token
+      summary: Resolve wildcard account pattern to paginated account list
+      description: Returns a paginated list of managed enterprise accounts (ID and name) for the CSP identified by the X-Watchtower-Account-Id header. Requires a Bearer token with the authorized_account_id_pattern claim (wildcard credentials). By default, returns only direct managed accounts. Use includeSubAccounts=true to return the full hierarchy of managed accounts.
+      operationId: getAuthorizedAccounts
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - name: X-Watchtower-Account-Id
+        in: header
+        description: CSP Partner Admin's own account ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 10200000
+      - name: limit
+        in: query
+        description: Number of results per page
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 500
+      - name: offset
+        in: query
+        description: Zero-based offset for pagination
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: sort
+        in: query
+        description: 'Sort field and direction. Format: field,direction. Allowed fields: accountId, accountName. Directions: asc, desc.'
+        schema:
+          type: string
+          default: accountId,asc
+        example: accountName,desc
+      - name: includeSubAccounts
+        in: query
+        description: When false (default), returns only direct managed accounts. When true, returns the full hierarchy of managed accounts.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Paginated list of managed enterprise accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizedAccountsResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+components:
+  responses:
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  schemas:
+    AuthorizedAccountsResponse:
+      type: object
+      description: Paginated list of managed enterprise accounts
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManagedAccount'
+          description: List of managed enterprise accounts
+        offset:
+          type: integer
+          description: Current offset
+          example: 0
+        limit:
+          type: integer
+          description: Page size
+          example: 20
+        total:
+          type: integer
+          format: int64
+          description: Total number of managed accounts
+          example: 1847
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    ManagedAccount:
+      type: object
+      description: A managed enterprise account
+      properties:
+        accountId:
+          type: integer
+          format: int64
+          description: Enterprise account ID
+          example: 10200001
+        accountName:
+          type: string
+          description: Account display name
+          example: Swisscom Enterprise AG
+  parameters:
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      description: This API uses OAuth 2 with the Client Credentials flow.
+      flows:
+        clientCredentials:
+          tokenUrl: /watchtower/v1/auth/token
+          scopes: {}

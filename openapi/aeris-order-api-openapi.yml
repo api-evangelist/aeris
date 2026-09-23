@@ -1,0 +1,1222 @@
+openapi: 3.2.0
+info:
+  title: Subscription Management Order API
+  description: Endpoints requiring authentication are indicated with a lock icon, which is performed by passing a token in the 'X-Access-Token' header in each request.
+  version: 1.0.1
+  x-audience: external-public
+servers:
+- url: /dcpapi/rest/subscriptionManagement/v1
+tags:
+- name: Order
+paths:
+  /euiccs/euiccOrder:
+    post:
+      tags:
+      - Order
+      summary: Order eUICC
+      operationId: euiccOrder
+      requestBody:
+        description: The euicc order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EuiccOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/EuiccOrder'
+        required: true
+      responses:
+        '200':
+          description: euicc order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/stockOrders:
+    post:
+      tags:
+      - Order
+      summary: Order SIM Stock
+      description: Valid SIM Stock Order Parameter values can be fetched with the GET metadata operation
+      operationId: simStockOrder
+      requestBody:
+        description: The SIM Stock order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SIMStockOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/SIMStockOrder'
+        required: true
+      responses:
+        '200':
+          description: SIM Stock order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SimOrderResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /euiccs/stockOrder:
+    post:
+      tags:
+      - Order
+      summary: Order eUICC Stock
+      operationId: euiccStockOrder
+      requestBody:
+        description: The Subscription Profile Stock order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EuiccStockOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/EuiccStockOrder'
+        required: true
+      responses:
+        '200':
+          description: euicc stock order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/orders/{orderId}:
+    delete:
+      tags:
+      - Order
+      summary: Reject an order pending for approval
+      operationId: rejectOrder
+      parameters:
+      - name: orderId
+        in: path
+        description: Order ID to reject.
+        required: true
+        schema:
+          type: string
+      - name: additionalInfo
+        in: query
+        description: Information for rejection.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Order request rejected.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderApprovalResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/orders/{orderId}:approve:
+    post:
+      tags:
+      - Order
+      summary: Approve an order pending for approval
+      operationId: approveOrder
+      parameters:
+      - name: orderId
+        in: path
+        description: Order ID to approve.
+        required: true
+        schema:
+          type: string
+      - name: additionalInfo
+        in: query
+        description: Information for approval.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Order request approved.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderApprovalResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/pendingOrders:
+    get:
+      tags:
+      - Order
+      summary: Get pending order approvals
+      description: Get a list of orders pending for approval.
+      operationId: getPendingOrderApprovals
+      responses:
+        '200':
+          description: List of pending requests returned successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/PendingApprovalsDto'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/stockOrders/metadata:
+    get:
+      tags:
+      - Order
+      summary: Get metadata for SIM Stock Order
+      description: Returns selections of values required for SIM Stock Order parameters.
+      operationId: simStockOrderMetaData
+      responses:
+        '200':
+          description: Query succeeded.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SIMStockOrderMetadataResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/order/metadata:
+    get:
+      tags:
+      - Order
+      summary: Get metadata for SIM Order
+      description: Returns selections of values required for SIM Order parameters.
+      operationId: simOrderMetaData
+      parameters:
+      - name: companyId
+        in: query
+        description: Company ID
+        required: true
+        schema:
+          type: string
+      - name: ignoreServiceContracts
+        in: query
+        description: If true service contracts will not be returned.
+        schema:
+          type: string
+      - name: ignoreDeliveryAddresses
+        in: query
+        description: If true delivery addesses will not be returned.
+        schema:
+          type: string
+      - name: ignoreSimSpecifications
+        in: query
+        description: If true sim specifications will not be returned.
+        schema:
+          type: string
+      - name: ignoreMsisdnPools
+        in: query
+        description: If true MSISDN pools for sim specifications will not be returned.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Query succeeded.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SIMOrderMetadataResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccs/profileOrder:
+    post:
+      tags:
+      - Order
+      summary: Order Subscription Profile Stock
+      operationId: subscriptionProfileStockOrder
+      requestBody:
+        description: The Subscription Profile Stock order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionProfileStockOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionProfileStockOrder'
+        required: true
+      responses:
+        '200':
+          description: Subscription Profile Stock order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /euiccs/multiProfileOrder:
+    post:
+      tags:
+      - Order
+      summary: Perform a multi-profile eUICC Order
+      operationId: euiccsMultiProfileOrder
+      requestBody:
+        description: The multi-profile eUICC order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Multi-profileEuiccOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/Multi-profileEuiccOrder'
+        required: true
+      responses:
+        '200':
+          description: eUICC order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/order:
+    post:
+      tags:
+      - Order
+      summary: Order SIM cards
+      description: Valid SIM Order Parameter values can be fetched with the GET metadata operation
+      operationId: simOrder
+      requestBody:
+        description: The SIM order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SIMOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/SIMOrder'
+        required: true
+      responses:
+        '200':
+          description: SIM order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SimOrderResponse'
+        '400':
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    SIMSpecification:
+      type: object
+      properties:
+        simSpecificationId:
+          type: string
+          description: ID of the specification is used as reference in SIM order data.
+        minimumOrderVolume:
+          type: integer
+          description: The minimum number of subscriptions that can be ordered for this specification.
+          format: int32
+        orderIncrement:
+          type: integer
+          description: The amount of subscriptions ordered must be a multiple of order increment.
+          format: int32
+        lowOrderThreshold:
+          type: integer
+          description: An order for less subscriptions than threshold may cause a one-time low order fee.
+          format: int32
+        earliestDeliveryDate:
+          type: string
+          description: The earliest possible delivery date for an order according to this specification. ISO8601 date.
+          format: date
+        description:
+          type: string
+          description: Description of the specification.
+        operatorId:
+          type: string
+          description: Corresponding operator ID for this specification.
+        numberSchemeId:
+          type: string
+          description: Number scheme collects the relevant number pools when appropriate.
+        numberSchemeName:
+          type: string
+        networkResourceGroupId:
+          type: integer
+          description: The network resource group id of the SIM specification.
+          format: int64
+        networkResourceGroupName:
+          type: string
+          description: Name of the network resource group.
+        msisdnPools:
+          type: array
+          description: MSISDN pools usable with this specification. In case the list empty specifying a pool is unnecessary.
+          items:
+            $ref: '#/components/schemas/MSISDNPool'
+      description: SIM specification data required for making a SIM order.
+    ServiceContract:
+      type: object
+      properties:
+        serviceContractId:
+          type: string
+          description: Internal ID of the service contract.
+        name:
+          type: string
+          description: Name is used as reference in SIM order data.
+        description:
+          type: string
+          description: Description of the service contract.
+        subscriptionPackages:
+          type: array
+          description: Possible subscription packages usable with this service contract.
+          items:
+            $ref: '#/components/schemas/SubscriptionPackage'
+      description: Service contract data required for making a SIM order.
+    SIMStockOrderMetadataResponse:
+      type: object
+      properties:
+        simSpecifications:
+          type: array
+          description: List of possible SIM specifications.
+          items:
+            $ref: '#/components/schemas/SIMSpecification'
+      description: Contains the data set required for populating a SIM Stock Order correctly.
+    EuiccStockOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - formSpecification
+      - operatorId
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      type: object
+      properties:
+        preferredDeliveryDate:
+          type: string
+          format: date
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        quantity:
+          type: integer
+          description: Quantity of subscriptions ordered.
+          format: int32
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        profileSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        formSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        operatorId:
+          type: string
+          description: Operator for which the order is made.
+        packageMarkings:
+          type: string
+        poolShortName:
+          type: string
+          description: Short name of the MSISDN pool to use when required by profile specification.
+      description: Euicc Stock Order Request Model
+    SubscriptionProfileStockOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - operatorId
+      - profileSpecification
+      - quantity
+      type: object
+      properties:
+        profileSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        quantity:
+          type: integer
+          description: Quantity of subscription profiles ordered.
+          format: int32
+        operatorId:
+          type: string
+          description: Operator for the subscription profiles.
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        poolShortName:
+          type: string
+          description: Short name of the MSISDN pool to use when required by profile specification.
+      description: Subscription Profile Stock Order Request Model
+    EuiccOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - euiccAgreement
+      - initialState
+      - organizationId
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      type: object
+      properties:
+        preferredDeliveryDate:
+          type: string
+          format: date
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        quantity:
+          type: integer
+          description: Quantity of subscriptions ordered.
+          format: int32
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        initialState:
+          type: string
+          description: Initial state for the subscriptions. Must be Active.
+          enum:
+          - Active
+          - Deactivated
+        profileSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        euiccAgreement:
+          type: string
+          description: The euiccAgreement to use for the order.
+        subscriptionPackage:
+          type: string
+          description: Subscription package for the ordered subscriptions. The subscription package must be also active.
+        organizationId:
+          type: string
+          description: Organization for which the order is made.
+        packageMarkings:
+          type: string
+        poolShortName:
+          type: string
+          description: Short name of the MSISDN pool to use when required by profile specification.
+      description: Euicc Order Request Model
+    OrderReference:
+      type: object
+      properties:
+        companyId:
+          type: string
+        requestId:
+          type: string
+    Error:
+      required:
+      - code
+      - httpStatus
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          format: int32
+          example: 2040
+        httpStatus:
+          type: integer
+          description: Response HTTP status
+          format: int32
+          example: 401
+        message:
+          type: string
+          description: Error message
+          example: Request validation failed
+        detailedMessage:
+          type: string
+          description: Detailed error message
+          example: Could not parse JSON body. Optional, This attribute will not be included in the response if the message is empty.
+      description: Error response model
+    SimOrderResponse:
+      required:
+      - jobId
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: Request ID for a successful order.
+        resultCode:
+          type: string
+        errorCode:
+          type: string
+      description: SIM Order Response
+    SIMStockOrder:
+      required:
+      - companyId
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      - simSpecification
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: Quantity of subscriptions ordered.
+          format: int32
+        preferredDeliveryDate:
+          type: string
+          format: date
+        companyId:
+          type: string
+          description: Company for which the subscriptions are ordered.
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        packageMarkings:
+          type: string
+        simSpecification:
+          type: string
+          description: SIM specification to use for the order.
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+      description: SIM Stock Order Request Model
+    SIMOrder:
+      required:
+      - companyId
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - initialState
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      - serviceContract
+      - simSpecification
+      - subscriptionPackage
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: Quantity of subscriptions ordered.
+          format: int32
+        preferredDeliveryDate:
+          type: string
+          format: date
+        companyId:
+          type: string
+          description: Company for which the subscriptions are ordered.
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        packageMarkings:
+          type: string
+        simSpecification:
+          type: string
+          description: SIM specification to use for the order.
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        initialState:
+          type: string
+          description: Initial state for the subscriptions. Must be Active.
+          enum:
+          - Active
+          - Deactivated
+        subscriptionPackage:
+          type: string
+          description: Subscription package for the ordered subscriptions. The subscription package must be also active.
+        serviceContract:
+          type: string
+          description: Service contract used for the order.
+        poolShortName:
+          type: string
+          description: Short name of the MSISDN pool to use when required by SIM specification.
+      description: SIM Order Request Model
+    PendingApprovalsDto:
+      type: object
+      properties:
+        jobsPendingApproval:
+          type: array
+          items:
+            $ref: '#/components/schemas/PendingJobDto'
+    Deliveryaddress:
+      type: object
+      properties:
+        deliveryAddress:
+          type: string
+          description: Delivery address to use in SIM order data.
+        phone:
+          type: string
+          description: Phone number corresponding with the delivery address.
+      description: A registered delivery address for a company.
+    MSISDNPool:
+      type: object
+      properties:
+        msisdnPoolId:
+          type: string
+          description: Internal ID of the MSISDN pool.
+        shortName:
+          type: string
+          description: Pool short name is used as reference in SIM order data.
+        desciption:
+          type: string
+          description: Description of the MSISDN pool.
+      description: Defines the range from which MSISDN numbers will be generated.
+    PendingOrderResourceDto:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+        serviceContractId:
+          type: string
+        subscriptionPackageId:
+          type: string
+        simSpecificationId:
+          type: string
+        orderType:
+          type: string
+        companyId:
+          type: string
+        preferredDeliveryDate:
+          type: number
+          format: double
+    EsbRequest:
+      type: object
+      properties:
+        userToken:
+          type: string
+        uuid:
+          type: string
+          format: uuid
+    SIMOrderMetadataResponse:
+      type: object
+      properties:
+        simSpecifications:
+          type: array
+          description: List of possible SIM specifications for this company.
+          items:
+            $ref: '#/components/schemas/SIMSpecification'
+        serviceContracts:
+          type: array
+          description: List of possible service contracts for this company.
+          items:
+            $ref: '#/components/schemas/ServiceContract'
+        deliveryAddresses:
+          type: array
+          description: List of possible delivery addresses for this company.
+          items:
+            $ref: '#/components/schemas/Deliveryaddress'
+      description: Contains the data set required for populating a SIM order correctly.
+    OrderApprovalResponse:
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/EsbRequest'
+        serviceRequestId:
+          type: string
+        success:
+          type: boolean
+        errorCode:
+          type: integer
+          format: int32
+        orderReference:
+          $ref: '#/components/schemas/OrderReference'
+    Multi-profileEuiccOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - organizationId
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      - templateId
+      type: object
+      properties:
+        preferredDeliveryDate:
+          type: string
+          format: date
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        packageMarkings:
+          type: string
+        templateId:
+          type: integer
+          description: Numeric identifier of the order template to use.
+          format: int64
+        quantity:
+          type: integer
+          description: Quantity of subscription profiles ordered.
+          format: int32
+        organizationId:
+          type: string
+          description: Organization for which the order is made.
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+      description: Multi-profile eUICC Order Request Model
+    OrderResponse:
+      required:
+      - jobId
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: Request ID for a successful order.
+        resultCode:
+          type: string
+        errorCode:
+          type: string
+      description: Order Response
+    SubscriptionPackage:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name is used as reference to the subscription package in SIM order data.
+        description:
+          type: string
+          description: Description of the subscription package.
+        status:
+          type: string
+          description: The subscription package status must be active for SIM order.
+        networkResourceGroupId:
+          type: integer
+          description: The network resource group id of this subscription package.
+          format: int64
+      description: The ordered subscriptions must belong into a subscription package.
+    PendingJobDto:
+      type: object
+      properties:
+        jobId:
+          type: string
+        orderedBy:
+          type: string
+        companyId:
+          type: string
+        createdAt:
+          type: number
+          format: double
+        updatedAt:
+          type: number
+          format: double
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/PendingOrderResourceDto'
+  securitySchemes:
+    token:
+      type: apiKey
+      description: Input token directly or use login endpoints
+      name: X-Access-Token
+      in: header
+x-original-swagger-version: '2.0'

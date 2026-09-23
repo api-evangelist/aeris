@@ -1,0 +1,832 @@
+openapi: 3.2.0
+info:
+  version: 0.7.0
+  title: Aeris IoT Watchtower™ Gateway API
+  description: '## Introduction
+
+
+    The Aeris IoT Watchtower™ API provides access to resources such as real-time events, aggregated events, risk assessment reports, and device group operations.'
+  termsOfService: https://www.aeris.com/services-terms-of-use/
+  contact:
+    email: support@aeris.net
+    url: https://www.aeris.com/support/
+  license:
+    name: Aeris License
+    url: https://www.aeris.com/services-terms-of-use/
+  x-audience: external-public
+servers:
+- url: https://watchtower-api-prd.aeriscloud.com
+security:
+- oAuth2ClientCredentials: []
+tags:
+- name: Gateway
+  description: Watchtower Configuration APIs for Gateway management
+paths:
+  /watchtower/v1/gateways:
+    get:
+      tags:
+      - Gateway
+      summary: List gateways by company
+      operationId: listGateways
+      parameters:
+      - name: companyId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter by device status (Active, Suspended, Terminated)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GatewayResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '400':
+          $ref: '#/components/responses/400Configuration'
+        '500':
+          $ref: '#/components/responses/500'
+    post:
+      tags:
+      - Gateway
+      summary: Provision a gateway
+      operationId: provisionGateway
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+          description: Client-supplied idempotency key (UUID). Same key replays the cached response.
+      - name: X-Watchtower-Trace-Id
+        in: header
+        required: false
+        schema:
+          type: string
+          description: Correlation ID propagated through all downstream calls and stored in BigQuery.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GatewayProvisionRequest'
+      responses:
+        '201':
+          description: Gateway provisioned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '409':
+          $ref: '#/components/responses/409Configuration'
+        '400':
+          $ref: '#/components/responses/400Configuration'
+        '503':
+          $ref: '#/components/responses/503Configuration'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/gateways/{gatewayId}:
+    get:
+      tags:
+      - Gateway
+      summary: Get gateway by ID
+      operationId: getGateway
+      parameters:
+      - name: gatewayId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: companyId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '400':
+          $ref: '#/components/responses/400Configuration'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      tags:
+      - Gateway
+      summary: Update gateway fields
+      operationId: updateGateway
+      parameters:
+      - name: gatewayId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: companyId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+          description: Client-supplied idempotency key (UUID). Same key replays the cached response.
+      - name: X-Watchtower-Trace-Id
+        in: header
+        required: false
+        schema:
+          type: string
+          description: Correlation ID propagated through all downstream calls.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GatewayUpdateRequest'
+      responses:
+        '204':
+          description: Gateway updated successfully
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '400':
+          $ref: '#/components/responses/400Configuration'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+      - Gateway
+      summary: Deprovision a gateway
+      operationId: deprovisionGateway
+      parameters:
+      - name: gatewayId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: companyId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+          description: Client-supplied idempotency key (UUID). Same key replays the cached response.
+      - name: X-Watchtower-Trace-Id
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Gateway deprovisioned successfully
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '409':
+          $ref: '#/components/responses/409Configuration'
+        '400':
+          $ref: '#/components/responses/400Configuration'
+        '503':
+          $ref: '#/components/responses/503Configuration'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/gateways/{gatewayId}/history:
+    get:
+      tags:
+      - Gateway
+      summary: Get gateway state-change history
+      operationId: getGatewayHistory
+      parameters:
+      - name: gatewayId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: companyId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Start of time window (ISO 8601). Defaults to 31 days ago.
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: End of time window (ISO 8601). Defaults to now.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GatewayHistoryResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/batch/gateways:
+    post:
+      tags:
+      - Gateway
+      summary: Batch provision gateways
+      operationId: batchProvisionGateways
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+          description: Client-supplied idempotency key (UUID). Same key replays the cached response.
+      - name: X-Watchtower-Trace-Id
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchGatewayProvisionRequest'
+      responses:
+        '202':
+          description: Batch accepted — partial failures listed in the response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchGatewayProvisionResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '400':
+          $ref: '#/components/responses/400Configuration'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+      - Gateway
+      summary: Batch deprovision gateways
+      operationId: batchDeprovisionGateways
+      parameters:
+      - name: X-Watchtower-Trace-Id
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchGatewayDeprovisionRequest'
+      responses:
+        '202':
+          description: Batch accepted — partial failures listed in the response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchGatewayDeprovisionResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '400':
+          $ref: '#/components/responses/400Configuration'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  responses:
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    409Configuration:
+      description: Conflict — resource already exists or invalid state transition
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConfigurationErrorResponse'
+    503Configuration:
+      description: Service Unavailable — downstream dependency failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConfigurationErrorResponse'
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '404':
+      description: Not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    400Configuration:
+      description: Bad Request — validation failure (RFC 7807)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConfigurationErrorResponse'
+          example:
+            title: Payload validation failed
+            status: 400
+            correlationId: c7f5a8b2-1234-5678-abcd-ef0123456789
+            errors:
+            - field: gatewayId
+              code: VALIDATION_ERROR
+              message: must be exactly 15 digits
+  schemas:
+    BatchGatewayDeprovisionResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total records received
+        terminated:
+          type: integer
+          description: Successfully terminated
+        skipped:
+          type: integer
+          description: Skipped (already terminated or not found)
+        rejected:
+          type: integer
+          description: Failed validation or IPAM release
+        failures:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchDeprovisionFailureRecord'
+    ConfigurationErrorResponse:
+      type: object
+      description: RFC 7807 error envelope (FS section 4.7)
+      properties:
+        title:
+          type: string
+          description: Human-readable error summary
+          example: Payload validation failed
+        status:
+          type: integer
+          description: HTTP status code
+          example: 422
+        correlationId:
+          type: string
+          description: Trace / correlation ID (X-Watchtower-Trace-Id or auto-generated UUID)
+          example: c7f5a8b2-1234-5678-abcd-ef0123456789
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigurationErrorDetail'
+    BatchFailureRecord:
+      type: object
+      properties:
+        gatewayId:
+          type: string
+          description: Gateway ID from the original request (may be invalid)
+        failureCategory:
+          type: string
+          description: 'High-level category: validation / company_not_found / ip_enrichment'
+        failureReason:
+          type: string
+          description: Specific reason code (e.g. MISSING_GATEWAY_ID, IPAM_NON_2XX)
+    GatewayDeprovisionItem:
+      type: object
+      required:
+      - gatewayId
+      - companyId
+      properties:
+        gatewayId:
+          type: string
+          description: IMSI of the gateway to deprovision
+        companyId:
+          type: string
+          description: Company owning the gateway
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    GatewayResponse:
+      type: object
+      properties:
+        deviceId:
+          type: string
+          description: Internal BigQuery entity_id for the device
+        gatewayId:
+          type: string
+          description: Gateway device identifier (IMSI)
+        companyId:
+          type: string
+          description: FK → Company
+        status:
+          type: string
+          description: Device lifecycle status (Active, Suspended, Terminated)
+        carrierId:
+          type: string
+          description: FK → Carrier (operator id)
+        imei:
+          type:
+          - string
+          - 'null'
+          description: International Mobile Equipment Identity — exactly 15 digits
+        iccid:
+          type:
+          - string
+          - 'null'
+          description: Integrated Circuit Card Identifier
+        mcc:
+          type:
+          - string
+          - 'null'
+          description: Mobile Country Code — 3-digit numeric string
+        mnc:
+          type:
+          - string
+          - 'null'
+          description: Mobile Network Code — 2–3 digit numeric string
+        serialNumber:
+          type:
+          - string
+          - 'null'
+          description: Device serial number
+        deviceType:
+          type:
+          - string
+          - 'null'
+          description: Device type classification
+        firmwareVersion:
+          type:
+          - string
+          - 'null'
+          description: Firmware version string
+        billingStatus:
+          type:
+          - string
+          - 'null'
+          description: Billing / SIM subscription state
+        assignedIp:
+          type:
+          - string
+          - 'null'
+          description: IP address assigned by IPAM
+        apn:
+          type:
+          - string
+          - 'null'
+          description: APN (Access Point Name) assigned to this gateway
+        correlationId:
+          type:
+          - string
+          - 'null'
+          description: Correlation / trace ID
+        createdAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Creation timestamp
+        attributes:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+          description: Custom attributes
+    ConfigurationErrorDetail:
+      type: object
+      properties:
+        field:
+          type:
+          - string
+          - 'null'
+          description: Field name that caused the error (null for non-field errors)
+          example: gatewayId
+        code:
+          type: string
+          description: Machine-readable error code
+          example: VALIDATION_ERROR
+        message:
+          type: string
+          description: Human-readable error message
+          example: must be exactly 15 digits
+    GatewayUpdateRequest:
+      type: object
+      description: Partial update for a gateway. Only provided fields are updated.
+      properties:
+        serialNumber:
+          type:
+          - string
+          - 'null'
+        deviceType:
+          type:
+          - string
+          - 'null'
+        firmwareVersion:
+          type:
+          - string
+          - 'null'
+        imei:
+          type:
+          - string
+          - 'null'
+          pattern: ^\d{15}$
+        mcc:
+          type:
+          - string
+          - 'null'
+          pattern: ^\d{3}$
+        mnc:
+          type:
+          - string
+          - 'null'
+          pattern: ^\d{2,3}$
+        attributes:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+        billing:
+          type:
+          - object
+          - 'null'
+          properties:
+            billingStatus:
+              type: string
+    BatchGatewayDeprovisionRequest:
+      type: object
+      required:
+      - gateways
+      properties:
+        gateways:
+          type: array
+          maxItems: 5000
+          items:
+            $ref: '#/components/schemas/GatewayDeprovisionItem'
+    BatchDeprovisionFailureRecord:
+      type: object
+      properties:
+        gatewayId:
+          type: string
+          description: Gateway ID from the original request
+        failureCategory:
+          type: string
+          description: 'High-level category: validation / ipam_failed / not_found / already_terminated'
+        failureReason:
+          type: string
+          description: Specific reason code
+    BatchGatewayProvisionRequest:
+      type: object
+      required:
+      - gateways
+      properties:
+        gateways:
+          type: array
+          maxItems: 5000
+          items:
+            $ref: '#/components/schemas/GatewayProvisionRequest'
+    BatchGatewayProvisionResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total records received
+        provisioned:
+          type: integer
+          description: Successfully provisioned
+        updated:
+          type: integer
+          description: Already existed and were idempotently returned
+        rejected:
+          type: integer
+          description: Failed validation or enrichment
+        failures:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchFailureRecord'
+    GatewayHistoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique event ID (UUID)
+        gatewayId:
+          type: string
+          description: Gateway device identifier (IMSI)
+        fromStatus:
+          type:
+          - string
+          - 'null'
+          description: Previous status — null for initial PROVISION event
+        toStatus:
+          type: string
+          description: Status after transition
+        reason:
+          type: string
+          description: 'Transition reason: PROVISION / TERMINATION'
+        traceId:
+          type:
+          - string
+          - 'null'
+          description: X-Watchtower-Trace-Id from the originating request
+        occurredAt:
+          type: string
+          format: date-time
+          description: Wall-clock time of the transition
+    GatewayProvisionRequest:
+      type: object
+      required:
+      - gatewayId
+      - companyId
+      properties:
+        gatewayId:
+          type: string
+          description: Gateway device identifier — 15-digit IMSI
+          pattern: ^\d{15}$
+        companyId:
+          type: string
+          description: FK → Company; must already exist in the company registry
+        mcc:
+          type:
+          - string
+          - 'null'
+          description: Mobile Country Code — 3-digit numeric string
+          pattern: ^\d{3}$
+        mnc:
+          type:
+          - string
+          - 'null'
+          description: Mobile Network Code — 2–3 digit numeric string
+          pattern: ^\d{2,3}$
+        iccid:
+          type:
+          - string
+          - 'null'
+          description: Integrated Circuit Card Identifier — 18–22 digit numeric string
+          pattern: ^\d{18,22}$
+        imei:
+          type:
+          - string
+          - 'null'
+          description: International Mobile Equipment Identity — exactly 15 digits
+          pattern: ^\d{15}$
+        serialNumber:
+          type:
+          - string
+          - 'null'
+          description: Device serial number (e.g. MR40-QA-00050001)
+        deviceType:
+          type:
+          - string
+          - 'null'
+          description: Device type classification (e.g. CAT20)
+        firmwareVersion:
+          type:
+          - string
+          - 'null'
+          description: Firmware version string
+        billing:
+          type:
+          - object
+          - 'null'
+          description: Billing information
+          properties:
+            plan:
+              type:
+              - string
+              - 'null'
+            usedDataMb:
+              type:
+              - number
+              - 'null'
+              format: double
+            usedDataGb:
+              type:
+              - number
+              - 'null'
+              format: double
+            billingStatus:
+              type:
+              - string
+              - 'null'
+        attributes:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+          description: Optional custom key-value attributes stored as device custom_field entries
+        apn:
+          type:
+          - string
+          - 'null'
+          description: APN hint from caller — always overridden by server-side configuration
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      description: This API uses OAuth 2 with the Client Credentials flow.
+      flows:
+        clientCredentials:
+          tokenUrl: /watchtower/v1/auth/token
+          scopes: {}

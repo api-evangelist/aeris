@@ -1,0 +1,452 @@
+openapi: 3.2.0
+info:
+  title: Number Management Msisdn Pool API
+  version: 1.0.5
+  description: '#### Copyright
+
+    © Aeris Communications, Inc.'
+  x-api-id: f9fccdac-8c1f-43bc-90a7-99edee52fe2f
+  x-audience: external-public
+servers:
+- url: https://iot-api.aeris.com/iot/api/subscriptions
+  description: API server
+tags:
+- name: MsisdnPool
+  description: MSISDN Pool API
+paths:
+  /msisdn-pools:
+    get:
+      tags:
+      - MsisdnPool
+      operationId: listMsisdnPools
+      summary: List MSISDN pools
+      description: Provides list of msisdn pools mapped to a specific organization.
+      parameters:
+      - $ref: '#/components/parameters/Header-Authorization'
+      - in: query
+        name: organizationId
+        required: true
+        schema:
+          type: string
+          example: 22311000
+        description: 'The msisdn pools mapped to the specific organization ID
+
+          '
+      - in: query
+        name: schemeId
+        required: true
+        schema:
+          type: string
+          example: TESTOPPREFSCHEME00021
+        description: 'The msisdn pools mapped to the specific scheme ID
+
+          '
+      - $ref: '#/components/parameters/limitParam'
+      - $ref: '#/components/parameters/cursorParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/MsisdnPoolsResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/default'
+      security:
+      - OAuth2:
+        - cnx_subscription_view
+  /msisdn-pools/{poolId}:
+    get:
+      tags:
+      - MsisdnPool
+      operationId: getMsisdnPool
+      summary: MSISDN pool details
+      description: Provides list of msisdn pools mapped to a specific organization.
+      parameters:
+      - $ref: '#/components/parameters/Header-Authorization'
+      - in: query
+        name: organizationId
+        required: true
+        schema:
+          type: string
+          example: 22311000
+        description: 'The msisdn pools mapped to the specific organization ID
+
+          '
+      - in: query
+        name: schemeId
+        required: true
+        schema:
+          type: string
+          example: TESTOPPREFSCHEME00021
+        description: 'The msisdn pools mapped to the specific scheme ID
+
+          '
+      - in: path
+        name: poolId
+        required: true
+        schema:
+          type: string
+          example: TESTOPPREFSCHEME00021
+        description: 'The msisdn pools mapped to the specific scheme ID
+
+          '
+      responses:
+        '200':
+          $ref: '#/components/responses/MsisdnPoolResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          $ref: '#/components/responses/default'
+      security:
+      - OAuth2:
+        - cnx_subscription_view
+components:
+  responses:
+    '401':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Unauthorized
+                status: 401
+                detail: Token expired
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Unauthorized
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    default:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Internal Server Error
+    MsisdnPoolsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/msisdnPools'
+          examples:
+            msisdnPoolDetail:
+              value:
+                pools:
+                - shortName: pool22312
+                  poolDesc: Test pool
+                  quarantinePeriod: 60
+                  numberLength: 15
+                  poolId: TESTOPPREFMSISDNP00002
+                  status: ACTIVE
+                next: /msisdn-pools?organizationId=050001&schemeId=ZZRSCHEME01 &limit=10&cursor=ODk0NTA0MjExNzEyMDYwMjIyMjI=
+      description: OK
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    '429':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Too Many Requests
+                status: 429
+                detail: API rate limit exceeded
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+    '403':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Forbidden
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    '400':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Bad Request
+                status: 400
+                detail: organizationId can not be null
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Bad Request
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    '404':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Not Found
+                status: 404
+                detail: Not Found
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Not Found
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    '500':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Internal Server Error
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    MsisdnPoolResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/msisdnPoolDetail'
+          example:
+            shortName: pool22312
+            poolDesc: Test pool
+            quarantinePeriod: 60
+            numberLength: 15
+            poolId: TESTOPPREFMSISDNP00002
+            status: ACTIVE
+      description: OK
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+  parameters:
+    cursorParam:
+      in: query
+      name: cursor
+      schema:
+        type: string
+      example: DFVSDB3434%DFB%EYY445
+      description: 'Encoded string parameter used for pagination. This field is
+
+        automatically populated in the response field "next" if there
+
+        are more results in the system than delivered in the response.
+
+        '
+    limitParam:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        default: 100
+      description: 'Specifies the maximum number of results to be returned.
+
+        Allowed interval is 1-10000.
+
+        '
+    Header-Authorization:
+      name: Authorization
+      in: header
+      required: true
+      description: A valid token string in the form Bearer <token string>
+      schema:
+        type: string
+  schemas:
+    msisdnPoolDetail:
+      type: object
+      description: 'MSISDN pool information.
+
+        '
+      properties:
+        poolId:
+          type: string
+          description: Id of Msisdn Pool.
+          example: TESTOPPREFMSISDNP00002
+        status:
+          type: string
+          description: Status of Msisdn Pool.
+          example: Active
+        poolData:
+          $ref: '#/components/schemas/poolData'
+    poolData:
+      type: object
+      description: 'Pool data.
+
+        '
+      properties:
+        shortName:
+          type: string
+          description: The name of MSISDN pool used in the number scheme.
+          example: pool22312
+        poolDesc:
+          type: string
+          description: Description of Msisdn Pool.
+          example: Test pool
+        quarantinePeriod:
+          type: integer
+          format: int32
+          description: Number of days the MSISDNs are locked before being made available for reallocation
+          example: 60
+        numberLength:
+          type: integer
+          format: int32
+          description: Length of number.
+          example: 15
+    msisdnPools:
+      type: object
+      properties:
+        pools:
+          type: array
+          items:
+            $ref: '#/components/schemas/msisdnPoolDetail'
+        next:
+          type: string
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.
+
+            When dereferenced, it SHOULD provide human-readable
+
+            documentation for the problem type (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://your.api.documentation.url
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and
+
+            readable for engineers (usually not suited for non technical
+
+            stakeholders and not localized); example: Service Unavailable
+
+            '
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for
+
+            this occurrence of the problem.
+
+            '
+          minimum: 100
+          example: 503
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Connection to database timed out
+        instance:
+          type: string
+          description: 'An absolute URI that identifies the specific occurrence of the
+
+            problem. It may or may not yield further information
+
+            if dereferenced.
+
+            '
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: The resources in the API are protected using the OAuth 2.0 protocol with the password grant flow.
+      flows:
+        password:
+          tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+          scopes:
+            cnx_subscription_view: Grant user read access to Number management inventory resource

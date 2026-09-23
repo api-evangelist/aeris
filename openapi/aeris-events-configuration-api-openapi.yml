@@ -1,0 +1,522 @@
+openapi: 3.2.0
+info:
+  version: 0.7.0
+  title: Aeris IoT Watchtower™ Events Configuration API
+  description: '## Introduction
+
+
+    The Aeris IoT Watchtower™ API provides access to resources such as real-time events, aggregated events, risk assessment reports, and device group operations.'
+  termsOfService: https://www.aeris.com/services-terms-of-use/
+  contact:
+    email: support@aeris.net
+    url: https://www.aeris.com/support/
+  license:
+    name: Aeris License
+    url: https://www.aeris.com/services-terms-of-use/
+  x-audience: external-public
+servers:
+- url: https://watchtower-api-prd.aeriscloud.com
+security:
+- oAuth2ClientCredentials: []
+tags:
+- name: Events Configuration
+  description: Endpoints for configuring Security Events
+paths:
+  /watchtower/v1/events/configs:
+    get:
+      summary: Get Event Configs
+      description: This endpoint returns the list of Event configs.
+      operationId: getEventConfigs
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      tags:
+      - Events Configuration
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedEventConfigsTable'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/events/configs/{eventConfigId}/suppression-configs:
+    post:
+      summary: Create an Event suppression configuration
+      description: This endpoint allows to create a new Event suppression configuration.
+      operationId: createEventSuppressionConfig
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/eventConfigId'
+      tags:
+      - Events Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventSuppressionConfigCreateRequest'
+      responses:
+        '201':
+          description: Created.
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+  /watchtower/v1/events/configs/{eventConfigId}/suppression-configs/{suppressionConfigId}:
+    get:
+      summary: Get Event Suppression Configs
+      description: This endpoint returns detail of event suppression configs.
+      operationId: getEventSuppressionConfigs
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/eventConfigId'
+      - $ref: '#/components/parameters/suppressionConfigId'
+      tags:
+      - Events Configuration
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSuppressionConfig'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+    put:
+      summary: Update Event Suppression Configs
+      description: This endpoint update existing event suppression configs.
+      operationId: updateEventSuppressionConfigs
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/eventConfigId'
+      - $ref: '#/components/parameters/suppressionConfigId'
+      tags:
+      - Events Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventSuppressionConfigUpdateRequest'
+      responses:
+        '200':
+          description: Successfully updated
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      summary: Delete Event Suppression Configs
+      description: This endpoint deletes existing event suppression configs.
+      operationId: deleteEventSuppressionConfigs
+      parameters:
+      - $ref: '#/components/parameters/authorization'
+      - $ref: '#/components/parameters/accountId'
+      - $ref: '#/components/parameters/eventConfigId'
+      - $ref: '#/components/parameters/suppressionConfigId'
+      - $ref: '#/components/parameters/undoDismissedEvents'
+      tags:
+      - Events Configuration
+      responses:
+        '200':
+          description: Successfully deleted
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  responses:
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  schemas:
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+    ConfigItem:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the configuration field.
+          example: Minimum Threshold
+        value:
+          type: string
+          description: Value of the configuration field.
+          example: 1024
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    EventConfigSuppressionPeriodType:
+      type: string
+      enum:
+      - ALWAYS
+      - DURING_TIME_PERIOD
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    EventConfig:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Event Config Id
+          example: 134242
+        eventTypeId:
+          description: Event Type Id
+          type: integer
+          example: 10
+        type:
+          description: Event Type
+          type: string
+          example: Traffic Spike
+        detectionState:
+          type: string
+          enum:
+          - DISMISSING
+          - ACTIVE_FOR_ALL_DEVICES
+          - MULTIPLE_STATES
+        suppressionConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSuppressionConfig'
+        lastModifiedBy:
+          description: Last modified user
+          type: string
+          example: abc.xyz@aeris.com
+        lastModifiedTime:
+          $ref: '#/components/schemas/dateTime'
+    EventSuppressionConfigBase:
+      type: object
+      properties:
+        name:
+          description: Name of the event suppression config
+          type: string
+          example: Dismiss Truck events
+        description:
+          description: Description of the event suppression config
+          type: string
+          example: This config is for dismissing all truck events
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigItem'
+        suppressionTargetDevices:
+          $ref: '#/components/schemas/EventSuppressionTargetDevices'
+        suppressionMatchingTraffic:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSuppressionMatchingTraffic'
+        suppressionPeriodType:
+          $ref: '#/components/schemas/EventConfigSuppressionPeriodType'
+        suppressionPeriodStart:
+          $ref: '#/components/schemas/dateTime'
+        suppressionPeriodEnd:
+          $ref: '#/components/schemas/dateTime'
+        comment:
+          description: Comment for the suppression config
+          type: string
+          example: Just for truck
+    EventSuppressionConfigUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/EventSuppressionConfigBase'
+    EventSuppressionConfig:
+      allOf:
+      - type: object
+        properties:
+          id:
+            description: Event suppression config Id
+            type: integer
+            format: int64
+      - $ref: '#/components/schemas/EventSuppressionConfigBase'
+      - type: object
+        properties:
+          eventConfigId:
+            type: integer
+            description: Event config Id
+            example: 134242
+          detectionState:
+            type: string
+          dismissPastEvents:
+            type: boolean
+          lastModifiedBy:
+            description: Last modified user
+            type: string
+            example: abc.xyz@aeris.com
+          lastModifiedTime:
+            $ref: '#/components/schemas/dateTime'
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    EventSuppressionMatchingTraffic:
+      type: object
+      properties:
+        serverIp:
+          type: array
+          description: List of IP Addresses
+          items:
+            type: string
+          example:
+          - 172.16.1.2
+          - 172.16.1.3
+        serverPort:
+          type: array
+          description: List of Port numbers
+          items:
+            type: string
+            example:
+            - 8080
+            - 9922
+        serverFqdn:
+          type: array
+          description: List of server fqdn
+          items:
+            type: string
+          example:
+          - example.com
+          - anotherexample.com
+        imei:
+          type: array
+          description: List of International Mobile Equipment Identity of the device, only applicable to SIM Misuse
+          items:
+            type: string
+          example:
+          - 86715704097269
+          - 86715704097260
+        numberOfPortsScanned:
+          type: array
+          description: Number of ports scanned, only applicable to Port Scan
+          items:
+            type: string
+          example:
+          - 6
+          - 10
+        targetScannedHosts:
+          type: array
+          description: IP subnet of scanned hosts, only applicable to Address Scan
+          items:
+            type: string
+          example:
+          - 10.0.2.0/24
+    EventSuppressionTargetDevices:
+      type: object
+      properties:
+        iccid:
+          type: array
+          description: List of Integrated Circuit Card Identifier of the device.
+          items:
+            type: string
+          example:
+          - 891004234814455936
+          - 891004234814455937
+      required:
+      - iccid
+    EventSuppressionConfigCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/EventSuppressionConfigBase'
+      - type: object
+        properties:
+          dismissPastEvents:
+            type: boolean
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    PagedEventConfigsTable:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/EventConfig'
+  parameters:
+    undoDismissedEvents:
+      name: undoDismissedEvents
+      in: query
+      description: Whether to undo past events dismissed by this suppression config or not
+      required: true
+      schema:
+        type: boolean
+        default: false
+    eventConfigId:
+      name: eventConfigId
+      in: path
+      description: Event Configuration Id
+      required: true
+      schema:
+        type: integer
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    suppressionConfigId:
+      name: suppressionConfigId
+      in: path
+      description: Event Suppression Configuration Id
+      required: true
+      schema:
+        type: integer
+        format: int64
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      description: This API uses OAuth 2 with the Client Credentials flow.
+      flows:
+        clientCredentials:
+          tokenUrl: /watchtower/v1/auth/token
+          scopes: {}

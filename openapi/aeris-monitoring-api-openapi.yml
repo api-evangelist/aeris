@@ -1,0 +1,83 @@
+openapi: 3.2.0
+info:
+  version: 2.0.2
+  title: Device Localization Monitoring API
+  description: '#### Copyright
+
+    © Aeris Communications, Inc.'
+  x-audience: external-public
+servers:
+- url: https://iot-api.aeris.com/dcpapi/rest
+tags:
+- name: Monitoring
+paths:
+  /monitor/echo/{message}:
+    get:
+      tags:
+      - Monitoring
+      summary: Echo message back to caller
+      description: Echoes the specified message back to the requester to see if the API is connected and responding. Does not require authentication.
+      operationId: echo
+      parameters:
+      - name: message
+        in: path
+        description: message (1-100 characters)
+        required: true
+        schema:
+          type: string
+          default: ok
+      responses:
+        '200':
+          description: Echo successful.
+          content:
+            text/plain:
+              schema:
+                type: string
+        '503':
+          description: Service not available.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      required:
+      - code
+      - detailedMessage
+      - httpStatus
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          format: int32
+          example: 2040
+        httpStatus:
+          type: integer
+          description: Response HTTP status
+          format: int32
+          example: 401
+        message:
+          type: string
+          description: Error message
+          example: Request validation failed
+        detailedMessage:
+          type: string
+          description: Detailed error message
+          example: Could not parse JSON body
+      description: Error response model
+  securitySchemes:
+    token:
+      type: apiKey
+      description: Input token directly or use login endpoints
+      name: X-Access-Token
+      in: header
+x-original-swagger-version: '2.0'

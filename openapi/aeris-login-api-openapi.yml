@@ -1,0 +1,257 @@
+openapi: 3.2.0
+info:
+  title: Aeris Login API
+  x-audience: external-public
+  version: '1.0'
+  description: 'Operations tagged Login across 2 of this provider''s published API definitions: aeris-mds-esb-device-localization-openapi.yaml, aeris-mds-esb-subscription-management-openapi.yaml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://iot-api.aeris.com/dcpapi/rest
+- url: /dcpapi/rest/subscriptionManagement/v1
+tags:
+- name: Login
+paths:
+  /token-reissue:
+    post:
+      tags:
+      - Login
+      summary: Reissue access token
+      description: Returns a new token.
+      operationId: reissueToken
+      responses:
+        '200':
+          description: Token reissued successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/TokenReissue'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+    servers:
+    - url: https://iot-api.aeris.com/dcpapi/rest
+  /login-form:
+    post:
+      tags:
+      - Login
+      summary: Sign in to the API
+      description: Sign in and authenticate the user.
+      operationId: formLoginV1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+              - password
+              - username
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username
+                password:
+                  type: string
+                  description: Password
+                  format: password
+        required: true
+      responses:
+        '200':
+          description: Logged in successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Login'
+        '401':
+          description: Invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    servers:
+    - url: https://iot-api.aeris.com/dcpapi/rest
+  /login:
+    post:
+      tags:
+      - Login
+      summary: Sign in to the API
+      description: Signs in and authenticates the user.
+      operationId: formLoginV1_1
+      requestBody:
+        description: User credentials
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+        required: true
+      responses:
+        '200':
+          description: Logged in successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Login'
+        '401':
+          description: Invalid credentials.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-codegen-request-body-name: body
+    servers:
+    - url: https://iot-api.aeris.com/dcpapi/rest
+components:
+  schemas:
+    Login:
+      required:
+      - expirationTime
+      - message
+      - token
+      - userId
+      type: object
+      properties:
+        message:
+          type: string
+        expirationTime:
+          type: integer
+          format: int64
+        userId:
+          type: string
+        token:
+          type: string
+      description: Login response model
+    Error:
+      required:
+      - code
+      - detailedMessage
+      - httpStatus
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          format: int32
+          example: 2040
+        httpStatus:
+          type: integer
+          description: Response HTTP status
+          format: int32
+          example: 401
+        message:
+          type: string
+          description: Error message
+          example: Request validation failed
+        detailedMessage:
+          type: string
+          description: Detailed error message
+          example: Could not parse JSON body
+      description: Error response model
+    Credentials:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+        password:
+          type: string
+          description: User password
+      description: Login request model
+    TokenReissue:
+      required:
+      - expirationTime
+      - message
+      - token
+      - userId
+      type: object
+      properties:
+        message:
+          type: string
+        expirationTime:
+          type: integer
+          format: int64
+        userId:
+          type: string
+        token:
+          type: string
+      description: Token reissue response model
+    Error_2:
+      required:
+      - code
+      - httpStatus
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          format: int32
+          example: 2040
+        httpStatus:
+          type: integer
+          description: Response HTTP status
+          format: int32
+          example: 401
+        message:
+          type: string
+          description: Error message
+          example: Request validation failed
+        detailedMessage:
+          type: string
+          description: Detailed error message
+          example: Could not parse JSON body. Optional, This attribute will not be included in the response if the message is empty.
+      description: Error response model
+  securitySchemes:
+    token:
+      type: apiKey
+      description: Input token directly or use login endpoints
+      name: X-Access-Token
+      in: header
+x-refined-from:
+- aeris-mds-esb-device-localization-openapi.yaml
+- aeris-mds-esb-subscription-management-openapi.yaml

@@ -1,0 +1,2878 @@
+# x-archived-from: aeris-mds-esb-subscription-management-openapi.yaml
+# x-archived-on: 2026-09-16
+openapi: 3.0.1
+info:
+  title: Subscription Management API
+  description: |-
+    Endpoints requiring authentication are indicated with a lock icon, which is performed by passing a token in the 'X-Access-Token' header in each request.
+
+    The token can be acquired using the /login or /login-form endpoints documented below. The login response also contains the token expiration time in milliseconds. For prolonged interaction with the API, a new token can be reissued before expiration using the /token-reissue endpoint. HTTP status 401 will be returned in case of missing, expired or invalid token.
+
+    Note that this documentation page will handle the token automatically after logging in with either of the login endpoints.
+  version: 1.0.1
+  x-audience: external-public
+servers:
+- url: /dcpapi/rest/subscriptionManagement/v1
+tags:
+- name: Login
+- name: Order
+- name: 'SubscriptionInventory '
+paths:
+  /token-reissue:
+    post:
+      tags:
+      - Login
+      summary: Reissue access token.
+      description: Returns a new token.
+      operationId: reissueToken
+      responses:
+        "200":
+          description: Token reissued successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/TokenReissue'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /login-form:
+    post:
+      tags:
+      - Login
+      summary: Sign in to the API.
+      description: Sign in and authenticate the user.
+      operationId: formLoginV1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+              - password
+              - username
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username
+                password:
+                  type: string
+                  description: Password
+                  format: password
+        required: true
+      responses:
+        "200":
+          description: Logged in successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Login'
+        "401":
+          description: Invalid credentials.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /login:
+    post:
+      tags:
+      - Login
+      summary: Sign in to the API.
+      description: Signs in and authenticates the user.
+      operationId: formLoginV1_1
+      requestBody:
+        description: User credentials
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+        required: true
+      responses:
+        "200":
+          description: Logged in successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Login'
+        "401":
+          description: Invalid credentials.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-codegen-request-body-name: body
+  /euiccs/euiccOrder:
+    post:
+      tags:
+      - Order
+      summary: Order eUICC
+      operationId: euiccOrder
+      requestBody:
+        description: The euicc order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EuiccOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/EuiccOrder'
+        required: true
+      responses:
+        "200":
+          description: euicc order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/stockOrders:
+    post:
+      tags:
+      - Order
+      summary: Order SIM Stock
+      description: Valid SIM Stock Order Parameter values can be fetched with the
+        GET metadata operation
+      operationId: simStockOrder
+      requestBody:
+        description: The SIM Stock order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SIMStockOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/SIMStockOrder'
+        required: true
+      responses:
+        "200":
+          description: SIM Stock order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SimOrderResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /euiccs/stockOrder:
+    post:
+      tags:
+      - Order
+      summary: Order eUICC Stock
+      operationId: euiccStockOrder
+      requestBody:
+        description: The Subscription Profile Stock order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EuiccStockOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/EuiccStockOrder'
+        required: true
+      responses:
+        "200":
+          description: euicc stock order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/orders/{orderId}:
+    delete:
+      tags:
+      - Order
+      summary: Reject an order pending for approval.
+      operationId: rejectOrder
+      parameters:
+      - name: orderId
+        in: path
+        description: Order ID to reject.
+        required: true
+        schema:
+          type: string
+      - name: additionalInfo
+        in: query
+        description: Information for rejection.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Order request rejected.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderApprovalResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/orders/{orderId}:approve:
+    post:
+      tags:
+      - Order
+      summary: Approve an order pending for approval.
+      operationId: approveOrder
+      parameters:
+      - name: orderId
+        in: path
+        description: Order ID to approve.
+        required: true
+        schema:
+          type: string
+      - name: additionalInfo
+        in: query
+        description: Information for approval.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Order request approved.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderApprovalResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/pendingOrders:
+    get:
+      tags:
+      - Order
+      summary: Get pending order approvals
+      description: Get a list of orders pending for approval.
+      operationId: getPendingOrderApprovals
+      responses:
+        "200":
+          description: List of pending requests returned successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/PendingApprovalsDto'
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/stockOrders/metadata:
+    get:
+      tags:
+      - Order
+      summary: Get metadata for SIM Stock Order.
+      description: Returns selections of values required for SIM Stock Order parameters.
+      operationId: simStockOrderMetaData
+      responses:
+        "200":
+          description: Query succeeded.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SIMStockOrderMetadataResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/order/metadata:
+    get:
+      tags:
+      - Order
+      summary: Get metadata for SIM Order.
+      description: Returns selections of values required for SIM Order parameters.
+      operationId: simOrderMetaData
+      parameters:
+      - name: companyId
+        in: query
+        description: Company ID
+        required: true
+        schema:
+          type: string
+      - name: ignoreServiceContracts
+        in: query
+        description: If true service contracts will not be returned.
+        schema:
+          type: string
+      - name: ignoreDeliveryAddresses
+        in: query
+        description: If true delivery addesses will not be returned.
+        schema:
+          type: string
+      - name: ignoreSimSpecifications
+        in: query
+        description: If true sim specifications will not be returned.
+        schema:
+          type: string
+      - name: ignoreMsisdnPools
+        in: query
+        description: If true MSISDN pools for sim specifications will not be returned.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Query succeeded.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SIMOrderMetadataResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /euiccs/profileOrder:
+    post:
+      tags:
+      - Order
+      summary: Order Subscription Profile Stock
+      operationId: subscriptionProfileStockOrder
+      requestBody:
+        description: The Subscription Profile Stock order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionProfileStockOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionProfileStockOrder'
+        required: true
+      responses:
+        "200":
+          description: Subscription Profile Stock order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /euiccs/multiProfileOrder:
+    post:
+      tags:
+      - Order
+      summary: Perform a multi-profile eUICC Order
+      operationId: euiccsMultiProfileOrder
+      requestBody:
+        description: The multi-profile eUICC order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Multi-profileEuiccOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/Multi-profileEuiccOrder'
+        required: true
+      responses:
+        "200":
+          description: eUICC order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/order:
+    post:
+      tags:
+      - Order
+      summary: Order SIM cards
+      description: Valid SIM Order Parameter values can be fetched with the GET metadata
+        operation
+      operationId: simOrder
+      requestBody:
+        description: The SIM order parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SIMOrder'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/SIMOrder'
+        required: true
+      responses:
+        "200":
+          description: SIM order request initiated.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SimOrderResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/requests/{requestId}:
+    get:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Get details for a single subscription request.
+      description: Returns details of a single subscription request.
+      operationId: getSubscriptionRequest
+      parameters:
+      - name: requestId
+        in: path
+        description: Subscription request ID
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: "Page number, starts from 0"
+        schema:
+          type: integer
+          format: int32
+      - name: perPage
+        in: query
+        description: Per page
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Subscription request fetched successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionRequest'
+        "400":
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/requests/find:
+    post:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Find Subscription Request IDs based on Search Criteria
+      description: Returns Subscription Request IDs based on Search Criteria
+      operationId: getSubscriptionRequestIds
+      requestBody:
+        description: Search Criteria
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequestFilterDto'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequestFilterDto'
+        required: true
+      responses:
+        "200":
+          description: Completed Successfully
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties: {}
+        "400":
+          description: Cannot complete the request. See the error for more details
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/details/{key}/{value}:
+    get:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Get subscription details by secondary key
+      description: >-
+        **DEPRECATED** since release 23.4.1. This endpoint will be removed in a future release.
+        Use the Subscription Search API (GET /iot/api/subscriptions/details) instead.
+      operationId: getSubscriptionDetailsBySecondarykey
+      deprecated: true
+      parameters:
+      - name: key
+        in: path
+        description: Subscription secondary key used for query. Either 'company' (for
+          company id) or 'label' (for customer label).
+        required: true
+        schema:
+          type: string
+          enum:
+          - company
+          - label
+      - name: value
+        in: path
+        description: Value of the subscription secondary key used for query
+        required: true
+        schema:
+          type: string
+      - name: order
+        in: query
+        description: Results ordered by specified subscription field (default 'imsi')
+        schema:
+          type: string
+          default: imsi
+          enum:
+          - imsi
+          - icc
+          - msisdn
+      - name: group
+        in: query
+        description: Collection of additional subscription field groups to include
+          in the response
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - enterpriseInfo
+            - packageInfo
+            - dates
+            - label
+            - simSpecification
+            - lockStateInfo
+            - individualApn
+      - name: start
+        in: query
+        description: "Return results starting from index (default 0, max 200000)"
+        schema:
+          maximum: 200000
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionDetailsPagedResponse'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "503":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/returnedMsisdns:
+    get:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Query Returned Msisdns within specific time period
+      description: Fetches the Returned Msisdn Ranges based on Operator Id and given
+        date intervals
+      operationId: fetchReturnedMsisdnRanges
+      parameters:
+      - name: operatorId
+        in: query
+        description: Operator Id
+        required: true
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        description: Start Date
+        required: true
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        description: End Date
+        required: true
+        schema:
+          type: string
+      - name: simSpecificationId
+        in: query
+        description: Sim Specification Id
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Completed Successfully
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/MsisdnRangeResponseDto'
+        "400":
+          description: Invalid arguments for the operation
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Error in query
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+  /subscriptions/disabledApns:
+    post:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Disable one or more APNs for one or more subscriptions.
+      description: "The operation disables APNs for specific subscriptions within\
+        \ a single subscription package. After the operation, the specified APNs are\
+        \ disabled, other APNs are enabled for the specified subscriptions. All subscriptions\
+        \ must be in the same subscription package."
+      operationId: disabledSubscriptionApns
+      requestBody:
+        description: "."
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisabledSubscriptionApns'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/DisabledSubscriptionApns'
+        required: true
+      responses:
+        "200":
+          description: Request initiated successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+        "400":
+          description: Cannot complete the request. See the error for more details.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "403":
+          description: Forbidden
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/{subscription_id}:changeMsisdn:
+    post:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Activate Subscription .
+      description: 'This API will put subscription in activate state '
+      operationId: activateSubscription
+      parameters:
+      - name: subscription_id
+        in: path
+        description: Subscription Id which needs to be suspended
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Activate Subscription Request Contains subscription type either
+          IMSI or ICC
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivateSubscriptionRequest'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/ActivateSubscriptionRequest'
+        required: true
+      responses:
+        "200":
+          description: Subscription was re activated successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/ActivateSubscriptionResponse'
+        "204":
+          description: Subscription is already active.
+          content: {}
+        "400":
+          description: Invalid arguments for the operation
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/{subscription_id}:suspendSubscription:
+    post:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Suspend Subscription .
+      description: This API will put subscription in terminated state with longer
+        grace period
+      operationId: suspendSubscription
+      parameters:
+      - name: subscription_id
+        in: path
+        description: Subscription Id which needs to be suspended
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Suspend Subscription Request Contains subscription type either
+          IMSI or MSISDN
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuspendSubscriptionRequest'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/SuspendSubscriptionRequest'
+        required: true
+      responses:
+        "200":
+          description: Subscription was terminated and MSISDN removed successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+        "400":
+          description: Invalid arguments for the operation
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/{imsi}:reassignMsisdn:
+    post:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Reassign MSISDN into a new subscription identified by IMSI.
+      description: The new subscription must be in paused state and the old not terminated.
+        The operation causes the old subscription identified by given msisdn to become
+        terminated and the new one activated with MSISDN from the old subscription.
+      operationId: reassignMsisdn
+      parameters:
+      - name: idType
+        in: query
+        schema:
+          type: string
+      - name: imsi
+        in: path
+        description: Identifies the new subscription msisdn will become reassigned
+          to.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Identifies the MSISDN to be moved into the new subscription identified
+          by IMSI.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReassignMSISDN'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/ReassignMSISDN'
+        required: true
+      responses:
+        "200":
+          description: MSISDN was reassigned without errors.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+        "400":
+          description: Invalid arguments for the operation.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Operation failed for internal reasons.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/details:
+    post:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Get subscription details by primary key
+      description: >-
+        **DEPRECATED** since release 23.4.1. This endpoint will be removed in a future release.
+        Use POST /iot/api/subscriptions/details (Subscription Search API) instead.
+      operationId: getSubscriptionDetails
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetSubscriptionDetailsByPrimaryKey'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/GetSubscriptionDetailsByPrimaryKey'
+        required: false
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionDetailsResponse'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /actions/assignImeis:
+    post:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Update assigned-imei of a subscription.
+      description: "Subscription can be identified by IMSI, ICCID, or MSISDN. DEPRECATED\
+        \ on the 10th of June 2018"
+      operationId: updateAssignedImei
+      requestBody:
+        description: Assigned IMEI for subscription.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignIMEI'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/AssignIMEI'
+        required: true
+      responses:
+        "200":
+          description: IMEI is assigned and updated successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+        "400":
+          description: "Update failed, response body contains exact error."
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: "Update failed, response body contains exact error."
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      deprecated: true
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/{id}:assignImei:
+    post:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Update assigned-imei of a subscription.
+      description: "Subscription can be identified by IMSI, ICCID, or MSISDN."
+      operationId: updateAssignedImeiV2
+      parameters:
+      - name: idType
+        in: query
+        description: "Use IMSI, ICCID, or MSISDN as subscription identified. Default\
+          \ is IMSI. "
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Subscription identifier.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Assigned IMEI for subscription.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignIMEIRequest'
+          application/vnd.dcp-v1+json:
+            schema:
+              $ref: '#/components/schemas/AssignIMEIRequest'
+        required: true
+      responses:
+        "200":
+          description: IMEI is assigned and updated successfully.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+        "400":
+          description: "Update failed, response body contains exact error."
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: "Update failed, response body contains exact error."
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+      x-codegen-request-body-name: body
+  /subscriptions/{id}/history:
+    get:
+      tags:
+      - 'SubscriptionInventory '
+      summary: Query history of a subscription.
+      description: "Subscription must be identified by either IMSI, ICCID, or MSISDN."
+      operationId: querySubscriptionHistory
+      parameters:
+      - name: idType
+        in: query
+        description: "Use IMSI, ICCID, or MSISDN as subscription identified. Default\
+          \ is IMSI."
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Subscription identifier.
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Query completed without errors.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionHistoryRow'
+        "400":
+          description: Invalid arguments for query.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: Not found
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'        
+        "500":
+          description: Error in query.
+          content:
+            application/vnd.dcp-v1+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - token: []
+components:
+  schemas:
+    TokenReissue:
+      required:
+      - expirationTime
+      - message
+      - token
+      - userId
+      type: object
+      properties:
+        message:
+          type: string
+        expirationTime:
+          type: integer
+          format: int64
+        userId:
+          type: string
+        token:
+          type: string
+      description: Token reissue response model
+    Login:
+      required:
+      - expirationTime
+      - message
+      - token
+      - userId
+      type: object
+      properties:
+        message:
+          type: string
+        expirationTime:
+          type: integer
+          format: int64
+        userId:
+          type: string
+        token:
+          type: string
+      description: Login response model
+    Error:
+      required:
+      - code
+      - httpStatus
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          format: int32
+          example: 2040
+        httpStatus:
+          type: integer
+          description: Response HTTP status
+          format: int32
+          example: 401
+        message:
+          type: string
+          description: Error message
+          example: Request validation failed
+        detailedMessage:
+          type: string
+          description: Detailed error message
+          example: Could not parse JSON body. Optional, This attribute will not be included in the response if the message is empty.
+      description: Error response model
+    Credentials:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+        password:
+          type: string
+          description: User password
+      description: Login request model
+    OrderResponse:
+      required:
+      - jobId
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: Request ID for a successful order.
+        resultCode:
+          type: string
+        errorCode:
+          type: string
+      description: Order Response
+    EuiccOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - euiccAgreement
+      - initialState
+      - organizationId
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      type: object
+      properties:
+        preferredDeliveryDate:
+          type: string
+          format: date
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        quantity:
+          type: integer
+          description: Quantity of subscriptions ordered.
+          format: int32
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        initialState:
+          type: string
+          description: Initial state for the subscriptions. Must be Active.
+          enum:
+          - Active
+          - Deactivated
+        profileSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        euiccAgreement:
+          type: string
+          description: The euiccAgreement to use for the order.
+        subscriptionPackage:
+          type: string
+          description: Subscription package for the ordered subscriptions. The subscription
+            package must be also active.
+        organizationId:
+          type: string
+          description: Organization for which the order is made.
+        packageMarkings:
+          type: string
+        poolShortName:
+          type: string
+          description: Short name of the MSISDN pool to use when required by profile
+            specification.
+      description: Euicc Order Request Model
+    SimOrderResponse:
+      required:
+      - jobId
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: Request ID for a successful order.
+        resultCode:
+          type: string
+        errorCode:
+          type: string
+      description: SIM Order Response
+    SIMStockOrder:
+      required:
+      - companyId
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      - simSpecification
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: Quantity of subscriptions ordered.
+          format: int32
+        preferredDeliveryDate:
+          type: string
+          format: date
+        companyId:
+          type: string
+          description: Company for which the subscriptions are ordered.
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        packageMarkings:
+          type: string
+        simSpecification:
+          type: string
+          description: SIM specification to use for the order.
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+      description: SIM Stock Order Request Model
+    EuiccStockOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - formSpecification
+      - operatorId
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      type: object
+      properties:
+        preferredDeliveryDate:
+          type: string
+          format: date
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        quantity:
+          type: integer
+          description: Quantity of subscriptions ordered.
+          format: int32
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        profileSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        formSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        operatorId:
+          type: string
+          description: Operator for which the order is made.
+        packageMarkings:
+          type: string
+        poolShortName:
+          type: string
+          description: Short name of the MSISDN pool to use when required by profile
+            specification.
+      description: Euicc Stock Order Request Model
+    EsbRequest:
+      type: object
+      properties:
+        userToken:
+          type: string
+        uuid:
+          type: string
+          format: uuid
+    OrderApprovalResponse:
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/EsbRequest'
+        serviceRequestId:
+          type: string
+        success:
+          type: boolean
+        errorCode:
+          type: integer
+          format: int32
+        orderReference:
+          $ref: '#/components/schemas/OrderReference'
+    OrderReference:
+      type: object
+      properties:
+        companyId:
+          type: string
+        requestId:
+          type: string
+    PendingApprovalsDto:
+      type: object
+      properties:
+        jobsPendingApproval:
+          type: array
+          items:
+            $ref: '#/components/schemas/PendingJobDto'
+    PendingJobDto:
+      type: object
+      properties:
+        jobId:
+          type: string
+        orderedBy:
+          type: string
+        companyId:
+          type: string
+        createdAt:
+          type: number
+          format: double
+        updatedAt:
+          type: number
+          format: double
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/PendingOrderResourceDto'
+    PendingOrderResourceDto:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+        serviceContractId:
+          type: string
+        subscriptionPackageId:
+          type: string
+        simSpecificationId:
+          type: string
+        orderType:
+          type: string
+        companyId:
+          type: string
+        preferredDeliveryDate:
+          type: number
+          format: double
+    MSISDNPool:
+      type: object
+      properties:
+        msisdnPoolId:
+          type: string
+          description: Internal ID of the MSISDN pool.
+        shortName:
+          type: string
+          description: Pool short name is used as reference in SIM order data.
+        desciption:
+          type: string
+          description: Description of the MSISDN pool.
+      description: Defines the range from which MSISDN numbers will be generated.
+    SIMSpecification:
+      type: object
+      properties:
+        simSpecificationId:
+          type: string
+          description: ID of the specification is used as reference in SIM order data.
+        minimumOrderVolume:
+          type: integer
+          description: The minimum number of subscriptions that can be ordered for
+            this specification.
+          format: int32
+        orderIncrement:
+          type: integer
+          description: The amount of subscriptions ordered must be a multiple of order
+            increment.
+          format: int32
+        lowOrderThreshold:
+          type: integer
+          description: An order for less subscriptions than threshold may cause a
+            one-time low order fee.
+          format: int32
+        earliestDeliveryDate:
+          type: string
+          description: The earliest possible delivery date for an order according
+            to this specification. ISO8601 date.
+          format: date
+        description:
+          type: string
+          description: Description of the specification.
+        operatorId:
+          type: string
+          description: Corresponding operator ID for this specification.
+        numberSchemeId:
+          type: string
+          description: Number scheme collects the relevant number pools when appropriate.
+        numberSchemeName:
+          type: string
+        networkResourceGroupId:
+          type: integer
+          description: The network resource group id of the SIM specification.
+          format: int64
+        networkResourceGroupName:
+          type: string
+          description: Name of the network resource group.
+        msisdnPools:
+          type: array
+          description: MSISDN pools usable with this specification. In case the list
+            empty specifying a pool is unnecessary.
+          items:
+            $ref: '#/components/schemas/MSISDNPool'
+      description: SIM specification data required for making a SIM order.
+    SIMStockOrderMetadataResponse:
+      type: object
+      properties:
+        simSpecifications:
+          type: array
+          description: List of possible SIM specifications.
+          items:
+            $ref: '#/components/schemas/SIMSpecification'
+      description: Contains the data set required for populating a SIM Stock Order
+        correctly.
+    Deliveryaddress:
+      type: object
+      properties:
+        deliveryAddress:
+          type: string
+          description: Delivery address to use in SIM order data.
+        phone:
+          type: string
+          description: Phone number corresponding with the delivery address.
+      description: A registered delivery address for a company.
+    SIMOrderMetadataResponse:
+      type: object
+      properties:
+        simSpecifications:
+          type: array
+          description: List of possible SIM specifications for this company.
+          items:
+            $ref: '#/components/schemas/SIMSpecification'
+        serviceContracts:
+          type: array
+          description: List of possible service contracts for this company.
+          items:
+            $ref: '#/components/schemas/ServiceContract'
+        deliveryAddresses:
+          type: array
+          description: List of possible delivery addresses for this company.
+          items:
+            $ref: '#/components/schemas/Deliveryaddress'
+      description: Contains the data set required for populating a SIM order correctly.
+    ServiceContract:
+      type: object
+      properties:
+        serviceContractId:
+          type: string
+          description: Internal ID of the service contract.
+        name:
+          type: string
+          description: Name is used as reference in SIM order data.
+        description:
+          type: string
+          description: Description of the service contract.
+        subscriptionPackages:
+          type: array
+          description: Possible subscription packages usable with this service contract.
+          items:
+            $ref: '#/components/schemas/SubscriptionPackage'
+      description: Service contract data required for making a SIM order.
+    SubscriptionPackage:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name is used as reference to the subscription package in SIM
+            order data.
+        description:
+          type: string
+          description: Description of the subscription package.
+        status:
+          type: string
+          description: The subscription package status must be active for SIM order.
+        networkResourceGroupId:
+          type: integer
+          description: The network resource group id of this subscription package.
+          format: int64
+      description: The ordered subscriptions must belong into a subscription package.
+    SubscriptionProfileStockOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - operatorId
+      - profileSpecification
+      - quantity
+      type: object
+      properties:
+        profileSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        quantity:
+          type: integer
+          description: Quantity of subscription profiles ordered.
+          format: int32
+        operatorId:
+          type: string
+          description: Operator for the subscription profiles.
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        poolShortName:
+          type: string
+          description: Short name of the MSISDN pool to use when required by profile
+            specification.
+      description: Subscription Profile Stock Order Request Model
+    Multi-profileEuiccOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - organizationId
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      - templateId
+      type: object
+      properties:
+        preferredDeliveryDate:
+          type: string
+          format: date
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        packageMarkings:
+          type: string
+        templateId:
+          type: integer
+          description: Numeric identifier of the order template to use.
+          format: int64
+        quantity:
+          type: integer
+          description: Quantity of subscription profiles ordered.
+          format: int32
+        organizationId:
+          type: string
+          description: Organization for which the order is made.
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+      description: Multi-profile eUICC Order Request Model
+    SIMOrder:
+      required:
+      - companyId
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - initialState
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      - serviceContract
+      - simSpecification
+      - subscriptionPackage
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: Quantity of subscriptions ordered.
+          format: int32
+        preferredDeliveryDate:
+          type: string
+          format: date
+        companyId:
+          type: string
+          description: Company for which the subscriptions are ordered.
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        packageMarkings:
+          type: string
+        simSpecification:
+          type: string
+          description: SIM specification to use for the order.
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        initialState:
+          type: string
+          description: Initial state for the subscriptions. Must be Active.
+          enum:
+          - Active
+          - Deactivated
+        subscriptionPackage:
+          type: string
+          description: Subscription package for the ordered subscriptions. The subscription
+            package must be also active.
+        serviceContract:
+          type: string
+          description: Service contract used for the order.
+        poolShortName:
+          type: string
+          description: Short name of the MSISDN pool to use when required by SIM specification.
+      description: SIM Order Request Model
+    ErrorObject:
+      type: object
+    FailureInfo:
+      type: object
+      properties:
+        errorObject:
+          $ref: '#/components/schemas/ErrorObject'
+        getErrorType:
+          type: string
+          enum:
+          - ES_ERROR
+          - DCP_ERROR
+    Instant:
+      type: object
+      properties:
+        epochSecond:
+          type: integer
+          format: int64
+        nano:
+          type: integer
+          format: int64
+    SubscriptionRequest:
+      type: object
+      properties:
+        subscriptionRequestId:
+          type: string
+        subscriptionRequestType:
+          type: string
+          enum:
+          - CESS
+          - CHANGE_SUBSCRIPTIONOWNER
+          - CHANGE_SUBSCRIPTIONREGION
+          - CHANGE_SUBSCRIPTIONSTATE
+          - CHANGE_SUBSCRIPTIONSTATE_PARENT
+          - CHANGE_SUBSCRIPTIONPACKAGE_PARENT
+          - CHANGE_SUBSCRIPTIONOWNER_PARENT
+          - CHANGE_SUBSCRIPTIONREGION_PARENT
+          - CHANGE_SUBSCRIPTIONPACKAGE
+          - CHANGE_SUBSCRIPTIONLABEL
+          - CHANGE_SUBSCRIPTION_NOTE
+          - CHANGE_ALTROAMINGPROVIDER
+          - CHANGE_SUBSCRIPTIONIP
+          - DEVICE_RECONNECT
+          - EUICC_ORDER
+          - EUICC_PROFILE_ORDER
+          - EUICC_STOCK_ORDER
+          - EUICC_UPDATE_LABEL
+          - EUICC_LOCALIZATION
+          - EUICC_DELOCALIZATION
+          - EUICC_LOCALIZATION_BATCH
+          - EUICC_DELOCALIZATION_BATCH
+          - EUICC_MIGRATION
+          - EUICC_MIGRATION_BATCH
+          - EUICC_ADD_LOCALE
+          - EUICC_ADD_LOCALE_BATCH
+          - EUICC_REMOVE_LOCALE
+          - EUICC_ENABLE
+          - EUICC_RESET_COUNTERS
+          - SIM_ORDER
+          - STOCK_ORDER
+          - TRIGGERPACKAGE_ASSIGN
+          - TRIGGERPACKAGE_REMOVE
+          - EXECUTE_USE_CASE
+          - PCL_LIMIT_100_EXCEEDED
+          - REASSIGN_MSISDN
+          - UPDATE_PROVISIONED_IMEI
+          - CSO_APPROVAL
+          - LOCK_SUBSCRIPTIONSTATE
+          - UNLOCK_SUBSCRIPTIONSTATE
+          - EUICC_PROFILE_DELETED_NOTIFICATION
+          - EUICC_PROFILE_ENABLED_NOTIFICATION
+          - EUICC_PROFILE_DISABLED_NOTIFICATION
+          - EUICC_SMSR_CHANGE_NOTIFICATION
+          - EUICC_EXT_CHANGE_SM_SR
+          - EUICC_EXT_PREP_SM_SR_CHANGE
+          - EUICC_EXT_DOWNLOAD_WITH_ICC
+          - EUICC_EXT_ENABLE_WITH_ICC
+          - EUICC_EXT_DELETE_WITH_ICC
+          - EUICC_EXT_DISABLE_WITH_ICC
+          - EUICC_EXT_UPDATE_SM_SR
+          - EUICC_EXT_SET_FALLBACK_ATTR
+          - INDIVIDUAL_APN_UPDATE
+          - EUICC_SET_FALLBACK_ATTR
+          - EUICC_DISABLE_ACTIVE
+          - ATTACH_CUSTOM_FIELD
+          - PREPARE_CONSUMER_PROFILE
+        subscriptionRequestState:
+          type: string
+          enum:
+          - IN_PROGRESS
+          - PENDING
+          - CANCELED
+          - REJECTED
+          - COMPLETED
+          - COMPLETED_WITH_FAILURES
+          - UNKNOWN
+        createdBy:
+          type: string
+        companyId:
+          type: string
+        companyName:
+          type: string
+        timeCreated:
+          $ref: '#/components/schemas/Instant'
+        lastUpdated:
+          $ref: '#/components/schemas/Instant'
+        size:
+          type: integer
+          format: int32
+        subscriptionRequestResourceCounters:
+          $ref: '#/components/schemas/SubscriptionRequestResourceCounters'
+        subscriptionRequestFailureInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailureInfo'
+        subscriptionRequestResources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionRequestResource'
+    SubscriptionRequestResource:
+      type: object
+      properties:
+        resourceProperties:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionRequestResourceProperty'
+        resourceState:
+          type: string
+          enum:
+          - IN_PROGRESS
+          - PENDING
+          - CANCELED
+          - REJECTED
+          - COMPLETED
+          - FAILED
+          - UNKNOWN
+        resourceFailureInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailureInfo'
+        resourceId:
+          type: string
+    SubscriptionRequestResourceCounters:
+      type: object
+      properties:
+        inProgress:
+          type: integer
+          format: int32
+        pending:
+          type: integer
+          format: int32
+        canceled:
+          type: integer
+          format: int32
+        rejected:
+          type: integer
+          format: int32
+        completed:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+    SubscriptionRequestResourceProperty:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - ICCID
+          - IMSI
+          - MSISDN
+          - EUICCID
+          - INTERNAL_ID
+          - TARGET_SUBSCRIPTION_STATE
+          - TARGET_SUBSCRIPTION_PACKAGE
+        value:
+          type: string
+        operation:
+          type: string
+          enum:
+          - SUBSCRIPTION_STATE_CHANGE
+          - SUBSCRIPTION_PACKAGE_CHANGE
+          - DOWNLOAD
+          - DOWNLOAD_AND_ENABLE
+          - ENABLE
+          - DELETE
+          - LOCALIZATION
+          - ADD_LOCALE
+          - DELOCALIZATION
+          - REMOVE_LOCALE
+          - UNKOWN
+    SubscriptionRequestFilterDto:
+      type: object
+      properties:
+        subscriptionRequestTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - CESS
+            - CHANGE_SUBSCRIPTIONOWNER
+            - CHANGE_SUBSCRIPTIONREGION
+            - CHANGE_SUBSCRIPTIONSTATE
+            - CHANGE_SUBSCRIPTIONPACKAGE
+            - CHANGE_SUBSCRIPTIONLABEL
+            - CHANGE_SUBSCRIPTIONSTATE_PARENT
+            - CHANGE_SUBSCRIPTIONPACKAGE_PARENT
+            - CHANGE_SUBSCRIPTIONOWNER_PARENT
+            - CHANGE_SUBSCRIPTIONREGION_PARENT
+            - CHANGE_SUBSCRIPTION_NOTE
+            - CHANGE_ALTROAMINGPROVIDER
+            - CHANGE_SUBSCRIPTIONIP
+            - DEVICE_RECONNECT
+            - EUICC_ORDER
+            - EUICC_PROFILE_ORDER
+            - EUICC_STOCK_ORDER
+            - EUICC_UPDATE_LABEL
+            - EUICC_LOCALIZATION
+            - EUICC_DELOCALIZATION
+            - EUICC_LOCALIZATION_BATCH
+            - EUICC_DELOCALIZATION_BATCH
+            - EUICC_ADD_LOCALE
+            - EUICC_ADD_LOCALE_BATCH
+            - EUICC_REMOVE_LOCALE
+            - EUICC_DOWNLOAD_PROFILE
+            - EUICC_DELETE_PROFILE
+            - EUICC_RESET_COUNTERS
+            - EUICC_SET_FALLBACK_ATTR
+            - SIM_ORDER
+            - STOCK_ORDER
+            - TRIGGERPACKAGE_ASSIGN
+            - TRIGGERPACKAGE_REMOVE
+            - INDIVIDUAL_APN_UPDATE
+            - SECURITY_LOCK_STATE
+            - SECURITY_UNLOCK_STATE
+            - LOCK_SUBSCRIPTIONSTATE
+            - UNLOCK_SUBSCRIPTIONSTATE
+            - PREPARE_CONSUMER_PROFILE
+            - UNKNOWN
+        subscriptionRequestStates:
+          type: array
+          items:
+            type: string
+            enum:
+            - IN_PROGRESS
+            - PENDING
+            - CANCELED
+            - REJECTED
+            - COMPLETED
+            - COMPLETED_WITH_FAILURES
+            - UNKNOWN
+        createdBy:
+          type: string
+        limit:
+          type: integer
+          format: int32
+        companyIds:
+          type: array
+          items:
+            type: string
+        timeCreatedBefore:
+          type: string
+          format: date-time
+        timeCreatedAfter:
+          type: string
+          format: date-time
+        lastUpdatedBefore:
+          type: string
+          format: date-time
+        lastUpdatedAfter:
+          type: string
+          format: date-time
+        sortOrder:
+          $ref: '#/components/schemas/SubscriptionRequestSortOrderDto'
+      description: Subscription Request Search Criteria Parameters
+    SubscriptionRequestSortOrderDto:
+      required:
+      - sortField
+      type: object
+      properties:
+        sortField:
+          type: string
+          enum:
+          - SUBSCRIPTION_REQUEST_TYPE
+          - SUBSCRIPTION_REQUEST_STATE
+          - TIME_CREATED_BEFORE
+          - TIME_CREATED_AFTER
+          - LAST_UPDATED_BEFORE
+          - LAST_UPDATED_AFTER
+          - CREATED_BY
+        descending:
+          type: boolean
+    IndividualApn:
+      type: object
+      properties:
+        ordinal:
+          type: integer
+          format: int32
+        apn:
+          type: string
+        type:
+          type: string
+      description: Individual APN for subscription
+    SubscriptionDetails:
+      required:
+      - imsi
+      - subscriptionState
+      type: object
+      properties:
+        imsi:
+          type: string
+          description: International mobile subscriber identity
+        msisdn:
+          type: string
+          description: Mobile station international subscriber directory number
+        subscriptionState:
+          type: string
+          description: Current state
+          enum:
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - OPERATOR_BLOCKED
+          - DEACTIVATED_NO_BILLING
+          - ACTIVE_NO_BILLING
+        icc:
+          type: string
+        imei:
+          type: string
+        companyId:
+          type: string
+          description: Enterprise identifier.
+        companyName:
+          type: string
+          description: Enterprise name. Included only with group 'enterpriseInfo'.
+        subscriptionPackageName:
+          type: string
+          description: Subscription package name. Included only with group 'packageInfo'.
+        subscriptionPackageDescription:
+          type: string
+          description: Subscription package description. Included only with group
+            'packageInfo'.
+        firstActivationDate:
+          type: string
+          description: First activation date. Included only with group 'dates'.
+          format: date-time
+        lastSubscriptionChangeDate:
+          type: string
+          description: Last subscription change time stamp. Included only with group
+            'dates'.
+          format: date-time
+        lockState:
+          type: string
+          description: Current lock state. Included only with group 'lockStateInfo'.
+          enum:
+          - UNLOCKED
+          - LOCKED
+          - UNKNOWN
+        lockingReason:
+          type: string
+          description: Locking reason. Included only with group 'lockStateInfo'.
+        customerLabel:
+          type: string
+          description: Customer label. Included only with group 'label'.
+        simSpecificationId:
+          type: string
+          description: SIM Specification ID. Included only with group 'simSpecification'.
+        pbrExitDate:
+          type: string
+          description: PBR exit date. Included only with group 'dates'.
+          format: date-time
+        individualApns:
+          type: array
+          description: "Subscription individually enabled APNs. Included only with\
+            \ group 'individualApn'. When empty, APNs from package are used"
+          items:
+            $ref: '#/components/schemas/IndividualApn'
+      description: Subscription details model
+    SubscriptionDetailsPagedResponse:
+      type: object
+      properties:
+        subscriptionDetails:
+          type: array
+          description: Subscription details
+          items:
+            $ref: '#/components/schemas/SubscriptionDetails'
+        moreResultsAvailable:
+          type: boolean
+          description: More results can be obtained by using a higher start index
+        start:
+          type: integer
+          description: The index of the first item in response
+          format: int32
+        size:
+          type: integer
+          description: Number of items in this response.
+          format: int32
+      description: Subscriptions details response with pagination
+    MsisdnRangeResponseDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MsisdnRangeResponseItemsDto'
+    MsisdnRangeResponseItemsDto:
+      type: object
+      properties:
+        startNumber:
+          type: string
+        endNumber:
+          type: string
+        dateTime:
+          type: string
+        poolId:
+          type: string
+        reservedFor:
+          type: string
+        available:
+          type: string
+        ordered:
+          type: string
+    SubscriptionResponse:
+      type: object
+      properties:
+        serviceRequestId:
+          type: string
+          description: |-
+            Use the unique ID called 'serviceRequestId' in the following operation to query the status of the 'disableApns' request:
+            /subscriptions/requests/{serviceRequestId}
+          example: REQ201234567890
+    DisabledSubscriptionApns:
+      required:
+      - apns
+      - imsis
+      - subscriptionPackageId
+      type: object
+      properties:
+        apns:
+          maxItems: 9
+          minItems: 0
+          type: array
+          description: "APNs to disable. Other APNs are enabled. Empty list means\
+            \ no APNs to disable, so it enables all APNs in the subscription package."
+          items:
+            type: string
+        imsis:
+          maxItems: 10000
+          minItems: 1
+          type: array
+          description: The IMSIs of subscriptions with APNs to disable.
+          items:
+            type: string
+        subscriptionPackageId:
+          type: string
+          description: Id of subscription package of the subscriptions
+    ActivateSubscriptionResponse:
+      type: object
+      properties:
+        serviceRequestId:
+          type: string
+        msisdn:
+          type: string
+    ActivateSubscriptionRequest:
+      required:
+      - subscription_id_type
+      type: object
+      properties:
+        subscription_id_type:
+          type: string
+          description: Subscription Type
+        msisdn:
+          type: string
+          description: 'MSIDSN '
+        companyId:
+          type: string
+          description: 'CompanyId '
+        additional_info:
+          type: string
+          description: 'CompanyId '
+      description: Activate Subscription.
+    SuspendSubscriptionRequest:
+      required:
+      - subscription_id_type
+      type: object
+      properties:
+        subscription_id_type:
+          type: string
+          description: Subscription Type
+      description: Suspend Subscription.
+    ReassignMSISDN:
+      required:
+      - companyId
+      - msisdn
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: Company ID under which the request is performed.
+        additionalInfo:
+          type: string
+          description: Additional info for the request.
+        msisdn:
+          type: string
+          description: The MSISDN to reassign from an old subscription..
+      description: Reassigns MSISDN from an old subscription identified by MSISDN
+        into a new one identified by IMSI.
+    SubscriptionDetailsResponse:
+      type: object
+      properties:
+        subscriptionDetails:
+          type: array
+          description: Subscription details
+          items:
+            $ref: '#/components/schemas/SubscriptionDetails'
+        size:
+          type: integer
+          description: Number of items in this response.
+          format: int32
+      description: Subscriptions details response model
+    GetSubscriptionDetailsByPrimaryKey:
+      required:
+      - type
+      - values
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of query key
+          enum:
+          - imsi
+          - icc
+          - msisdn
+        values:
+          maxItems: 10000
+          minItems: 1
+          type: array
+          items:
+            type: string
+        groups:
+          type: array
+          items:
+            type: string
+            enum:
+            - enterpriseInfo
+            - packageInfo
+            - dates
+            - label
+            - simSpecification
+            - lockStateInfo
+            - individualApn
+      description: Find subscriptions using primary key values
+    AssignIMEI:
+      required:
+      - assignedImei
+      - companyId
+      - subscriptionId
+      - subscriptionIdType
+      type: object
+      properties:
+        subscriptionIdType:
+          type: string
+          description: "Must be one of IMSI, ICCID, or MSISDN."
+          enum:
+          - IMSI
+          - ICCID
+          - MSISDN
+        subscriptionId:
+          type: string
+          description: Valid identifier of the specified subscriptionIdType.
+        assignedImei:
+          type: string
+          description: The IMEI to assign to the subscription. Define empty value
+            to remove.
+        companyId:
+          type: string
+          description: Company ID under which the request is performed.
+        additionalInfo:
+          type: string
+          description: Additional info for the request. Currently ignored.
+      description: Assign IMEI to a subscription.
+    AssignIMEIRequest:
+      required:
+      - assignedImei
+      - companyId
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: Company ID under which the request is performed.
+        additionalInfo:
+          type: string
+          description: Additional info for the request.
+        assignedImei:
+          type: string
+          description: The IMEI to assign to the subscription. Define empty value
+            to remove.
+      description: Assign IMEI to a subscription.
+    SubscriptionHistoryRow:
+      required:
+      - serviceConfiguration
+      - serviceRequestId
+      - subscriptionHistoryType
+      - subscriptionPackage
+      - subscriptionState
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          description: Timestamp of this change
+          format: int64
+        subscriptionHistoryType:
+          type: string
+          description: Type of this change
+          enum:
+          - CHANGE_EXISTING_SUBSCRIPTIONSTATE
+          - CHANGE_SUBSCRIPTIONOWNER
+          - CHANGE_SUBSCRIPTIONOWNER_EUICC
+          - CHANGE_SUBSCRIPTIONREGION
+          - CHANGE_SUBSCRIPTIONSTATE
+          - CHANGE_SUBSCRIPTIONSTATE_EUICC
+          - CHANGE_SUBSCRIPTIONPACKAGE
+          - CHANGE_SUBSCRIPTIONPACKAGE_EUICC
+          - CHANGE_SUBSCRIPTIONLABEL
+          - CHANGE_SUBSCRIPTIONNOTE
+          - CHANGE_ALTROAMINGPROVIDER
+          - CREATE_SUBSCRIPTION
+          - CREATE_SUBSCRIPTION_EUICC
+          - THROTTLE_IMSI
+          - POLICYBASEDROUTING_EXIT
+          - TRIGGER_ACTION
+          - TIME_BASED_CHANGE_SUBSCRIPTIONSTATE
+          - TIME_BASED_CHANGE_SUBSCRIPTIONPACKAGE
+          - UPDATE_IMEI
+          - REASSIGN_MSISDN
+          - UPDATE_PROVISIONED_IMEI
+          - PCL_LIMIT_EXCEEDED
+          - CHANGE_SUBSCRIPTIONSTATE_AND_UNLINK_SUBSCRIPTION
+          - LOCK_SUBSCRIPTIONSTATE
+          - UNLOCK_SUBSCRIPTIONSTATE
+          - INDIVIDUAL_APN_UPDATE
+          - UNKNOWN
+        serviceRequestId:
+          type: string
+          description: Job identifier for this change.
+        initiatorName:
+          type: string
+          description: The person or party who requested this change.
+        description:
+          type: string
+          description: Description of the changed value when applicable.
+        subscriptionState:
+          type: string
+          description: State of the subscription.
+          enum:
+          - NEW
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - PENDING_TERMINATION
+          - REMOVED
+          - OPERATOR_BLOCKED
+          - ACTIVE_NO_BILLING
+          - DEACTIVATED_NO_BILLING
+          - UNKNOWN
+        subscriptionPackage:
+          type: string
+          description: Subscrription package name.
+        serviceConfiguration:
+          type: string
+          description: Service configuration name.
+        msisdn:
+          type: string
+          description: MSISDN
+        imei:
+          type: string
+          description: IMEI detected from network.
+        provisionedImei:
+          type: string
+          description: IMEI provisioned to network.
+      description: Describes one change in subscription history.
+  securitySchemes:
+    token:
+      type: apiKey
+      description: Input token directly or use login endpoints
+      name: X-Access-Token
+      in: header
+x-original-swagger-version: "2.0"

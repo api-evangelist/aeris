@@ -1,0 +1,796 @@
+openapi: 3.2.0
+info:
+  version: 2.3.2
+  title: eUICC Setup Localization Table API
+  description: '#### Copyright
+
+    © Aeris Communications, Inc.'
+  x-audience: external-public
+  x-api-id: 8cd4dc59-bfa5-45f1-9567-460c15b817b1
+servers:
+- url: https://iot-api.aeris.com/iot/api
+  description: API server
+tags:
+- name: LocalizationTable
+  description: Localization table
+paths:
+  /localization-tables:
+    post:
+      tags:
+      - LocalizationTable
+      summary: Store localization table
+      operationId: storeLocalizationTable_1
+      description: Stores a localization table
+      parameters:
+      - $ref: '#/components/parameters/Header-Content-Type'
+      - $ref: '#/components/parameters/Header-Accept-Version'
+      - $ref: '#/components/parameters/Header-Accept'
+      requestBody:
+        description: LocalizationTableInfo.0.0.1
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalizationTableInfo.0.0.1'
+            examples:
+              Store localization table request:
+                $ref: '#/components/examples/LocalizationTableInfoExample'
+        required: true
+      responses:
+        '201':
+          description: Created
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalizationTable.0.0.1'
+              examples:
+                Store localization table response:
+                  $ref: '#/components/examples/LocalizationTableExample'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - OAuth2:
+        - euicc-mgt.agreement.write
+    get:
+      tags:
+      - LocalizationTable
+      summary: List localization tables
+      operationId: listLocalizationTables_1
+      description: Lists localization tables by organization id
+      parameters:
+      - $ref: '#/components/parameters/Header-Content-Type'
+      - $ref: '#/components/parameters/Header-Accept-Version'
+      - $ref: '#/components/parameters/Header-Accept'
+      - name: organizationId
+        in: query
+        description: Organization Id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalizationTableList.0.0.1'
+              examples:
+                List localization tables response:
+                  $ref: '#/components/examples/LocalizationTableListExample'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - OAuth2:
+        - euicc-mgt.agreement.read
+  /localization-tables/{localizationTableId}:
+    delete:
+      tags:
+      - LocalizationTable
+      summary: Delete localization table
+      operationId: deleteLocalizationTable_1
+      description: Deletes a localization table
+      parameters:
+      - $ref: '#/components/parameters/Header-Content-Type'
+      - $ref: '#/components/parameters/Header-Accept-Version'
+      - name: Accept
+        in: header
+        description: Accept content-type and schemas by client
+        content:
+          application/json:
+            schema:
+              type: string
+              allOf:
+              - $ref: '#/components/responses/204'
+      - name: localizationTableId
+        in: path
+        description: Localization table Id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '204':
+          description: Deleted
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - OAuth2:
+        - euicc-mgt.agreement.write
+    get:
+      tags:
+      - LocalizationTable
+      summary: Get localization table
+      operationId: getLocalizationTable_1
+      description: Retrieves a localization table
+      parameters:
+      - $ref: '#/components/parameters/Header-Content-Type'
+      - $ref: '#/components/parameters/Header-Accept-Version'
+      - $ref: '#/components/parameters/Header-Accept'
+      - name: localizationTableId
+        in: path
+        description: Localization table Id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalizationTable.0.0.1'
+              examples:
+                Get localization table response:
+                  $ref: '#/components/examples/LocalizationTableExample'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - OAuth2:
+        - euicc-mgt.agreement.read
+    put:
+      tags:
+      - LocalizationTable
+      summary: Update localization table parameters
+      operationId: updateLocalizationTable_1
+      description: Updates the details of a localization table
+      parameters:
+      - $ref: '#/components/parameters/Header-Content-Type'
+      - $ref: '#/components/parameters/Header-Accept-Version'
+      - $ref: '#/components/parameters/Header-Accept'
+      - name: localizationTableId
+        in: path
+        description: Localization table Id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: LocalizationTableInfoUpdate.0.0.1
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalizationTableInfoUpdate.0.0.1'
+            examples:
+              Update localization table parameters:
+                $ref: '#/components/examples/LocalizationTableInfoUpdateExample'
+        required: true
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalizationTable.0.0.1'
+              examples:
+                Update localization table parameters response:
+                  $ref: '#/components/examples/UpdatedLocalizationTableExample'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '429':
+          $ref: '#/components/responses/429'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - OAuth2:
+        - euicc-mgt.agreement.write
+components:
+  responses:
+    '401':
+      description: Unauthorized
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/unauthorized
+            title: Unauthorized
+            status: 401
+            detail: Authentication credentials were missing or incorrect
+            instance: https://api.documentation.url/request-id
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    '429':
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: The user has sent too many requests in a given amount of time
+            instance: https://api.documentation.url/request-id
+    '403':
+      description: Forbidden
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/forbidden
+            title: Forbidden
+            status: 403
+            detail: The server understood the request but refuses to authorize it
+            instance: https://api.documentation.url/request-id
+    '405':
+      description: Method Not Allowed
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/method-not-allowed
+            title: Method Not Allowed
+            status: 405
+            detail: The request method is not supported for this resource
+            instance: https://api.documentation.url/request-id
+    '400':
+      description: Bad Request
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/bad-request
+            title: Bad Request
+            status: 400
+            detail: The request could not be understood by the server due to malformed syntax
+            instance: https://api.documentation.url/request-id
+    '404':
+      description: Not Found
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/not-found
+            title: Not Found
+            status: 404
+            detail: The requested resource could not be found
+            instance: https://api.documentation.url/request-id
+    '500':
+      description: Internal Server Error
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/internal-server-error
+            title: Internal Server Error
+            status: 500
+            detail: The server encountered an unexpected condition that prevented it from fulfilling the request
+            instance: https://api.documentation.url/request-id
+    '204':
+      description: No Content
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+  parameters:
+    Header-Accept:
+      name: Accept
+      in: header
+      description: Accept content-type by the client
+      schema:
+        type: string
+    Header-Accept-Version:
+      name: Accept-Version
+      in: header
+      description: Accept version of the response
+      schema:
+        type: string
+    Header-Content-Type:
+      name: Content-Type
+      in: header
+      description: Content-Type
+      schema:
+        type: string
+  schemas:
+    LocalizationTableInfoUpdate.0.0.1:
+      required:
+      - euiccChargingType
+      - localizationTableName
+      type: object
+      properties:
+        localizationTableName:
+          type: string
+        euiccChargingType:
+          type: string
+          enum:
+          - CHARGE_ACTIVE
+          - CHARGE_BOOTSTRAP
+    LocalizationTable.0.0.1:
+      required:
+      - euiccChargingType
+      - id
+      - localizationTableName
+      - organizationId
+      type: object
+      properties:
+        localizationTableName:
+          type: string
+        euiccChargingType:
+          type: string
+          enum:
+          - CHARGE_ACTIVE
+          - CHARGE_BOOTSTRAP
+        organizationId:
+          type: string
+        items:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LocaleResponse.0.0.1'
+        id:
+          type: integer
+          format: int64
+        readOnly:
+          type: boolean
+    Locale.0.0.1:
+      required:
+      - localeId
+      - localeName
+      - organizationId
+      - profileSpecificationId
+      - subscriptionPackageId
+      type: object
+      properties:
+        localeName:
+          type: string
+        organizationId:
+          type: string
+        profileSpecificationId:
+          type: string
+        subscriptionPackageId:
+          type: string
+        localeId:
+          type: string
+        features:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LocaleFeature.0.0.1'
+        localeParameters:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LocaleParameter.0.0.1'
+        localeType:
+          type: string
+          enum:
+          - STANDARD_INBOUND
+          - EXTENDED_IOTA_IOTA
+          - EXTENDED_IOTA_NON_IOTA
+          - CUSTOM
+          - CONSUMER
+          - IOT
+    LocaleResponse.0.0.1:
+      description: Locale response schema for read operations. All fields are optional to accommodate locale records where some properties may be null (e.g. CONSUMER, IOT, CUSTOM locale types).
+      type: object
+      properties:
+        localeId:
+          type: string
+        localeName:
+          type: string
+        organizationId:
+          type: string
+        profileSpecificationId:
+          type: string
+        subscriptionPackageId:
+          type: string
+        features:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LocaleFeature.0.0.1'
+        localeParameters:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LocaleParameter.0.0.1'
+        localeType:
+          type: string
+          enum:
+          - STANDARD_INBOUND
+          - EXTENDED_IOTA_IOTA
+          - EXTENDED_IOTA_NON_IOTA
+          - CUSTOM
+          - CONSUMER
+          - IOT
+    LocaleFeature.0.0.1:
+      type: string
+      enum:
+      - SMSR_CHANGE
+      - SMDP_ONLY
+      - ONE_STEP
+      - NO_RETRY
+    LocalizationTableInfo.0.0.1:
+      required:
+      - euiccChargingType
+      - localizationTableName
+      - organizationId
+      type: object
+      properties:
+        localizationTableName:
+          type: string
+        euiccChargingType:
+          type: string
+          enum:
+          - CHARGE_ACTIVE
+          - CHARGE_BOOTSTRAP
+        organizationId:
+          type: string
+        items:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Locale.0.0.1'
+    LocalizationTableList.0.0.1:
+      required:
+      - localizationTables
+      type: object
+      properties:
+        localizationTables:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizationTable.0.0.1'
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://your.api.documentation.url
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized)
+
+            '
+          example: Service Unavailable
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          example: 503
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Connection to database timed out
+        instance:
+          type: string
+          description: 'An absolute URI that identifies the specific occurrence of the problem.
+
+            It may or may not yield further information if dereferenced.
+
+            '
+          example: https://api.documentation.url/request-id
+    LocaleParameter.0.0.1:
+      required:
+      - name
+      - value
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+          - TARGET_SMSR
+          - ES2_NOTIFICATION_ENDPOINT
+          - ES4_NOTIFICATION_ENDPOINT
+        value:
+          type: string
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+  examples:
+    UpdatedLocalizationTableExample:
+      value:
+        id: 10030
+        localizationTableName: Updated Localization table Name
+        euiccChargingType: CHARGE_ACTIVE
+        organizationId: 3.97.2
+        readOnly: false
+        items:
+        - localeId: ENH-01
+          localeName: Enhanced Service Locale
+          organizationId: 3.97.2
+          profileSpecificationId: Smooth_2nd_step_profile
+          subscriptionPackageId: 97000001_001_SP_02
+          features: []
+          localeParameters: []
+          localeType: STANDARD_INBOUND
+        - localeId: ENH-02
+          localeName: Enhanced Service Locale 2
+          organizationId: 3.97.2
+          profileSpecificationId: Smooth_2nd_step_profile
+          subscriptionPackageId: 97000001_002_SP_30
+          features: []
+          localeParameters: []
+          localeType: STANDARD_INBOUND
+    LocalizationTableInfoUpdateExample:
+      value:
+        localizationTableName: Updated Localization table Name
+        euiccChargingType: CHARGE_ACTIVE
+    LocalizationTableExample:
+      value:
+        id: 10030
+        localizationTableName: Enterprise X M2M Localization Table
+        euiccChargingType: CHARGE_ACTIVE
+        organizationId: 3.97.2
+        readOnly: false
+        items:
+        - localeId: ENH-01
+          localeName: Enhanced Service Locale
+          organizationId: 3.97.2
+          profileSpecificationId: Smooth_2nd_step_profile
+          subscriptionPackageId: 97000001_001_SP_02
+          features: []
+          localeParameters: []
+          localeType: STANDARD_INBOUND
+        - localeId: ENH-02
+          localeName: Enhanced Service Locale 2
+          organizationId: 3.97.2
+          profileSpecificationId: Smooth_2nd_step_profile
+          subscriptionPackageId: 97000001_002_SP_30
+          features: []
+          localeParameters: []
+          localeType: STANDARD_INBOUND
+    LocalizationTableInfoExample:
+      value:
+        localizationTableName: Enterprise X M2M Localization Table
+        euiccChargingType: CHARGE_ACTIVE
+        organizationId: 3.97.2
+        items:
+        - localeId: ENH-01
+          localeName: Enhanced Service Locale
+          organizationId: 3.97.2
+          profileSpecificationId: Smooth_2nd_step_profile
+          subscriptionPackageId: 97000001_001_SP_02
+          features: []
+          localeParameters: []
+          localeType: STANDARD_INBOUND
+        - localeId: ENH-02
+          localeName: Enhanced Service Locale 2
+          organizationId: 3.97.2
+          profileSpecificationId: Smooth_2nd_step_profile
+          subscriptionPackageId: 97000001_002_SP_30
+          features: []
+          localeParameters: []
+          localeType: STANDARD_INBOUND
+    LocalizationTableListExample:
+      value:
+        localizationTables:
+        - id: 10030
+          localizationTableName: Enterprise X M2M Localization Table
+          euiccChargingType: CHARGE_ACTIVE
+          organizationId: 3.97.2
+          readOnly: false
+          items:
+          - localeId: ENH-01
+            localeName: Enhanced Service Locale
+            organizationId: 3.97.2
+            profileSpecificationId: Smooth_2nd_step_profile
+            subscriptionPackageId: 97000001_001_SP_02
+            features: []
+            localeParameters: []
+            localeType: STANDARD_INBOUND
+          - localeId: ENH-02
+            localeName: Enhanced Service Locale 2
+            organizationId: 3.97.2
+            profileSpecificationId: Smooth_2nd_step_profile
+            subscriptionPackageId: 97000001_002_SP_30
+            features: []
+            localeParameters: []
+            localeType: STANDARD_INBOUND
+        - id: 10032
+          localizationTableName: Enterprise X Consumer Localization Table
+          euiccChargingType: CHARGE_ACTIVE
+          organizationId: 3.97.2
+          readOnly: false
+          items:
+          - localeId: Consumer-01
+            localeName: Enhanced Service Locale
+            organizationId: 3.97.2
+            profileSpecificationId: Smooth_consumer_profile
+            subscriptionPackageId: 97000001_001_SPC_01
+            features: []
+            localeParameters: []
+            localeType: CONSUMER
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: The resources in the API are protected using the OAuth 2.0 protocol
+      flows:
+        clientCredentials:
+          tokenUrl: https://iot-api.aeris.com/iot/api/auth/token
+          scopes:
+            euicc-mgt.agreement.read: Grant client read access to eUICC agreement resources
+            euicc-mgt.agreement.write: Grant client write access to eUICC agreement resources

@@ -1,0 +1,396 @@
+openapi: 3.2.0
+info:
+  title: Business Analytics Report Usages API
+  version: 1.0.5
+  description: '#### Copyright
+
+    © Aeris Communications, Inc.'
+  x-audience: external-public
+  x-api-id: b6389a2a-0d7f-4ba1-af93-27ad5e690095
+servers:
+- url: https://iot-api.aeris.com/iot/api/business-analytics-service/v1
+  description: API server
+tags:
+- name: Usages
+paths:
+  /usages:
+    get:
+      tags:
+      - Usages
+      summary: Query usage data files
+      description: Returns a list of report data files that can be downloaded.
+      operationId: QueryUsage
+      parameters:
+      - name: fromDate
+        in: query
+        description: 'Specifies the earliest date from which usage data are requested. The input of fromData is set according to RFC 3339 standard in UTC time.
+
+          '
+        required: false
+        schema:
+          type: string
+          format: date-time
+          example: '2022-04-20T01:01:01Z'
+      - name: toDate
+        in: query
+        description: 'Specifies the latest date from which usage data are requested. The input of tomData is set according to RFC 3339 standard in UTC time.
+
+          '
+        required: false
+        schema:
+          type: string
+          format: date-time
+          example: '2022-04-20T01:01:01Z'
+      - name: limit
+        in: query
+        required: false
+        description: 'Specifies the maximum number of entries to return. If the value exceeds the maximum, then the errror will be returned. If this parameter is not specified, the default value will be used.
+
+          '
+        schema:
+          type: integer
+          format: int32
+          example: 10000
+          default: 10000
+          minimum: 1
+          maximum: 10000
+      - name: offset
+        in: query
+        required: false
+        description: 'Specifies the offset of the first item in the collection to return. If the value exceeds the total count of result, empty result will be returned.
+
+          '
+        schema:
+          type: integer
+          format: int32
+          example: 0
+          default: 0
+          minimum: 0
+      - name: customerNo
+        in: query
+        required: false
+        description: 'Specifies the customer number of the related organization. If this parameter is not specified, default organizationId from token will be used as query and validated with organization id field in DB.
+
+          If both organizationId and customerNo are provided when query, organizationId will be used as query criteria and validate with customerNo field in DB.
+
+          If none of organizationId or customerNo is provided when query, default organizationId from token will be used as query and validated with organization id field in DB.
+
+          '
+        schema:
+          type: string
+          example: '99887766'
+      - name: organizationId
+        in: query
+        required: false
+        description: 'Specifies the organization ID number of the related organization. If this parameter is not specified,  customerNo field in DB will be used as query.
+
+          If both organizationId and customerNo are provided when query, use organizationId as query criteria and validate with customerNo field in DB.
+
+          If none of organizationId or customerNo is provided when query, it will query with default organizationId from token and validate with organization id field in DB.
+
+          ID of the organization could be a fix number e.g. “1.2.3” or it can contain ‘*’ as a wildcard in the following way:
+
+          - ''1.2.*'' will filter all organization whose id starts with 1.2 but not the parent 1.2 itself
+
+          - ''1.2*'' will filter all organizations whose id starts with 1.2 and include the parent 1.2 itself
+
+          '
+        schema:
+          type: string
+          example: 3.78.2
+      responses:
+        '200':
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryUsagesResponse'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '429':
+          $ref: '#/components/responses/429Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+        default:
+          $ref: '#/components/responses/500Response'
+      security:
+      - Oauth2_auth:
+        - cnx_usage_data_download
+        - cnx_usage_data_download_2
+  /usages/{id}:
+    get:
+      tags:
+      - Usages
+      summary: Download a usage data file
+      operationId: DownloadUsage
+      description: Returns the usage data file which is identified by id.
+      parameters:
+      - name: id
+        in: path
+        description: Id of usage data file which will be downloaded, this value can be in customerNO or organizationId format, which will be validated against DB field for customerNo and organizationId respectively.
+        required: true
+        schema:
+          type: string
+          example: '1234567800000'
+      responses:
+        '200':
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '429':
+          $ref: '#/components/responses/429Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+        default:
+          $ref: '#/components/responses/500Response'
+      security:
+      - Oauth2_auth:
+        - cnx_usage_data_download
+        - cnx_usage_data_download_2
+components:
+  headers:
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    400Response:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Bad Request
+                status: 400
+                detail: Invalid customerNo
+                instance: https://hostname/iot/api/some-path
+    401Response:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Unauthorized
+                status: 401
+                detail: Token expired
+                instance: https://hostname/iot/api/some-path
+    429Response:
+      description: Too Many Requests
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    500Response:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: https://hostname/iot/api/some-path
+    404Response:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Not Found
+                status: 404
+                detail: Not Found
+                instance: https://hostname/iot/api/some-path
+    403Response:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: https://hostname/iot/api/some-path
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,it SHOULD provide
+
+            human-readable documentation for the problem type (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable for engineers (usually not suited
+
+            for non technical stakeholders and not localized.
+
+            '
+        status:
+          type: integer
+          format: int32
+          description: The HTTP status code generated by the origin server for this occurrence of the problem.
+          minimum: 100
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem.
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
+          example: https://api.documentation.url/request-id
+    QueryUsagesResponseItem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1234567800000'
+          description: The id of usage data file can be downloaded.
+        date:
+          type: string
+          format: date-time
+          example: '2022-04-20T01:01:01.001Z'
+          description: The date when the file was created, which is set according to RFC 3339 standard in UTC time.
+        size:
+          type: integer
+          format: int64
+          example: 500000
+          description: The size of the file in bytes.
+    QueryUsagesResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+          description: The limit used for this page of results. This will be the same as the limit query parameter unless it exceeded the maximum value if it is specified in query request. If the limit parameter not specified in query request, the default value is used.
+          example: 10000
+          default: 10000
+          minimum: 1
+          maximum: 10000
+        offset:
+          type: integer
+          format: int32
+          description: The offset used for this page of results. This will be the same as the offset query parameter if it is specified in query request. If the offset is not specified in the query request, the default value is used.
+          example: 0
+          default: 0
+          minimum: 0
+        totalCount:
+          type: integer
+          format: int32
+          description: The total count of results, which is one greater than the offset of the last item in the entire collection.
+          example: 4001
+        usages:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryUsagesResponseItem'
+  securitySchemes:
+    Oauth2_auth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /iot/api/auth/token
+          scopes:
+            cnx_report_download_operator: Download monthly reports - for TCXN (old)
+            cnx_report_download_operator_2: Download monthly reports - for TCXN
+            cnx_report_download_opco: Download monthly reports - for operators (old)
+            cnx_report_download_opco_2: Download monthly reports - for operators
+            cnx_report_download: Download monthly reports - for TCXN (old)
+            cnx_report_download_2: Download monthly reports - for enterprises
+            cnx_report_download_no_invoice: Download monthly reports (no billing-related reports) - for enterprises (old)
+            cnx_report_download_no_invoice_2: Download monthly reports (no billing-related reports) - for enterprises
+            cnx_invoice_download_supplier: Download invoices + invoice deletion - for supplier
+            cnx_invoice_download_operator: Download invoices + invoice deletion - for operators (old)
+            cnx_invoice_download_operator_2: Download invoices + invoice deletion
+            cnx_invoice_download: Download invoices - for enterprises (old)
+            cnx_invoice_download_2: Download invoices
+            cnx_usage_data_download: Download usage data (old)
+            cnx_usage_data_download_2: Download usage data
+            cnx_top_traffic_subscr_gprs: 'API: Subscriptions with most data traffic'
+            cnx_top_traffic_subscr_sms: 'API: Subscriptions with most SMS traffic'

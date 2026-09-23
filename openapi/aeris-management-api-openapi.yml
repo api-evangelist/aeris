@@ -1,0 +1,1447 @@
+openapi: 3.2.0
+info:
+  version: 1.1.1
+  title: Business Automation Management API
+  description: '#### Copyright
+
+    © Aeris Communications, Inc.'
+  x-audience: external-public
+  x-api-id: fccaf317-7946-4703-bcd8-40ee0f66eb7f
+servers:
+- url: https://iot-api.aeris.com/iot/api/business-automation
+  description: API server
+- url: /iot/api/business-automation
+- url: /
+tags:
+- name: Management
+  description: Manage rulesets and its life-cycle status
+paths:
+  /rulesets:
+    post:
+      tags:
+      - Management
+      summary: Create a set of rules for a ruleset
+      description: Creates a ruleset.
+      operationId: createRuleset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ruleset'
+            example:
+              name: Ruleset one
+              description: The Ruleset...
+              ownerOrganizationId: '3.78'
+              level: SUBSCRIPTION_PACKAGE
+              targets:
+              - id: 9500001_007_SP_01
+              category: FRAUD_PREVENTION
+              ruleDefinitions:
+              - type: DATA_USAGE
+                rules:
+                - conditions:
+                  - details:
+                      type: LESS_THAN
+                      threshold: 100000
+                      timeRangeType: RANGE_1_HOUR
+                      trafficType: DATA
+                      zoneType: ALL_NETWORKS
+                  actions:
+                  - type: EMAIL_NOTIFICATION
+                    details:
+                      emailAddresses:
+                      - john@enterprise.com
+        required: true
+      responses:
+        '201':
+          description: Created
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRulesetDetailResponse'
+              example:
+                id: 17fb9e498aa55
+                name: RuleSet one
+                description: The RuleSet...
+                createdBy: test.enterprise@enterprise.com
+                createdAt: '2017-07-21T17:32:28Z'
+                ownerOrganizationId: '3.78'
+                level: SUBSCRIPTION_PACKAGE
+                status: ENABLED
+                targets:
+                - id: 9500001_007_SP_01
+                  organizationId: '3.78'
+                category: FRAUD_PREVENTION
+                ruleDefinitions:
+                - type: DATA_USAGE
+                  rules:
+                  - conditions:
+                    - details:
+                        type: LESS_THAN
+                        threshold: 100000
+                        timeRangeType: RANGE_1_HOUR
+                        trafficType: DATA
+                        zoneType: ALL_NETWORKS
+                      actions:
+                      - type: EMAIL_NOTIFICATION
+                        details:
+                          emailAddresses:
+                          - john@enterprise.com
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - BearerAuth: []
+      - Oauth2_auth:
+        - rulesets.write
+    get:
+      tags:
+      - Management
+      summary: List rulesets
+      description: 'The API provides a list of Rulesets. The max result size would
+
+        be 1000. Filter query param could be added for refined search.'
+      operationId: listRuleSets
+      parameters:
+      - $ref: '#/components/parameters/rulesetParam'
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulesetsListResponse'
+              example:
+              - id: 17fb9e498aa55
+                name: Ruleset one
+                description: The Ruleset...
+                createdBy: test.enterprise@enterprise.com
+                createdAt: '2017-07-21T17:32:28Z'
+                modifiedBy: test.enterprise@enterprise.com
+                modifiedAt: '2017-07-22T17:32:28Z'
+                ownerOrganizationId: '3.78'
+                level: SUBSCRIPTION_PACKAGE
+                status: ENABLED
+                targets:
+                - id: 9500001_007_SP_01
+                  organizationId: '3.78'
+                category: FRAUD_PREVENTION
+                ruleDefinitions:
+                - type: DATA_USAGE
+                  rules:
+                  - conditions:
+                    - details:
+                        type: LESS_THAN
+                        threshold: 100000
+                        timeRangeType: RANGE_1_HOUR
+                        trafficType: DATA
+                        zoneType: ALL_NETWORKS
+                    actions:
+                    - type: EMAIL_NOTIFICATION
+                      details:
+                        emailAddresses:
+                        - john@enterprise.com
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - BearerAuth: []
+      - Oauth2_auth:
+        - rulesets.read
+  /rulesets/{id}:
+    get:
+      tags:
+      - Management
+      summary: Get Details of ruleset
+      description: The API provides the detail of a given rulesetId.
+      operationId: getRuleSetDetails
+      parameters:
+      - name: id
+        in: path
+        description: rulesetId
+        required: true
+        schema:
+          type: string
+          example: 17fb9e498aa55
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulesetDetailResponse'
+              example:
+                id: 17fb9e498aa55
+                name: Ruleset one
+                description: The Ruleset...
+                createdBy: test.enterprise@enterprise.com
+                createdAt: '2017-07-21T17:32:28Z'
+                modifiedBy: test.enterprise@enterprise.com
+                modifiedAt: '2017-07-22T17:32:28Z'
+                ownerOrganizationId: '3.78'
+                level: SUBSCRIPTION_PACKAGE
+                status: ENABLED
+                targets:
+                - id: 9500001_007_SP_01
+                  organizationId: '3.78'
+                category: FRAUD_PREVENTION
+                ruleDefinitions:
+                - type: DATA_USAGE
+                  rules:
+                  - conditions:
+                    - details:
+                        type: LESS_THAN
+                        threshold: 100000
+                        timeRangeType: RANGE_1_HOUR
+                        trafficType: DATA
+                        zoneType: ALL_NETWORKS
+                    actions:
+                    - type: EMAIL_NOTIFICATION
+                      details:
+                        emailAddresses:
+                        - john@enterprise.com
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - BearerAuth: []
+      - Oauth2_auth:
+        - rulesets.read
+    put:
+      tags:
+      - Management
+      summary: Update Enabled ruleset
+      description: 'The API can be used to update an enabled status
+
+        ruleset.'
+      operationId: updateRuleset
+      parameters:
+      - name: id
+        in: path
+        description: rulesetId
+        required: true
+        schema:
+          type: string
+          example: 18fb9e498aa55
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ruleset'
+            example:
+              name: Ruleset one
+              description: updated ruleset...
+              ownerOrganizationId: '3.78'
+              level: SUBSCRIPTION_PACKAGE
+              targets:
+              - id: 9500001_007_SP_01
+              category: LIFE_CYCLE_MANAGEMENT
+              ruleDefinitions:
+              - type: DATA_USAGE
+                rules:
+                - conditions:
+                  - details:
+                      type: MORE_THAN
+                      threshold: 1000000
+                      timeRangeType: RANGE_1_WEEK
+                      trafficType: DATA
+                      zoneType: ALL_NETWORKS
+                  actions:
+                  - type: EMAIL_NOTIFICATION
+                    details:
+                      emailAddresses:
+                      - john@enterprise.com
+        required: true
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulesetDetailResponse'
+              example:
+                id: 18fb9e498aa55
+                name: Ruleset one
+                description: updated ruleset...
+                createdBy: test.enterprise@enterprise.com
+                createdAt: '2017-07-21T17:32:28Z'
+                modifiedBy: john.enterprise@enterprise.com
+                modifiedAt: '2017-07-22T17:32:28Z'
+                ownerOrganizationId: '3.78'
+                level: SUBSCRIPTION_PACKAGE
+                status: ENABLED
+                targets:
+                - id: 9500001_007_SP_01
+                  organizationId: '3.78'
+                category: LIFE_CYCLE_MANAGEMENT
+                ruleDefinitions:
+                - type: DATA_USAGE
+                  rules:
+                  - conditions:
+                    - details:
+                        type: MORE_THAN
+                        threshold: 1000000
+                        timeRangeType: RANGE_1_WEEK
+                        trafficType: DATA
+                        zoneType: ALL_NETWORKS
+                    actions:
+                    - type: EMAIL_NOTIFICATION
+                      details:
+                        emailAddresses:
+                        - john@enterprise.com
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - BearerAuth: []
+      - Oauth2_auth:
+        - rulesets.write
+    delete:
+      tags:
+      - Management
+      summary: Delete a ruleset
+      description: API is responsible for deleting a ruleset.
+      operationId: deleteRuleset
+      parameters:
+      - name: id
+        in: path
+        description: rulesetId
+        required: true
+        schema:
+          type: string
+          example: 181ec4a9d9657
+      responses:
+        '204':
+          description: No Content
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - BearerAuth: []
+      - Oauth2_auth:
+        - rulesets.write
+  /rulesets/draft:
+    post:
+      tags:
+      - Management
+      summary: Save as Draft ruleset
+      description: 'Saves Ruleset as draft.
+
+
+        _Note: Ruleset id is not a mandatory in the request body when ruleset is saved as draft for the first time. In case of updating a ruleset when its status is draft id is mandatory._'
+      operationId: saveAsDraftRuleSet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RulesetDraftRequest'
+            example:
+              id: 17fb9e498aa55
+              name: Ruleset one
+              description: The Ruleset...
+              ownerOrganizationId: '3.78'
+              level: SUBSCRIPTION_PACKAGE
+              targets:
+              - id: 9500001_007_SP_01
+              category: FRAUD_PREVENTION
+              ruleDefinitions:
+              - type: DATA_USAGE
+                rules:
+                - conditions:
+                  - details: {}
+                  actions:
+                  - type: ''
+                    details: {}
+        required: true
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulesetDetailResponse'
+              example:
+                id: 17fb9e498aa55
+                name: Ruleset one
+                description: The Ruleset...
+                createdBy: test.enterprise@enterprise.com
+                createdAt: '2017-07-21T17:32:28Z'
+                modifiedBy: test.enterprise@enterprise.com
+                modifiedAt: '2017-07-22T17:32:28Z'
+                ownerOrganizationId: '3.78'
+                level: SUBSCRIPTION_PACKAGE
+                status: DRAFT
+                targets:
+                - id: 9500001_007_SP_01
+                  organizationId: '3.78'
+                category: FRAUD_PREVENTION
+                ruleDefinitions:
+                - type: DATA_USAGE
+                  rules:
+                  - conditions:
+                    - details: {}
+                    actions:
+                    - type: ''
+                      details: {}
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - BearerAuth: []
+      - Oauth2_auth:
+        - rulesets.write
+  /rulesets/{id}/change-status/{desiredStatus}:
+    put:
+      tags:
+      - Management
+      summary: Update ruleset status
+      description: 'Update an existing ruleset by status.
+
+
+        ''desiredStatus'' can be ENABLED, DISABLED or DRAFT
+
+
+        ### The following status transition are allowed to an existing ruleset:
+
+        - from DRAFT to ENABLED
+
+        - from ENABLED to DISABLED
+
+        - from ENABLED to DRAFT
+
+        - from DISABLED to ENABLED
+
+        - from DISABLED to DRAFT'
+      operationId: updateRulesetStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      parameters:
+      - name: id
+        in: path
+        description: rulesetId
+        required: true
+        schema:
+          type: string
+          example: 181ec4a9d9657
+      - name: desiredStatus
+        in: path
+        description: status
+        required: true
+        schema:
+          type: string
+          example: ENABLED
+      responses:
+        '200':
+          description: OK
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RulesetStatusResponse'
+              example:
+                id: 181ec4a9d9657
+                status: ENABLED
+                modifiedBy: test.enterprise@enterprise.com
+                modifiedAt: '2017-07-22T17:32:28Z'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+        default:
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      security:
+      - BearerAuth: []
+      - Oauth2_auth:
+        - rulesets.write
+components:
+  responses:
+    '401':
+      description: Unauthorized
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            problem-example:
+              type: about:blank
+              title: Unauthorized
+              status: 401
+              detail: Permission denied
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    '403':
+      description: Forbidden
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            problem-example:
+              type: about:blank
+              title: Forbidden
+              status: 403
+              detail: Forbidden
+    '400':
+      description: Bad Request
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            problem-example:
+              type: about:blank
+              title: Bad Request
+              status: 400
+              detail: ownerOrganizationId should not be null or empty
+    '404':
+      description: Not Found
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            problem-example:
+              type: about:blank
+              title: Not Found
+              status: 404
+              detail: Not Found
+    '500':
+      description: Internal Server Error
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            problem-example:
+              type: about:blank
+              title: Internal Server Error
+              status: 500
+              detail: Internal Server Error
+  schemas:
+    NetworkEventCondition:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - NO_NETWORK_ACTIVITY
+          - NO_LOCATION_UPDATE
+          - ROAMING_NOT_ALLOWED
+          - NO_SMS_MO_EVENT
+          - NO_SMS_MT_EVENT
+        timeRangeType:
+          type: string
+          enum:
+          - RANGE_BEGINNING_OF_MONTH
+          - RANGE_1_MONTH
+          - RANGE_1_WEEK
+          - RANGE_1_DAY
+          - RANGE_1_HOUR
+        eventType:
+          type: string
+          enum:
+          - XDR
+          - CDR
+          - XDR_AND_CDR
+    CreateRulesetDetailResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+          description: 'The date when the ruleset created
+
+            '
+        ownerOrganizationId:
+          type: string
+        level:
+          type: string
+        status:
+          type: string
+        targets:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              organizationId:
+                type: string
+              priceProfile:
+                type: string
+        category:
+          type: string
+        ruleDefinitions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              rules:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    conditions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          details:
+                            type: object
+                    actions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          details:
+                            type: object
+    SubscriptionState:
+      type: string
+      x-extensible-enum:
+      - NEW
+      - ACTIVE
+      - PAUSE
+      - DEACTIVATED
+      - TERMINATED
+      - REMOVED
+      - OPERATOR_BLOCKED
+      - TERMINATED_PENDING
+      - ACTIVE_NO_BILLING
+      - DEACTIVATED_NO_BILLING
+      - DEACTIVATED_AND_LOCKED
+    DataSessionCondition:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - SESSION_START_ATTEMPT
+        threshold:
+          type: integer
+          format: int64
+        timeRangeType:
+          type: string
+          enum:
+          - RANGE_1_HOUR
+          - RANGE_24_HOUR
+    EmailNotificationAction:
+      type: object
+      properties:
+        emailAddresses:
+          type: array
+          items:
+            type: string
+    RuleType:
+      type: string
+      x-extensible-enum:
+      - DEVICE_CHANGE
+      - DATA_USAGE
+      - SMS_USAGE
+      - NETWORK_EVENT
+      - NETWORK_CHANGE
+      - TIME_BASED
+      - DATA_SESSION
+      - SHARED_BUNDLE_USAGE
+    RulesetStatusResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        modifiedBy:
+          type: string
+        modifiedAt:
+          type: string
+    DataUsageCondition:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - MORE_THAN
+          - LESS_THAN
+        threshold:
+          type: integer
+          format: int64
+        timeRangeType:
+          type: string
+          enum:
+          - RANGE_1_WEEK
+          - RANGE_BEGINNING_OF_MONTH
+          - RANGE_UNLIMITED_PERIOD
+          - RANGE_1_HOUR
+          - RANGE_24_HOUR
+          - RANGE_CURRENT_SP
+        trafficType:
+          type: string
+          enum:
+          - DATA
+          - SMS
+        zoneType:
+          type: string
+          enum:
+          - ALL_NETWORKS
+          - HOME_NETWORK
+          - ROAMING
+          - NOT_IN_ZONES
+          - IN_ZONE1
+          - IN_ZONE2
+          - NOT_IN_ZONE1
+          - NOT_IN_ZONE2
+    Ruleset:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 80
+          description: 'The name of the ruleset (max 80 char)
+
+            '
+          example: RuleSet One
+        description:
+          type: string
+          minLength: 1
+          maxLength: 80
+          description: 'The description of the ruleset component (max 80 char)
+
+            '
+          example: The RuleSet...
+        ownerOrganizationId:
+          type: string
+          description: 'The owner organization id (the new format support for organization
+
+            id)
+
+            '
+          example: 3.78.1
+        level:
+          $ref: '#/components/schemas/Level'
+        targets:
+          type: array
+          description: 'Target contains id and organization
+
+            id = enterprise id, if LEVEL = ENTERPRISE/PRICE_PROFILE <br>
+
+            id = subscription id, if LEVEL = SUBSCRIPTION <br>
+
+            id = subscription package id, if LEVEL = SUBSCRIPTION_PACKAGE <br>
+
+            '
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              priceProfile:
+                type: string
+        category:
+          $ref: '#/components/schemas/Category'
+        ruleDefinitions:
+          type: array
+          description: 'The ruleset defines the collection of rules that determine when a
+
+            ruleset will be fired. The rules comprise of condition (type of
+
+            condition is a predefined Enum - Condition and details is an object
+
+            based on condition type) and action (type of action is a predefined
+
+            Enum - Condition and details is an object based on condition type).
+
+            '
+          items:
+            type: object
+            properties:
+              type:
+                $ref: '#/components/schemas/RuleType'
+              rules:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    conditions:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Conditions'
+                    actions:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Action'
+      required:
+      - name
+      - ownerOrganizationId
+      - level
+      - targets
+      - category
+      - ruleDefinitions
+    Conditions:
+      type: object
+      properties:
+        details:
+          anyOf:
+          - $ref: '#/components/schemas/ImsiLockCondition'
+          - $ref: '#/components/schemas/DataUsageCondition'
+          - $ref: '#/components/schemas/SmsUsageCondition'
+          - $ref: '#/components/schemas/NetworkEventCondition'
+          - $ref: '#/components/schemas/NetworkAgreementCondition'
+          - $ref: '#/components/schemas/TimeBasedCondition'
+          - $ref: '#/components/schemas/DataSessionCondition'
+          - $ref: '#/components/schemas/SharedBundleUsageCondition'
+      description: 'The detail object depends on the ruleset type selected. <br>
+
+        If RuleType = DEVICE_CHANGE , details object should be of ImsiLockCondition <br>
+
+        If RuleType = DATA_USAGE , details object should be of DataUsageCondition <br>
+
+        If RuleType = SMS_USAGE , details object should be of SmsUsageCondition <br>
+
+        If RuleType = NETWORK_EVENT , details object should be of NetworkEventCondition <br>
+
+        If RuleType = NETWORK_CHANGE , details object should be of NetworkAgreementCondition <br>
+
+        If RuleType = TIME_BASED , details object should be of TimeBasedCondition <br>
+
+        If RuleType = DATA_SESSION , details object should be of DataSessionCondition <br>
+
+        If RuleType = SHARED_BUNDLE_USAGE , details object should be of SharedBundleUsageCondition <br>
+
+
+        Though condtions is an array, currently only one condition can be added.
+
+        '
+    ActionType:
+      type: string
+      x-extensible-enum:
+      - LOCALIZATION
+      - EMAIL_NOTIFICATION
+      - CHANGE_SUBSCRIPTION_STATE
+      - STOMP_NOTIFICATION
+      - CHANGE_SUBSCRIPTION_PACKAGE
+    RulesetsListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/RulesetDetailResponse'
+    RulesetDraftRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 17fb9e498aa55
+        name:
+          type: string
+          minLength: 1
+          maxLength: 80
+          description: 'The name of the RuleSet (max 80 char)
+
+            '
+          example: RuleSet One
+        description:
+          type: string
+          minLength: 1
+          maxLength: 80
+          description: 'The description of the ruleset component (max 80 char)
+
+            '
+          example: The RuleSet...
+        ownerOrganizationId:
+          type: string
+          description: 'The owner organization id (the new format support for organization id)
+
+            '
+          example: 3.78.1
+        level:
+          $ref: '#/components/schemas/Level'
+        targets:
+          type: array
+          description: 'Target contains id and organization
+
+            id = enterprise id, if LEVEL = ENTERPRISE/PRICE_PROFILE
+
+            id = subscription id, if LEVEL = SUBSCRIPTION
+
+            id = subscription package id, if LEVEL = SUBSCRIPTION_PACKAGE
+
+            '
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              price_profile:
+                type: string
+        category:
+          $ref: '#/components/schemas/Category'
+        ruleDefinitions:
+          type: array
+          description: 'The ruleset defines the collection of rules that determine when a
+
+            ruleset will be fired. The rules comprise of condition (type of
+
+            condition is a predefined Enum - Condition and details is an object
+
+            based on condition type) and action (type of action is a predefined
+
+            Enum - Condition and details is an object based on condition type).
+
+            '
+          items:
+            type: object
+            properties:
+              type:
+                $ref: '#/components/schemas/RuleType'
+              rules:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    conditions:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Conditions'
+                    actions:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Action'
+      required:
+      - name
+      - ownerOrganizationId
+    Category:
+      type: string
+      x-extensible-enum:
+      - FRAUD_PREVENTION
+      - LIFE_CYCLE_MANAGEMENT
+      - COST_PREVENTION
+      - FAULT_DETECTION
+      - CUSTOM
+      description: 'The category identifies purpose of creating ruleset.
+
+        The values must be selected from Enum Category only
+
+        DEFAULT : CUSTOM
+
+        '
+    Level:
+      type: string
+      x-extensible-enum:
+      - ENTERPRISE
+      - SUBSCRIPTION_PACKAGE
+      - SUBSCRIPTION
+      - PRICE_PROFILE
+      description: 'The affected subscriptions of the Ruleset depend on the target
+
+        set for the ruleset. Four different targets are supported.
+
+        - ENTERPRISE: All current and future subscriptions of the corresponding
+
+        enterprises
+
+        - SUBSCRIPTION_PACKAGE: All current and future subscriptions within the
+
+        corresponding subscription packages.
+
+        - SUBSCRIPTION: Only a single subscription.
+
+        - PRICE_PROFILE: Price profile of an Enterprise (shared bundle triggers)
+
+        '
+      example: SUBSCRIPTION_PACKAGE
+    Action:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ActionType'
+        details:
+          anyOf:
+          - $ref: '#/components/schemas/LocalizationAction'
+          - $ref: '#/components/schemas/EmailNotificationAction'
+          - $ref: '#/components/schemas/ChangeSubscriptionStateAction'
+          - $ref: '#/components/schemas/StompNotificationAction'
+          - $ref: '#/components/schemas/ChangeSubscriptionPackageAction'
+    Network:
+      type: object
+      properties:
+        mcc:
+          type: string
+        mncs:
+          type: array
+          items:
+            type: string
+    StompNotificationAction:
+      type: object
+      properties:
+        customIdentifier:
+          type: string
+    RulesetDetailResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+        modifiedBy:
+          type: string
+        modifiedAt:
+          type: string
+        ownerOrganizationId:
+          type: string
+        level:
+          type: string
+        status:
+          type: string
+        targets:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              organizationId:
+                type: string
+              priceProfile:
+                type: string
+        category:
+          type: string
+        ruleDefinitions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              rules:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    conditions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          details:
+                            type: object
+                    actions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          details:
+                            type: object
+    ImsiLockCondition:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - IS_CHANGED
+          - DOES_NOT_MATCH_TO_ASSIGNED_DEVICE
+          - DOES_NOT_MATCH_IMEI_RANGE
+        imeiRange:
+          type: array
+          items:
+            type: string
+    ChangeSubscriptionStateAction:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/SubscriptionState'
+    TimeBasedCondition:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - TIME_IN_SP
+          - TIME_SINCE_INSTALLATION
+          - TIME_ABSOLUTE
+          - TIME_SINCE_PBR_EXIT
+        threshold:
+          type: integer
+          format: int64
+        timeRangeType:
+          type: string
+          enum:
+          - RANGE_MONTHS
+          - RANGE_WEEKS
+          - RANGE_DAYS
+          - RANGE_HOURS
+          - RANGE_ABSOLUTE
+        absoluteTime:
+          type: string
+          format: date-time
+        executionHour:
+          type: integer
+          format: int32
+    SmsUsageCondition:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - SMS_MO_OVERRUN
+          - SMS_MT_OVERRUN
+        threshold:
+          type: integer
+          format: int64
+        timeRangeType:
+          type: string
+          enum:
+          - RANGE_1_WEEK
+          - RANGE_BEGINNING_OF_MONTH
+          - RANGE_UNLIMITED_PERIOD
+          - RANGE_1_HOUR
+          - RANGE_24_HOUR
+          - RANGE_CURRENT_SP
+        eventType:
+          type: string
+          enum:
+          - XDR
+          - CDR
+    ChangeSubscriptionPackageAction:
+      type: object
+      properties:
+        subscriptionPackageId:
+          type: string
+    SharedBundleUsageCondition:
+      type: object
+      properties:
+        bundleType:
+          type: string
+          enum:
+          - GPRS
+          - SMS
+          - VOICE
+          - CSD
+        threshold:
+          type: integer
+          format: int64
+        timeRangeType:
+          type: string
+          enum:
+          - RANGE_BEGINNING_OF_MONTH
+        eventType:
+          type: string
+          enum:
+          - CDR
+    NetworkAgreementCondition:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - IS
+          - IS_NOT
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Network'
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,
+
+            it provides human-readable documentation for the problem type
+
+            (for example, using HTML).
+
+            '
+          default: about:blank
+          example: about:blank
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (not aimed for non-technical stakeholders and not localized);
+
+            '
+          example: Internal Server Error
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          minimum: 100
+          example: 500
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Internal Server Error
+    LocalizationAction:
+      type: object
+      properties:
+        euIccAgreementId:
+          type: string
+        localeId:
+          type: string
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+  parameters:
+    rulesetParam:
+      in: query
+      name: q
+      schema:
+        type: string
+        example: status==ENABLED;name==Ruleset One;ruleType==DATA_USAGE;category==FRAUD_PREVENTION;level==SUBSCRIPTION_PACKAGE;owner==3.78;target==9500001_007_SP_01;rulesetId==17fb9e498aa55;stompQueueName==dcp.3.78.trigger.v1.0.0;createdStartDate==21-07-2017;createdEndDate==22-07-2017;modifiedStartDate==23-07-2017;modifiedEndDate==24-07-2017
+      description: '
+
+        RSQL query string parameter. Selects rulesets which are filtered by a RSQL compliant query string.
+
+
+        _Available logical operators:_
+
+
+        - Logical AND : ; or "and" is supported
+
+        - Logical OR : , or "or" is supported
+
+
+        ''status'' can be used to describe the current status of Ruleset in the list. Example ''ENABLED'' \
+
+        ''name'' can be used to specify the name of Ruleset in the list. Example ''Ruleset One''\
+
+        ''ruleType'' can be used to determine when a Ruleset will be fired. Example ''DATA_USAGE''\
+
+        ''category'' can be used for identifies purpose of creating ruleset. Example ''FRAUD_PREVENTION''\
+
+        ''level'' Defines affected subscriptions of the ruleset depend on the target set for the ruleset. Example ''SUBSCRIPTION_PACKAGE''\
+
+        ''owner'' The organization which owns the ruleset. Example ''3.78''\
+
+        ''target'' can be used for specify target based on level. Example ''9500001_007_SP_01''\
+
+        ''rulesetId'' can be used for accessing rulesetId items in the list. Example ''17fb9e498aa55''\
+
+        ''stompQueueName'' can be used to specify queue name for stomp notifications. Example ''dcp.3.78.trigger.v1.0.0''\
+
+        ''createdStartDate'' can be used for specifying the start date from which the created rulesets are to be filtered. createdStartDate is to be specified as ‘DD-MM-YYYY''. Example ''21-07-2017''\
+
+        ''createdEndDate'' can be used for specifying the end date to which the created rulesets are to be filtered. createdEndDate is to be specified as ‘DD-MM-YYYY''. Example ''22-07-2017''\
+
+        ''modifiedStartDate'' can be used for specifying the start date from which the modified rulesets are to be filtered. modifiedStartDate is to be specified as ‘DD-MM-YYYY''. Example ''23-07-2017''\
+
+        ''modifiedEndDate'' can be used for specifying the end date to which the modified rulesets are to be filtered. modifiedEndDate is to be specified as ‘DD-MM-YYYY''. Example ''24-07-2017''
+
+
+        Note! All the query parameters are optional.
+
+
+        Comparison operators are in FIQL notation.
+
+
+        _Available comparison operators:_
+
+
+        - Equal to : ==
+
+        - Not equal to : !=
+
+        - Less than : =lt= or <
+
+        - Less than or equal to : =le= or <=
+
+        - Greater than operator : =gt= or >
+
+        - Greater than or equal to : =ge= or >=
+
+
+        Example usage q=status==ENABLED;ruleType==DATA_USAGE\
+
+        Example equivalent usage q=status==ENABLED and ruleType==DATA_USAGE
+
+
+        Note! Only one of type ''q'' is allowed per request.
+
+        '
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    Oauth2_auth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /iot/api/auth/token
+          scopes:
+            triggered-actions.read: Access right to read a triggered action.
+            triggered-actions.write: Access right to write a triggered action.
+            rulesets.read: Access right to read a rulesets.
+            rulesets.write: Access right to write a rulesets..

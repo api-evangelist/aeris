@@ -1,0 +1,906 @@
+openapi: 3.2.0
+info:
+  title: Aeris Reports API
+  x-refined-note:
+  - x-api-id differs across the merged source definitions and was not carried
+  x-audience: external-public
+  version: '1.0'
+  description: 'Operations tagged Reports across 2 of this provider''s published API definitions: business-analytics-report-api.yaml, subscription-signalling-usages-api.yaml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://iot-api.aeris.com/iot/api/business-analytics-service/v1
+  description: API server
+- url: https://iot-api.aeris.com/iot/api/xdr/reports
+  description: API server
+tags:
+- name: Reports
+paths:
+  /reports:
+    get:
+      tags:
+      - Reports
+      summary: Query report data files
+      description: Returns a list of report data files that can be downloaded.
+      operationId: QueryReports
+      parameters:
+      - name: fromDate
+        in: query
+        description: 'Specifies the earliest date from which reports are requested. The input of fromData is set according to RFC 3339 standard in UTC time.
+
+          '
+        required: false
+        schema:
+          type: string
+          format: date-time
+          example: '2022-04-20T01:01:01Z'
+      - name: toDate
+        in: query
+        description: 'Specifies the latest date from which reports are requested. The input of toData is set according to RFC 3339 standard in UTC time.
+
+          '
+        required: false
+        schema:
+          type: string
+          example: '2022-04-20T01:01:01Z'
+      - name: limit
+        in: query
+        required: false
+        description: 'Specifies the maximum number of entries to return. If the value exceeds the maximum, then the errror will be returned. If this parameter is not specified, the default value will be used.
+
+          '
+        schema:
+          type: integer
+          format: int32
+          example: 10000
+          default: 10000
+          minimum: 1
+          maximum: 10000
+      - name: offset
+        in: query
+        required: false
+        description: 'Specifies the offset of the first item in the collection to return. If the value exceeds the total count of result, empty result will be returned.
+
+          '
+        schema:
+          type: integer
+          format: int32
+          example: 0
+          default: 0
+          minimum: 0
+      - name: customerNo
+        in: query
+        required: false
+        description: 'Specifies the customer number of the related organization. If this parameter is not specified, default organizationId from token will be used as query and validated with organization id field in DB.
+
+          If both organizationId and customerNo are provided when query, organizationId will be used as query criteria and validate with customerNo field in DB.
+
+          If none of organizationId or customerNo is provided when query, default organizationId from token will be used as query and validated with organization id field in DB.
+
+          '
+        schema:
+          type: string
+          example: '99887766'
+      - name: organizationId
+        in: query
+        required: false
+        description: 'Specifies the organization ID number of the related organization. If this parameter is not specified, customerNo field in DB will be used as query.
+
+          If both organizationId and customerNo are provided when query, organizationId will be used as query criteria and validate with customerNo field in DB.
+
+          If none of organizationId or customerNo is provided when query, default organizationId from token will be used as query and validate with organization id field in DB.
+
+          ID of the organization could be a fix number e.g. “1.2.3” or it can contain ‘*’ as a wildcard in the following way:
+
+          - ''1.2.*'' will filter all organization whose id starts with 1.2 but not the parent 1.2 itself
+
+          - ''1.2*'' will filter all organizations whose id starts with 1.2 and include the parent 1.2 itself
+
+          '
+        schema:
+          type: string
+          example: 3.78.2
+      - name: reportType
+        in: query
+        required: false
+        description: 'Specifies the type of reports to retrieve. If this parameter is specified, only reports of that type are returned. If this parameter is not specified, then reports for all types are returned.
+
+          '
+        schema:
+          $ref: '#/components/schemas/ReportTypeEnum'
+      responses:
+        '200':
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryReportsResponse'
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '429':
+          $ref: '#/components/responses/429Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+        default:
+          $ref: '#/components/responses/500Response'
+      security:
+      - Oauth2_auth:
+        - cnx_report_download_operator
+        - cnx_report_download_operator_2
+        - cnx_report_download_opco
+        - cnx_report_download_opco_2
+        - cnx_report_download
+        - cnx_report_download_2
+        - cnx_report_download_no_invoice
+        - cnx_report_download_no_invoice_2
+    servers:
+    - url: https://iot-api.aeris.com/iot/api/business-analytics-service/v1
+      description: API server
+  /reports/{id}:
+    get:
+      tags:
+      - Reports
+      summary: Download a report data file
+      description: Returns the report data file which is identified by id.
+      operationId: DownloadReport
+      parameters:
+      - name: id
+        in: path
+        description: Id of report data file which will be downloaded
+        required: true
+        schema:
+          type: string
+          example: 1650426960:CBADETRPT:99887766
+      responses:
+        '200':
+          allOf:
+          - $ref: '#/components/responses/RateLimitedResponse'
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/400Response'
+        '401':
+          $ref: '#/components/responses/401Response'
+        '403':
+          $ref: '#/components/responses/403Response'
+        '404':
+          $ref: '#/components/responses/404Response'
+        '429':
+          $ref: '#/components/responses/429Response'
+        '500':
+          $ref: '#/components/responses/500Response'
+        default:
+          $ref: '#/components/responses/500Response'
+      security:
+      - Oauth2_auth:
+        - cnx_report_download_operator
+        - cnx_report_download_operator_2
+        - cnx_report_download_opco
+        - cnx_report_download_opco_2
+        - cnx_report_download
+        - cnx_report_download_2
+        - cnx_report_download_no_invoice
+        - cnx_report_download_no_invoice_2
+    servers:
+    - url: https://iot-api.aeris.com/iot/api/business-analytics-service/v1
+      description: API server
+  /data-usage:
+    get:
+      tags:
+      - Reports
+      summary: Aggregated reports of data usage
+      description: 'The reports are based on all of the IMSIs that you supply in the request.
+
+
+        __LIMITATION:__
+
+
+        Currently we have a limitation in our analytics system which prohibits us from supporting pagination of report items. This will be addressed in a future release.
+
+
+        __NOTE:__
+
+
+        * Data is only available from 8 days prior to the current time.
+
+        * The maximum interval to query is 8 days.
+
+        * Should specify one of ''imsi'', ''msisdn'' and ''sort'''
+      operationId: getAllDataUsageReports
+      parameters:
+      - $ref: '#/components/parameters/imsiParam'
+      - $ref: '#/components/parameters/msisdnParam'
+      - $ref: '#/components/parameters/fromParam'
+      - $ref: '#/components/parameters/toParam'
+      - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-RateLimit-Limit-Second:
+              $ref: '#/components/headers/X-RateLimit-Limit-Second'
+            X-RateLimit-Limit-Minute:
+              $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+            X-RateLimit-Remaining-Second:
+              $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+            X-RateLimit-Remaining-Minute:
+              $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataUsageResponse'
+        '400':
+          description: Bad reqeust.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+        '401':
+          description: Authentication Failure
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+        '404':
+          description: No Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/404Response'
+        '500':
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/500Response'
+        '503':
+          description: Service Unavailable
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/503Response'
+        '529':
+          description: Service Overloaded
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/529Response'
+        default:
+          description: The standard http error codes will be given. 4XX for client errors and 5XX for server errors.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+      security:
+      - OAuth2:
+        - xdr-report-api.read
+        - subscription-signalling-usages.read
+    servers:
+    - url: https://iot-api.aeris.com/iot/api/xdr/reports
+      description: API server
+  /sms-usage:
+    get:
+      tags:
+      - Reports
+      summary: Aggregated reports of SMS usage
+      description: 'The reports are based on all of the IMSIs that you supply in the request.
+
+
+        __NOTE:__
+
+
+        * Data is only available from 8 days prior to the current time.
+
+        * The maximum interval to query is 8 days.
+
+        * Should specify one of ''imsi'', ''msisdn'' and ''sort'''
+      operationId: getAllSmsUsageReports
+      parameters:
+      - $ref: '#/components/parameters/imsiParam'
+      - $ref: '#/components/parameters/msisdnParam'
+      - $ref: '#/components/parameters/fromParam'
+      - $ref: '#/components/parameters/toParam'
+      - $ref: '#/components/parameters/sortParam'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-RateLimit-Limit-Second:
+              $ref: '#/components/headers/X-RateLimit-Limit-Second'
+            X-RateLimit-Limit-Minute:
+              $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+            X-RateLimit-Remaining-Second:
+              $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+            X-RateLimit-Remaining-Minute:
+              $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmsUsageResponse'
+        '400':
+          description: Bad reqeust.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/400Response'
+        '401':
+          description: Authentication Failure
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/401Response'
+        '404':
+          description: No Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/404Response'
+        '500':
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/500Response'
+        '503':
+          description: Service Unavailable
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/503Response'
+        '529':
+          description: Service Overloaded
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/529Response'
+        default:
+          description: The standard http error codes will be given. 4XX for client errors and 5XX for server errors.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse_2'
+      security:
+      - OAuth2:
+        - xdr-report-api.read
+        - subscription-signalling-usages.read
+    servers:
+    - url: https://iot-api.aeris.com/iot/api/xdr/reports
+      description: API server
+components:
+  schemas:
+    QueryReportsResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+          description: The limit used for this page of results. This will be the same as the limit query parameter unless it exceeded the maximum value if it is specified in query request. If the limit parameter not specified in query request, the default value is used.
+          example: 10000
+          default: 10000
+          minimum: 1
+          maximum: 10000
+        offset:
+          type: integer
+          format: int32
+          description: The offset used for this page of results. This will be the same as the offset query parameter if it is specified in query request. If the offset is not specified in the query request, the default value is used.
+          example: 0
+          default: 0
+          minimum: 0
+        totalCount:
+          type: integer
+          format: int32
+          description: The total count of results, which is one greater than the offset of the last item in the entire collection.
+          example: 4001
+        reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryReportsResponseItem'
+    ErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,it SHOULD provide
+
+            human-readable documentation for the problem type (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable for engineers (usually not suited
+
+            for non technical stakeholders and not localized.
+
+            '
+        status:
+          type: integer
+          format: int32
+          description: The HTTP status code generated by the origin server for this occurrence of the problem.
+          minimum: 100
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem.
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
+          example: https://api.documentation.url/request-id
+    QueryReportsResponseItem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1650426960:CBADETRPT:99887766
+          description: The id of report data file can be downloaded.
+        reportDate:
+          type: string
+          format: date-time
+          example: '2022-04-20T01:01:01.001Z'
+          description: The date when the file was produced, which is set according to RFC 3339 standard in UTC time.
+        size:
+          type: integer
+          format: int64
+          example: 500000
+          description: The size of the file in bytes.
+        reportType:
+          $ref: '#/components/schemas/ReportTypeEnum'
+        reportPeriod:
+          type: string
+          example: 2022-04
+          description: The time period for the report.
+    ReportTypeEnum:
+      type: string
+      description: The report types.
+      example: CBADETRPT
+      x-extensible-enum:
+      - CBADETRPT
+      - CBDETRPT
+      - CBISRPT
+      - CBPPCRPT
+      - CBRECRPT
+      - CCHARPT
+      - CERRRPT
+      - COPCRPT
+      - CRECRPT
+      - CTRATRPT
+      - CTRFRPT
+      - CUSTOM
+      - IMSINM
+      - MSISDNUSE
+      - OI01
+      - OI04
+      - OI05
+      - SIMORDER
+      - SIMSTADET
+      - SIMSTAGE
+      - SIMSTAT
+      - SIMTERM
+      - TIMRECRPT
+      - SIMACTDET
+    404Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: No Found
+          status:
+            example: 404
+    SmsUsageResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsageResponse'
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SmsUsageReport'
+    400Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Bad Request
+          status:
+            example: 400
+    500Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Internal server error
+          status:
+            example: 500
+    UsageReport:
+      type: object
+      properties:
+        key:
+          type: string
+          description: 'The value of the key used to aggregate the reports. This is the sort field supplied in the request.
+
+            If the request was made witout a specified sort, then it will default to imsi.
+
+            '
+          example: '238208000000001'
+    DataUsageResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsageResponse'
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataUsageReport'
+    UsageResponse:
+      type: object
+      properties:
+        cycle_started_at:
+          type: string
+          format: date-time
+          description: The start time for the time window processed to generate the report.
+          example: '2019-06-27T00:00:00.000Z'
+        cycle_ended_at:
+          type: string
+          example: '2019-06-28T00:00:00.000Z'
+          format: date-time
+          description: The end time for the time window processed to generate the report.
+        key_type:
+          type: string
+          example: imsi
+          description: The field name of the key in items.
+    SmsCount:
+      type: object
+      properties:
+        success_count:
+          type: integer
+          format: int64
+          example: 10
+          description: The number of successful messages.
+        error_count:
+          type: integer
+          format: int64
+          example: 1
+          description: The number of erroneous messages.
+    401Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Authentication Failure
+          status:
+            example: 401
+    SmsUsageReport:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsageReport'
+      properties:
+        received:
+          allOf:
+          - $ref: '#/components/schemas/SmsCount'
+          description: The number of received messages.
+        sent:
+          allOf:
+          - $ref: '#/components/schemas/SmsCount'
+          description: The number of sent messages.
+    DataUsageReport:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsageReport'
+      properties:
+        uploaded:
+          type: integer
+          format: int64
+          example: 500000
+          description: The amount of uploaded data in bytes.
+        downloaded:
+          type: integer
+          format: int64
+          example: 500000
+          description: The amount of downloaded data in bytes.
+    ErrorResponse_2:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,it SHOULD provide
+
+            human-readable documentation for the problem type (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable for engineers (usually not suited
+
+            for non technical stakeholders and not localized.
+
+            '
+          example: Service Unavailable
+        status:
+          type: integer
+          format: int32
+          description: The HTTP status code generated by the origin server for this occurrence of the problem.
+          minimum: 100
+          maximum: 600
+          example: 503
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem.
+          example: Connection to database timed out.
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
+          example: https://api.documentation.url/request-id
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+    529Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Service Overloaded
+          status:
+            example: 529
+    503Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Service Unavailable
+          status:
+            example: 503
+  headers:
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    400Response:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Bad Request
+                status: 400
+                detail: Invalid customerNo
+                instance: https://hostname/iot/api/some-path
+    401Response:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Unauthorized
+                status: 401
+                detail: Token expired
+                instance: https://hostname/iot/api/some-path
+    429Response:
+      description: Too Many Requests
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    500Response:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: https://hostname/iot/api/some-path
+    403Response:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: https://hostname/iot/api/some-path
+    404Response:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Not Found
+                status: 404
+                detail: Not Found
+                instance: https://hostname/iot/api/some-path
+  parameters:
+    msisdnParam:
+      in: query
+      name: msisdn
+      description: One or more MSISDNs, comma separated, which identifies the subscription(s) to get reports for, e.g. "01151601063,01151601064". Can only be specified if imsi is NOT.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: string
+      allowReserved: true
+      example: 01151601063,01151601064
+    fromParam:
+      in: query
+      name: from
+      description: The start time, UTC, for the time window processed to generate the response, e.g. "2019-06-28T00:00:00.000Z". If not input, will use default value "One hour ago (UTC)".
+      required: false
+      schema:
+        type: string
+        format: date-time
+      allowReserved: true
+      example: '2019-06-28T00:00:00.000Z'
+    toParam:
+      in: query
+      name: to
+      description: The end time, UTC, for the time window processed to generate the response, e.g. "2019-06-28T01:00:00.000Z". If not input, will use default value "Now (UTC)".
+      required: false
+      schema:
+        type: string
+        format: date-time
+      allowReserved: true
+      example: '2019-06-28T00:00:00.000Z'
+    imsiParam:
+      in: query
+      name: imsi
+      description: One or more IMSIs, comma separated, which identifies the subscription(s) to get reports for, e.g. "238208000000001,238208000000002". Can only be specified if msisdn is NOT.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: string
+      allowReserved: true
+      example: 238208000000001,238208000000002
+    sortParam:
+      in: query
+      name: sort
+      schema:
+        type: string
+        enum:
+        - imsi:asc
+        - imsi:desc
+        - msisdn:asc
+        - msisdn:desc
+        - apn:asc
+        - apn:desc
+        - vplmn:asc
+        - vplmn:desc
+        - rat_type:asc
+        - rat_type:desc
+      description: 'Sort parameter containing sort field and sort mode used for generating reports. This is used to group usage reports, if not input, will use default value ''''imsi:asc".
+
+
+        - imsi: The international mobile subscriber identity. An internationally standardized unique number to identify a mobile subscription. Only support when imsi or msisdn is specified.
+
+        - msisdn: The telephone number that is assigned to a mobile subscription.  Only support when imsi or msisdn is specified.
+
+        - apn: Access Point Name.
+
+        - vplmn: [Visited] Public Land Mobile Network is the PLMN that the mobile subscription has visited.
+
+        - rat_type: The radio technology used by the mobile subscription. 0 (reserved), 1 (UTRAN (3G)), 2 (GERAN (2G)), 3 (WLAN), 4 (GAN), 5 (HSPA Evolution), 6 (EUTRAN (LTE/4G), 7 (Virtual), 8-255 (spare)
+
+        '
+      allowReserved: true
+  securitySchemes:
+    Oauth2_auth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /iot/api/auth/token
+          scopes:
+            cnx_report_download_operator: Download monthly reports - for TCXN (old)
+            cnx_report_download_operator_2: Download monthly reports - for TCXN
+            cnx_report_download_opco: Download monthly reports - for operators (old)
+            cnx_report_download_opco_2: Download monthly reports - for operators
+            cnx_report_download: Download monthly reports - for TCXN (old)
+            cnx_report_download_2: Download monthly reports - for enterprises
+            cnx_report_download_no_invoice: Download monthly reports (no billing-related reports) - for enterprises (old)
+            cnx_report_download_no_invoice_2: Download monthly reports (no billing-related reports) - for enterprises
+            cnx_invoice_download_supplier: Download invoices + invoice deletion - for supplier
+            cnx_invoice_download_operator: Download invoices + invoice deletion - for operators (old)
+            cnx_invoice_download_operator_2: Download invoices + invoice deletion
+            cnx_invoice_download: Download invoices - for enterprises (old)
+            cnx_invoice_download_2: Download invoices
+            cnx_usage_data_download: Download usage data (old)
+            cnx_usage_data_download_2: Download usage data
+            cnx_top_traffic_subscr_gprs: 'API: Subscriptions with most data traffic'
+            cnx_top_traffic_subscr_sms: 'API: Subscriptions with most SMS traffic'
+    OAuth2:
+      type: oauth2
+      description: The resources in the API are protected using the OAuth 2.0 protocol with the password grant flow.
+      flows:
+        password:
+          tokenUrl: /iot/api/auth/token
+          scopes:
+            xdr-report-api.read: Grant read access to usage reports.
+            subscription-signalling-usages.read: Grant read access to subscription signalling usages API.
+x-refined-from:
+- business-analytics-report-api.yaml
+- subscription-signalling-usages-api.yaml
