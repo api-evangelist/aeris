@@ -58,42 +58,7 @@ paths:
       operationId: postDeviceReconnect
       x-operation-id-source: derived
 components:
-  responses:
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    Response_429:
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
   headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
     X-RateLimit-Remaining-Minute:
       description: The number of requests remaining in a minute.
       schema:
@@ -104,7 +69,37 @@ components:
       schema:
         type: integer
         format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
   schemas:
+    Subscription:
+      title: Subscription
+      required:
+      - identifier
+      - identifier_type
+      properties:
+        identifier_type:
+          description: "The type of the values for the items.\n it is case insensitive, Value can be: IMSI, MSISDN, ICC"
+          type: string
+          x-extensible-enum:
+          - IMSI
+          - MSISDN
+          - ICC
+        identifier:
+          description: The identifier of the subscription. The type of the identifier is given by the property "identifier_type".
+          type: string
     DeviceReconnectResponse:
       title: DeviceReconnectResponse
       description: Response type for successfully created subscription request.
@@ -168,22 +163,6 @@ components:
             dereferenced.
 
             '
-    Subscription:
-      title: Subscription
-      required:
-      - identifier
-      - identifier_type
-      properties:
-        identifier_type:
-          description: "The type of the values for the items.\n it is case insensitive, Value can be: IMSI, MSISDN, ICC"
-          type: string
-          x-extensible-enum:
-          - IMSI
-          - MSISDN
-          - ICC
-        identifier:
-          description: The identifier of the subscription. The type of the identifier is given by the property "identifier_type".
-          type: string
     DeviceReconnectRequest:
       title: DeviceReconnectRequest
       description: The model for a subscription device reconnect request.
@@ -202,6 +181,27 @@ components:
         subscription:
           identifier_type: IMSI
           identifier: '100000123456001'
+  responses:
+    Response_429:
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
   securitySchemes:
     Oauth2_auth:
       flows:

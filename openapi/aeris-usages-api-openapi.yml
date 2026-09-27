@@ -168,12 +168,8 @@ paths:
         - cnx_usage_data_download_2
 components:
   headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
       schema:
         type: integer
         format: int32
@@ -187,112 +183,33 @@ components:
       schema:
         type: integer
         format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
       schema:
         type: integer
         format: int32
-  responses:
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    400Response:
-      description: Bad Request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Bad Request
-                status: 400
-                detail: Invalid customerNo
-                instance: https://hostname/iot/api/some-path
-    401Response:
-      description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Unauthorized
-                status: 401
-                detail: Token expired
-                instance: https://hostname/iot/api/some-path
-    429Response:
-      description: Too Many Requests
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    500Response:
-      description: Internal Server Error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Internal Server Error
-                status: 500
-                detail: Internal Server Error
-                instance: https://hostname/iot/api/some-path
-    404Response:
-      description: Not Found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Not Found
-                status: 404
-                detail: Not Found
-                instance: https://hostname/iot/api/some-path
-    403Response:
-      description: Forbidden
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Forbidden
-                status: 403
-                detail: You do not have access to the resource
-                instance: https://hostname/iot/api/some-path
   schemas:
+    QueryUsagesResponseItem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1234567800000'
+          description: The id of usage data file can be downloaded.
+        date:
+          type: string
+          format: date-time
+          example: '2022-04-20T01:01:01.001Z'
+          description: The date when the file was created, which is set according to RFC 3339 standard in UTC time.
+        size:
+          type: integer
+          format: int64
+          example: 500000
+          description: The size of the file in bytes.
     ErrorResponse:
       type: object
       properties:
@@ -326,23 +243,6 @@ components:
           type: string
           description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
           example: https://api.documentation.url/request-id
-    QueryUsagesResponseItem:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1234567800000'
-          description: The id of usage data file can be downloaded.
-        date:
-          type: string
-          format: date-time
-          example: '2022-04-20T01:01:01.001Z'
-          description: The date when the file was created, which is set according to RFC 3339 standard in UTC time.
-        size:
-          type: integer
-          format: int64
-          example: 500000
-          description: The size of the file in bytes.
     QueryUsagesResponse:
       type: object
       properties:
@@ -370,6 +270,106 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/QueryUsagesResponseItem'
+  responses:
+    429Response:
+      description: Too Many Requests
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    401Response:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Unauthorized
+                status: 401
+                detail: Token expired
+                instance: https://hostname/iot/api/some-path
+    404Response:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Not Found
+                status: 404
+                detail: Not Found
+                instance: https://hostname/iot/api/some-path
+    403Response:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: https://hostname/iot/api/some-path
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    400Response:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Bad Request
+                status: 400
+                detail: Invalid customerNo
+                instance: https://hostname/iot/api/some-path
+    500Response:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: https://hostname/iot/api/some-path
   securitySchemes:
     Oauth2_auth:
       type: oauth2

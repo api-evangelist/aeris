@@ -109,29 +109,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    UnauthorizedTokenError:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Application-specific error code.
-          example: 2040
-        httpStatus:
-          type: integer
-          description: HTTP status code returned.
-          example: 401
-        message:
-          type: string
-          description: Human-readable error message.
-          example: Invalid credentials
-      required:
-      - code
-      - httpStatus
-      - message
-      example:
-        code: 2040
-        httpStatus: 401
-        message: Invalid credentials
     CertsResponse:
       type: object
       properties:
@@ -198,6 +175,29 @@ components:
         access_token: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJtT2RVVDYzSG90NTI3Z3pSRGdDczRkWklYUzZONjZ4OUxuekZtaGNzbEEwIn0.eyJqdGkiOiIwMGQ0YmUxNC05YTYzLTQ3YzItYmEyMi01ZmM3NWFhOTZkYjUiLCJleHAiOjE1NjY4MTE2NzgsIm5iZiI6MCwiaWF0IjoxNTY2ODExMzc4LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODEvYXV0aC9yZWFsbXMvaW90IiwiYXVkIjpbImlvdC1yZXNvdXJjZSIsImFjY291bnQiXSwic3ViIjoiY2M4NWRhNGMtMDk1NC00MTA2LWJjM2YtZTY2ZTc3ZDAxZDQxIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiaW90LWJhc2ljLWNsaWVudCIsImF1dGhfdGltZSI6MCwic2Vzc2lvbl9zdGF0ZSI6IjA3YzkxZWQ5LTM5OTAtNDRkNi04MjQxLTY4YWUyZmZkZDU2MSIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImlvdC1yZXNvdXJjZSI6eyJyb2xlcyI6WyJ4ZHItcmF3LWFwaS5yZWFkIiwieGRyLXJlcG9ydC1hcGkucmVhZCIsInhkci1sb2NhdGlvbi1hcGkucmVhZCJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJkZWZhdWx0Q2xpZW50VGVtcGxhdGUgcHJvZmlsZSBlbWFpbCIsImRjcCI6eyJjb21wYW55X2lkIjoiUGlnZ3lzQmFjb24ifSwidXBuIjoiY2M4NWRhNGMtMDk1NC00MTA2LWJjM2YtZTY2ZTc3ZDAxZDQxIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJncm91cHMiOlsieGRyLXJhdy1hcGkucmVhZCIsInhkci1yZXBvcnQtYXBpLnJlYWQiLCJ4ZHItbG9jYXRpb24tYXBpLnJlYWQiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWxpY2UifQ.bJMBcGQOkRPhP29I2xyrpPFiuA4sf1N3gkm8pnI5zPm2n3mnUuWSIX8fO6StnvF5Fuid2zkFIFbSsN8vWveZmQwty6Tn17fnmLWy7AJ2nmn8VQlAxaGo8Ldwsd_zygyalhJKKos2rnT8b95_57hW8OCPJzF8OpQB0uOb9UHk25JKUeaHRhOfKyN7MRffnd48RIvQ54J1YWMIrtbHrRFsWx1ZMZa0GbIlcVbi3GUN_s8Tn1EXBFCtw2a4Wf-THmyI6o1ogqBAisR6QzkW6el1KcEqz5--Dl06EEV_TQDUEBEVROswXQlHwBaD6AKezT8wtoyzQSyXIEoYR9cl6ayJpQ
         token_type: JWT
         expires_in: 60
+    UnauthorizedTokenError:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Application-specific error code.
+          example: 2040
+        httpStatus:
+          type: integer
+          description: HTTP status code returned.
+          example: 401
+        message:
+          type: string
+          description: Human-readable error message.
+          example: Invalid credentials
+      required:
+      - code
+      - httpStatus
+      - message
+      example:
+        code: 2040
+        httpStatus: 401
+        message: Invalid credentials
     BadRequestTokenError:
       type: object
       properties:

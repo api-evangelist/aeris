@@ -293,19 +293,6 @@ components:
             type: string
             description: File name.
             example: Image.jpg
-    FileUpload:
-      type: object
-      required:
-      - file
-      - fileName
-      properties:
-        file:
-          type: string
-          format: binary
-        fileName:
-          type: string
-          format: string
-          example: Sample.txt
     Problem:
       type: object
       properties:
@@ -362,6 +349,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Attachment'
+    FileUpload:
+      type: object
+      required:
+      - file
+      - fileName
+      properties:
+        file:
+          type: string
+          format: binary
+        fileName:
+          type: string
+          format: string
+          example: Sample.txt
   securitySchemes:
     oauth2:
       type: oauth2

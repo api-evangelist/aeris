@@ -61,212 +61,31 @@ paths:
       - OAuth2:
         - cnx_aggregated_traffic
 components:
-  responses:
-    '401':
-      description: Unauthorized
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: about:blank
-            title: Unauthorized
-            status: 401
-            detail: Token expired.
-            instance: N/A
-    '429':
-      description: Too Many Requests
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: about:blank
-            title: Too Many Requests
-            status: 429
-            detail: Limit of requests fully used. Please try later.
-            instance: N/A
-    '403':
-      description: Forbidden
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: about:blank
-            title: Forbidden
-            status: 403
-            detail: Action forbidden.
-            instance: N/A
-    '405':
-      description: Method Not Allowed
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: about:blank
-            title: Method Not Allowed
-            status: 405
-            detail: Method not allowed.
-            instance: N/A
-    '400':
-      description: Bad Request
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: https://your.api.documentation.url
-            title: Bad Request
-            status: 400
-            detail: The dimension parameter is unknown.
-            instance: N/A
-    '404':
-      description: Not Found
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: about:blank
-            title: Not Found
-            status: 404
-            detail: Resource not found.
-            instance: N/A
-    '500':
-      description: Internal Server Error
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-    '204':
-      description: No Content
-    '200':
-      description: OK
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TrafficUsagesResponse'
-  parameters:
-    Header-Accept:
-      name: Accept
-      in: header
-      description: Accept content-type and schemas by the client
+  headers:
+    Content-Type:
+      description: Handle Content-Type
       schema:
         type: string
-        example: application/json
-        default: application/json
-    Header-Accept-Version:
-      name: Accept-Version
-      in: header
-      description: Accept version of the response
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
       schema:
-        type: string
-        example: 0.0.1
-        default: 0.0.1
-    DimensionParameter:
-      name: dimension
-      in: path
-      required: true
-      description: "A parameter that tells how to aggregate the data. Valid values are as follows:\n  - APN\n  - SMSC_ACCOUNT\n  - COUNTRY_CODE\n  - OPCO\n  - OPERATOR\n  - TOTAL\n\nReal time usage query response elements:\n  | Value in the Request | Description |\n  |-------------|------------|\n  | APN         | Only 'activePDPContexts' and 'data' contain related data. |\n  | SMSC_ACCOUNT | Only smsMobileOriginated, smsMobileTerminated, smsApplicationOriginated, and smsAApplicationTerminated contain related data. |\n  | COUNTRY_CODE | All elements contain related data. |\n  | OPCO        | Aggregation on customer number. All elements contain related data. |\n  | OPERATOR    | All elements contain related data. |\n  | TOTAL       | All elements contain related data. |\n"
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
       schema:
-        $ref: '#/components/schemas/DimensionEnum'
-    OrganizationIdParameter:
-      name: organizationId
-      in: query
-      description: "ID of the organization for which the aggregation should be done. It could be a fix number e.g. '1.2.3' or it can contain ‘*’ as a wildcard in the following way:\n  - '1.2.*' will filter all organization whose id starts with 1.2 but not the parent 1.2 itself\n  - '1.2*' will filter all organizations whose id starts with 1.2 and include the parent 1.2 itself'\n"
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
       schema:
-        type: string
-      example: 22.2.2.22
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
   schemas:
     Aggregation:
       allOf:
@@ -278,6 +97,44 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Sms'
+    Sms:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - properties:
+          type:
+            type: string
+            description: Type of SMS traffic.
+            enum:
+            - MobileOriginated
+            - MobileTerminated
+            - ApplicationOriginated
+            - ApplicationTerminated
+          successCount:
+            type: integer
+            format: int64
+            description: 'Optional. Total number of messages.
+
+              Eight-byte integer, its maximum value is 2^63 - 1.
+
+              '
+            example: 100
+            default: 0
+          lastOccurredAt:
+            type: string
+            format: date-time
+            description: Optional. The date and time of the last message.
+            example: '2001-12-31T00:00:00.000Z'
+    TrafficUsagesResponse:
+      description: Response containing aggregated traffic statistics
+      type: object
+      properties:
+        usageAggregations:
+          type: array
+          description: 'Aggregated items based on the dimension parameter.
+
+            '
+          items:
+            $ref: '#/components/schemas/Aggregation'
     Error:
       type: object
       properties:
@@ -294,17 +151,6 @@ components:
           format: date-time
           description: Optional. The date and time of last error.
           example: '2001-12-31T00:00:00.000Z'
-    TrafficUsagesResponse:
-      description: Response containing aggregated traffic statistics
-      type: object
-      properties:
-        usageAggregations:
-          type: array
-          description: 'Aggregated items based on the dimension parameter.
-
-            '
-          items:
-            $ref: '#/components/schemas/Aggregation'
     Data:
       allOf:
       - $ref: '#/components/schemas/Error'
@@ -335,35 +181,6 @@ components:
             format: date-time
             description: Optional. The timestamp of the last downloaded data.
             example: '2001-12-31T00:00:00.000Z'
-    Common:
-      type: object
-      properties:
-        dimensionValue:
-          type: string
-          description: 'The value of the aggregated dimension.
-
-            '
-          example: FI
-        numberOfLocationUpdates:
-          type: integer
-          format: int64
-          description: 'Optional. Number of location updates.
-
-            Eight-byte integer, its maximum value is 2^63-1.
-
-            '
-          default: 0
-          example: 1000
-        activePDPContexts:
-          type: integer
-          format: int64
-          description: 'Optional. Number of active PDP Contexts.
-
-            Eight-byte integer, its maximum value is 2^63-1.
-
-            '
-          default: 0
-          example: 100
     Problem:
       type: object
       properties:
@@ -415,6 +232,35 @@ components:
             It may or may not yield further information if dereferenced.
 
             '
+    Common:
+      type: object
+      properties:
+        dimensionValue:
+          type: string
+          description: 'The value of the aggregated dimension.
+
+            '
+          example: FI
+        numberOfLocationUpdates:
+          type: integer
+          format: int64
+          description: 'Optional. Number of location updates.
+
+            Eight-byte integer, its maximum value is 2^63-1.
+
+            '
+          default: 0
+          example: 1000
+        activePDPContexts:
+          type: integer
+          format: int64
+          description: 'Optional. Number of active PDP Contexts.
+
+            Eight-byte integer, its maximum value is 2^63-1.
+
+            '
+          default: 0
+          example: 100
     DimensionEnum:
       type: string
       description: "A parameter that tells how to aggregate the data. Valid values are as follows:\n  - APN\n  - SMSC_ACCOUNT\n  - COUNTRY_CODE\n  - OPCO\n  - OPERATOR\n  - TOTAL\n"
@@ -427,58 +273,212 @@ components:
       - TOTAL
       example: COUNTRY_CODE
       default: TOTAL
-    Sms:
-      allOf:
-      - $ref: '#/components/schemas/Error'
-      - properties:
-          type:
-            type: string
-            description: Type of SMS traffic.
-            enum:
-            - MobileOriginated
-            - MobileTerminated
-            - ApplicationOriginated
-            - ApplicationTerminated
-          successCount:
-            type: integer
-            format: int64
-            description: 'Optional. Total number of messages.
-
-              Eight-byte integer, its maximum value is 2^63 - 1.
-
-              '
-            example: 100
-            default: 0
-          lastOccurredAt:
-            type: string
-            format: date-time
-            description: Optional. The date and time of the last message.
-            example: '2001-12-31T00:00:00.000Z'
-  headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
+  responses:
+    '429':
+      description: Too Many Requests
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Too Many Requests
+            status: 429
+            detail: Limit of requests fully used. Please try later.
+            instance: N/A
+    '401':
+      description: Unauthorized
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Unauthorized
+            status: 401
+            detail: Token expired.
+            instance: N/A
+    '204':
+      description: No Content
+    '403':
+      description: Forbidden
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Forbidden
+            status: 403
+            detail: Action forbidden.
+            instance: N/A
+    '200':
+      description: OK
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TrafficUsagesResponse'
+    '400':
+      description: Bad Request
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url
+            title: Bad Request
+            status: 400
+            detail: The dimension parameter is unknown.
+            instance: N/A
+    '405':
+      description: Method Not Allowed
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Method Not Allowed
+            status: 405
+            detail: Method not allowed.
+            instance: N/A
+    '404':
+      description: Not Found
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Not Found
+            status: 404
+            detail: Resource not found.
+            instance: N/A
+    '500':
+      description: Internal Server Error
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  parameters:
+    DimensionParameter:
+      name: dimension
+      in: path
+      required: true
+      description: "A parameter that tells how to aggregate the data. Valid values are as follows:\n  - APN\n  - SMSC_ACCOUNT\n  - COUNTRY_CODE\n  - OPCO\n  - OPERATOR\n  - TOTAL\n\nReal time usage query response elements:\n  | Value in the Request | Description |\n  |-------------|------------|\n  | APN         | Only 'activePDPContexts' and 'data' contain related data. |\n  | SMSC_ACCOUNT | Only smsMobileOriginated, smsMobileTerminated, smsApplicationOriginated, and smsAApplicationTerminated contain related data. |\n  | COUNTRY_CODE | All elements contain related data. |\n  | OPCO        | Aggregation on customer number. All elements contain related data. |\n  | OPERATOR    | All elements contain related data. |\n  | TOTAL       | All elements contain related data. |\n"
       schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
+        $ref: '#/components/schemas/DimensionEnum'
+    OrganizationIdParameter:
+      name: organizationId
+      in: query
+      description: "ID of the organization for which the aggregation should be done. It could be a fix number e.g. '1.2.3' or it can contain ‘*’ as a wildcard in the following way:\n  - '1.2.*' will filter all organization whose id starts with 1.2 but not the parent 1.2 itself\n  - '1.2*' will filter all organizations whose id starts with 1.2 and include the parent 1.2 itself'\n"
       schema:
         type: string
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
+      example: 22.2.2.22
+    Header-Accept-Version:
+      name: Accept-Version
+      in: header
+      description: Accept version of the response
       schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
+        type: string
+        example: 0.0.1
+        default: 0.0.1
+    Header-Accept:
+      name: Accept
+      in: header
+      description: Accept content-type and schemas by the client
       schema:
-        type: integer
-        format: int32
+        type: string
+        example: application/json
+        default: application/json
   securitySchemes:
     OAuth2:
       type: oauth2

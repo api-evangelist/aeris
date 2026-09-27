@@ -241,71 +241,45 @@ paths:
       - Oauth2_auth:
         - cc.write
 components:
-  responses:
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    Response_429:
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/vnd.dcp-v1+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/vnd.dcp-v1+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    InternalError:
-      description: Internal error
-      content:
-        application/vnd.dcp-v1+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-  headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
   schemas:
-    SubscriptionIdTypeEnum:
-      type: string
-      description: Subscription ID type
-      enum:
-      - IMSI
-      - MSISDN
+    PriceModel:
+      type: object
+      properties:
+        price:
+          type: number
+          format: double
+        currency_code:
+          type: string
+        vat:
+          type: number
+          format: float
+        validity_period:
+          $ref: '#/components/schemas/TimePeriodModel'
+      description: Price
+    RecurrenceStateModel:
+      type: object
+      properties:
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - PAUSED
+          - FINAL_RENEW_COMPLETED
+          - CANCELED
+        timestamp:
+          type: string
+          format: date-time
+      description: Recurrence state
+    FreeRecurringPurchasesRequestModel:
+      type: object
+      properties:
+        purchase_id:
+          type: string
+          format: uuid
+        free_purchases:
+          type: integer
+          format: int32
+      description: Free recurring purchases request
     ErrorResponse:
       type: object
       properties:
@@ -325,30 +299,36 @@ components:
         success:
           type: boolean
       description: Delete response
-    PriceModel:
-      type: object
-      properties:
-        price:
-          type: number
-          format: double
-        currency_code:
-          type: string
-        vat:
-          type: number
-          format: float
-        validity_period:
-          $ref: '#/components/schemas/TimePeriodModel'
-      description: Price
-    FreeRecurringPurchasesRequestModel:
+    SubscriptionIdTypeEnum:
+      type: string
+      description: Subscription ID type
+      enum:
+      - IMSI
+      - MSISDN
+    PauseRecurringPurchaseRequestModel:
       type: object
       properties:
         purchase_id:
           type: string
           format: uuid
-        free_purchases:
+        paused:
+          type: boolean
+      description: Pause recurring purchase request
+    TimePeriodModel:
+      type: object
+      properties:
+        unit:
+          type: string
+          enum:
+          - NONE
+          - DAYS
+          - WEEKS
+          - MONTHS
+          - YEARS
+        value:
           type: integer
-          format: int32
-      description: Free recurring purchases request
+          format: int64
+      description: Time period
     RecurringPurchaseModel:
       type: object
       properties:
@@ -396,44 +376,64 @@ components:
           type: string
           format: date-time
       description: Recurring purchase
-    PauseRecurringPurchaseRequestModel:
-      type: object
-      properties:
-        purchase_id:
-          type: string
-          format: uuid
-        paused:
-          type: boolean
-      description: Pause recurring purchase request
-    RecurrenceStateModel:
-      type: object
-      properties:
-        state:
-          type: string
-          enum:
-          - ACTIVE
-          - PAUSED
-          - FINAL_RENEW_COMPLETED
-          - CANCELED
-        timestamp:
-          type: string
-          format: date-time
-      description: Recurrence state
-    TimePeriodModel:
-      type: object
-      properties:
-        unit:
-          type: string
-          enum:
-          - NONE
-          - DAYS
-          - WEEKS
-          - MONTHS
-          - YEARS
-        value:
-          type: integer
-          format: int64
-      description: Time period
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    InternalError:
+      description: Internal error
+      content:
+        application/vnd.dcp-v1+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    Response_429:
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/vnd.dcp-v1+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/vnd.dcp-v1+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Oauth2_auth:
       flows:

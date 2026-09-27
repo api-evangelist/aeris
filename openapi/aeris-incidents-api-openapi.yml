@@ -314,6 +314,238 @@ paths:
         - css_premium_csp_incident_for_operators
 components:
   schemas:
+    Auditable:
+      type: object
+      description: Common metadata of auditable entities.
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when this entity was created. (RFC 3339 date-time)
+          example: '2017-06-27T15:47:03.000Z'
+          readOnly: true
+        created_by_user:
+          type: string
+          description: The user who created this entity.
+          example: user@enterprise.xyz
+          readOnly: true
+        last_modified_at:
+          type: string
+          format: date-time
+          description: The date and time of last modification. (RFC 3339 date-time)
+          example: '2017-06-27T15:47:03.000Z'
+          readOnly: true
+        modified_by_user:
+          type: string
+          description: The user who was the last to modify this entity.
+          example: user@enterprise.xyz
+          readOnly: true
+    Attachment:
+      type: object
+      description: File attachment metadata.
+      allOf:
+      - $ref: '#/components/schemas/Auditable'
+      - type: object
+        required:
+        - id
+        - name
+        properties:
+          id:
+            type: string
+            description: File attachment unique id.
+            example: dg3g5vdg
+            readOnly: true
+          name:
+            type: string
+            description: File name.
+            example: Image.jpg
+    IncidentStatus:
+      type: object
+      required:
+      - status
+      - status_change_reason
+      properties:
+        status:
+          type: string
+          description: Current status of the incident (DRAFT/NEW/ASSIGNED/IN_PROGRESS/PENDING/RESOLVED/FORWARDED/CLOSED/CANCELLED).
+          x-extensible-enum:
+          - DRAFT
+          - NEW
+          - ASSIGNED
+          - IN_PROGRESS
+          - PENDING
+          - RESOLVED
+          - FORWARDED
+          - CLOSED
+          - CANCELLED
+          example: NEW
+        status_change_reason:
+          type: string
+          description: The reason for changing the incident status.Note:Mandatory field for PENDING(first two enums) / RESOLVED statuses(Other enum values)
+          x-extensible-enum:
+          - CLIENT_HOLD
+          - CLIENT_ACTION_REQUIRED
+          - BY_CUSTOMER
+          - DUPLICATE
+          - KNOWN_ERROR
+          - NEW_WORK_AROUND
+          - RESOLVED_BY_3_RD_PARTY
+          - HOT_FIX_RELEASE_IMPLEMENTED
+          - NO_FAULT_FOUND
+          readOnly: true
+        resolution_reason:
+          type: string
+          description: The reason for resolution of the RESOLVED incident status.
+          example: Reported Incident is the duplicate ticket
+          readOnly: true
+    IncidentsList:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          description: A list of brief representations of incidents.
+          type: array
+          items:
+            $ref: '#/components/schemas/Incident'
+    Activity:
+      type: object
+      description: An activity related to an incident.
+      allOf:
+      - $ref: '#/components/schemas/Auditable'
+      - $ref: '#/components/schemas/ActivityStatus'
+      - type: object
+        required:
+        - id
+        - summary
+        properties:
+          id:
+            type: string
+            readOnly: true
+            description: Unique activity id.
+            example: j23h434k
+          summary:
+            type: string
+            maxLength: 100
+            description: Short description of the activity.
+            example: Initial activity
+          description:
+            type: string
+            maxLength: 2000
+            description: Detailed description of the activity.
+            example: Incident created.
+          attachments:
+            description: A list of attachment metadata.
+            readOnly: true
+            type: array
+            items:
+              $ref: '#/components/schemas/Attachment'
+    SearchRequest:
+      type: object
+      properties:
+        limit:
+          description: The number of incidents to list.
+          type: string
+          example: '100'
+          minimum: 1
+        organization_ids:
+          description: A list of organization ids to filter the incidents.
+          type: array
+          items:
+            type: string
+            example:
+            - 1.2.3
+            - 1.2.4.*
+        from:
+          description: The starting date yyyy-mm-dd. (RFC 3339 date-time)
+          type: string
+          format: date
+          example: '2020-01-01'
+        to:
+          description: The finishing date yyyy-mm-dd. (RFC 3339 date-time)
+          type: string
+          format: date
+          example: '2020-02-02'
+        sort:
+          description: Sorting fields and order.
+          type: string
+          x-extensible-enum:
+          - id
+          - created
+          - last_modified_at
+          example: -last_modified_at,id
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.  When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://your.api.documentation.url
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized); example: Service Unavailable
+
+            '
+        status:
+          type: integer
+          format: int32
+          description: "The HTTP status code generated by the origin server for this occurrence\n of the problem.\n"
+          minimum: 100
+          example: 503
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Connection to database timed out
+        instance:
+          type: string
+          description: 'An absolute URI that identifies the specific occurrence of the problem.
+
+            It may or may not yield further information if dereferenced.
+
+            '
+    VIPIncidentCount:
+      type: object
+      allOf:
+      - type: object
+        required:
+        - newOrganizationId
+        - currentCount
+        - maxUsageLimit
+        - month
+        properties:
+          newOrganizationId:
+            type: string
+            description: The ID of the Organization in the new period-separated format
+            example: 3.88
+          currentCount:
+            type: integer
+            description: Current VIP Incident count
+            example: 17
+          maxUsageLimit:
+            type: integer
+            description: The usage limit of VIP Incidents
+            example: 5
+          month:
+            type: string
+            description: The month for which the current VIP incident count applies in <mm/yyyy> format
+            example: 03/2022
     Incident:
       type: object
       allOf:
@@ -456,40 +688,17 @@ components:
             type: boolean
             description: true if incident is VIP. VIP incident is a functionality available for operators only, as part of the IoT Accelerator Premium Support service.
       - $ref: '#/components/schemas/Auditable'
-    SearchRequest:
+    IncidentDetails:
       type: object
-      properties:
-        limit:
-          description: The number of incidents to list.
-          type: string
-          example: '100'
-          minimum: 1
-        organization_ids:
-          description: A list of organization ids to filter the incidents.
-          type: array
-          items:
-            type: string
-            example:
-            - 1.2.3
-            - 1.2.4.*
-        from:
-          description: The starting date yyyy-mm-dd. (RFC 3339 date-time)
-          type: string
-          format: date
-          example: '2020-01-01'
-        to:
-          description: The finishing date yyyy-mm-dd. (RFC 3339 date-time)
-          type: string
-          format: date
-          example: '2020-02-02'
-        sort:
-          description: Sorting fields and order.
-          type: string
-          x-extensible-enum:
-          - id
-          - created
-          - last_modified_at
-          example: -last_modified_at,id
+      allOf:
+      - $ref: '#/components/schemas/Incident'
+      - type: object
+        properties:
+          activities:
+            description: A list of activities related to this incident. The first activity is always the creation of the incident.
+            type: array
+            items:
+              $ref: '#/components/schemas/Activity'
     ActivityStatus:
       type: object
       required:
@@ -502,215 +711,6 @@ components:
           - DRAFT
           - CREATED
           example: DRAFT
-    Activity:
-      type: object
-      description: An activity related to an incident.
-      allOf:
-      - $ref: '#/components/schemas/Auditable'
-      - $ref: '#/components/schemas/ActivityStatus'
-      - type: object
-        required:
-        - id
-        - summary
-        properties:
-          id:
-            type: string
-            readOnly: true
-            description: Unique activity id.
-            example: j23h434k
-          summary:
-            type: string
-            maxLength: 100
-            description: Short description of the activity.
-            example: Initial activity
-          description:
-            type: string
-            maxLength: 2000
-            description: Detailed description of the activity.
-            example: Incident created.
-          attachments:
-            description: A list of attachment metadata.
-            readOnly: true
-            type: array
-            items:
-              $ref: '#/components/schemas/Attachment'
-    Auditable:
-      type: object
-      description: Common metadata of auditable entities.
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when this entity was created. (RFC 3339 date-time)
-          example: '2017-06-27T15:47:03.000Z'
-          readOnly: true
-        created_by_user:
-          type: string
-          description: The user who created this entity.
-          example: user@enterprise.xyz
-          readOnly: true
-        last_modified_at:
-          type: string
-          format: date-time
-          description: The date and time of last modification. (RFC 3339 date-time)
-          example: '2017-06-27T15:47:03.000Z'
-          readOnly: true
-        modified_by_user:
-          type: string
-          description: The user who was the last to modify this entity.
-          example: user@enterprise.xyz
-          readOnly: true
-    IncidentDetails:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Incident'
-      - type: object
-        properties:
-          activities:
-            description: A list of activities related to this incident. The first activity is always the creation of the incident.
-            type: array
-            items:
-              $ref: '#/components/schemas/Activity'
-    Attachment:
-      type: object
-      description: File attachment metadata.
-      allOf:
-      - $ref: '#/components/schemas/Auditable'
-      - type: object
-        required:
-        - id
-        - name
-        properties:
-          id:
-            type: string
-            description: File attachment unique id.
-            example: dg3g5vdg
-            readOnly: true
-          name:
-            type: string
-            description: File name.
-            example: Image.jpg
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type.  When dereferenced,
-
-            it SHOULD provide human-readable documentation for the problem type
-
-            (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: https://your.api.documentation.url
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable
-
-            for engineers (usually not suited for non technical stakeholders and
-
-            not localized); example: Service Unavailable
-
-            '
-        status:
-          type: integer
-          format: int32
-          description: "The HTTP status code generated by the origin server for this occurrence\n of the problem.\n"
-          minimum: 100
-          example: 503
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Connection to database timed out
-        instance:
-          type: string
-          description: 'An absolute URI that identifies the specific occurrence of the problem.
-
-            It may or may not yield further information if dereferenced.
-
-            '
-    VIPIncidentCount:
-      type: object
-      allOf:
-      - type: object
-        required:
-        - newOrganizationId
-        - currentCount
-        - maxUsageLimit
-        - month
-        properties:
-          newOrganizationId:
-            type: string
-            description: The ID of the Organization in the new period-separated format
-            example: 3.88
-          currentCount:
-            type: integer
-            description: Current VIP Incident count
-            example: 17
-          maxUsageLimit:
-            type: integer
-            description: The usage limit of VIP Incidents
-            example: 5
-          month:
-            type: string
-            description: The month for which the current VIP incident count applies in <mm/yyyy> format
-            example: 03/2022
-    IncidentsList:
-      type: object
-      required:
-      - items
-      properties:
-        items:
-          description: A list of brief representations of incidents.
-          type: array
-          items:
-            $ref: '#/components/schemas/Incident'
-    IncidentStatus:
-      type: object
-      required:
-      - status
-      - status_change_reason
-      properties:
-        status:
-          type: string
-          description: Current status of the incident (DRAFT/NEW/ASSIGNED/IN_PROGRESS/PENDING/RESOLVED/FORWARDED/CLOSED/CANCELLED).
-          x-extensible-enum:
-          - DRAFT
-          - NEW
-          - ASSIGNED
-          - IN_PROGRESS
-          - PENDING
-          - RESOLVED
-          - FORWARDED
-          - CLOSED
-          - CANCELLED
-          example: NEW
-        status_change_reason:
-          type: string
-          description: The reason for changing the incident status.Note:Mandatory field for PENDING(first two enums) / RESOLVED statuses(Other enum values)
-          x-extensible-enum:
-          - CLIENT_HOLD
-          - CLIENT_ACTION_REQUIRED
-          - BY_CUSTOMER
-          - DUPLICATE
-          - KNOWN_ERROR
-          - NEW_WORK_AROUND
-          - RESOLVED_BY_3_RD_PARTY
-          - HOT_FIX_RELEASE_IMPLEMENTED
-          - NO_FAULT_FOUND
-          readOnly: true
-        resolution_reason:
-          type: string
-          description: The reason for resolution of the RESOLVED incident status.
-          example: Reported Incident is the duplicate ticket
-          readOnly: true
   securitySchemes:
     oauth2:
       type: oauth2

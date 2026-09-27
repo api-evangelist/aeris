@@ -113,6 +113,65 @@ paths:
                 $ref: '#/components/schemas/RequestError'
 components:
   schemas:
+    OutboundSMSBinaryMessage:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Base64 coded string
+    RequestError:
+      type: object
+      properties:
+        requestError:
+          type: object
+          properties:
+            serviceException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
+            policyException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
+    OutboundSMSMessageRequestHolder:
+      type: object
+      required:
+      - outboundSMSMessageRequest
+      properties:
+        outboundSMSMessageRequest:
+          $ref: '#/components/schemas/OutboundSMSMessageRequest'
+    DeliveryInfoList:
+      type: object
+      required:
+      - deliveryInfo
+      - resourceURL
+      properties:
+        deliveryInfo:
+          type: array
+          description: List of deliveryInfos
+          items:
+            $ref: '#/components/schemas/DeliveryInfo'
+        resourceURL:
+          type: string
+          description: Link to the successful response.
     OutboundSMSMessageRequest:
       type: object
       required:
@@ -145,57 +204,14 @@ components:
         subAddress:
           type: string
           description: 'A string that represents the sub-address of the device to send the message to. Supports only SIM card. For example: subAddress:sim'
-    OutboundSMSMessageRequestHolder:
+    OutboundSMSTextMessage:
       type: object
       required:
-      - outboundSMSMessageRequest
+      - message
       properties:
-        outboundSMSMessageRequest:
-          $ref: '#/components/schemas/OutboundSMSMessageRequest'
-    DeliveryInfoList:
-      type: object
-      required:
-      - deliveryInfo
-      - resourceURL
-      properties:
-        deliveryInfo:
-          type: array
-          description: List of deliveryInfos
-          items:
-            $ref: '#/components/schemas/DeliveryInfo'
-        resourceURL:
+        message:
           type: string
-          description: Link to the successful response.
-    RequestError:
-      type: object
-      properties:
-        requestError:
-          type: object
-          properties:
-            serviceException:
-              type: object
-              properties:
-                messageId:
-                  type: string
-                  description: violation identifier, ref. User Guide
-                text:
-                  type: string
-                  description: describes the violation
-                variables:
-                  type: string
-                  description: points to the variable(s) in violation
-            policyException:
-              type: object
-              properties:
-                messageId:
-                  type: string
-                  description: violation identifier, ref. User Guide
-                text:
-                  type: string
-                  description: describes the violation
-                variables:
-                  type: string
-                  description: points to the variable(s) in violation
+          description: Regular text string of up to 160 characters.
     DeliveryInfo:
       type: object
       required:
@@ -214,22 +230,6 @@ components:
           - DeliveryImpossible
           - MessageWaiting
           - DeliveredToNetwork
-    OutboundSMSTextMessage:
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Regular text string of up to 160 characters.
-    OutboundSMSBinaryMessage:
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Base64 coded string
   securitySchemes:
     BasicAuth:
       type: http

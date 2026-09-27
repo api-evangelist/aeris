@@ -21,6 +21,20 @@ tags:
 - M2M
 - eSIM
 - SIM Management
+- Telecommunications
+- Device Management
+- IoT Security
+- Connectivity Management Platform
+- SMS Messaging
+- eUICC
+- Fleet Telematics
+- Machine-to-Machine
+tags_raw:
+- IoT
+- Cellular Connectivity
+- M2M
+- eSIM
+- SIM Management
 - Telecom
 - Device Management
 - IoT Security
@@ -46,6 +60,11 @@ apis:
   humanURL: https://iotdeveloper.aeris.net/hc/en-us/articles/25348517998364-IoT-Accelerator-SOAP-API
   baseURL: https://iot-api.aeris.net
   tags:
+  - IoT
+  - SOAP
+  - Telecommunications
+  - Device Management
+  tags_raw:
   - IoT
   - SOAP
   - Telecom
@@ -137,6 +156,11 @@ apis:
   humanURL: https://support.aeris.net/hc/en-us/articles/360037394973-AerTraffic-Reports-API
   baseURL: https://aertrafficapi.aeris.com/v1
   tags:
+  - IoT
+  - Cellular Connectivity
+  - Telecommunications
+  - M2M
+  tags_raw:
   - IoT
   - Cellular Connectivity
   - Telecom

@@ -117,6 +117,7 @@
     "aeris-consumer-connectivity-openapi.yaml: declared missing tag: Subscriptions",
     "aeris-mds-esb-device-localization-openapi.yaml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
     "aeris-mds-esb-subscription-management-openapi.yaml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "aeris-mds-esb-subscription-management-openapi.yaml: declared missing tag: SubscriptionInventory",
     "aeris-subscription-change-history-openapi.yaml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "aeris-subscription-change-history-openapi.yaml: tagged paths POST /requests -> Requests",
     "aeris-subscription-change-history-openapi.yaml: tagged paths GET /requests/{request-id} -> Requests",

@@ -7,12 +7,12 @@ info:
 servers:
 - url: /dcpapi/rest/subscriptionManagement/v1
 tags:
-- name: 'SubscriptionInventory '
+- name: SubscriptionInventory
 paths:
   /subscriptions/requests/{requestId}:
     get:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Get details for a single subscription request
       description: Returns details of a single subscription request.
       operationId: getSubscriptionRequest
@@ -83,7 +83,7 @@ paths:
   /subscriptions/requests/find:
     post:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Find Subscription Request IDs based on Search Criteria
       description: Returns Subscription Request IDs based on Search Criteria
       operationId: getSubscriptionRequestIds
@@ -149,7 +149,7 @@ paths:
   /subscriptions/details/{key}/{value}:
     get:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Get subscription details by secondary key
       description: '**DEPRECATED** since release 23.4.1. This endpoint will be removed in a future release. Use the Subscription Search API (GET /iot/api/subscriptions/details) instead.'
       operationId: getSubscriptionDetailsBySecondarykey
@@ -246,7 +246,7 @@ paths:
   /subscriptions/returnedMsisdns:
     get:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Query Returned Msisdns within specific time period
       description: Fetches the Returned Msisdn Ranges based on Operator Id and given date intervals
       operationId: fetchReturnedMsisdnRanges
@@ -313,7 +313,7 @@ paths:
   /subscriptions/disabledApns:
     post:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Disable one or more APNs for one or more subscriptions
       description: The operation disables APNs for specific subscriptions within a single subscription package. After the operation, the specified APNs are disabled, other APNs are enabled for the specified subscriptions. All subscriptions must be in the same subscription package.
       operationId: disabledSubscriptionApns
@@ -367,7 +367,7 @@ paths:
   /subscriptions/{subscription_id}:changeMsisdn:
     post:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Activate Subscription
       description: This API will put subscription in activate state
       operationId: activateSubscription
@@ -431,7 +431,7 @@ paths:
   /subscriptions/{subscription_id}:suspendSubscription:
     post:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Suspend Subscription
       description: This API will put subscription in terminated state with longer grace period
       operationId: suspendSubscription
@@ -492,7 +492,7 @@ paths:
   /subscriptions/{imsi}:reassignMsisdn:
     post:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Reassign MSISDN into a new subscription identified by IMSI
       description: The new subscription must be in paused state and the old not terminated. The operation causes the old subscription identified by given msisdn to become terminated and the new one activated with MSISDN from the old subscription.
       operationId: reassignMsisdn
@@ -557,7 +557,7 @@ paths:
   /subscriptions/details:
     post:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Get subscription details by primary key
       description: '**DEPRECATED** since release 23.4.1. This endpoint will be removed in a future release. Use POST /iot/api/subscriptions/details (Subscription Search API) instead.'
       operationId: getSubscriptionDetails
@@ -584,7 +584,7 @@ paths:
   /actions/assignImeis:
     post:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Update assigned-imei of a subscription
       description: Subscription can be identified by IMSI, ICCID, or MSISDN. DEPRECATED on the 10th of June 2018
       operationId: updateAssignedImei
@@ -639,7 +639,7 @@ paths:
   /subscriptions/{id}:assignImei:
     post:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Update assigned-imei of a subscription
       description: Subscription can be identified by IMSI, ICCID, or MSISDN.
       operationId: updateAssignedImeiV2
@@ -705,7 +705,7 @@ paths:
   /subscriptions/{id}/history:
     get:
       tags:
-      - 'SubscriptionInventory '
+      - SubscriptionInventory
       summary: Query history of a subscription
       description: Subscription must be identified by either IMSI, ICCID, or MSISDN.
       operationId: querySubscriptionHistory
@@ -758,123 +758,117 @@ paths:
       - token: []
 components:
   schemas:
-    SubscriptionRequestFilterDto:
+    SubscriptionRequestResourceCounters:
       type: object
       properties:
-        subscriptionRequestTypes:
-          type: array
-          items:
-            type: string
-            enum:
-            - CESS
-            - CHANGE_SUBSCRIPTIONOWNER
-            - CHANGE_SUBSCRIPTIONREGION
-            - CHANGE_SUBSCRIPTIONSTATE
-            - CHANGE_SUBSCRIPTIONPACKAGE
-            - CHANGE_SUBSCRIPTIONLABEL
-            - CHANGE_SUBSCRIPTIONSTATE_PARENT
-            - CHANGE_SUBSCRIPTIONPACKAGE_PARENT
-            - CHANGE_SUBSCRIPTIONOWNER_PARENT
-            - CHANGE_SUBSCRIPTIONREGION_PARENT
-            - CHANGE_SUBSCRIPTION_NOTE
-            - CHANGE_ALTROAMINGPROVIDER
-            - CHANGE_SUBSCRIPTIONIP
-            - DEVICE_RECONNECT
-            - EUICC_ORDER
-            - EUICC_PROFILE_ORDER
-            - EUICC_STOCK_ORDER
-            - EUICC_UPDATE_LABEL
-            - EUICC_LOCALIZATION
-            - EUICC_DELOCALIZATION
-            - EUICC_LOCALIZATION_BATCH
-            - EUICC_DELOCALIZATION_BATCH
-            - EUICC_ADD_LOCALE
-            - EUICC_ADD_LOCALE_BATCH
-            - EUICC_REMOVE_LOCALE
-            - EUICC_DOWNLOAD_PROFILE
-            - EUICC_DELETE_PROFILE
-            - EUICC_RESET_COUNTERS
-            - EUICC_SET_FALLBACK_ATTR
-            - SIM_ORDER
-            - STOCK_ORDER
-            - TRIGGERPACKAGE_ASSIGN
-            - TRIGGERPACKAGE_REMOVE
-            - INDIVIDUAL_APN_UPDATE
-            - SECURITY_LOCK_STATE
-            - SECURITY_UNLOCK_STATE
-            - LOCK_SUBSCRIPTIONSTATE
-            - UNLOCK_SUBSCRIPTIONSTATE
-            - PREPARE_CONSUMER_PROFILE
-            - UNKNOWN
-        subscriptionRequestStates:
-          type: array
-          items:
-            type: string
-            enum:
-            - IN_PROGRESS
-            - PENDING
-            - CANCELED
-            - REJECTED
-            - COMPLETED
-            - COMPLETED_WITH_FAILURES
-            - UNKNOWN
-        createdBy:
-          type: string
-        limit:
+        inProgress:
           type: integer
           format: int32
-        companyIds:
-          type: array
-          items:
-            type: string
-        timeCreatedBefore:
-          type: string
-          format: date-time
-        timeCreatedAfter:
-          type: string
-          format: date-time
-        lastUpdatedBefore:
-          type: string
-          format: date-time
-        lastUpdatedAfter:
-          type: string
-          format: date-time
-        sortOrder:
-          $ref: '#/components/schemas/SubscriptionRequestSortOrderDto'
-      description: Subscription Request Search Criteria Parameters
-    SuspendSubscriptionRequest:
+        pending:
+          type: integer
+          format: int32
+        canceled:
+          type: integer
+          format: int32
+        rejected:
+          type: integer
+          format: int32
+        completed:
+          type: integer
+          format: int32
+        failed:
+          type: integer
+          format: int32
+    SubscriptionDetails:
       required:
-      - subscription_id_type
+      - imsi
+      - subscriptionState
       type: object
       properties:
-        subscription_id_type:
+        imsi:
           type: string
-          description: Subscription Type
-      description: Suspend Subscription.
-    DisabledSubscriptionApns:
+          description: International mobile subscriber identity
+        msisdn:
+          type: string
+          description: Mobile station international subscriber directory number
+        subscriptionState:
+          type: string
+          description: Current state
+          enum:
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - OPERATOR_BLOCKED
+          - DEACTIVATED_NO_BILLING
+          - ACTIVE_NO_BILLING
+        icc:
+          type: string
+        imei:
+          type: string
+        companyId:
+          type: string
+          description: Enterprise identifier.
+        companyName:
+          type: string
+          description: Enterprise name. Included only with group 'enterpriseInfo'.
+        subscriptionPackageName:
+          type: string
+          description: Subscription package name. Included only with group 'packageInfo'.
+        subscriptionPackageDescription:
+          type: string
+          description: Subscription package description. Included only with group 'packageInfo'.
+        firstActivationDate:
+          type: string
+          description: First activation date. Included only with group 'dates'.
+          format: date-time
+        lastSubscriptionChangeDate:
+          type: string
+          description: Last subscription change time stamp. Included only with group 'dates'.
+          format: date-time
+        lockState:
+          type: string
+          description: Current lock state. Included only with group 'lockStateInfo'.
+          enum:
+          - UNLOCKED
+          - LOCKED
+          - UNKNOWN
+        lockingReason:
+          type: string
+          description: Locking reason. Included only with group 'lockStateInfo'.
+        customerLabel:
+          type: string
+          description: Customer label. Included only with group 'label'.
+        simSpecificationId:
+          type: string
+          description: SIM Specification ID. Included only with group 'simSpecification'.
+        pbrExitDate:
+          type: string
+          description: PBR exit date. Included only with group 'dates'.
+          format: date-time
+        individualApns:
+          type: array
+          description: Subscription individually enabled APNs. Included only with group 'individualApn'. When empty, APNs from package are used
+          items:
+            $ref: '#/components/schemas/IndividualApn'
+      description: Subscription details model
+    SubscriptionRequestSortOrderDto:
       required:
-      - apns
-      - imsis
-      - subscriptionPackageId
+      - sortField
       type: object
       properties:
-        apns:
-          maxItems: 9
-          minItems: 0
-          type: array
-          description: APNs to disable. Other APNs are enabled. Empty list means no APNs to disable, so it enables all APNs in the subscription package.
-          items:
-            type: string
-        imsis:
-          maxItems: 10000
-          minItems: 1
-          type: array
-          description: The IMSIs of subscriptions with APNs to disable.
-          items:
-            type: string
-        subscriptionPackageId:
+        sortField:
           type: string
-          description: Id of subscription package of the subscriptions
+          enum:
+          - SUBSCRIPTION_REQUEST_TYPE
+          - SUBSCRIPTION_REQUEST_STATE
+          - TIME_CREATED_BEFORE
+          - TIME_CREATED_AFTER
+          - LAST_UPDATED_BEFORE
+          - LAST_UPDATED_AFTER
+          - CREATED_BY
+        descending:
+          type: boolean
     SubscriptionDetailsPagedResponse:
       type: object
       properties:
@@ -895,35 +889,17 @@ components:
           description: Number of items in this response.
           format: int32
       description: Subscriptions details response with pagination
-    SubscriptionDetailsResponse:
+    IndividualApn:
       type: object
       properties:
-        subscriptionDetails:
-          type: array
-          description: Subscription details
-          items:
-            $ref: '#/components/schemas/SubscriptionDetails'
-        size:
+        ordinal:
           type: integer
-          description: Number of items in this response.
           format: int32
-      description: Subscriptions details response model
-    AssignIMEIRequest:
-      required:
-      - assignedImei
-      - companyId
-      type: object
-      properties:
-        companyId:
+        apn:
           type: string
-          description: Company ID under which the request is performed.
-        additionalInfo:
+        type:
           type: string
-          description: Additional info for the request.
-        assignedImei:
-          type: string
-          description: The IMEI to assign to the subscription. Define empty value to remove.
-      description: Assign IMEI to a subscription.
+      description: Individual APN for subscription
     MsisdnRangeResponseDto:
       type: object
       properties:
@@ -931,88 +907,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MsisdnRangeResponseItemsDto'
-    Error:
-      required:
-      - code
-      - httpStatus
-      - message
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Error code
-          format: int32
-          example: 2040
-        httpStatus:
-          type: integer
-          description: Response HTTP status
-          format: int32
-          example: 401
-        message:
-          type: string
-          description: Error message
-          example: Request validation failed
-        detailedMessage:
-          type: string
-          description: Detailed error message
-          example: Could not parse JSON body. Optional, This attribute will not be included in the response if the message is empty.
-      description: Error response model
-    ReassignMSISDN:
-      required:
-      - companyId
-      - msisdn
-      type: object
-      properties:
-        companyId:
-          type: string
-          description: Company ID under which the request is performed.
-        additionalInfo:
-          type: string
-          description: Additional info for the request.
-        msisdn:
-          type: string
-          description: The MSISDN to reassign from an old subscription..
-      description: Reassigns MSISDN from an old subscription identified by MSISDN into a new one identified by IMSI.
-    ActivateSubscriptionResponse:
+    SubscriptionResponse:
       type: object
       properties:
         serviceRequestId:
           type: string
-        msisdn:
-          type: string
-    SubscriptionRequestResource:
-      type: object
-      properties:
-        resourceProperties:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionRequestResourceProperty'
-        resourceState:
-          type: string
-          enum:
-          - IN_PROGRESS
-          - PENDING
-          - CANCELED
-          - REJECTED
-          - COMPLETED
-          - FAILED
-          - UNKNOWN
-        resourceFailureInfos:
-          type: array
-          items:
-            $ref: '#/components/schemas/FailureInfo'
-        resourceId:
-          type: string
-    FailureInfo:
-      type: object
-      properties:
-        errorObject:
-          $ref: '#/components/schemas/ErrorObject'
-        getErrorType:
-          type: string
-          enum:
-          - ES_ERROR
-          - DCP_ERROR
+          description: 'Use the unique ID called ''serviceRequestId'' in the following operation to query the status of the ''disableApns'' request:
+
+            /subscriptions/requests/{serviceRequestId}'
+          example: REQ201234567890
     SubscriptionRequest:
       type: object
       properties:
@@ -1111,136 +1014,138 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionRequestResource'
-    SubscriptionResponse:
+    SubscriptionRequestResource:
       type: object
       properties:
-        serviceRequestId:
+        resourceProperties:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionRequestResourceProperty'
+        resourceState:
           type: string
-          description: 'Use the unique ID called ''serviceRequestId'' in the following operation to query the status of the ''disableApns'' request:
-
-            /subscriptions/requests/{serviceRequestId}'
-          example: REQ201234567890
-    SubscriptionRequestResourceCounters:
-      type: object
-      properties:
-        inProgress:
-          type: integer
-          format: int32
-        pending:
-          type: integer
-          format: int32
-        canceled:
-          type: integer
-          format: int32
-        rejected:
-          type: integer
-          format: int32
-        completed:
-          type: integer
-          format: int32
-        failed:
-          type: integer
-          format: int32
-    AssignIMEI:
-      required:
-      - assignedImei
-      - companyId
-      - subscriptionId
-      - subscriptionIdType
-      type: object
-      properties:
-        subscriptionIdType:
-          type: string
-          description: Must be one of IMSI, ICCID, or MSISDN.
           enum:
-          - IMSI
-          - ICCID
-          - MSISDN
-        subscriptionId:
+          - IN_PROGRESS
+          - PENDING
+          - CANCELED
+          - REJECTED
+          - COMPLETED
+          - FAILED
+          - UNKNOWN
+        resourceFailureInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailureInfo'
+        resourceId:
           type: string
-          description: Valid identifier of the specified subscriptionIdType.
-        assignedImei:
+    SubscriptionRequestFilterDto:
+      type: object
+      properties:
+        subscriptionRequestTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - CESS
+            - CHANGE_SUBSCRIPTIONOWNER
+            - CHANGE_SUBSCRIPTIONREGION
+            - CHANGE_SUBSCRIPTIONSTATE
+            - CHANGE_SUBSCRIPTIONPACKAGE
+            - CHANGE_SUBSCRIPTIONLABEL
+            - CHANGE_SUBSCRIPTIONSTATE_PARENT
+            - CHANGE_SUBSCRIPTIONPACKAGE_PARENT
+            - CHANGE_SUBSCRIPTIONOWNER_PARENT
+            - CHANGE_SUBSCRIPTIONREGION_PARENT
+            - CHANGE_SUBSCRIPTION_NOTE
+            - CHANGE_ALTROAMINGPROVIDER
+            - CHANGE_SUBSCRIPTIONIP
+            - DEVICE_RECONNECT
+            - EUICC_ORDER
+            - EUICC_PROFILE_ORDER
+            - EUICC_STOCK_ORDER
+            - EUICC_UPDATE_LABEL
+            - EUICC_LOCALIZATION
+            - EUICC_DELOCALIZATION
+            - EUICC_LOCALIZATION_BATCH
+            - EUICC_DELOCALIZATION_BATCH
+            - EUICC_ADD_LOCALE
+            - EUICC_ADD_LOCALE_BATCH
+            - EUICC_REMOVE_LOCALE
+            - EUICC_DOWNLOAD_PROFILE
+            - EUICC_DELETE_PROFILE
+            - EUICC_RESET_COUNTERS
+            - EUICC_SET_FALLBACK_ATTR
+            - SIM_ORDER
+            - STOCK_ORDER
+            - TRIGGERPACKAGE_ASSIGN
+            - TRIGGERPACKAGE_REMOVE
+            - INDIVIDUAL_APN_UPDATE
+            - SECURITY_LOCK_STATE
+            - SECURITY_UNLOCK_STATE
+            - LOCK_SUBSCRIPTIONSTATE
+            - UNLOCK_SUBSCRIPTIONSTATE
+            - PREPARE_CONSUMER_PROFILE
+            - UNKNOWN
+        subscriptionRequestStates:
+          type: array
+          items:
+            type: string
+            enum:
+            - IN_PROGRESS
+            - PENDING
+            - CANCELED
+            - REJECTED
+            - COMPLETED
+            - COMPLETED_WITH_FAILURES
+            - UNKNOWN
+        createdBy:
           type: string
-          description: The IMEI to assign to the subscription. Define empty value to remove.
+        limit:
+          type: integer
+          format: int32
+        companyIds:
+          type: array
+          items:
+            type: string
+        timeCreatedBefore:
+          type: string
+          format: date-time
+        timeCreatedAfter:
+          type: string
+          format: date-time
+        lastUpdatedBefore:
+          type: string
+          format: date-time
+        lastUpdatedAfter:
+          type: string
+          format: date-time
+        sortOrder:
+          $ref: '#/components/schemas/SubscriptionRequestSortOrderDto'
+      description: Subscription Request Search Criteria Parameters
+    ReassignMSISDN:
+      required:
+      - companyId
+      - msisdn
+      type: object
+      properties:
         companyId:
           type: string
           description: Company ID under which the request is performed.
         additionalInfo:
           type: string
-          description: Additional info for the request. Currently ignored.
-      description: Assign IMEI to a subscription.
-    MsisdnRangeResponseItemsDto:
-      type: object
-      properties:
-        startNumber:
+          description: Additional info for the request.
+        msisdn:
           type: string
-        endNumber:
-          type: string
-        dateTime:
-          type: string
-        poolId:
-          type: string
-        reservedFor:
-          type: string
-        available:
-          type: string
-        ordered:
-          type: string
-    SubscriptionRequestSortOrderDto:
+          description: The MSISDN to reassign from an old subscription..
+      description: Reassigns MSISDN from an old subscription identified by MSISDN into a new one identified by IMSI.
+    SuspendSubscriptionRequest:
       required:
-      - sortField
+      - subscription_id_type
       type: object
       properties:
-        sortField:
+        subscription_id_type:
           type: string
-          enum:
-          - SUBSCRIPTION_REQUEST_TYPE
-          - SUBSCRIPTION_REQUEST_STATE
-          - TIME_CREATED_BEFORE
-          - TIME_CREATED_AFTER
-          - LAST_UPDATED_BEFORE
-          - LAST_UPDATED_AFTER
-          - CREATED_BY
-        descending:
-          type: boolean
-    Instant:
-      type: object
-      properties:
-        epochSecond:
-          type: integer
-          format: int64
-        nano:
-          type: integer
-          format: int64
-    SubscriptionRequestResourceProperty:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - ICCID
-          - IMSI
-          - MSISDN
-          - EUICCID
-          - INTERNAL_ID
-          - TARGET_SUBSCRIPTION_STATE
-          - TARGET_SUBSCRIPTION_PACKAGE
-        value:
-          type: string
-        operation:
-          type: string
-          enum:
-          - SUBSCRIPTION_STATE_CHANGE
-          - SUBSCRIPTION_PACKAGE_CHANGE
-          - DOWNLOAD
-          - DOWNLOAD_AND_ENABLE
-          - ENABLE
-          - DELETE
-          - LOCALIZATION
-          - ADD_LOCALE
-          - DELOCALIZATION
-          - REMOVE_LOCALE
-          - UNKOWN
+          description: Subscription Type
+      description: Suspend Subscription.
     ActivateSubscriptionRequest:
       required:
       - subscription_id_type
@@ -1259,49 +1164,30 @@ components:
           type: string
           description: 'CompanyId '
       description: Activate Subscription.
-    GetSubscriptionDetailsByPrimaryKey:
+    DisabledSubscriptionApns:
       required:
-      - type
-      - values
+      - apns
+      - imsis
+      - subscriptionPackageId
       type: object
       properties:
-        type:
-          type: string
-          description: Type of query key
-          enum:
-          - imsi
-          - icc
-          - msisdn
-        values:
+        apns:
+          maxItems: 9
+          minItems: 0
+          type: array
+          description: APNs to disable. Other APNs are enabled. Empty list means no APNs to disable, so it enables all APNs in the subscription package.
+          items:
+            type: string
+        imsis:
           maxItems: 10000
           minItems: 1
           type: array
+          description: The IMSIs of subscriptions with APNs to disable.
           items:
             type: string
-        groups:
-          type: array
-          items:
-            type: string
-            enum:
-            - enterpriseInfo
-            - packageInfo
-            - dates
-            - label
-            - simSpecification
-            - lockStateInfo
-            - individualApn
-      description: Find subscriptions using primary key values
-    IndividualApn:
-      type: object
-      properties:
-        ordinal:
-          type: integer
-          format: int32
-        apn:
+        subscriptionPackageId:
           type: string
-        type:
-          type: string
-      description: Individual APN for subscription
+          description: Id of subscription package of the subscriptions
     SubscriptionHistoryRow:
       required:
       - serviceConfiguration
@@ -1387,81 +1273,195 @@ components:
           type: string
           description: IMEI provisioned to network.
       description: Describes one change in subscription history.
-    ErrorObject:
-      type: object
-    SubscriptionDetails:
-      required:
-      - imsi
-      - subscriptionState
+    SubscriptionDetailsResponse:
       type: object
       properties:
-        imsi:
+        subscriptionDetails:
+          type: array
+          description: Subscription details
+          items:
+            $ref: '#/components/schemas/SubscriptionDetails'
+        size:
+          type: integer
+          description: Number of items in this response.
+          format: int32
+      description: Subscriptions details response model
+    Error:
+      required:
+      - code
+      - httpStatus
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          format: int32
+          example: 2040
+        httpStatus:
+          type: integer
+          description: Response HTTP status
+          format: int32
+          example: 401
+        message:
           type: string
-          description: International mobile subscriber identity
-        msisdn:
+          description: Error message
+          example: Request validation failed
+        detailedMessage:
           type: string
-          description: Mobile station international subscriber directory number
-        subscriptionState:
+          description: Detailed error message
+          example: Could not parse JSON body. Optional, This attribute will not be included in the response if the message is empty.
+      description: Error response model
+    SubscriptionRequestResourceProperty:
+      type: object
+      properties:
+        type:
           type: string
-          description: Current state
           enum:
-          - ACTIVE
-          - DEACTIVATED
-          - PAUSE
-          - TERMINATED
-          - OPERATOR_BLOCKED
-          - DEACTIVATED_NO_BILLING
-          - ACTIVE_NO_BILLING
-        icc:
+          - ICCID
+          - IMSI
+          - MSISDN
+          - EUICCID
+          - INTERNAL_ID
+          - TARGET_SUBSCRIPTION_STATE
+          - TARGET_SUBSCRIPTION_PACKAGE
+        value:
           type: string
-        imei:
+        operation:
           type: string
+          enum:
+          - SUBSCRIPTION_STATE_CHANGE
+          - SUBSCRIPTION_PACKAGE_CHANGE
+          - DOWNLOAD
+          - DOWNLOAD_AND_ENABLE
+          - ENABLE
+          - DELETE
+          - LOCALIZATION
+          - ADD_LOCALE
+          - DELOCALIZATION
+          - REMOVE_LOCALE
+          - UNKOWN
+    Instant:
+      type: object
+      properties:
+        epochSecond:
+          type: integer
+          format: int64
+        nano:
+          type: integer
+          format: int64
+    FailureInfo:
+      type: object
+      properties:
+        errorObject:
+          $ref: '#/components/schemas/ErrorObject'
+        getErrorType:
+          type: string
+          enum:
+          - ES_ERROR
+          - DCP_ERROR
+    ErrorObject:
+      type: object
+    AssignIMEIRequest:
+      required:
+      - assignedImei
+      - companyId
+      type: object
+      properties:
         companyId:
           type: string
-          description: Enterprise identifier.
-        companyName:
+          description: Company ID under which the request is performed.
+        additionalInfo:
           type: string
-          description: Enterprise name. Included only with group 'enterpriseInfo'.
-        subscriptionPackageName:
+          description: Additional info for the request.
+        assignedImei:
           type: string
-          description: Subscription package name. Included only with group 'packageInfo'.
-        subscriptionPackageDescription:
+          description: The IMEI to assign to the subscription. Define empty value to remove.
+      description: Assign IMEI to a subscription.
+    AssignIMEI:
+      required:
+      - assignedImei
+      - companyId
+      - subscriptionId
+      - subscriptionIdType
+      type: object
+      properties:
+        subscriptionIdType:
           type: string
-          description: Subscription package description. Included only with group 'packageInfo'.
-        firstActivationDate:
-          type: string
-          description: First activation date. Included only with group 'dates'.
-          format: date-time
-        lastSubscriptionChangeDate:
-          type: string
-          description: Last subscription change time stamp. Included only with group 'dates'.
-          format: date-time
-        lockState:
-          type: string
-          description: Current lock state. Included only with group 'lockStateInfo'.
+          description: Must be one of IMSI, ICCID, or MSISDN.
           enum:
-          - UNLOCKED
-          - LOCKED
-          - UNKNOWN
-        lockingReason:
+          - IMSI
+          - ICCID
+          - MSISDN
+        subscriptionId:
           type: string
-          description: Locking reason. Included only with group 'lockStateInfo'.
-        customerLabel:
+          description: Valid identifier of the specified subscriptionIdType.
+        assignedImei:
           type: string
-          description: Customer label. Included only with group 'label'.
-        simSpecificationId:
+          description: The IMEI to assign to the subscription. Define empty value to remove.
+        companyId:
           type: string
-          description: SIM Specification ID. Included only with group 'simSpecification'.
-        pbrExitDate:
+          description: Company ID under which the request is performed.
+        additionalInfo:
           type: string
-          description: PBR exit date. Included only with group 'dates'.
-          format: date-time
-        individualApns:
+          description: Additional info for the request. Currently ignored.
+      description: Assign IMEI to a subscription.
+    MsisdnRangeResponseItemsDto:
+      type: object
+      properties:
+        startNumber:
+          type: string
+        endNumber:
+          type: string
+        dateTime:
+          type: string
+        poolId:
+          type: string
+        reservedFor:
+          type: string
+        available:
+          type: string
+        ordered:
+          type: string
+    ActivateSubscriptionResponse:
+      type: object
+      properties:
+        serviceRequestId:
+          type: string
+        msisdn:
+          type: string
+    GetSubscriptionDetailsByPrimaryKey:
+      required:
+      - type
+      - values
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of query key
+          enum:
+          - imsi
+          - icc
+          - msisdn
+        values:
+          maxItems: 10000
+          minItems: 1
           type: array
-          description: Subscription individually enabled APNs. Included only with group 'individualApn'. When empty, APNs from package are used
           items:
-            $ref: '#/components/schemas/IndividualApn'
-      description: Subscription details model
+            type: string
+        groups:
+          type: array
+          items:
+            type: string
+            enum:
+            - enterpriseInfo
+            - packageInfo
+            - dates
+            - label
+            - simSpecification
+            - lockStateInfo
+            - individualApn
+      description: Find subscriptions using primary key values
   securitySchemes:
     token:
       type: apiKey

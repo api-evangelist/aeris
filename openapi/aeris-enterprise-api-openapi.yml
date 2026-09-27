@@ -328,98 +328,32 @@ paths:
       - oauth2:
         - css_deprecate_subscription_package
 components:
+  headers:
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
   schemas:
-    EnterpriseRead:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Enterprise ID.
-          minLength: 3
-          maxLength: 255
-          example: 1.2.3.44
-        customer_number:
-          deprecated: true
-          type: string
-          description: Legacy identifier for the enterprise. API clients should start transitioning to use id instead as the customer_number will be removed. Date of removal is not yet known; notice will be given at least 6 months before.
-          minLength: 8
-          maxLength: 8
-          example: '02000044'
-        parent_number:
-          deprecated: true
-          type: string
-          description: Legacy identifier for the enterprise's parent. API clients should start transitioning to use id instead as the parent_number will be removed, and id contains the parent ID. Date of removal is not yet known; notice will be given at least 6 months before.
-          maxLength: 255
-          example: '02000001'
-        parent_id:
-          type: string
-          description: ID of the parent organization
-          maxLength: 255
-          example: 1.2.3
-        name:
-          type: string
-          description: Enterprise name.
-          minLength: 1
-          maxLength: 80
-          example: MyCompany
-        description:
-          type:
-          - string
-          - 'null'
-          description: Enterprise description.
-          maxLength: 255
-          example: MyCompany description
-        enterprise_type:
-          description: Type of the enterprise.
-          type: string
-          x-extensible-enum:
-          - ENTERPRISE
-          - ADVANCED_RESELLER
-          - CONTROLLED_RESELLER
-          default: ENTERPRISE
-          example: ENTERPRISE
-        created_at:
-          type: string
-          description: The time when the enterprise was created (ISO 8601 UTC)
-          example: '2019-06-28T00:00:00.000Z'
-        status:
-          $ref: '#/components/schemas/Status'
-        provisioning_status:
-          $ref: '#/components/schemas/ProvisioningStatus'
-        tags:
-          type: array
-          description: A list of API consumer defined text strings that can be used to further describe an enterprise.
-          maxItems: 10
-          items:
-            type: string
-          example:
-          - business:finance
-          - market:europe
-        template_sp_id:
-          type: array
-          description: A list of template subscription package id are used for an enterprise.
-          items:
-            type: integer
-            format: int64
-          example:
-          - '1231'
-          - '1232'
-      required:
-      - id
-      - parent_id
-      - name
-      - created_at
-      - status
-    ProvisioningStatus:
-      type: string
-      description: Provisioning status of the entity
-      x-extensible-enum:
-      - NONE
-      - PENDING
-      - STARTED
-      - SUCCESS
-      - FAILURE
-      example: SUCCESS
     SubscriptionPackageBase:
       type: object
       properties:
@@ -599,37 +533,58 @@ components:
           description: Operator-defined external service which is available for the enterprise.
           allOf:
           - $ref: '#/components/schemas/BasicData'
-    EnterpriseCreate:
+    SimSpecification:
+      type: object
       allOf:
-      - $ref: '#/components/schemas/EnterpriseWrite'
+      - $ref: '#/components/schemas/BasicData'
       - properties:
-          enterprise_type:
-            description: Type of the enterprise
+          earliest_delivery_in_days:
+            type:
+            - integer
+            - 'null'
+            description: Minimum number of days from SIM order to earliest possible delivery.
+            example: 15
+          order_increment:
+            type:
+            - integer
+            - 'null'
+            description: The number of SIMs that an order must be incremented with.
+            example: 10
+          low_order_threshold:
+            type:
+            - integer
+            - 'null'
+            description: If number of SIMs in SIM order is smaller than the low order threshold, a low order fee may be applied.
+            example: 5
+          network_group_id:
+            type:
+            - integer
+            - 'null'
+            format: int64
+            description: Internal ID of the operator's network group to which this SIM specfication belongs. See output of [GET/enterprises/network-groups]
+            example: 123
+    ProfileSpecification:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BasicData'
+      - properties:
+          number_scheme:
+            type: string
+            description: The number scheme id
+            example: ZZSSCHEME00142,ZZSSCHEME00143
+          price_category:
+            type: integer
+            description: The price category
+            example: 5
+          profile_type:
             type: string
             x-extensible-enum:
-            - ENTERPRISE
-            default: ENTERPRISE
-            example: ENTERPRISE
-          parent_id:
-            type: string
-            description: ID of the parent organization
-            maxLength: 255
-            example: 1.2.3
-          agreement_number:
-            type: string
-            description: 'Agreement number for the enterprise. Globally unique and case sensitive. Numbers, letters, hyphen, dot and underscore are allowed.
-
-
-              Cannot be changed once the enterprise is created.
-
-              '
-            minLength: 1
-            maxLength: 20
-            example: Abc_1234.5-6
-        required:
-        - parent_id
-        - agreement_number
-        - connectivity
+            - BOOTSTRAP
+            - VIRTUAL
+            - PROVISIONING
+            - OPERATIONAL
+            description: The profile type
+            example: BOOTSTRAP,VIRTUAL
     FormSpecification:
       type: object
       allOf:
@@ -647,6 +602,96 @@ components:
             type: string
             description: sm-sr endpoint
             example: 4.3.2.1,1.2.3.4
+    TpsPriceMap:
+      type: object
+      additionalProperties:
+        type: string
+        description: Mapping of SP Template name to Price Profile Name
+      example:
+        TPS Example-1: Example Price Profile Name
+        TPS Example-2: Example Price Profile Name
+    price:
+      type: object
+      properties:
+        plan_id:
+          type: string
+          maxLength: 50
+          example: PP123456789
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+          example: My Price Highlights
+        profile_ids:
+          type: string
+          maxLength: 255
+          example: profileid1,profileid2
+        plan_name:
+          type: string
+          maxLength: 255
+          example: My Price Plan
+    EnterprisesRead:
+      type: object
+      properties:
+        enterprises:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnterpriseRead'
+        other_enterprises_available:
+          type: boolean
+          description: Inform the user whether there are more enterprises to be displayed
+          default: true
+    Address:
+      type: object
+      properties:
+        contact_person:
+          type: string
+          description: Name of the recipient. Mandatory for billing address.
+          minLength: 3
+          maxLength: 60
+          example: Firstname Lastname
+        street_address:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: Main Street 1
+        city:
+          type: string
+          minLength: 1
+          maxLength: 60
+          example: Somecity
+        zip:
+          type: string
+          description: ZIP code / postal code
+          minLength: 1
+          maxLength: 90
+          example: ZIP-12345
+        country:
+          type: string
+          minLength: 2
+          maxLength: 2
+          example: FI
+          description: Country's ISO-3166-1 2-character shortcode string
+        state:
+          type:
+          - string
+          - 'null'
+          minLength: 4
+          maxLength: 6
+          example: FI-16
+          description: State's / province's ISO-3166-2 shortcode string
+        phone_number:
+          type:
+          - string
+          - 'null'
+          maxLength: 50
+          example: +999-12-34567
+      required:
+      - street_address
+      - city
+      - zip
+      - country
     BasicData:
       type: object
       properties:
@@ -670,39 +715,6 @@ components:
           $ref: '#/components/schemas/ProvisioningStatus'
       required:
       - name
-    ProfileSpecification:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BasicData'
-      - properties:
-          number_scheme:
-            type: string
-            description: The number scheme id
-            example: ZZSSCHEME00142,ZZSSCHEME00143
-          price_category:
-            type: integer
-            description: The price category
-            example: 5
-          profile_type:
-            type: string
-            x-extensible-enum:
-            - BOOTSTRAP
-            - VIRTUAL
-            - PROVISIONING
-            - OPERATIONAL
-            description: The profile type
-            example: BOOTSTRAP,VIRTUAL
-    EnterprisesRead:
-      type: object
-      properties:
-        enterprises:
-          type: array
-          items:
-            $ref: '#/components/schemas/EnterpriseRead'
-        other_enterprises_available:
-          type: boolean
-          description: Inform the user whether there are more enterprises to be displayed
-          default: true
     Status:
       type: string
       description: Status of the entity
@@ -713,14 +725,111 @@ components:
       - SUBMITTED
       - OBSOLETE
       example: READY
-    TpsPriceMap:
+    CamelProfile:
       type: object
-      additionalProperties:
-        type: string
-        description: Mapping of SP Template name to Price Profile Name
-      example:
-        TPS Example-1: Example Price Profile Name
-        TPS Example-2: Example Price Profile Name
+      allOf:
+      - $ref: '#/components/schemas/BasicData'
+      - properties:
+          camel_profile_id:
+            type: integer
+            maximum: 8160
+            example: 5005
+        required:
+        - camel_profile_id
+    EnterpriseRead:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Enterprise ID.
+          minLength: 3
+          maxLength: 255
+          example: 1.2.3.44
+        customer_number:
+          deprecated: true
+          type: string
+          description: Legacy identifier for the enterprise. API clients should start transitioning to use id instead as the customer_number will be removed. Date of removal is not yet known; notice will be given at least 6 months before.
+          minLength: 8
+          maxLength: 8
+          example: '02000044'
+        parent_number:
+          deprecated: true
+          type: string
+          description: Legacy identifier for the enterprise's parent. API clients should start transitioning to use id instead as the parent_number will be removed, and id contains the parent ID. Date of removal is not yet known; notice will be given at least 6 months before.
+          maxLength: 255
+          example: '02000001'
+        parent_id:
+          type: string
+          description: ID of the parent organization
+          maxLength: 255
+          example: 1.2.3
+        name:
+          type: string
+          description: Enterprise name.
+          minLength: 1
+          maxLength: 80
+          example: MyCompany
+        description:
+          type:
+          - string
+          - 'null'
+          description: Enterprise description.
+          maxLength: 255
+          example: MyCompany description
+        enterprise_type:
+          description: Type of the enterprise.
+          type: string
+          x-extensible-enum:
+          - ENTERPRISE
+          - ADVANCED_RESELLER
+          - CONTROLLED_RESELLER
+          default: ENTERPRISE
+          example: ENTERPRISE
+        created_at:
+          type: string
+          description: The time when the enterprise was created (ISO 8601 UTC)
+          example: '2019-06-28T00:00:00.000Z'
+        status:
+          $ref: '#/components/schemas/Status'
+        provisioning_status:
+          $ref: '#/components/schemas/ProvisioningStatus'
+        tags:
+          type: array
+          description: A list of API consumer defined text strings that can be used to further describe an enterprise.
+          maxItems: 10
+          items:
+            type: string
+          example:
+          - business:finance
+          - market:europe
+        template_sp_id:
+          type: array
+          description: A list of template subscription package id are used for an enterprise.
+          items:
+            type: integer
+            format: int64
+          example:
+          - '1231'
+          - '1232'
+      required:
+      - id
+      - parent_id
+      - name
+      - created_at
+      - status
+    Offers:
+      type: object
+      properties:
+        offers:
+          type: array
+          maxItems: 50
+          items:
+            $ref: '#/components/schemas/Offer'
+    TemplateSubscriptionPackage:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BasicData'
+      - $ref: '#/components/schemas/SubscriptionPackageBase'
     Offer:
       type: object
       allOf:
@@ -758,43 +867,19 @@ components:
             format: int64
           tsp_price_profile_linkage:
             $ref: '#/components/schemas/TpsPriceMap'
-    TemplateSubscriptionPackage:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BasicData'
-      - $ref: '#/components/schemas/SubscriptionPackageBase'
-    SubscriptionPackages:
-      type: object
-      properties:
-        items:
-          type: array
-          maxItems: 255
-          items:
-            $ref: '#/components/schemas/SubscriptionPackage'
     EnterpriseUpdate:
       allOf:
       - $ref: '#/components/schemas/EnterpriseWrite'
-    price:
-      type: object
-      properties:
-        plan_id:
-          type: string
-          maxLength: 50
-          example: PP123456789
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-          example: My Price Highlights
-        profile_ids:
-          type: string
-          maxLength: 255
-          example: profileid1,profileid2
-        plan_name:
-          type: string
-          maxLength: 255
-          example: My Price Plan
+    ProvisioningStatus:
+      type: string
+      description: Provisioning status of the entity
+      x-extensible-enum:
+      - NONE
+      - PENDING
+      - STARTED
+      - SUCCESS
+      - FAILURE
+      example: SUCCESS
     Connectivity:
       type: object
       description: Connectivity parameters.
@@ -829,19 +914,45 @@ components:
           example: mycompany@example.com
       required:
       - invoice_delivery_type
-    CamelProfile:
-      type: object
+    EnterpriseCreate:
       allOf:
-      - $ref: '#/components/schemas/BasicData'
+      - $ref: '#/components/schemas/EnterpriseWrite'
       - properties:
-          camel_profile_id:
-            type: integer
-            maximum: 8160
-            example: 5005
+          enterprise_type:
+            description: Type of the enterprise
+            type: string
+            x-extensible-enum:
+            - ENTERPRISE
+            default: ENTERPRISE
+            example: ENTERPRISE
+          parent_id:
+            type: string
+            description: ID of the parent organization
+            maxLength: 255
+            example: 1.2.3
+          agreement_number:
+            type: string
+            description: 'Agreement number for the enterprise. Globally unique and case sensitive. Numbers, letters, hyphen, dot and underscore are allowed.
+
+
+              Cannot be changed once the enterprise is created.
+
+              '
+            minLength: 1
+            maxLength: 20
+            example: Abc_1234.5-6
         required:
-        - camel_profile_id
-    Empty:
-      type: string
+        - parent_id
+        - agreement_number
+        - connectivity
+    SubscriptionPackages:
+      type: object
+      properties:
+        items:
+          type: array
+          maxItems: 255
+          items:
+            $ref: '#/components/schemas/SubscriptionPackage'
     ProblemGeneric:
       type: object
       properties:
@@ -895,100 +1006,6 @@ components:
             '
           default: about:blank
           example: /iot/api/problems/123e4567-e89b-12d3-a456-426614174000
-    Address:
-      type: object
-      properties:
-        contact_person:
-          type: string
-          description: Name of the recipient. Mandatory for billing address.
-          minLength: 3
-          maxLength: 60
-          example: Firstname Lastname
-        street_address:
-          type: string
-          minLength: 1
-          maxLength: 255
-          example: Main Street 1
-        city:
-          type: string
-          minLength: 1
-          maxLength: 60
-          example: Somecity
-        zip:
-          type: string
-          description: ZIP code / postal code
-          minLength: 1
-          maxLength: 90
-          example: ZIP-12345
-        country:
-          type: string
-          minLength: 2
-          maxLength: 2
-          example: FI
-          description: Country's ISO-3166-1 2-character shortcode string
-        state:
-          type:
-          - string
-          - 'null'
-          minLength: 4
-          maxLength: 6
-          example: FI-16
-          description: State's / province's ISO-3166-2 shortcode string
-        phone_number:
-          type:
-          - string
-          - 'null'
-          maxLength: 50
-          example: +999-12-34567
-      required:
-      - street_address
-      - city
-      - zip
-      - country
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type. When dereferenced,it SHOULD provide
-
-            human-readable documentation for the problem type (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable for engineers (usually not suited
-
-            for non technical stakeholders and not localized.
-
-            '
-          example: Service Unavailable
-        status:
-          type: integer
-          format: int32
-          description: The HTTP status code generated by the origin server for this occurrence of the problem.
-          minimum: 100
-          example: 503
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem.
-          example: Connection to database timed out.
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
-          example: https://api.documentation.url/request-id
-    Offers:
-      type: object
-      properties:
-        offers:
-          type: array
-          maxItems: 50
-          items:
-            $ref: '#/components/schemas/Offer'
     EnterpriseDetail:
       allOf:
       - $ref: '#/components/schemas/EnterpriseRead'
@@ -1097,141 +1114,42 @@ components:
         required:
         - agreement_number
         - billing_address
-    SimSpecification:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BasicData'
-      - properties:
-          earliest_delivery_in_days:
-            type:
-            - integer
-            - 'null'
-            description: Minimum number of days from SIM order to earliest possible delivery.
-            example: 15
-          order_increment:
-            type:
-            - integer
-            - 'null'
-            description: The number of SIMs that an order must be incremented with.
-            example: 10
-          low_order_threshold:
-            type:
-            - integer
-            - 'null'
-            description: If number of SIMs in SIM order is smaller than the low order threshold, a low order fee may be applied.
-            example: 5
-          network_group_id:
-            type:
-            - integer
-            - 'null'
-            format: int64
-            description: Internal ID of the operator's network group to which this SIM specfication belongs. See output of [GET/enterprises/network-groups]
-            example: 123
-    EnterpriseWrite:
+    Problem:
       type: object
       properties:
-        name:
+        type:
           type: string
-          description: Enterprise name.
-          minLength: 1
-          maxLength: 80
-          example: MyCompany
-        description:
-          type:
-          - string
-          - 'null'
-          description: Enterprise description.
-          maxLength: 255
-          example: MyCompany description
-        tags:
-          type: array
-          description: 'A list of API consumer defined text strings that can be used to further describe an enterprise.
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,it SHOULD provide
+
+            human-readable documentation for the problem type (e.g., using HTML).
 
             '
-          maxItems: 10
-          items:
-            type: string
-          example:
-          - business:finance
-          - foo12345
-        vat_number:
+          default: about:blank
+          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
+        title:
           type: string
-          description: Value Added Tax registration/identification number
-          minLength: 4
-          maxLength: 30
-          example: FF-123/4.5
-        financial_customer_number:
-          type:
-          - string
-          - 'null'
-          description: Used in client's financial system to identify the enterprise
-          maxLength: 255
-          example: 987-F
-        has_price_plan:
-          type: boolean
-          description: Indicates if the enterprise has a price plan assigned to it
-          default: false
-        offer_ids:
-          type: array
-          description: List of Internal IoT-A offer Ids
-          maxItems: 10
-          items:
-            type: integer
-            format: int64
-        subscription_request_notification_enabled:
-          description: Indicates if notifications about completed subscription service requests are sent for this enterprise. See document 'Subscription Request Notifications' for details
-          type: boolean
-          example: false
-        billing_address:
-          description: Enterprise's legal/registered address
-          allOf:
-          - $ref: '#/components/schemas/Address'
-        delivery_addresses:
-          description: Addresses for SIM delivery
-          type: array
-          maxItems: 100
-          items:
-            $ref: '#/components/schemas/Address'
-        sim_specification_ids:
-          type: array
-          description: Internal IDs of the SIM specifications this enterprise needs to use. Obtained from [GET/enterprises/sim-specifications]
-          maxItems: 100
-          uniqueItems: true
-          items:
-            type: integer
-            format: int64
-        network_group_ids:
-          type: array
-          description: Internal IDs of the operator's network groups this enterprise is used in. Mandatory if operator has more than 1 network group. Obtained from [GET/enterprises/network-groups]
-          maxItems: 100
-          uniqueItems: true
-          items:
-            type: integer
-            format: int64
-        euicc_specification_ids:
-          type: array
-          description: Internal IDs of the eUICC specifications this enterprise needs to use
-          maxItems: 100
-          uniqueItems: true
-          items:
-            type: integer
-            format: int64
-        connectivity:
-          $ref: '#/components/schemas/Connectivity'
-        security_management:
-          description: Monitor device behaviour to recognize security events, get alerts of suspicious behaviour and apply needed mitigation actions to react to identified incidents.
-          type:
-          - boolean
-          - 'null'
-          example: false
-        cellular_threat_detection_enabled:
-          type: boolean
-          example: false
-        volte_roaming_allowed:
-          type: boolean
-          example: false
-      required:
-      - name
+          description: 'A short, summary of the problem type. Written in english and readable for engineers (usually not suited
+
+            for non technical stakeholders and not localized.
+
+            '
+          example: Service Unavailable
+        status:
+          type: integer
+          format: int32
+          description: The HTTP status code generated by the origin server for this occurrence of the problem.
+          minimum: 100
+          example: 503
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem.
+          example: Connection to database timed out.
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
+          example: https://api.documentation.url/request-id
     SubscriptionPackage:
       type: object
       allOf:
@@ -1463,17 +1381,150 @@ components:
           volte_roaming_allowed:
             type: boolean
             description: VoLTE roaming is allowed.
+    Empty:
+      type: string
+    EnterpriseWrite:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Enterprise name.
+          minLength: 1
+          maxLength: 80
+          example: MyCompany
+        description:
+          type:
+          - string
+          - 'null'
+          description: Enterprise description.
+          maxLength: 255
+          example: MyCompany description
+        tags:
+          type: array
+          description: 'A list of API consumer defined text strings that can be used to further describe an enterprise.
+
+            '
+          maxItems: 10
+          items:
+            type: string
+          example:
+          - business:finance
+          - foo12345
+        vat_number:
+          type: string
+          description: Value Added Tax registration/identification number
+          minLength: 4
+          maxLength: 30
+          example: FF-123/4.5
+        financial_customer_number:
+          type:
+          - string
+          - 'null'
+          description: Used in client's financial system to identify the enterprise
+          maxLength: 255
+          example: 987-F
+        has_price_plan:
+          type: boolean
+          description: Indicates if the enterprise has a price plan assigned to it
+          default: false
+        offer_ids:
+          type: array
+          description: List of Internal IoT-A offer Ids
+          maxItems: 10
+          items:
+            type: integer
+            format: int64
+        subscription_request_notification_enabled:
+          description: Indicates if notifications about completed subscription service requests are sent for this enterprise. See document 'Subscription Request Notifications' for details
+          type: boolean
+          example: false
+        billing_address:
+          description: Enterprise's legal/registered address
+          allOf:
+          - $ref: '#/components/schemas/Address'
+        delivery_addresses:
+          description: Addresses for SIM delivery
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Address'
+        sim_specification_ids:
+          type: array
+          description: Internal IDs of the SIM specifications this enterprise needs to use. Obtained from [GET/enterprises/sim-specifications]
+          maxItems: 100
+          uniqueItems: true
+          items:
+            type: integer
+            format: int64
+        network_group_ids:
+          type: array
+          description: Internal IDs of the operator's network groups this enterprise is used in. Mandatory if operator has more than 1 network group. Obtained from [GET/enterprises/network-groups]
+          maxItems: 100
+          uniqueItems: true
+          items:
+            type: integer
+            format: int64
+        euicc_specification_ids:
+          type: array
+          description: Internal IDs of the eUICC specifications this enterprise needs to use
+          maxItems: 100
+          uniqueItems: true
+          items:
+            type: integer
+            format: int64
+        connectivity:
+          $ref: '#/components/schemas/Connectivity'
+        security_management:
+          description: Monitor device behaviour to recognize security events, get alerts of suspicious behaviour and apply needed mitigation actions to react to identified incidents.
+          type:
+          - boolean
+          - 'null'
+          example: false
+        cellular_threat_detection_enabled:
+          type: boolean
+          example: false
+        volte_roaming_allowed:
+          type: boolean
+          example: false
+      required:
+      - name
+  responses:
+    '429':
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemGeneric'
+          example:
+            type: about:blank
+            title: Too Many Requests
+            status: 429
+            detail: Too Many Requests. Please refer response RateLimit-* headers before send requests.
+            instance: about:blank
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
   parameters:
-    pageNumber:
+    tagsParam:
       in: query
-      name: page_number
-      description: Page number to display list of enterprises
+      name: tags
+      description: 'Filter the response based on tags. Matching is exact and case sensitive. If multiple tags are applied only resources matching all filters will be returned (logical ''AND'')
+
+        '
       schema:
-        type: integer
-        minimum: 1
-        maximum: 99999
-        example: 1
-        default: 1
+        type: string
+      example: business:finance
     statusParam:
       in: query
       name: enterprise_status
@@ -1485,47 +1536,18 @@ components:
         - READY
         default: READY
         example: READY
-    tagsParam:
+    tspIdQuery:
       in: query
-      name: tags
-      description: 'Filter the response based on tags. Matching is exact and case sensitive. If multiple tags are applied only resources matching all filters will be returned (logical ''AND'')
-
-        '
-      schema:
-        type: string
-      example: business:finance
-    enterpriseIdParam:
-      in: path
-      name: enterprise_id
-      description: The id of the requested enterprise. May be either organizationID or the deprecated customerNo.
-      required: true
-      schema:
-        type: string
-        minLength: 3
-        maxLength: 255
-        example: 1.2.3.44
-    spIdToDeactivate:
-      in: path
-      name: subscription_package_id
-      description: The id of the subscription package to deactivate
+      name: subscription_package_template_id
+      description: The id of the subscription package template
       required: true
       schema:
         type: integer
         format: int64
-    template_sp_id:
-      in: query
-      name: template_sp_id
-      description: The id(s) of the Subscription Package Template(s)
-      schema:
-        type: array
-        items:
-          type: integer
-          format: int64
-        example: 528491, 67534
-    parentEnterpriseIdParam:
+    enterpriseIdParam:
       in: path
-      name: parent_enterprise_id
-      description: The id of the requested parent enterprise.May be either organizationID or the deprecated customerNo.
+      name: enterprise_id
+      description: The id of the requested enterprise. May be either organizationID or the deprecated customerNo.
       required: true
       schema:
         type: string
@@ -1542,14 +1564,6 @@ components:
         maximum: 999
         example: 10
         default: 100
-    tspIdQuery:
-      in: query
-      name: subscription_package_template_id
-      description: The id of the subscription package template
-      required: true
-      schema:
-        type: integer
-        format: int64
     targetEnterpriseId:
       in: query
       name: target_enterprise_id
@@ -1559,58 +1573,44 @@ components:
         minLength: 3
         maxLength: 255
         example: 1.2.3.44
-  headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
+    pageNumber:
+      in: query
+      name: page_number
+      description: Page number to display list of enterprises
       schema:
         type: integer
-        format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
+        minimum: 1
+        maximum: 99999
+        example: 1
+        default: 1
+    spIdToDeactivate:
+      in: path
+      name: subscription_package_id
+      description: The id of the subscription package to deactivate
+      required: true
       schema:
         type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
+        format: int64
+    parentEnterpriseIdParam:
+      in: path
+      name: parent_enterprise_id
+      description: The id of the requested parent enterprise.May be either organizationID or the deprecated customerNo.
+      required: true
       schema:
         type: string
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
+        minLength: 3
+        maxLength: 255
+        example: 1.2.3.44
+    template_sp_id:
+      in: query
+      name: template_sp_id
+      description: The id(s) of the Subscription Package Template(s)
       schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-  responses:
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    '429':
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemGeneric'
-          example:
-            type: about:blank
-            title: Too Many Requests
-            status: 429
-            detail: Too Many Requests. Please refer response RateLimit-* headers before send requests.
-            instance: about:blank
+        type: array
+        items:
+          type: integer
+          format: int64
+        example: 528491, 67534
   securitySchemes:
     oauth2:
       type: oauth2

@@ -741,52 +741,143 @@ paths:
       summary: Cancel sim order with provided id
       description: Executes the cancel sim order with the provided request id.
 components:
+  responses:
+    Response_404:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 404
+                detail: Resource not found
+    SimResourceResponse:
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SimResourceResponse'
+      description: The response from a sucessfull query sim resource request.
+    Response_429:
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 429
+                detail: Too Many Requests
+    Response_401:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 401
+                detail: Unauthorized.
+    Response_403:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 403
+                detail: Forbidden
+    Response_default:
+      description: 'Internal Server Error, Error occurred -
+
+        see status code and problem object for more'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 500
+                detail: Internal Server Error.
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    Response_500:
+      description: 'Internal Server Error, Error occurred -
+
+        see status code and problem object for more'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 500
+                detail: Internal Server Error.
+    SubscriptionRequestResponse:
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SubscriptionRequestResponseType'
+          examples:
+            subscription-request-response-example-1:
+              value:
+                subscription_request_id: REQ201234567890
+      description: The response from a sucessfully created request.
+    Response_400:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                status: 400
+                detail: 'Missing mandatory request parameters
+
+                  and/or incorrect parameter format'
+    AvailableRegionQueryResponse:
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AvailableRegionQueryResponseType'
+          examples:
+            available-region-query-response-example-1:
+              value:
+                regions:
+                - short_name: REQ201234567890
+                  description: ABC
+                  quarantine_period: 60
+                  number_length: 15
+                  pool_id: ZZFXXXXXXP00099
+                  status: ACTIVE
+      description: The response from a sucessfully query request.
   schemas:
-    ChangeArpRequest:
-      description: The model for a subscription arp change request.
-      required:
-      - subscription
-      - change
-      type: object
-      properties:
-        subscription:
-          $ref: '#/components/schemas/ArpSubscription'
-        change:
-          $ref: '#/components/schemas/ArpChange'
-        on_behalf_of:
-          $ref: '#/components/schemas/OrganizationType'
-      example:
-        subscription:
-          identifier_type: IMSI
-          identifier: 100000123456001
-        change:
-          arp_tadig_code: FRAF1
-        on_behalf_of:
-          organization_id: 1.23.4
-          company_id: 100002304
-    ArpChange:
-      title: ArpChangeData
-      description: 'The subscrition ARP to change to. Using TADIG (Transferred Account
-
-        Data Interchange Group) code. Use alphanumeric characters only
-
-        (maximum 10). Please note that the ARP code is case sensitive.'
-      required:
-      - arp_tadig_code
-      type: object
-      properties:
-        arp_tadig_code:
-          type: string
-    CancelSimOrderResponse:
-      description: Defines response of cancel sim order request.
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-      example:
-        status: success
     SubscriptionList:
       title: SubscriptionList
       description: 'Used to identify a list of subscriptions.
@@ -823,18 +914,6 @@ components:
         - '100000123456001'
         - '100000123456002'
         - '100000123456003'
-    RegionChange:
-      title: RegionChangeData
-      description: Contains the data for a region change.
-      required:
-      - region
-      type: object
-      properties:
-        region:
-          description: The name of the region to change to.
-          type: string
-      example:
-        region: ABC
     FixedIp:
       type: object
       properties:
@@ -861,6 +940,64 @@ components:
         sub_net:
           description: The subnet to which the fixed IP address belongs.
           type: string
+    AvailableRegionQueryResponseType:
+      title: AvailableRegionQueryResponseType
+      description: 'Response type for a successful query available region request.
+
+        The regions in the response can be used in a request to the change
+
+        subscription region.'
+      required:
+      - regions
+      type: object
+      properties:
+        regions:
+          description: The array of regions.
+          required:
+          - short_name
+          items:
+            $ref: '#/components/schemas/Region'
+          type: array
+      example:
+        regions:
+        - short_name: REQ201234567890
+          description: ABC
+          quarantine_period: 60
+          number_length: 15
+          pool_id: ZZFXXXXXXP00099
+          status: ACTIVE
+    CompanyId:
+      description: Company_id type
+      type: object
+      properties:
+        company_id:
+          deprecated: true
+          description: 'Id of the company.
+
+            Format: "12345678".
+
+            Deprecated.'
+          type: string
+      example:
+        company_id: '78000037'
+    SubscriptionRequestResponseType:
+      title: SubscriptionRequestResponseType
+      description: 'Response type for successfully created subscription request.
+
+        The subscription_request_id in the response can be used in a query to
+
+        the endpoint ''GET /subscriptions/requests/{requestId}'' to get the
+
+        status of subscription request job.'
+      required:
+      - subscription_request_id
+      type: object
+      properties:
+        subscription_request_id:
+          description: The request id returned for the subscription change request.
+          type: string
+      example:
+        subscription_request_id: REQ201234567890
     OwnerChange:
       title: OwnerChangeData
       description: Contains the data for an owner change.
@@ -873,6 +1010,50 @@ components:
       example:
         owner:
           organization_id: 3.78.38
+    SimResourceResponse:
+      title: SimResourceResponse
+      description: Response type for a successful query sim resourse
+      type: object
+      properties:
+        sims:
+          type: array
+          description: List of sim resources
+          items:
+            $ref: '#/components/schemas/SimResource'
+    SubscriptionOwner:
+      oneOf:
+      - $ref: '#/components/schemas/CompanyId'
+      - $ref: '#/components/schemas/OrganizationId'
+      - $ref: '#/components/schemas/PackageChange'
+      title: OrganizationType
+      description: 'Mandatory, Either one of the properties ''organization_id'' or
+
+        ''company_id'' must be given.
+
+        the property ''subscription_package_id'' must be given.'
+      type: object
+      example: "{\n    \"organization_id\": \"3.78.37\",\n}"
+    Apn:
+      type: object
+      properties:
+        name:
+          description: Apn name
+          type: string
+        description:
+          description: Description of Apn
+          type: string
+    RegionChange:
+      title: RegionChangeData
+      description: Contains the data for a region change.
+      required:
+      - region
+      type: object
+      properties:
+        region:
+          description: The name of the region to change to.
+          type: string
+      example:
+        region: ABC
     RegionChangeRequest:
       description: The model for a subscription region change request.
       required:
@@ -896,62 +1077,83 @@ components:
           region: ABC
         on_behalf_of:
           organization_id: 1.23.4
-    SubscriptionOwner:
+    StateChange:
+      title: StateChangeData
+      description: Contains the data for a state change.
+      required:
+      - state
+      type: object
+      properties:
+        state:
+          description: 'The subscrition state to change to, only uppercase, including
+
+            ACTIVE/PAUSE/TERMINATED/DEACTIVATED/ACTIVE_NO_BILLING
+
+            /DEACTIVATED_NO_BILLING.'
+          type: string
+          x-extensible-enum:
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - ACTIVE_NO_BILLING
+          - DEACTIVATED_NO_BILLING
+      example:
+        state: PAUSE
+    OrganizationType:
       oneOf:
       - $ref: '#/components/schemas/CompanyId'
       - $ref: '#/components/schemas/OrganizationId'
-      - $ref: '#/components/schemas/PackageChange'
       title: OrganizationType
-      description: 'Mandatory, Either one of the properties ''organization_id'' or
+      description: 'Optional, Used to identify the organization.
+
+        But if exist, Either one of the properties ''organization_id'' or
 
         ''company_id'' must be given.
 
-        the property ''subscription_package_id'' must be given.'
+        If both exist at the same time then using organization_id as default.'
       type: object
       example: "{\n    \"organization_id\": \"3.78.37\",\n}"
-    OrganizationId:
-      description: Organization_id type
-      type: object
-      properties:
-        organization_id:
-          description: 'Id of the organization.
+    ArpChange:
+      title: ArpChangeData
+      description: 'The subscrition ARP to change to. Using TADIG (Transferred Account
 
-            Format: "1.23.4"'
-          type: string
-      example:
-        organization_id: 3.78.37
-    PackageChangeRequest:
-      description: The model for a subscription package change request.
+        Data Interchange Group) code. Use alphanumeric characters only
+
+        (maximum 10). Please note that the ARP code is case sensitive.'
       required:
-      - subscriptions
-      - change
+      - arp_tadig_code
       type: object
       properties:
-        subscriptions:
-          $ref: '#/components/schemas/SubscriptionList'
-        change:
-          $ref: '#/components/schemas/PackageChange'
-        on_behalf_of:
-          $ref: '#/components/schemas/OrganizationType'
+        arp_tadig_code:
+          type: string
+    ArpSubscription:
+      title: Subscription
+      required:
+      - identifier
+      - identifier_type
+      properties:
+        identifier_type:
+          description: "The type of the values for the items.\n it is case insensitive, Value can be: IMSI, MSISDN"
+          type: string
+          x-extensible-enum:
+          - IMSI
+          - MSISDN
+        identifier:
+          description: 'The identifier of the subscription. The type of the identifier
+
+            is given by the property "identifier_type".'
+          type: string
+    CancelSimOrderResponse:
+      description: Defines response of cancel sim order request.
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
       example:
-        subscriptions:
-          identifier_type: IMSI
-          identifiers:
-          - '100000123456001'
-          - '100000123456002'
-        change:
-          subscription_package_id: 200200207_SP_01
-        on_behalf_of:
-          organization_id: 1.23.4
-    Apn:
-      type: object
-      properties:
-        name:
-          description: Apn name
-          type: string
-        description:
-          description: Description of Apn
-          type: string
+        status: success
     OwnerChangeRequest:
       description: The model for a subscription owner change request.
       required:
@@ -976,35 +1178,6 @@ components:
             organization_id: 3.78.38
         on_behalf_of:
           organization_id: 1.23.4
-    PackageChange:
-      title: PackageChangeData
-      description: Contains the data for a package change.
-      required:
-      - subscription_package_id
-      type: object
-      properties:
-        subscription_package_id:
-          description: The Subscription Package to change to.
-          type: string
-      example:
-        subscription_package_id: 200200207_SP_01
-    ArpSubscription:
-      title: Subscription
-      required:
-      - identifier
-      - identifier_type
-      properties:
-        identifier_type:
-          description: "The type of the values for the items.\n it is case insensitive, Value can be: IMSI, MSISDN"
-          type: string
-          x-extensible-enum:
-          - IMSI
-          - MSISDN
-        identifier:
-          description: 'The identifier of the subscription. The type of the identifier
-
-            is given by the property "identifier_type".'
-          type: string
     SimResource:
       type: object
       properties:
@@ -1148,71 +1321,8 @@ components:
           type: string
         enable_5g:
           type: boolean
-    StateChange:
-      title: StateChangeData
-      description: Contains the data for a state change.
-      required:
-      - state
-      type: object
-      properties:
-        state:
-          description: 'The subscrition state to change to, only uppercase, including
-
-            ACTIVE/PAUSE/TERMINATED/DEACTIVATED/ACTIVE_NO_BILLING
-
-            /DEACTIVATED_NO_BILLING.'
-          type: string
-          x-extensible-enum:
-          - ACTIVE
-          - DEACTIVATED
-          - PAUSE
-          - TERMINATED
-          - ACTIVE_NO_BILLING
-          - DEACTIVATED_NO_BILLING
-      example:
-        state: PAUSE
-    AvailableRegionQueryResponseType:
-      title: AvailableRegionQueryResponseType
-      description: 'Response type for a successful query available region request.
-
-        The regions in the response can be used in a request to the change
-
-        subscription region.'
-      required:
-      - regions
-      type: object
-      properties:
-        regions:
-          description: The array of regions.
-          required:
-          - short_name
-          items:
-            $ref: '#/components/schemas/Region'
-          type: array
-      example:
-        regions:
-        - short_name: REQ201234567890
-          description: ABC
-          quarantine_period: 60
-          number_length: 15
-          pool_id: ZZFXXXXXXP00099
-          status: ACTIVE
-    CompanyId:
-      description: Company_id type
-      type: object
-      properties:
-        company_id:
-          deprecated: true
-          description: 'Id of the company.
-
-            Format: "12345678".
-
-            Deprecated.'
-          type: string
-      example:
-        company_id: '78000037'
-    StateChangeRequest:
-      description: The model for a subscription state change request.
+    PackageChangeRequest:
+      description: The model for a subscription package change request.
       required:
       - subscriptions
       - change
@@ -1221,7 +1331,7 @@ components:
         subscriptions:
           $ref: '#/components/schemas/SubscriptionList'
         change:
-          $ref: '#/components/schemas/StateChange'
+          $ref: '#/components/schemas/PackageChange'
         on_behalf_of:
           $ref: '#/components/schemas/OrganizationType'
       example:
@@ -1231,40 +1341,43 @@ components:
           - '100000123456001'
           - '100000123456002'
         change:
-          state: PAUSE
+          subscription_package_id: 200200207_SP_01
         on_behalf_of:
           organization_id: 1.23.4
-    Region:
-      description: The values for one region
+    ChangeArpRequest:
+      description: The model for a subscription arp change request.
+      required:
+      - subscription
+      - change
       type: object
       properties:
-        short_name:
-          description: Short name of region
-          type: string
-        description:
-          description: Description of region
-          type: string
-        quarantine_period:
-          description: After Termination, MSISDN enters a 'quarantine period' as defined in MSISDN-POOL setup. Within this time frame, it is guaranteed that reactivation of a certain subscription will get the same MSISDN
-          type: integer
-        number_length:
-          description: 'Number length assigned from MSISDN-POOL for instance the MSISDN
-
-            200883000000002 has a length of 15'
-          type: integer
-        pool_id:
-          description: pool id of region
-          type: string
-        status:
-          description: region status of region
+        subscription:
+          $ref: '#/components/schemas/ArpSubscription'
+        change:
+          $ref: '#/components/schemas/ArpChange'
+        on_behalf_of:
+          $ref: '#/components/schemas/OrganizationType'
+      example:
+        subscription:
+          identifier_type: IMSI
+          identifier: 100000123456001
+        change:
+          arp_tadig_code: FRAF1
+        on_behalf_of:
+          organization_id: 1.23.4
+          company_id: 100002304
+    PackageChange:
+      title: PackageChangeData
+      description: Contains the data for a package change.
+      required:
+      - subscription_package_id
+      type: object
+      properties:
+        subscription_package_id:
+          description: The Subscription Package to change to.
           type: string
       example:
-        short_name: REQ201234567890
-        description: ABC
-        quarantine_period: 60
-        number_length: 15
-        pool_id: ZZFXXXXXXP00099
-        status: ACTIVE
+        subscription_package_id: 200200207_SP_01
     Problem:
       type: object
       properties:
@@ -1324,65 +1437,78 @@ components:
             to some specific errors or responses.
 
             '
-    OrganizationType:
-      oneOf:
-      - $ref: '#/components/schemas/CompanyId'
-      - $ref: '#/components/schemas/OrganizationId'
-      title: OrganizationType
-      description: 'Optional, Used to identify the organization.
-
-        But if exist, Either one of the properties ''organization_id'' or
-
-        ''company_id'' must be given.
-
-        If both exist at the same time then using organization_id as default.'
-      type: object
-      example: "{\n    \"organization_id\": \"3.78.37\",\n}"
-    SubscriptionRequestResponseType:
-      title: SubscriptionRequestResponseType
-      description: 'Response type for successfully created subscription request.
-
-        The subscription_request_id in the response can be used in a query to
-
-        the endpoint ''GET /subscriptions/requests/{requestId}'' to get the
-
-        status of subscription request job.'
+    StateChangeRequest:
+      description: The model for a subscription state change request.
       required:
-      - subscription_request_id
+      - subscriptions
+      - change
       type: object
       properties:
-        subscription_request_id:
-          description: The request id returned for the subscription change request.
+        subscriptions:
+          $ref: '#/components/schemas/SubscriptionList'
+        change:
+          $ref: '#/components/schemas/StateChange'
+        on_behalf_of:
+          $ref: '#/components/schemas/OrganizationType'
+      example:
+        subscriptions:
+          identifier_type: IMSI
+          identifiers:
+          - '100000123456001'
+          - '100000123456002'
+        change:
+          state: PAUSE
+        on_behalf_of:
+          organization_id: 1.23.4
+    OrganizationId:
+      description: Organization_id type
+      type: object
+      properties:
+        organization_id:
+          description: 'Id of the organization.
+
+            Format: "1.23.4"'
           type: string
       example:
-        subscription_request_id: REQ201234567890
-    SimResourceResponse:
-      title: SimResourceResponse
-      description: Response type for a successful query sim resourse
+        organization_id: 3.78.37
+    Region:
+      description: The values for one region
       type: object
       properties:
-        sims:
-          type: array
-          description: List of sim resources
-          items:
-            $ref: '#/components/schemas/SimResource'
+        short_name:
+          description: Short name of region
+          type: string
+        description:
+          description: Description of region
+          type: string
+        quarantine_period:
+          description: After Termination, MSISDN enters a 'quarantine period' as defined in MSISDN-POOL setup. Within this time frame, it is guaranteed that reactivation of a certain subscription will get the same MSISDN
+          type: integer
+        number_length:
+          description: 'Number length assigned from MSISDN-POOL for instance the MSISDN
+
+            200883000000002 has a length of 15'
+          type: integer
+        pool_id:
+          description: pool id of region
+          type: string
+        status:
+          description: region status of region
+          type: string
+      example:
+        short_name: REQ201234567890
+        description: ABC
+        quarantine_period: 60
+        number_length: 15
+        pool_id: ZZFXXXXXXP00099
+        status: ACTIVE
   headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
     Content-Type:
       description: Handle Content-Type
       schema:
         type: string
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
       schema:
         type: integer
         format: int32
@@ -1391,142 +1517,16 @@ components:
       schema:
         type: integer
         format: int32
-  responses:
-    Response_400:
-      description: Bad Request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                status: 400
-                detail: 'Missing mandatory request parameters
-
-                  and/or incorrect parameter format'
-    Response_404:
-      description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                status: 404
-                detail: Resource not found
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    Response_500:
-      description: 'Internal Server Error, Error occurred -
-
-        see status code and problem object for more'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                status: 500
-                detail: Internal Server Error.
-    AvailableRegionQueryResponse:
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/AvailableRegionQueryResponseType'
-          examples:
-            available-region-query-response-example-1:
-              value:
-                regions:
-                - short_name: REQ201234567890
-                  description: ABC
-                  quarantine_period: 60
-                  number_length: 15
-                  pool_id: ZZFXXXXXXP00099
-                  status: ACTIVE
-      description: The response from a sucessfully query request.
-    Response_403:
-      description: Forbidden
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                status: 403
-                detail: Forbidden
-    Response_401:
-      description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                status: 401
-                detail: Unauthorized.
-    Response_429:
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                status: 429
-                detail: Too Many Requests
-    Response_default:
-      description: 'Internal Server Error, Error occurred -
-
-        see status code and problem object for more'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                status: 500
-                detail: Internal Server Error.
-    SubscriptionRequestResponse:
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/SubscriptionRequestResponseType'
-          examples:
-            subscription-request-response-example-1:
-              value:
-                subscription_request_id: REQ201234567890
-      description: The response from a sucessfully created request.
-    SimResourceResponse:
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/SimResourceResponse'
-      description: The response from a sucessfull query sim resource request.
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
   securitySchemes:
     Oauth2_auth:
       flows:

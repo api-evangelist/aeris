@@ -1824,69 +1824,102 @@ paths:
           $ref: '#/components/responses/Problem'
 components:
   schemas:
-    InventoryContextItems:
-      type: object
+    AuthServer:
+      type:
+      - object
+      - 'null'
       properties:
-        hssEsmContextId:
+        ipAddress:
           type: string
-          description: HSS ESM Context Id
-          example: '2'
-    ServiceDataUnit:
-      properties:
-        sduMaxSize:
+          format: ipv4
+          example: 34.125.64.6
+        port:
           type: integer
-          description: sdu Max size
           format: int32
-          example: 5
-        erroneousSduDelivery:
+          example: 1812
+        key:
           type: string
-          description: erroreous Sdu Delivery
-          example: DELIVERED
-          x-extensible-enum:
-          - NOT_CHECKED
-          - NOT_DELIVERED
-          - DELIVERED
-        residualBitErrorRate:
-          type: integer
-          description: residual Bit Error Rate
-          format: int32
-          example: 4
-        sduErrorRatio:
-          type: integer
-          description: sdu Error Ratio
-          format: int32
-          example: 2
-      description: Service Data Unit
+          example: '1232'
+      description: Authentication server
       example:
-        sduMaxSize: 5
-        erroneousSduDelivery: DELIVERED
-        residualBitErrorRate: 4
-        sduErrorRatio: 2
-    VirtualApn:
+        ipAddress: 34.125.64.6
+        port: 1812
+        key: '1243'
+    PdpContextQos:
       allOf:
-      - $ref: '#/components/schemas/PgwApn'
+      - $ref: '#/components/schemas/InventoryBase'
       - type: object
         properties:
-          realApnId:
+          name:
             type: string
-            example: '0'
-    PrivateApn:
-      allOf:
-      - $ref: '#/components/schemas/RealApn'
-    EsmContextQosArray:
-      allOf:
-      - type: object
-        properties:
-          esmContextQoS:
-            type: array
-            items:
-              $ref: '#/components/schemas/InventoryBase'
-      - type: object
-        properties:
-          next:
+            description: The name of the  Qos
+            example: Foo  Qos
+          trafficClass:
             type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /esm-contexts-qos?cursor=BDCTAQ3434%DFB%EYY445
+            description: Traffic class
+            example: BACKGROUND
+            x-extensible-enum:
+            - BACKGROUND
+            - CONVERSATIONAL
+            - INTERACTIVE
+            - STREAMING
+          maximumBitrateUp:
+            type: integer
+            description: Max bitrate up in Kbps
+            format: int32
+            example: 5
+          maximumBitrateDown:
+            type: integer
+            description: Max bitrate down in Kbps
+            format: int32
+            example: 5
+          deliveryOrder:
+            type: string
+            description: Delivery Order
+            example: IN_ORDER
+            x-extensible-enum:
+            - IN_ORDER
+            - NO_ORDERING
+          allocationRetentionPriority:
+            type: string
+            description: allocation Retention Priority
+            example: HIGH
+            x-extensible-enum:
+            - HIGH
+            - NORMAL
+            - LOW
+          trafficHandlingPriority:
+            type: string
+            description: traffic handling priority
+            example: PRIO_1
+            x-extensible-enum:
+            - PRIO_1
+            - PRIO_2
+            - PRIO_3
+            - PRIO_4
+          serviceDataUnit:
+            $ref: '#/components/schemas/ServiceDataUnit'
+          transferDelay:
+            type:
+            - integer
+            - 'null'
+            description: transfer delay
+            format: int32
+            example: 100
+          operatorId:
+            type: string
+            description: operator ID
+            example: '3.77'
+          operatorNetworkId:
+            type:
+            - string
+            - 'null'
+            description: network group id
+            example: '5'
+          hlrPdpContextQosId:
+            type: string
+            description: hlr Pdp Context Qos Id
+            example: '5'
     DataProfileBase:
       allOf:
       - $ref: '#/components/schemas/InventoryBase'
@@ -1921,6 +1954,168 @@ components:
           - PRIVATE_APN
           - VIRTUAL_APN
           - RADIUS_APN
+    RoamingProfile4g:
+      allOf:
+      - $ref: '#/components/schemas/RoamingProfile4gSimple'
+      - $ref: '#/components/schemas/RoamingAreas'
+      - type: object
+        properties:
+          operatorNetworkId:
+            type:
+            - string
+            - 'null'
+            description: network group ID
+            example: '538'
+          operatorId:
+            type: string
+            description: operator ID
+            example: '3.77'
+      - type: object
+        properties:
+          hssRsaId:
+            type: string
+            description: Roaming service area id
+            example: '996'
+          roamingAreaListType:
+            type: string
+            description: Indicate the roaming area list is an roaming allowed list or roaming blocked list.
+            x-extensible-enum:
+            - ALLOWED_LIST
+            - BLOCKED_LIST
+            example: ALLOWED_LIST
+    PacketGw:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '525'
+        name:
+          type: string
+          example: pwg1
+        isPrimary:
+          type: boolean
+          example: true
+      example:
+        id: '525'
+        name: pwg1
+        isPrimary: true
+    Get4GInventoryListResponse:
+      allOf:
+      - type: object
+        properties:
+          lteV2RoamingProfiles:
+            type: array
+            items:
+              $ref: '#/components/schemas/InventoryItem4G'
+      - type: object
+        properties:
+          next:
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            type: string
+            example: /roaming-profiles-4g?cursor=DFVSDB3434%DFB%EYY445
+    NonHostedApn:
+      allOf:
+      - $ref: '#/components/schemas/ApnBase'
+    ServiceDataUnit:
+      properties:
+        sduMaxSize:
+          type: integer
+          description: sdu Max size
+          format: int32
+          example: 5
+        erroneousSduDelivery:
+          type: string
+          description: erroreous Sdu Delivery
+          example: DELIVERED
+          x-extensible-enum:
+          - NOT_CHECKED
+          - NOT_DELIVERED
+          - DELIVERED
+        residualBitErrorRate:
+          type: integer
+          description: residual Bit Error Rate
+          format: int32
+          example: 4
+        sduErrorRatio:
+          type: integer
+          description: sdu Error Ratio
+          format: int32
+          example: 2
+      description: Service Data Unit
+      example:
+        sduMaxSize: 5
+        erroneousSduDelivery: DELIVERED
+        residualBitErrorRate: 4
+        sduErrorRatio: 2
+    InventoryContextItems:
+      type: object
+      properties:
+        hssEsmContextId:
+          type: string
+          description: HSS ESM Context Id
+          example: '2'
+    InventoryItem2G3G:
+      allOf:
+      - $ref: '#/components/schemas/InventoryBase'
+      - type: object
+        properties:
+          hlrRsaId:
+            type: string
+            description: Roaming service area id
+            example: '996'
+    ApnArray:
+      allOf:
+      - type: object
+        properties:
+          apns:
+            type: array
+            items:
+              $ref: '#/components/schemas/DataProfileBase'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /apns?cursor=BDCTAQ3434%DFB%EYY445
+    Get4GInventoryResponse:
+      allOf:
+      - $ref: '#/components/schemas/InventoryBase'
+      - $ref: '#/components/schemas/RoamingProfile4g'
+    EsmProfileArray:
+      allOf:
+      - type: object
+        properties:
+          esmProfiles:
+            type: array
+            items:
+              allOf:
+              - $ref: '#/components/schemas/InventoryBase'
+              - $ref: '#/components/schemas/InventoryProfileItems'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /esm-profiles?cursor=BDCTAQ3434%DFB%EYY445
+    PgwApn:
+      allOf:
+      - $ref: '#/components/schemas/ApnBase'
+      - type: object
+        properties:
+          packetGws:
+            type: array
+            items:
+              $ref: '#/components/schemas/PacketGw'
+    InternetApn:
+      allOf:
+      - $ref: '#/components/schemas/RealApn'
+      - type: object
+        properties:
+          firewallAllowlist:
+            type: array
+            description: The configuration to restrict communication on the internet.
+            items:
+              $ref: '#/components/schemas/ApnFirewallAllowlist'
     RoamingProfile4gSimple:
       type: object
       properties:
@@ -1937,20 +2132,64 @@ components:
           example: RP996LTE Offering
       required:
       - name
-    ApnArray:
+    InventoryPdpContextQosItem:
+      type: object
+      properties:
+        hlrPdpContextQosId:
+          type: string
+          description: hlr Pdp Context Qos Id
+          example: '5'
+    Apn:
+      anyOf:
+      - $ref: '#/components/schemas/InternetApn'
+      - $ref: '#/components/schemas/NonHostedApn'
+      - $ref: '#/components/schemas/PrivateApn'
+      - $ref: '#/components/schemas/RadiusApn'
+      - $ref: '#/components/schemas/VirtualApn'
+    NotFound:
+      description: 'Network Resource with provided ID not found.
+
+        '
+    ApnFirewallAllowlist:
+      type: object
+      properties:
+        ipAddress:
+          type: string
+          example: 111.222.111.222
+        portStart:
+          type: integer
+          format: int32
+          example: 1810
+        portEnd:
+          type: integer
+          format: int32
+          example: 1820
+        protocol:
+          type: string
+          example: TCP
+          x-extensible-enum:
+          - TCP
+          - UDP
+          - ICMP
+          - SCTP
+          - ESP
+          - ANY
+    EsmContextArray:
       allOf:
       - type: object
         properties:
-          apns:
+          esmContexts:
             type: array
             items:
-              $ref: '#/components/schemas/DataProfileBase'
+              allOf:
+              - $ref: '#/components/schemas/InventoryBase'
+              - $ref: '#/components/schemas/InventoryContextItems'
       - type: object
         properties:
           next:
             type: string
             description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /apns?cursor=BDCTAQ3434%DFB%EYY445
+            example: /esm-contexts?cursor=BDCTAQ3434%DFB%EYY445
     PdpContextSub:
       type: object
       properties:
@@ -1978,92 +2217,33 @@ components:
         apnId: '1249'
         pdpContextQosId: '1242'
         pdpContextType: IPV4
-    AuthServer:
-      type:
-      - object
-      - 'null'
-      properties:
-        ipAddress:
-          type: string
-          format: ipv4
-          example: 34.125.64.6
-        port:
-          type: integer
-          format: int32
-          example: 1812
-        key:
-          type: string
-          example: '1232'
-      description: Authentication server
-      example:
-        ipAddress: 34.125.64.6
-        port: 1812
-        key: '1243'
-    PdpContextProfileArray:
-      allOf:
-      - type: object
-        properties:
-          pdpContextProfiles:
-            type: array
-            items:
-              allOf:
-              - $ref: '#/components/schemas/InventoryBase'
-              - $ref: '#/components/schemas/InventoryPdpContextItems'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /pdp-context-profiles?cursor=BDCTAQ3434%DFB%EYY445
-    RadiusApn:
-      allOf:
-      - $ref: '#/components/schemas/PgwApn'
-      - type: object
-        properties:
-          defaultApnId:
-            type: string
-            description: Default Apn Id
-            example: '0'
-    EsmProfileQos:
+    EsmProfile:
       allOf:
       - $ref: '#/components/schemas/InventoryBase'
       - type: object
         properties:
-          name:
+          esmContexts:
+            type: array
+            items:
+              $ref: '#/components/schemas/EsmContextSub'
+          esmProfileQosId:
             type: string
-            description: The name of the ESM profile Qos
-            example: Foo Esm profile Qos
-          maxDownlinkBitrate:
-            type: integer
-            description: Max downlink bitrate in (bits/s)
-            format: int32
-            example: 0
-          maxUplinkBitrate:
-            type: integer
-            description: Max uplink bitrate in (bits/s)
-            format: int32
-            example: 0
-          maxExtendedDownlinkBitrate:
-            type: integer
-            description: Max Extended downlink bitrate in (kbits/s)
-            format: int64
-            example: 0
-          maxExtendedUplinkBitrate:
-            type: integer
-            description: Max Extended uplink bitrate in (kbits/s)
-            format: int64
-            example: 0
-          epsServiceChargingChar:
+            description: The id of ESM profile QoS
+            example: '14567'
+          defaultEsmContextId:
+            type: string
+            description: The id of default ESM context
+            example: '50605'
+          apnOiReplacement:
             type:
             - string
             - 'null'
-            description: eps service charging char
-            example: '64555'
-          freqPriorityId:
-            type: integer
-            description: Frequency priority identifier/subscriber profile ID
-            format: int32
-            example: 3
+            description: This attribute indicates the domain name to replace the APN Operator Identifier when constructing the PDN Gateway (GW) Full Qualified Domain Name (FQDN) upon which to perform a DNS resolution.
+            example: mncfoo.mccfoo.gprs
+          enabled5gNsa:
+            type: boolean
+            description: A boolean indicating whether 5G is enabled
+            example: true
           operatorId:
             type: string
             description: operator ID
@@ -2074,17 +2254,43 @@ components:
             - 'null'
             description: network group id
             example: '5'
-    InventoryPdpContextItems:
-      type: object
-      properties:
-        hlrPdpContextProfileId:
-          type: string
-          description: hlr PDP context profile id
-          example: '5'
+          hssEsmProfileId:
+            type: string
+            description: Esm profile id in HSS
+            example: '2'
     Get2G3GInventoryResponse:
       allOf:
       - $ref: '#/components/schemas/InventoryBase'
       - $ref: '#/components/schemas/RoamingProfile2g3g'
+    InventoryProfileItems:
+      type: object
+      properties:
+        hssEsmProfileId:
+          type: string
+          description: Esm profile id in HSS
+          example: '2'
+    GlobalTitles:
+      type: object
+      properties:
+        globalTitles:
+          type: array
+          description: Global Titles
+          uniqueItems: true
+          items:
+            type: string
+          example:
+          - '164780001'
+          - '2250505987'
+          - '32468'
+          - '32475'
+          - '7901106'
+          - '7901154'
+          - '790116'
+          - '7901472'
+          - '790160'
+          - '799426'
+          - '99292'
+          - '99293'
     EsmContext:
       allOf:
       - $ref: '#/components/schemas/InventoryBase'
@@ -2152,83 +2358,21 @@ components:
             - 'null'
             description: network group id
             example: '5'
-    EsmProfileArray:
-      allOf:
-      - type: object
-        properties:
-          esmProfiles:
-            type: array
-            items:
-              allOf:
-              - $ref: '#/components/schemas/InventoryBase'
-              - $ref: '#/components/schemas/InventoryProfileItems'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /esm-profiles?cursor=BDCTAQ3434%DFB%EYY445
-    EsmProfileQosArray:
-      allOf:
-      - type: object
-        properties:
-          esmProfileQos:
-            type: array
-            items:
-              $ref: '#/components/schemas/InventoryBase'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /esm-profiles-qos?cursor=BDCTAQ3434%DFB%EYY445
-    GlobalTitles:
+    EsmContextSub:
       type: object
       properties:
-        globalTitles:
-          type: array
-          description: Global Titles
-          uniqueItems: true
-          items:
-            type: string
-          example:
-          - '164780001'
-          - '2250505987'
-          - '32468'
-          - '32475'
-          - '7901106'
-          - '7901154'
-          - '790116'
-          - '7901472'
-          - '790160'
-          - '799426'
-          - '99292'
-          - '99293'
-    Get4GInventoryResponse:
-      allOf:
-      - $ref: '#/components/schemas/InventoryBase'
-      - $ref: '#/components/schemas/RoamingProfile4g'
-    AcctServer:
-      type:
-      - object
-      - 'null'
-      properties:
-        ipAddress:
-          type: string
-          format: ipv4
-          example: 34.125.64.9
-        port:
+        ordinal:
           type: integer
+          description: The ordinal number of the ESM context.
           format: int32
-          example: 18126
-        key:
+          example: 2
+        esmContextId:
           type: string
-          example: '1234'
-      description: Accounting server
+          description: The id of the ESM context
+          example: '1235'
       example:
-        ipAddress: 34.125.64.9
-        port: 1812
-        key: '1324'
+        ordinal: 2
+        esmContextId: '1235'
     RealApn:
       allOf:
       - $ref: '#/components/schemas/PgwApn'
@@ -2460,54 +2604,6 @@ components:
 
               '
             example: true
-    PgwApn:
-      allOf:
-      - $ref: '#/components/schemas/ApnBase'
-      - type: object
-        properties:
-          packetGws:
-            type: array
-            items:
-              $ref: '#/components/schemas/PacketGw'
-    NonHostedApn:
-      allOf:
-      - $ref: '#/components/schemas/ApnBase'
-    NotFound:
-      description: 'Network Resource with provided ID not found.
-
-        '
-    RoamingProfileSimple:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 255
-          example: RP996
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 500
-          example: RP996
-      required:
-      - name
-    EsmContextArray:
-      allOf:
-      - type: object
-        properties:
-          esmContexts:
-            type: array
-            items:
-              allOf:
-              - $ref: '#/components/schemas/InventoryBase'
-              - $ref: '#/components/schemas/InventoryContextItems'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /esm-contexts?cursor=BDCTAQ3434%DFB%EYY445
     InventoryBase:
       type: object
       properties:
@@ -2547,10 +2643,6 @@ components:
           - 'null'
           description: network group ID
           example: '538'
-    PdpContextProfiles:
-      allOf:
-      - $ref: '#/components/schemas/InventoryBase'
-      - $ref: '#/components/schemas/PdpContextProfile'
     Get2G3GInventoryListResponse:
       allOf:
       - type: object
@@ -2565,13 +2657,69 @@ components:
             description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
             type: string
             example: /roaming-profiles-2g3g?cursor=DFVSDB3434%DFB%EYY445
-    Apn:
-      anyOf:
-      - $ref: '#/components/schemas/InternetApn'
-      - $ref: '#/components/schemas/NonHostedApn'
-      - $ref: '#/components/schemas/PrivateApn'
-      - $ref: '#/components/schemas/RadiusApn'
-      - $ref: '#/components/schemas/VirtualApn'
+    PdpContextQosArray:
+      allOf:
+      - type: object
+        properties:
+          qos:
+            type: array
+            items:
+              allOf:
+              - $ref: '#/components/schemas/InventoryBase'
+              - $ref: '#/components/schemas/InventoryPdpContextQosItem'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /pdp-context-qos?cursor=BDCTAQ3434%DFB%EYY445
+    PdpContextProfiles:
+      allOf:
+      - $ref: '#/components/schemas/InventoryBase'
+      - $ref: '#/components/schemas/PdpContextProfile'
+    RoamingProfileSimple:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: RP996
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 500
+          example: RP996
+      required:
+      - name
+    VirtualApn:
+      allOf:
+      - $ref: '#/components/schemas/PgwApn'
+      - type: object
+        properties:
+          realApnId:
+            type: string
+            example: '0'
+    ApnBase:
+      allOf:
+      - $ref: '#/components/schemas/DataProfileBase'
+      - type: object
+        properties:
+          supplierHostedDns:
+            type: boolean
+            example: true
+          dnsPlmnIds:
+            type: array
+            items:
+              type: string
+              example: '7324'
+          advancedResellerApn:
+            type: boolean
+            description: 'APN requested by a CSP is a Global APN or is being used in the Reseller scenario
+
+              '
+            example: true
     RoamingAreas:
       type: object
       properties:
@@ -2594,248 +2742,59 @@ components:
             type: string
             description: Roaming service area id
             example: '996'
-    PdpContextProfile:
-      type: object
-      properties:
-        pdpContexts:
-          type: array
-          items:
-            $ref: '#/components/schemas/PdpContextSub'
-        operatorId:
-          type: string
-          description: operator ID
-          example: '3.77'
-        operatorNetworkId:
-          type:
-          - string
-          - 'null'
-          description: network group id
-          example: '5'
-        hlrPdpContextProfileId:
-          type: string
-          description: hlr PDP context profile id
-          example: '5'
-    EsmProfile:
-      allOf:
-      - $ref: '#/components/schemas/InventoryBase'
-      - type: object
-        properties:
-          esmContexts:
-            type: array
-            items:
-              $ref: '#/components/schemas/EsmContextSub'
-          esmProfileQosId:
-            type: string
-            description: The id of ESM profile QoS
-            example: '14567'
-          defaultEsmContextId:
-            type: string
-            description: The id of default ESM context
-            example: '50605'
-          apnOiReplacement:
-            type:
-            - string
-            - 'null'
-            description: This attribute indicates the domain name to replace the APN Operator Identifier when constructing the PDN Gateway (GW) Full Qualified Domain Name (FQDN) upon which to perform a DNS resolution.
-            example: mncfoo.mccfoo.gprs
-          enabled5gNsa:
-            type: boolean
-            description: A boolean indicating whether 5G is enabled
-            example: true
-          operatorId:
-            type: string
-            description: operator ID
-            example: '3.77'
-          operatorNetworkId:
-            type:
-            - string
-            - 'null'
-            description: network group id
-            example: '5'
-          hssEsmProfileId:
-            type: string
-            description: Esm profile id in HSS
-            example: '2'
-    PdpContextQos:
-      allOf:
-      - $ref: '#/components/schemas/InventoryBase'
-      - type: object
-        properties:
-          name:
-            type: string
-            description: The name of the  Qos
-            example: Foo  Qos
-          trafficClass:
-            type: string
-            description: Traffic class
-            example: BACKGROUND
-            x-extensible-enum:
-            - BACKGROUND
-            - CONVERSATIONAL
-            - INTERACTIVE
-            - STREAMING
-          maximumBitrateUp:
-            type: integer
-            description: Max bitrate up in Kbps
-            format: int32
-            example: 5
-          maximumBitrateDown:
-            type: integer
-            description: Max bitrate down in Kbps
-            format: int32
-            example: 5
-          deliveryOrder:
-            type: string
-            description: Delivery Order
-            example: IN_ORDER
-            x-extensible-enum:
-            - IN_ORDER
-            - NO_ORDERING
-          allocationRetentionPriority:
-            type: string
-            description: allocation Retention Priority
-            example: HIGH
-            x-extensible-enum:
-            - HIGH
-            - NORMAL
-            - LOW
-          trafficHandlingPriority:
-            type: string
-            description: traffic handling priority
-            example: PRIO_1
-            x-extensible-enum:
-            - PRIO_1
-            - PRIO_2
-            - PRIO_3
-            - PRIO_4
-          serviceDataUnit:
-            $ref: '#/components/schemas/ServiceDataUnit'
-          transferDelay:
-            type:
-            - integer
-            - 'null'
-            description: transfer delay
-            format: int32
-            example: 100
-          operatorId:
-            type: string
-            description: operator ID
-            example: '3.77'
-          operatorNetworkId:
-            type:
-            - string
-            - 'null'
-            description: network group id
-            example: '5'
-          hlrPdpContextQosId:
-            type: string
-            description: hlr Pdp Context Qos Id
-            example: '5'
-    RoamingProfile2g3g:
+    PdpContextProfileArray:
       allOf:
       - type: object
         properties:
-          hlrRsaId:
-            type: string
-            description: Roaming service area id
-            example: '996'
-      - $ref: '#/components/schemas/RoamingProfileSimple'
-      - $ref: '#/components/schemas/GlobalTitles'
-      - type: object
-        properties:
-          operatorNetworkId:
-            type:
-            - string
-            - 'null'
-            description: network group ID
-            example: '538'
-          operatorId:
-            type: string
-            description: operator ID
-            example: '3.77'
-    InternetApn:
-      allOf:
-      - $ref: '#/components/schemas/RealApn'
-      - type: object
-        properties:
-          firewallAllowlist:
-            type: array
-            description: The configuration to restrict communication on the internet.
-            items:
-              $ref: '#/components/schemas/ApnFirewallAllowlist'
-    RoamingProfile4g:
-      allOf:
-      - $ref: '#/components/schemas/RoamingProfile4gSimple'
-      - $ref: '#/components/schemas/RoamingAreas'
-      - type: object
-        properties:
-          operatorNetworkId:
-            type:
-            - string
-            - 'null'
-            description: network group ID
-            example: '538'
-          operatorId:
-            type: string
-            description: operator ID
-            example: '3.77'
-      - type: object
-        properties:
-          hssRsaId:
-            type: string
-            description: Roaming service area id
-            example: '996'
-          roamingAreaListType:
-            type: string
-            description: Indicate the roaming area list is an roaming allowed list or roaming blocked list.
-            x-extensible-enum:
-            - ALLOWED_LIST
-            - BLOCKED_LIST
-            example: ALLOWED_LIST
-    InventoryItem2G3G:
-      allOf:
-      - $ref: '#/components/schemas/InventoryBase'
-      - type: object
-        properties:
-          hlrRsaId:
-            type: string
-            description: Roaming service area id
-            example: '996'
-    PdpContextQosArray:
-      allOf:
-      - type: object
-        properties:
-          qos:
+          pdpContextProfiles:
             type: array
             items:
               allOf:
               - $ref: '#/components/schemas/InventoryBase'
-              - $ref: '#/components/schemas/InventoryPdpContextQosItem'
+              - $ref: '#/components/schemas/InventoryPdpContextItems'
       - type: object
         properties:
           next:
             type: string
             description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /pdp-context-qos?cursor=BDCTAQ3434%DFB%EYY445
-    ApnBase:
+            example: /pdp-context-profiles?cursor=BDCTAQ3434%DFB%EYY445
+    EsmContextQosArray:
       allOf:
-      - $ref: '#/components/schemas/DataProfileBase'
       - type: object
         properties:
-          supplierHostedDns:
-            type: boolean
-            example: true
-          dnsPlmnIds:
+          esmContextQoS:
             type: array
             items:
-              type: string
-              example: '7324'
-          advancedResellerApn:
-            type: boolean
-            description: 'APN requested by a CSP is a Global APN or is being used in the Reseller scenario
-
-              '
-            example: true
+              $ref: '#/components/schemas/InventoryBase'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /esm-contexts-qos?cursor=BDCTAQ3434%DFB%EYY445
+    RadiusApn:
+      allOf:
+      - $ref: '#/components/schemas/PgwApn'
+      - type: object
+        properties:
+          defaultApnId:
+            type: string
+            description: Default Apn Id
+            example: '0'
+    EsmProfileQosArray:
+      allOf:
+      - type: object
+        properties:
+          esmProfileQos:
+            type: array
+            items:
+              $ref: '#/components/schemas/InventoryBase'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /esm-profiles-qos?cursor=BDCTAQ3434%DFB%EYY445
     Problem:
       type: object
       properties:
@@ -2887,60 +2846,49 @@ components:
             It may or may not yield further information if dereferenced.
 
             '
-    PacketGw:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '525'
-        name:
-          type: string
-          example: pwg1
-        isPrimary:
-          type: boolean
-          example: true
-      example:
-        id: '525'
-        name: pwg1
-        isPrimary: true
-    InventoryProfileItems:
-      type: object
-      properties:
-        hssEsmProfileId:
-          type: string
-          description: Esm profile id in HSS
-          example: '2'
-    ApnFirewallAllowlist:
-      type: object
+    RoamingProfile2g3g:
+      allOf:
+      - type: object
+        properties:
+          hlrRsaId:
+            type: string
+            description: Roaming service area id
+            example: '996'
+      - $ref: '#/components/schemas/RoamingProfileSimple'
+      - $ref: '#/components/schemas/GlobalTitles'
+      - type: object
+        properties:
+          operatorNetworkId:
+            type:
+            - string
+            - 'null'
+            description: network group ID
+            example: '538'
+          operatorId:
+            type: string
+            description: operator ID
+            example: '3.77'
+    AcctServer:
+      type:
+      - object
+      - 'null'
       properties:
         ipAddress:
           type: string
-          example: 111.222.111.222
-        portStart:
+          format: ipv4
+          example: 34.125.64.9
+        port:
           type: integer
           format: int32
-          example: 1810
-        portEnd:
-          type: integer
-          format: int32
-          example: 1820
-        protocol:
+          example: 18126
+        key:
           type: string
-          example: TCP
-          x-extensible-enum:
-          - TCP
-          - UDP
-          - ICMP
-          - SCTP
-          - ESP
-          - ANY
-    InventoryPdpContextQosItem:
-      type: object
-      properties:
-        hlrPdpContextQosId:
-          type: string
-          description: hlr Pdp Context Qos Id
-          example: '5'
+          example: '1234'
+      description: Accounting server
+      example:
+        ipAddress: 34.125.64.9
+        port: 1812
+        key: '1324'
     EsmContextQos:
       allOf:
       - $ref: '#/components/schemas/InventoryBase'
@@ -3006,94 +2954,216 @@ components:
             - 'null'
             description: network group id
             example: '5'
-    EsmContextSub:
+    PrivateApn:
+      allOf:
+      - $ref: '#/components/schemas/RealApn'
+    EsmProfileQos:
+      allOf:
+      - $ref: '#/components/schemas/InventoryBase'
+      - type: object
+        properties:
+          name:
+            type: string
+            description: The name of the ESM profile Qos
+            example: Foo Esm profile Qos
+          maxDownlinkBitrate:
+            type: integer
+            description: Max downlink bitrate in (bits/s)
+            format: int32
+            example: 0
+          maxUplinkBitrate:
+            type: integer
+            description: Max uplink bitrate in (bits/s)
+            format: int32
+            example: 0
+          maxExtendedDownlinkBitrate:
+            type: integer
+            description: Max Extended downlink bitrate in (kbits/s)
+            format: int64
+            example: 0
+          maxExtendedUplinkBitrate:
+            type: integer
+            description: Max Extended uplink bitrate in (kbits/s)
+            format: int64
+            example: 0
+          epsServiceChargingChar:
+            type:
+            - string
+            - 'null'
+            description: eps service charging char
+            example: '64555'
+          freqPriorityId:
+            type: integer
+            description: Frequency priority identifier/subscriber profile ID
+            format: int32
+            example: 3
+          operatorId:
+            type: string
+            description: operator ID
+            example: '3.77'
+          operatorNetworkId:
+            type:
+            - string
+            - 'null'
+            description: network group id
+            example: '5'
+    PdpContextProfile:
       type: object
       properties:
-        ordinal:
-          type: integer
-          description: The ordinal number of the ESM context.
-          format: int32
-          example: 2
-        esmContextId:
+        pdpContexts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PdpContextSub'
+        operatorId:
           type: string
-          description: The id of the ESM context
-          example: '1235'
-      example:
-        ordinal: 2
-        esmContextId: '1235'
-    Get4GInventoryListResponse:
+          description: operator ID
+          example: '3.77'
+        operatorNetworkId:
+          type:
+          - string
+          - 'null'
+          description: network group id
+          example: '5'
+        hlrPdpContextProfileId:
+          type: string
+          description: hlr PDP context profile id
+          example: '5'
+    InventoryPdpContextItems:
+      type: object
+      properties:
+        hlrPdpContextProfileId:
+          type: string
+          description: hlr PDP context profile id
+          example: '5'
+    InventoryItemSmProfile5gsaSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        status:
+          type: string
+          example: ACTIVE
+          x-extensible-enum:
+          - ACTIVE
+          - DEPRECATED
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+          example: Foo name
+        description:
+          maxLength: 500
+          type:
+          - string
+          - 'null'
+          example: Foo description
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        operatorId:
+          type: string
+          description: operator ID
+          example: '3.77'
+        operatorNetworkId:
+          type:
+          - string
+          - 'null'
+          description: Operator network ID
+          example: '538'
+    SscModeEntry:
+      type: object
+      properties:
+        mode:
+          type: string
+          description: SSC mode value
+          example: SSC_MODE_1
+        def:
+          type: boolean
+          description: Indicates whether this is the default SSC mode
+          example: true
+    GetSmContext5gsaInventoryListResponseSchema:
       allOf:
       - type: object
         properties:
-          lteV2RoamingProfiles:
+          smContexts:
             type: array
             items:
-              $ref: '#/components/schemas/InventoryItem4G'
+              $ref: '#/components/schemas/InventoryItemSmContext5gsaSchema'
       - type: object
         properties:
           next:
+            type: string
             description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            type: string
-            example: /roaming-profiles-4g?cursor=DFVSDB3434%DFB%EYY445
-    GetNetworkSliceContextInventoryResponseSchema:
-      allOf:
-      - $ref: '#/components/schemas/InventoryItemNetworkSliceContextSchema'
-      - type: object
-        properties:
-          networkId:
-            type: integer
-            description: Network Id
-            format: int32
-            example: 0
-          sliceType:
-            type: integer
-            description: Slice Type
-            format: int32
-            example: 0
-          sliceDifferentiator:
-            type: string
-            description: Slice Differentiator (SD)
-            example: 000090
-          networkSlicingDnnMappingDetailResps:
-            type: array
-            description: List of DNN mappings associated with this network slice context
-            items:
-              $ref: '#/components/schemas/DnnMapping'
-    GetSmContext5gsaInventoryResponseSchema:
-      allOf:
-      - $ref: '#/components/schemas/InventoryItemSmContext5gsaSchema'
-      - type: object
-        properties:
-          networkId:
-            type: integer
-            description: Network Id
-            format: int32
-            example: 0
-          smContextQosId:
-            type: string
-            description: ID of the associated SM Context QoS
-            example: '300'
-          networkSlicingContextId:
-            type: string
-            description: ID of the associated Network Slicing Context
-            example: 000090
-          dnnId:
-            type: array
-            description: List of DNN IDs associated with this SM context
-            items:
-              type: string
-              example: '7324'
-    DnnMapping:
+            example: /sm-context-5gsa?cursor=BDCTAQ3434%DFB%EYY445
+    SmContextRef:
       type: object
       properties:
-        dnnDcpId:
+        smContextId:
           type: string
-          description: DCP ID of the DNN
-          example: '7324'
-        isDefault:
+          description: ID of the SM context
+          example: '123'
+        defaultContext:
           type: boolean
-          description: Indicates whether this is the default DNN mapping
+          description: Indicates whether this is the default SM context
           example: true
+    InventoryItemRoamingProfile5gsaSchema:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1'
+        status:
+          type: string
+          example: ACTIVE
+          x-extensible-enum:
+          - ACTIVE
+          - DEPRECATED
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+          example: Foo name
+        description:
+          maxLength: 500
+          type:
+          - string
+          - 'null'
+          example: Foo description
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        operatorId:
+          type: string
+          description: operator ID
+          example: '3.77'
+        operatorNetworkId:
+          type:
+          - string
+          - 'null'
+          description: Operator network ID
+          example: '538'
+    GetRoamingProfile5gsaInventoryResponseSchema:
+      allOf:
+      - $ref: '#/components/schemas/InventoryItemRoamingProfile5gsaSchema'
+      - type: object
+        properties:
+          globalTitles:
+            type: array
+            description: List of global titles associated with the roaming profile
+            uniqueItems: true
+            items:
+              type: string
+            example:
+            - '164780001'
+            - '2250505987'
+            - '32468'
     InventoryItemSmContext5gsaSchema:
       type: object
       properties:
@@ -3133,6 +3203,30 @@ components:
           - 'null'
           description: Operator network ID
           example: '538'
+    GetNetworkSliceContextInventoryResponseSchema:
+      allOf:
+      - $ref: '#/components/schemas/InventoryItemNetworkSliceContextSchema'
+      - type: object
+        properties:
+          networkId:
+            type: integer
+            description: Network Id
+            format: int32
+            example: 0
+          sliceType:
+            type: integer
+            description: Slice Type
+            format: int32
+            example: 0
+          sliceDifferentiator:
+            type: string
+            description: Slice Differentiator (SD)
+            example: 000090
+          networkSlicingDnnMappingDetailResps:
+            type: array
+            description: List of DNN mappings associated with this network slice context
+            items:
+              $ref: '#/components/schemas/DnnMapping'
     GetRoamingProfile5gsaInventoryListResponseSchema:
       allOf:
       - type: object
@@ -3147,6 +3241,117 @@ components:
             type: string
             description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
             example: /roaming-profile-5gsa?cursor=BDCTAQ3434%DFB%EYY445
+    GetSmProfile5gsaInventoryResponseSchema:
+      allOf:
+      - $ref: '#/components/schemas/InventoryItemSmProfile5gsaSchema'
+      - type: object
+        properties:
+          aggMaxUplinkBitRate:
+            type: string
+            description: Aggregate maximum uplink bit rate
+            example: '1000000'
+          aggMaxDownlinkBitrate:
+            type: string
+            description: Aggregate maximum downlink bit rate
+            example: '1000000'
+          nssaiInclusionAllowed:
+            type: boolean
+            description: Indicates whether NSSAI inclusion is allowed
+            example: true
+          smContexts:
+            type: array
+            description: List of SM contexts associated with this SM profile
+            items:
+              $ref: '#/components/schemas/SmContextRef'
+    GetSMContextQos5GSAInventoryListResponseSchema:
+      allOf:
+      - type: object
+        properties:
+          smContextQos:
+            type: array
+            items:
+              $ref: '#/components/schemas/InventoryItemSMContextQos5GSASchema'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /sm-context-qos-5gsa?cursor=BDCTAQ3434%DFB%EYY445
+    GetSMContextQos5GSAInventoryResponseSchema:
+      allOf:
+      - $ref: '#/components/schemas/InventoryItemSMContextQos5GSASchema'
+      - type: object
+        properties:
+          aggMaxDownlinkBitrate:
+            type: integer
+            description: Aggregate maximum downlink bitrate in (bits/s)
+            format: int32
+            example: 0
+          aggMaxUplinkBitRate:
+            type: integer
+            description: Aggregate maximum uplink bitrate in (bits/s)
+            format: int32
+            example: 0
+          qosPriorityLevel:
+            type: integer
+            description: QoS priority level
+            minimum: 1
+            maximum: 15
+            example: 10
+          sessionContinuityIndicator:
+            type:
+            - string
+            - 'null'
+            description: Session continuity indicator
+            example: null
+          arpPreemptionCapability:
+            type: boolean
+            description: ARP preemption capability flag
+            example: true
+          arpPreemptionVulnerability:
+            type: boolean
+            description: ARP preemption vulnerability flag
+            example: true
+          sscModes:
+            type: array
+            description: List of SSC modes with default indicator
+            items:
+              $ref: '#/components/schemas/SscModeEntry'
+    GetSmContext5gsaInventoryResponseSchema:
+      allOf:
+      - $ref: '#/components/schemas/InventoryItemSmContext5gsaSchema'
+      - type: object
+        properties:
+          networkId:
+            type: integer
+            description: Network Id
+            format: int32
+            example: 0
+          smContextQosId:
+            type: string
+            description: ID of the associated SM Context QoS
+            example: '300'
+          networkSlicingContextId:
+            type: string
+            description: ID of the associated Network Slicing Context
+            example: 000090
+          dnnId:
+            type: array
+            description: List of DNN IDs associated with this SM context
+            items:
+              type: string
+              example: '7324'
+    DnnMapping:
+      type: object
+      properties:
+        dnnDcpId:
+          type: string
+          description: DCP ID of the DNN
+          example: '7324'
+        isDefault:
+          type: boolean
+          description: Indicates whether this is the default DNN mapping
+          example: true
     InventoryItemSMContextQos5GSASchema:
       type: object
       properties:
@@ -3186,17 +3391,20 @@ components:
           - 'null'
           description: Operator network ID
           example: '538'
-    SmContextRef:
-      type: object
-      properties:
-        smContextId:
-          type: string
-          description: ID of the SM context
-          example: '123'
-        defaultContext:
-          type: boolean
-          description: Indicates whether this is the default SM context
-          example: true
+    GetSmProfile5gsaInventoryListResponseSchema:
+      allOf:
+      - type: object
+        properties:
+          smProfiles:
+            type: array
+            items:
+              $ref: '#/components/schemas/InventoryItemSmProfile5gsaSchema'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /sm-profile-5gsa?cursor=BDCTAQ3434%DFB%EYY445
     GetNetworkSliceContextInventoryListResponseSchema:
       allOf:
       - type: object
@@ -3250,302 +3458,34 @@ components:
           - 'null'
           description: Operator network ID
           example: '538'
-    GetSMContextQos5GSAInventoryListResponseSchema:
-      allOf:
-      - type: object
-        properties:
-          smContextQos:
-            type: array
-            items:
-              $ref: '#/components/schemas/InventoryItemSMContextQos5GSASchema'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /sm-context-qos-5gsa?cursor=BDCTAQ3434%DFB%EYY445
-    GetSmContext5gsaInventoryListResponseSchema:
-      allOf:
-      - type: object
-        properties:
-          smContexts:
-            type: array
-            items:
-              $ref: '#/components/schemas/InventoryItemSmContext5gsaSchema'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /sm-context-5gsa?cursor=BDCTAQ3434%DFB%EYY445
-    InventoryItemRoamingProfile5gsaSchema:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        status:
-          type: string
-          example: ACTIVE
-          x-extensible-enum:
-          - ACTIVE
-          - DEPRECATED
-        name:
-          maxLength: 255
-          minLength: 1
-          type: string
-          example: Foo name
-        description:
-          maxLength: 500
-          type:
-          - string
-          - 'null'
-          example: Foo description
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        operatorId:
-          type: string
-          description: operator ID
-          example: '3.77'
-        operatorNetworkId:
-          type:
-          - string
-          - 'null'
-          description: Operator network ID
-          example: '538'
-    GetSMContextQos5GSAInventoryResponseSchema:
-      allOf:
-      - $ref: '#/components/schemas/InventoryItemSMContextQos5GSASchema'
-      - type: object
-        properties:
-          aggMaxDownlinkBitrate:
-            type: integer
-            description: Aggregate maximum downlink bitrate in (bits/s)
-            format: int32
-            example: 0
-          aggMaxUplinkBitRate:
-            type: integer
-            description: Aggregate maximum uplink bitrate in (bits/s)
-            format: int32
-            example: 0
-          qosPriorityLevel:
-            type: integer
-            description: QoS priority level
-            minimum: 1
-            maximum: 15
-            example: 10
-          sessionContinuityIndicator:
-            type:
-            - string
-            - 'null'
-            description: Session continuity indicator
-            example: null
-          arpPreemptionCapability:
-            type: boolean
-            description: ARP preemption capability flag
-            example: true
-          arpPreemptionVulnerability:
-            type: boolean
-            description: ARP preemption vulnerability flag
-            example: true
-          sscModes:
-            type: array
-            description: List of SSC modes with default indicator
-            items:
-              $ref: '#/components/schemas/SscModeEntry'
-    GetRoamingProfile5gsaInventoryResponseSchema:
-      allOf:
-      - $ref: '#/components/schemas/InventoryItemRoamingProfile5gsaSchema'
-      - type: object
-        properties:
-          globalTitles:
-            type: array
-            description: List of global titles associated with the roaming profile
-            uniqueItems: true
-            items:
-              type: string
-            example:
-            - '164780001'
-            - '2250505987'
-            - '32468'
-    GetSmProfile5gsaInventoryListResponseSchema:
-      allOf:
-      - type: object
-        properties:
-          smProfiles:
-            type: array
-            items:
-              $ref: '#/components/schemas/InventoryItemSmProfile5gsaSchema'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /sm-profile-5gsa?cursor=BDCTAQ3434%DFB%EYY445
-    SscModeEntry:
-      type: object
-      properties:
-        mode:
-          type: string
-          description: SSC mode value
-          example: SSC_MODE_1
-        def:
-          type: boolean
-          description: Indicates whether this is the default SSC mode
-          example: true
-    InventoryItemSmProfile5gsaSchema:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '1'
-        status:
-          type: string
-          example: ACTIVE
-          x-extensible-enum:
-          - ACTIVE
-          - DEPRECATED
-        name:
-          maxLength: 255
-          minLength: 1
-          type: string
-          example: Foo name
-        description:
-          maxLength: 500
-          type:
-          - string
-          - 'null'
-          example: Foo description
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        operatorId:
-          type: string
-          description: operator ID
-          example: '3.77'
-        operatorNetworkId:
-          type:
-          - string
-          - 'null'
-          description: Operator network ID
-          example: '538'
-    GetSmProfile5gsaInventoryResponseSchema:
-      allOf:
-      - $ref: '#/components/schemas/InventoryItemSmProfile5gsaSchema'
-      - type: object
-        properties:
-          aggMaxUplinkBitRate:
-            type: string
-            description: Aggregate maximum uplink bit rate
-            example: '1000000'
-          aggMaxDownlinkBitrate:
-            type: string
-            description: Aggregate maximum downlink bit rate
-            example: '1000000'
-          nssaiInclusionAllowed:
-            type: boolean
-            description: Indicates whether NSSAI inclusion is allowed
-            example: true
-          smContexts:
-            type: array
-            description: List of SM contexts associated with this SM profile
-            items:
-              $ref: '#/components/schemas/SmContextRef'
-  responses:
-    BadRequest:
-      description: Bad Request
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: https://www.iana.org/assignments/http-status-codes
-            title: Bad Request
-            status: 400
-            detail: Invalid request parameter
-            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    NotFound:
-      description: Not Found
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/NotFound'
-          example:
-            type: https://www.iana.org/assignments/http-status-codes
-            title: Not Found
-            status: 404
-            detail: The server has not found anything matching the Request-URI.
-            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-    Unauthorized:
-      description: Unauthorized
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: https://www.iana.org/assignments/http-status-codes
-            title: Unauthorized
-            status: 401
-            detail: The request has not been applied because the server requires user authentication.
-            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-    InternalError:
-      description: Internal Server Error.
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: https://www.iana.org/assignments/http-status-codes
-            title: Internal Server Error
-            status: 500
-            detail: The server has encountered a situation that it does not know how to handle.
-            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-    Problem:
-      description: Internal Server Error.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-    TooManyRequests:
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
   examples:
+    radiusApnExample:
+      value:
+        id: '1'
+        status: ACTIVE
+        description: Foo description
+        createdAt: '2022-06-28T13:23:59.121Z'
+        updatedAt: '2022-06-28T13:23:59.121Z'
+        type: RADIUS_APN
+        name: iot
+        apn: rad0309.iota.com
+        advancedResellerApn: true
+        hlrApnId: '6415'
+        hssApnId: '6416'
+        supplierDnsHosted: true
+        packetGws:
+        - id: '26'
+          name: pgd1
+          isPrimary: true
+        - id: '27'
+          name: pgd2
+          isPrimary: false
+        dnsPlmnIds:
+        - '123456'
+        - '777888'
+        defaultApnId: '0'
+        operatorId: '3.77'
+        operatorNetworkId: '538'
     nonHostedApnExample:
       value:
         id: '1'
@@ -3563,6 +3503,87 @@ components:
         dnsPlmnIds:
         - '123456'
         - '777888'
+        operatorId: '3.77'
+        operatorNetworkId: '538'
+    privateApnExample:
+      value:
+        id: '1'
+        status: ACTIVE
+        description: Foo description
+        createdAt: '2022-06-28T13:23:59.121Z'
+        updatedAt: '2022-06-28T13:23:59.121Z'
+        type: PRIVATE_APN
+        name: iot
+        apn: rad0309.iota.com
+        hlrApnId: '6415'
+        hssApnId: '6416'
+        supplierDnsHosted: true
+        enabled2g3g: true
+        enabled4g: false
+        packetGws:
+        - id: '26'
+          name: pgd1
+          isPrimary: true
+        - id: '27'
+          name: pgd2
+          isPrimary: false
+        dnsPlmnIds:
+        - '123456'
+        - '777888'
+        advancedResellerApn: true
+        uplinkBandwidth: 500
+        downlinkBandwidth: 700
+        numberOfSimultaneousSessions: 256
+        primaryGiRange: 42.56.152.23/28
+        secondaryGiRange: 42.56.152.23/28
+        routingInstance: route1
+        natFirewallBy: OPERATOR
+        ipVersion: IPV4
+        sessionTimeout: NO_SUPERVISION
+        sessionTimeoutTimer: 0
+        idleTimeout: TIMER
+        idleTimeoutTimer: 0
+        vpn: vpn1
+        terminalIpAddresses:
+        - 34.231.12.37/24
+        - 2001:db8:abd:0012::0/56
+        secondaryTerminalIpAddresses:
+        - 34.231.12.37/20
+        - 2001:db8:abd:0012::0/56
+        primaryEnterpriseServerAddress: 1.2.3.4/20
+        secondaryEnterpriseServerAddress: 1.2.3.4/20
+        primaryAuthServer:
+          ipAddress: 34.231.12.37
+          port: 18126
+          key: '1234'
+        secondaryAuthServer:
+          ipAddress: 34.231.12.37
+          port: 18126
+          key: '1234'
+        primaryAcctServer:
+          ipAddress: 100.12.43.4
+          port: 1813
+          key: '1246'
+        secondaryAcctServer:
+          ipAddress: 100.12.43.4
+          port: 1813
+          key: '1246'
+        addressAllocationType: Provider_Dynamic
+        useIpAddressAllocation: false
+        radiusAuthOptions: imsi , rat-type , user-plmn-id , allocate-ip-type
+        radiusAccOptions: event-timestamp , imsi , msisdn , apn-selection-mode
+        numberOfReservedIpV4Addresses: 2
+        numberOfReservedIpV6Addresses: 0
+        restrictM2MAccess: true
+        sendIpV4Dns: true
+        useSupplierDnsIpV4: true
+        sendIpV6Dns: true
+        useSupplierDnsIpV6: true
+        primaryDnsIpV4: 100.12.43.7
+        primaryDnsIpV6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        secondaryDnsIpV4: 100.12.43.4
+        secondaryDnsIpV6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        pcrf: NONE
         operatorId: '3.77'
         operatorNetworkId: '538'
     internetApnExample:
@@ -3651,114 +3672,6 @@ components:
           protocol: ESP
         operatorId: '3.77'
         operatorNetworkId: '538'
-    privateApnExample:
-      value:
-        id: '1'
-        status: ACTIVE
-        description: Foo description
-        createdAt: '2022-06-28T13:23:59.121Z'
-        updatedAt: '2022-06-28T13:23:59.121Z'
-        type: PRIVATE_APN
-        name: iot
-        apn: rad0309.iota.com
-        hlrApnId: '6415'
-        hssApnId: '6416'
-        supplierDnsHosted: true
-        enabled2g3g: true
-        enabled4g: false
-        packetGws:
-        - id: '26'
-          name: pgd1
-          isPrimary: true
-        - id: '27'
-          name: pgd2
-          isPrimary: false
-        dnsPlmnIds:
-        - '123456'
-        - '777888'
-        advancedResellerApn: true
-        uplinkBandwidth: 500
-        downlinkBandwidth: 700
-        numberOfSimultaneousSessions: 256
-        primaryGiRange: 42.56.152.23/28
-        secondaryGiRange: 42.56.152.23/28
-        routingInstance: route1
-        natFirewallBy: OPERATOR
-        ipVersion: IPV4
-        sessionTimeout: NO_SUPERVISION
-        sessionTimeoutTimer: 0
-        idleTimeout: TIMER
-        idleTimeoutTimer: 0
-        vpn: vpn1
-        terminalIpAddresses:
-        - 34.231.12.37/24
-        - 2001:db8:abd:0012::0/56
-        secondaryTerminalIpAddresses:
-        - 34.231.12.37/20
-        - 2001:db8:abd:0012::0/56
-        primaryEnterpriseServerAddress: 1.2.3.4/20
-        secondaryEnterpriseServerAddress: 1.2.3.4/20
-        primaryAuthServer:
-          ipAddress: 34.231.12.37
-          port: 18126
-          key: '1234'
-        secondaryAuthServer:
-          ipAddress: 34.231.12.37
-          port: 18126
-          key: '1234'
-        primaryAcctServer:
-          ipAddress: 100.12.43.4
-          port: 1813
-          key: '1246'
-        secondaryAcctServer:
-          ipAddress: 100.12.43.4
-          port: 1813
-          key: '1246'
-        addressAllocationType: Provider_Dynamic
-        useIpAddressAllocation: false
-        radiusAuthOptions: imsi , rat-type , user-plmn-id , allocate-ip-type
-        radiusAccOptions: event-timestamp , imsi , msisdn , apn-selection-mode
-        numberOfReservedIpV4Addresses: 2
-        numberOfReservedIpV6Addresses: 0
-        restrictM2MAccess: true
-        sendIpV4Dns: true
-        useSupplierDnsIpV4: true
-        sendIpV6Dns: true
-        useSupplierDnsIpV6: true
-        primaryDnsIpV4: 100.12.43.7
-        primaryDnsIpV6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
-        secondaryDnsIpV4: 100.12.43.4
-        secondaryDnsIpV6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
-        pcrf: NONE
-        operatorId: '3.77'
-        operatorNetworkId: '538'
-    radiusApnExample:
-      value:
-        id: '1'
-        status: ACTIVE
-        description: Foo description
-        createdAt: '2022-06-28T13:23:59.121Z'
-        updatedAt: '2022-06-28T13:23:59.121Z'
-        type: RADIUS_APN
-        name: iot
-        apn: rad0309.iota.com
-        advancedResellerApn: true
-        hlrApnId: '6415'
-        hssApnId: '6416'
-        supplierDnsHosted: true
-        packetGws:
-        - id: '26'
-          name: pgd1
-          isPrimary: true
-        - id: '27'
-          name: pgd2
-          isPrimary: false
-        dnsPlmnIds:
-        - '123456'
-        - '777888'
-        defaultApnId: '0'
-        operatorId: '3.77'
-        operatorNetworkId: '538'
     virtualApnExample:
       value:
         id: '1'
@@ -3788,7 +3701,128 @@ components:
         realApnId: '0'
         operatorId: '3.77'
         operatorNetworkId: '538'
+  headers:
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+  responses:
+    NotFound:
+      description: Not Found
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+          example:
+            type: https://www.iana.org/assignments/http-status-codes
+            title: Not Found
+            status: 404
+            detail: The server has not found anything matching the Request-URI.
+            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+    Unauthorized:
+      description: Unauthorized
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://www.iana.org/assignments/http-status-codes
+            title: Unauthorized
+            status: 401
+            detail: The request has not been applied because the server requires user authentication.
+            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    Problem:
+      description: Internal Server Error.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    BadRequest:
+      description: Bad Request
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://www.iana.org/assignments/http-status-codes
+            title: Bad Request
+            status: 400
+            detail: Invalid request parameter
+            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+    TooManyRequests:
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    InternalError:
+      description: Internal Server Error.
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://www.iana.org/assignments/http-status-codes
+            title: Internal Server Error
+            status: 500
+            detail: The server has encountered a situation that it does not know how to handle.
+            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
   parameters:
+    cursor:
+      in: query
+      name: cursor
+      schema:
+        type: string
+      example: DFVSDB3434%DFB%EYY445
+      description: 'Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the ''cursor'' parameter in the next request to return the next page of results. The last page of results will not have a ''next'' present.
+
+        '
     inventoryId:
       name: id
       in: path
@@ -3805,40 +3839,6 @@ components:
         type: integer
         default: 100
         example: 100
-    cursor:
-      in: query
-      name: cursor
-      schema:
-        type: string
-      example: DFVSDB3434%DFB%EYY445
-      description: 'Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the ''cursor'' parameter in the next request to return the next page of results. The last page of results will not have a ''next'' present.
-
-        '
-  headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
   securitySchemes:
     oauth2:
       type: oauth2

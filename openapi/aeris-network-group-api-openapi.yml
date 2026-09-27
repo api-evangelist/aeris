@@ -47,48 +47,7 @@ paths:
       - oauth2:
         - css_view_resources
 components:
-  responses:
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    '429':
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemGeneric'
-          example:
-            type: about:blank
-            title: Too Many Requests
-            status: 429
-            detail: Too Many Requests. Please refer response RateLimit-* headers before send requests.
-            instance: about:blank
   headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
     X-RateLimit-Remaining-Minute:
       description: The number of requests remaining in a minute.
       schema:
@@ -99,15 +58,48 @@ components:
       schema:
         type: integer
         format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
   schemas:
-    NetworkGroupsRead:
+    NetworkGroupRead:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BasicData'
+    BasicData:
       type: object
       properties:
-        network_groups:
-          type: array
-          maxItems: 100
-          items:
-            $ref: '#/components/schemas/NetworkGroupRead'
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: My resource
+        internal_id:
+          type: integer
+          format: int64
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 500
+          example: Descriptive information
+        status:
+          $ref: '#/components/schemas/Status'
+        provisioning_status:
+          $ref: '#/components/schemas/ProvisioningStatus'
+      required:
+      - name
     ProblemGeneric:
       type: object
       properties:
@@ -197,43 +189,14 @@ components:
           type: string
           description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
           example: https://api.documentation.url/request-id
-    NetworkGroupRead:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BasicData'
-    BasicData:
+    NetworkGroupsRead:
       type: object
       properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 255
-          example: My resource
-        internal_id:
-          type: integer
-          format: int64
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 500
-          example: Descriptive information
-        status:
-          $ref: '#/components/schemas/Status'
-        provisioning_status:
-          $ref: '#/components/schemas/ProvisioningStatus'
-      required:
-      - name
-    ProvisioningStatus:
-      type: string
-      description: Provisioning status of the entity
-      x-extensible-enum:
-      - NONE
-      - PENDING
-      - STARTED
-      - SUCCESS
-      - FAILURE
-      example: SUCCESS
+        network_groups:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/NetworkGroupRead'
     Status:
       type: string
       description: Status of the entity
@@ -244,6 +207,43 @@ components:
       - SUBMITTED
       - OBSOLETE
       example: READY
+    ProvisioningStatus:
+      type: string
+      description: Provisioning status of the entity
+      x-extensible-enum:
+      - NONE
+      - PENDING
+      - STARTED
+      - SUCCESS
+      - FAILURE
+      example: SUCCESS
+  responses:
+    '429':
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemGeneric'
+          example:
+            type: about:blank
+            title: Too Many Requests
+            status: 429
+            detail: Too Many Requests. Please refer response RateLimit-* headers before send requests.
+            instance: about:blank
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
   securitySchemes:
     oauth2:
       type: oauth2

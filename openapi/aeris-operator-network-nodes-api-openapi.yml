@@ -142,6 +142,31 @@ paths:
       - oauth2:
         - cnx_view_networks
 components:
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
   schemas:
     GeoRedundantGroupArray:
       type: object
@@ -150,27 +175,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NetworkNodeArray'
-    NetworkNode:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Node Id
-          example: 1
-        name:
-          type: string
-          description: Node Name
-          example: STO-EPG1
-        nodeType:
-          type: string
-          description: Node Type
-          example: EPG
-        redundancyNodeId:
-          type:
-          - integer
-          - 'null'
-          description: Redundancy Node Id
-          example: 2
     Problem:
       type: object
       properties:
@@ -222,6 +226,27 @@ components:
             It may or may not yield further information if dereferenced.
 
             '
+    NetworkNode:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Node Id
+          example: 1
+        name:
+          type: string
+          description: Node Name
+          example: STO-EPG1
+        nodeType:
+          type: string
+          description: Node Type
+          example: EPG
+        redundancyNodeId:
+          type:
+          - integer
+          - 'null'
+          description: Redundancy Node Id
+          example: 2
     NetworkNodeArray:
       type: object
       properties:
@@ -247,31 +272,6 @@ components:
           $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
         Content-Type:
           $ref: '#/components/headers/Content-Type'
-  headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
   securitySchemes:
     oauth2:
       type: oauth2

@@ -209,280 +209,7 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 components:
-  schemas:
-    PagedEventPoliciesTable:
-      type: object
-      properties:
-        page:
-          type: integer
-          example: 0
-          description: Current page number (0-based)
-        size:
-          type: integer
-          example: 20
-          description: Page size
-        totalPages:
-          type: integer
-          example: 5
-          description: Total number of pages
-        totalElements:
-          type: integer
-          format: int64
-          example: 100
-          description: Total number of elements
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventPolicySummaryResponse'
-    EventPolicyCreateResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: ID of the newly created event policy
-          example: 42
-    EventPolicyUpdateRequest:
-      type: object
-      required:
-      - name
-      - deviceGroupIds
-      - eventTypeIds
-      properties:
-        name:
-          type: string
-          maxLength: 255
-          description: Name of the event policy
-          example: My Fleet Policy
-        description:
-          type: string
-          description: Optional description
-        deviceGroupIds:
-          type: array
-          minItems: 1
-          description: IDs of the device groups this policy applies to. At least one device group is required.
-          items:
-            type: integer
-            format: int64
-        eventTypeIds:
-          type: array
-          minItems: 1
-          description: IDs of the event types to watch. At least one event type is required.
-          items:
-            type: integer
-    EventPolicySummaryResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Event policy ID
-          example: 1
-        accountId:
-          type: integer
-          format: int32
-          description: Account ID
-          example: 10407
-        name:
-          type: string
-          description: Name of the event policy
-          example: My Fleet Policy
-        description:
-          type: string
-          description: Optional description
-        deviceGroupIds:
-          type: array
-          description: IDs of the associated device groups
-          items:
-            type: integer
-            format: int64
-        eventTypeIds:
-          type: array
-          description: IDs of the watched event types
-          items:
-            type: integer
-        createdBy:
-          type: string
-          example: john.doe@example.com
-        createdTime:
-          $ref: '#/components/schemas/dateTime'
-        lastModifiedBy:
-          type: string
-          example: jane.doe@example.com
-        lastModifiedTime:
-          $ref: '#/components/schemas/dateTime'
-    EventPolicyResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Event policy ID
-          example: 1
-        accountId:
-          type: integer
-          format: int32
-          description: Account ID
-          example: 10407
-        name:
-          type: string
-          description: Name of the event policy
-          example: My Fleet Policy
-        description:
-          type: string
-          description: Optional description
-        deviceGroupIds:
-          type: array
-          description: IDs of the associated device groups
-          items:
-            type: integer
-            format: int64
-        eventTypeIds:
-          type: array
-          description: IDs of the watched event types
-          items:
-            type: integer
-        createdBy:
-          type: string
-          description: User who created the policy
-          example: john.doe@example.com
-        createdTime:
-          $ref: '#/components/schemas/dateTime'
-        lastModifiedBy:
-          type: string
-          description: User who last modified the policy
-          example: jane.doe@example.com
-        lastModifiedTime:
-          $ref: '#/components/schemas/dateTime'
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: HTTP code
-          example: 500
-        message:
-          type: string
-          description: Error message
-          example: An error encountered in processing the request
-        timestamp:
-          type: string
-          description: ISO DateTime
-          example: '2025-06-02 09:01:53.678'
-        path:
-          type: string
-          description: Endpoint path at which the error occured
-          example: /watchtower/v1/events
-        traceId:
-          type: string
-          description: Trace Id
-          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    EventPolicySearchRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Filter by policy name (partial match, case-insensitive)
-          example: fleet
-        deviceGroupIds:
-          type: array
-          description: Filter — return policies that include ANY of these device group IDs
-          items:
-            type: integer
-            format: int64
-        eventTypeIds:
-          type: array
-          description: Filter — return policies that include ANY of these event type IDs
-          items:
-            type: integer
-    EventPolicyCreateRequest:
-      type: object
-      required:
-      - name
-      - deviceGroupIds
-      - eventTypeIds
-      properties:
-        name:
-          type: string
-          maxLength: 255
-          description: Name of the event policy
-          example: My Fleet Policy
-        description:
-          type: string
-          description: Optional description
-          example: Policy for monitoring anomalous mobility on fleet devices
-        deviceGroupIds:
-          type: array
-          minItems: 1
-          description: IDs of the device groups this policy applies to. At least one device group is required.
-          items:
-            type: integer
-            format: int64
-        eventTypeIds:
-          type: array
-          minItems: 1
-          description: IDs of the event types (alert_types) to watch. At least one event type is required.
-          items:
-            type: integer
-    accountId:
-      description: Account Id.
-      type: integer
-      format: int32
-      example: 10407
-      minimum: 0
-    ReportStatus:
-      description: Report status
-      type: string
-      example: Processing
-      enum:
-      - Success
-      - Processing
-      - Error
-      - NotStarted
-    ScheduledReport:
-      type: object
-      properties:
-        reportId:
-          description: Report Id
-          type: string
-          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
-        status:
-          $ref: '#/components/schemas/ReportStatus'
-        statusEndpoint:
-          description: Report Status URL
-          type: string
-          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
-    dateTime:
-      description: ISO 8601 date time
-      type: string
-      format: date-time
-      example: '2021-07-04T17:36:47Z'
-    limit:
-      type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
   responses:
-    '401':
-      description: Not authorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '429':
       description: Too many requests.
       content:
@@ -492,6 +219,18 @@ components:
           example:
             code: 429
             message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
@@ -543,13 +282,268 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-  parameters:
+  schemas:
+    PagedEventPoliciesTable:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 0
+          description: Current page number (0-based)
+        size:
+          type: integer
+          example: 20
+          description: Page size
+        totalPages:
+          type: integer
+          example: 5
+          description: Total number of pages
+        totalElements:
+          type: integer
+          format: int64
+          example: 100
+          description: Total number of elements
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventPolicySummaryResponse'
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
     limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    EventPolicyUpdateRequest:
+      type: object
+      required:
+      - name
+      - deviceGroupIds
+      - eventTypeIds
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Name of the event policy
+          example: My Fleet Policy
+        description:
+          type: string
+          description: Optional description
+        deviceGroupIds:
+          type: array
+          minItems: 1
+          description: IDs of the device groups this policy applies to. At least one device group is required.
+          items:
+            type: integer
+            format: int64
+        eventTypeIds:
+          type: array
+          minItems: 1
+          description: IDs of the event types to watch. At least one event type is required.
+          items:
+            type: integer
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    EventPolicySearchRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Filter by policy name (partial match, case-insensitive)
+          example: fleet
+        deviceGroupIds:
+          type: array
+          description: Filter — return policies that include ANY of these device group IDs
+          items:
+            type: integer
+            format: int64
+        eventTypeIds:
+          type: array
+          description: Filter — return policies that include ANY of these event type IDs
+          items:
+            type: integer
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    EventPolicyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Event policy ID
+          example: 1
+        accountId:
+          type: integer
+          format: int32
+          description: Account ID
+          example: 10407
+        name:
+          type: string
+          description: Name of the event policy
+          example: My Fleet Policy
+        description:
+          type: string
+          description: Optional description
+        deviceGroupIds:
+          type: array
+          description: IDs of the associated device groups
+          items:
+            type: integer
+            format: int64
+        eventTypeIds:
+          type: array
+          description: IDs of the watched event types
+          items:
+            type: integer
+        createdBy:
+          type: string
+          description: User who created the policy
+          example: john.doe@example.com
+        createdTime:
+          $ref: '#/components/schemas/dateTime'
+        lastModifiedBy:
+          type: string
+          description: User who last modified the policy
+          example: jane.doe@example.com
+        lastModifiedTime:
+          $ref: '#/components/schemas/dateTime'
+    EventPolicySummaryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Event policy ID
+          example: 1
+        accountId:
+          type: integer
+          format: int32
+          description: Account ID
+          example: 10407
+        name:
+          type: string
+          description: Name of the event policy
+          example: My Fleet Policy
+        description:
+          type: string
+          description: Optional description
+        deviceGroupIds:
+          type: array
+          description: IDs of the associated device groups
+          items:
+            type: integer
+            format: int64
+        eventTypeIds:
+          type: array
+          description: IDs of the watched event types
+          items:
+            type: integer
+        createdBy:
+          type: string
+          example: john.doe@example.com
+        createdTime:
+          $ref: '#/components/schemas/dateTime'
+        lastModifiedBy:
+          type: string
+          example: jane.doe@example.com
+        lastModifiedTime:
+          $ref: '#/components/schemas/dateTime'
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
+    EventPolicyCreateRequest:
+      type: object
+      required:
+      - name
+      - deviceGroupIds
+      - eventTypeIds
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Name of the event policy
+          example: My Fleet Policy
+        description:
+          type: string
+          description: Optional description
+          example: Policy for monitoring anomalous mobility on fleet devices
+        deviceGroupIds:
+          type: array
+          minItems: 1
+          description: IDs of the device groups this policy applies to. At least one device group is required.
+          items:
+            type: integer
+            format: int64
+        eventTypeIds:
+          type: array
+          minItems: 1
+          description: IDs of the event types (alert_types) to watch. At least one event type is required.
+          items:
+            type: integer
+    EventPolicyCreateResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the newly created event policy
+          example: 42
+    ScheduledReport:
+      type: object
+      properties:
+        reportId:
+          description: Report Id
+          type: string
+          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        statusEndpoint:
+          description: Report Status URL
+          type: string
+          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+    ReportStatus:
+      description: Report status
+      type: string
+      example: Processing
+      enum:
+      - Success
+      - Processing
+      - Error
+      - NotStarted
+  parameters:
     accountId:
       name: X-Watchtower-Account-Id
       in: header
@@ -564,14 +558,6 @@ components:
       description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
       schema:
         $ref: '#/components/schemas/offset'
-    policyId:
-      name: policyId
-      in: path
-      required: true
-      description: The ID of the event policy
-      schema:
-        type: integer
-        format: int64
     authorization:
       name: Authorization
       in: header
@@ -581,6 +567,20 @@ components:
         type: string
         pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
       example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    policyId:
+      name: policyId
+      in: path
+      required: true
+      description: The ID of the event policy
+      schema:
+        type: integer
+        format: int64
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

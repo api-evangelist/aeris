@@ -95,6 +95,24 @@ paths:
                 $ref: '#/components/schemas/RequestError'
 components:
   schemas:
+    DeliveryInfo:
+      type: object
+      required:
+      - address
+      - deliveryStatus
+      properties:
+        address:
+          type: string
+          description: 'The recipients MSISDN including the tel: protocol identifier. For example: tel:16309700001'
+        deliveryStatus:
+          type: string
+          description: 'Delivery status for the recipient identified by address. '
+          enum:
+          - DeliveredToTerminal
+          - DeliveryUncertain
+          - DeliveryImpossible
+          - MessageWaiting
+          - DeliveredToNetwork
     DeliveryInfoList:
       type: object
       required:
@@ -139,24 +157,6 @@ components:
                 variables:
                   type: string
                   description: points to the variable(s) in violation
-    DeliveryInfo:
-      type: object
-      required:
-      - address
-      - deliveryStatus
-      properties:
-        address:
-          type: string
-          description: 'The recipients MSISDN including the tel: protocol identifier. For example: tel:16309700001'
-        deliveryStatus:
-          type: string
-          description: 'Delivery status for the recipient identified by address. '
-          enum:
-          - DeliveredToTerminal
-          - DeliveryUncertain
-          - DeliveryImpossible
-          - MessageWaiting
-          - DeliveredToNetwork
   securitySchemes:
     BasicAuth:
       type: http

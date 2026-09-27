@@ -140,6 +140,31 @@ paths:
         - ssm.euicc-spec.read
         - ssm.euicc-spec.write
 components:
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
   schemas:
     FileShareListResponse:
       properties:
@@ -153,6 +178,71 @@ components:
           - 'null'
           description: URI to next pagination.
           example: /file-shares?cursor=VSDFDB3434%DFB%EYY336
+    FileShare:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '755654'
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: DEFAULT
+        status:
+          type: string
+          x-extensible-enum:
+          - DRAFT
+          - SUBMITTED
+          - ACTIVE
+          - INVALID
+          - OBSOLETE
+          example: ACTIVE
+        fileShareType:
+          type: string
+          x-extensible-enum:
+          - STOCK_ORDER
+          - WAREHOUSE_ORDER
+          - MANUFACTURER_ORDER
+          - PROFILE_STOCK_ORDER
+          example: WAREHOUSE_ORDER
+        fileShareURI:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          example: /share/FILESHAREWAREHOUSEORDEREUICC
+        description:
+          type: string
+          minLength: 1
+          maxLength: 500
+          example: Profile Spec for OpTest1
+    InvalidParamsProblem:
+      description: A Problem object extended with an invalid-params array describing parameter validation failures.
+      allOf:
+      - $ref: '#/components/schemas/Problem'
+      - type: object
+        properties:
+          parameters:
+            type: object
+            properties:
+              invalid-params:
+                type: array
+                description: List of invalid parameters causing the request to fail.
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Name of the offending parameter.
+                      example: q
+                    violation:
+                      type: string
+                      description: Description of the validation error.
+                      example: 'q must be in format: type==SIM;organizationId==3.88.7'
+                  required:
+                  - name
+                  - violation
+            additionalProperties: true
     Problem:
       type: object
       properties:
@@ -212,84 +302,7 @@ components:
           description: 'Additional properties related to the problem.
 
             '
-    InvalidParamsProblem:
-      description: A Problem object extended with an invalid-params array describing parameter validation failures.
-      allOf:
-      - $ref: '#/components/schemas/Problem'
-      - type: object
-        properties:
-          parameters:
-            type: object
-            properties:
-              invalid-params:
-                type: array
-                description: List of invalid parameters causing the request to fail.
-                items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                      description: Name of the offending parameter.
-                      example: q
-                    violation:
-                      type: string
-                      description: Description of the validation error.
-                      example: 'q must be in format: type==SIM;organizationId==3.88.7'
-                  required:
-                  - name
-                  - violation
-            additionalProperties: true
-    FileShare:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '755654'
-        name:
-          type: string
-          minLength: 1
-          maxLength: 255
-          example: DEFAULT
-        status:
-          type: string
-          x-extensible-enum:
-          - DRAFT
-          - SUBMITTED
-          - ACTIVE
-          - INVALID
-          - OBSOLETE
-          example: ACTIVE
-        fileShareType:
-          type: string
-          x-extensible-enum:
-          - STOCK_ORDER
-          - WAREHOUSE_ORDER
-          - MANUFACTURER_ORDER
-          - PROFILE_STOCK_ORDER
-          example: WAREHOUSE_ORDER
-        fileShareURI:
-          type: string
-          minLength: 1
-          maxLength: 1024
-          example: /share/FILESHAREWAREHOUSEORDEREUICC
-        description:
-          type: string
-          minLength: 1
-          maxLength: 500
-          example: Profile Spec for OpTest1
   responses:
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
     InternalServerError:
       description: Internal Server Error
       allOf:
@@ -332,6 +345,20 @@ components:
             status: 403
             detail: Permission missing
             instance: https://example-host/iot/api/problems/523e2562-e89b-12d3-a456-426614175000
+    Unauthorized:
+      description: Unauthorized
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://www.iana.org/assignments/http-status-codes/
+            title: Unauthorized
+            status: 401
+            detail: No or invalid authentication token provided
+            instance: https://example-host/iot/api/problems/523e1562-e89b-12d3-a456-426614175000
     BadRequestWithInvalidParams:
       description: Bad Request with invalid parameters
       allOf:
@@ -364,45 +391,18 @@ components:
             status: 405
             detail: POST is not allowed in this endpoint
             instance: https://example-host/iot/api/problems/523e9562-e89b-12d3-a456-426614175000
-    Unauthorized:
-      description: Unauthorized
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: https://www.iana.org/assignments/http-status-codes/
-            title: Unauthorized
-            status: 401
-            detail: No or invalid authentication token provided
-            instance: https://example-host/iot/api/problems/523e1562-e89b-12d3-a456-426614175000
-  headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
   securitySchemes:
     Oauth2_auth:
       type: oauth2

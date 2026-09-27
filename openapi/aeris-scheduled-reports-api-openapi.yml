@@ -51,27 +51,15 @@ paths:
           $ref: '#/components/responses/429'
 components:
   responses:
-    '401':
-      description: Not authorized.
+    '404':
+      description: Not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '429':
-      description: Too many requests.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 429
-            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            code: 404
+            message: Not found
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
@@ -87,15 +75,27 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '404':
-      description: Not found.
+    '429':
+      description: Too many requests.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            code: 404
-            message: Not found
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
@@ -111,34 +111,7 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-  parameters:
-    reportId:
-      name: reportId
-      in: path
-      description: Report Id
-      required: true
-      schema:
-        type: string
-      example: b7e72bb3-b2fd-4265-a28b-9a279418fdb9
-    authorization:
-      name: Authorization
-      in: header
-      description: Bearer Token for authentication
-      required: true
-      schema:
-        type: string
-        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
-      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
   schemas:
-    ReportStatus:
-      description: Report status
-      type: string
-      example: Processing
-      enum:
-      - Success
-      - Processing
-      - Error
-      - NotStarted
     ScheduledReportStatus:
       type: object
       properties:
@@ -181,6 +154,33 @@ components:
           type: string
           description: Trace Id
           example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    ReportStatus:
+      description: Report status
+      type: string
+      example: Processing
+      enum:
+      - Success
+      - Processing
+      - Error
+      - NotStarted
+  parameters:
+    reportId:
+      name: reportId
+      in: path
+      description: Report Id
+      required: true
+      schema:
+        type: string
+      example: b7e72bb3-b2fd-4265-a28b-9a279418fdb9
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

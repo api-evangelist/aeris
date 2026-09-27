@@ -940,148 +940,15 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 components:
-  responses:
-    '401':
-      description: Not authorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '429':
-      description: Too many requests.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 429
-            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '400':
-      description: Bad Request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Bad Request
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '413':
-      description: Requested data too large
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 413
-            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Internal Server Error
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   schemas:
-    SecurityReportAppendixTrigger:
-      properties:
-        request_by:
-          type: string
-          title: Request By
-        account_name:
-          type: string
-          title: Account Name
-      type: object
-      title: SecurityReportAppendixTrigger
-    SecurityReportDetail:
-      properties:
-        sections:
-          $ref: '#/components/schemas/SecurityReportSections'
-        category:
-          $ref: '#/components/schemas/SecurityReportCategory'
-      type: object
-      required:
-      - sections
-      - category
-      title: SecurityReportDetail
-    TrendData:
-      properties:
-        content:
-          type: string
-          title: Content
-        direction:
-          $ref: '#/components/schemas/TrendDirection'
-        current_value:
-          type: integer
-          title: Current Value
-        previous_value:
-          type: integer
-          title: Previous Value
-      type: object
-      required:
-      - content
-      - direction
-      - current_value
-      - previous_value
-      title: TrendData
-      description: Schema for a trend object.
-    SecurityReportDeviceUsage:
-      properties:
-        total:
-          type: integer
-          title: Total
-        data:
-          items:
-            items:
-              $ref: '#/components/schemas/DeviceUsageData'
-            type: array
-          type: array
-          title: Rows
-      type: object
-      required:
-      - total
-      - data
-      title: DeviceUsageResponse
-    Pagination:
-      type: object
-      properties:
-        total:
-          $ref: '#/components/schemas/total'
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
+    Severity:
+      type: string
+      enum:
+      - High
+      - Medium
+      - Low
+      title: Severity
+      example: High
     EndpointData:
       properties:
         endpoint_country:
@@ -1107,6 +974,153 @@ components:
       - data_usage_bytes
       - ip_flows
       title: EndpointData
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    SecurityReportDetail:
+      properties:
+        sections:
+          $ref: '#/components/schemas/SecurityReportSections'
+        category:
+          $ref: '#/components/schemas/SecurityReportCategory'
+      type: object
+      required:
+      - sections
+      - category
+      title: SecurityReportDetail
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    DeviceUsageData:
+      properties:
+        active_devices:
+          type: integer
+          title: Active Devices
+        device_country:
+          type: string
+          title: Device Country
+        data_usage_bytes:
+          type: integer
+          title: Data Usage Bytes
+      type: object
+      required:
+      - active_devices
+      - device_country
+      - data_usage_bytes
+      title: DeviceUsageData
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    SecurityReportAppendixRequest:
+      title: SecurityReportAppendixRequest
+      type: object
+      required:
+      - year
+      - month
+      properties:
+        year:
+          type: integer
+          title: Year
+        month:
+          type: integer
+          title: Month
+        category:
+          type: string
+          title: Category
+        security_item:
+          type: string
+          title: Security Item
+        iccid:
+          type: string
+          title: Iccid
+        imsi:
+          type: string
+          title: Imsi
+        start_ts:
+          type: string
+          title: Start Ts
+        end_ts:
+          type: string
+          title: End Ts
+        device_location:
+          type: string
+          title: Device Location
+        device_type:
+          type: string
+          title: Device Type
+        network_protocol:
+          type: string
+          title: Network Protocol
+        protocol:
+          type: string
+          title: Protocol
+        unencrypted_protocol:
+          type: string
+          title: Unencrypted Protocol
+        server_port:
+          type: string
+          title: Server Port
+        endpoint_location:
+          type: string
+          title: Endpoint Location
+        fqdn:
+          type: string
+          title: Fqdn
+        dns_server_ip:
+          type: string
+          title: Dns Server Ip
+        scanned_subnet_port:
+          type: string
+          title: Scanned Subnet Port
+        apn:
+          type: array
+          title: Apn
+          items:
+            type: string
+        apn_type:
+          type: array
+          title: Apn Type
+          items:
+            type: string
+        device_group_id:
+          items:
+            type: string
+          type: array
+          title: Device Group Id
+    SecurityReportSectionItem:
+      properties:
+        sec_no:
+          type: string
+          title: Sec No
+        tds:
+          items:
+            $ref: '#/components/schemas/TdsItem'
+          type: array
+          title: Tds
+        alert_type:
+          type: string
+          title: Event Type
+      type: object
+      required:
+      - sec_no
+      - tds
+      title: SectionItem
     SecurityEventData:
       type: object
       title: SecurityEventData
@@ -1214,169 +1228,80 @@ components:
       - scanned_subnet_port
       - unencrypted_protocol
       - device_groups
-    Error:
-      type: object
+    SecurityReportSections:
       properties:
-        code:
-          type: integer
-          description: HTTP code
-          example: 500
-        message:
-          type: string
-          description: Error message
-          example: An error encountered in processing the request
-        timestamp:
-          type: string
-          description: ISO DateTime
-          example: '2025-06-02 09:01:53.678'
-        path:
-          type: string
-          description: Endpoint path at which the error occured
-          example: /watchtower/v1/events
-        traceId:
-          type: string
-          description: Trace Id
-          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    SecurityReportAppendixRequest:
-      title: SecurityReportAppendixRequest
+        inventory_control_devices:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Inventory Control Devices
+        data_protection:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Data Protection
+        net_work_security:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Net Work Security
+        application_security:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Application Security
+        device_security:
+          items:
+            $ref: '#/components/schemas/SecurityReportSectionItem'
+          type: array
+          title: Device Security
       type: object
       required:
-      - year
-      - month
+      - inventory_control_devices
+      - data_protection
+      - net_work_security
+      - application_security
+      - device_security
+      title: Sections
+    TdsItem:
       properties:
-        year:
+        content:
+          type: string
+          title: Content
+        column:
+          type: string
+          title: Column
+        direction:
+          type: string
+          title: Direction
+        current_value:
+          type: number
+          title: Current Value
+        previous_value:
+          type: number
+          title: Previous Value
+      type: object
+      required:
+      - content
+      - column
+      title: TdsItem
+    SecurityReportDeviceUsage:
+      properties:
+        total:
           type: integer
-          title: Year
-        month:
-          type: integer
-          title: Month
-        category:
-          type: string
-          title: Category
-        security_item:
-          type: string
-          title: Security Item
-        iccid:
-          type: string
-          title: Iccid
-        imsi:
-          type: string
-          title: Imsi
-        start_ts:
-          type: string
-          title: Start Ts
-        end_ts:
-          type: string
-          title: End Ts
-        device_location:
-          type: string
-          title: Device Location
-        device_type:
-          type: string
-          title: Device Type
-        network_protocol:
-          type: string
-          title: Network Protocol
-        protocol:
-          type: string
-          title: Protocol
-        unencrypted_protocol:
-          type: string
-          title: Unencrypted Protocol
-        server_port:
-          type: string
-          title: Server Port
-        endpoint_location:
-          type: string
-          title: Endpoint Location
-        fqdn:
-          type: string
-          title: Fqdn
-        dns_server_ip:
-          type: string
-          title: Dns Server Ip
-        scanned_subnet_port:
-          type: string
-          title: Scanned Subnet Port
-        apn:
-          type: array
-          title: Apn
+          title: Total
+        data:
           items:
-            type: string
-        apn_type:
-          type: array
-          title: Apn Type
-          items:
-            type: string
-        device_group_id:
-          items:
-            type: string
-          type: array
-          title: Device Group Id
-    PagedSecurityReportAppendix:
-      allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - type: object
-        properties:
-          data:
-            type: array
             items:
-              $ref: '#/components/schemas/SecurityEventData'
-    TrendDirection:
-      type: string
-      enum:
-      - trend_up
-      - trend_down
-      - trend_flat
-      title: TrendDirection
-    total:
-      type: integer
-      format: int64
-      description: Total number of items available.
-      example: 1
-      minimum: 0
-    SectionSummary:
-      properties:
-        high:
-          type: integer
-          title: High
-        medium:
-          type: integer
-          title: Medium
-        low:
-          type: integer
-          title: Low
-        highest_severity:
-          $ref: '#/components/schemas/Severity'
-        recommended_action:
-          type: string
-          title: Recommended Action
-      type: object
-      required:
-      - high
-      - medium
-      - low
-      - highest_severity
-      - recommended_action
-      title: SectionSummary
-    SecurityReportSectionItem:
-      properties:
-        sec_no:
-          type: string
-          title: Sec No
-        tds:
-          items:
-            $ref: '#/components/schemas/TdsItem'
+              $ref: '#/components/schemas/DeviceUsageData'
+            type: array
           type: array
-          title: Tds
-        alert_type:
-          type: string
-          title: Event Type
+          title: Rows
       type: object
       required:
-      - sec_no
-      - tds
-      title: SectionItem
+      - total
+      - data
+      title: DeviceUsageResponse
     SecurityReportEndpoint:
       properties:
         total:
@@ -1419,100 +1344,70 @@ components:
       - application_security
       - device_security
       title: Category
-    TdsItem:
-      properties:
-        content:
-          type: string
-          title: Content
-        column:
-          type: string
-          title: Column
-        direction:
-          type: string
-          title: Direction
-        current_value:
-          type: number
-          title: Current Value
-        previous_value:
-          type: number
-          title: Previous Value
+    Error:
       type: object
-      required:
-      - content
-      - column
-      title: TdsItem
-    DeviceUsageData:
       properties:
-        active_devices:
+        code:
           type: integer
-          title: Active Devices
-        device_country:
+          description: HTTP code
+          example: 500
+        message:
           type: string
-          title: Device Country
-        data_usage_bytes:
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    SectionSummary:
+      properties:
+        high:
           type: integer
-          title: Data Usage Bytes
+          title: High
+        medium:
+          type: integer
+          title: Medium
+        low:
+          type: integer
+          title: Low
+        highest_severity:
+          $ref: '#/components/schemas/Severity'
+        recommended_action:
+          type: string
+          title: Recommended Action
       type: object
       required:
-      - active_devices
-      - device_country
-      - data_usage_bytes
-      title: DeviceUsageData
-    SecurityReportSections:
+      - high
+      - medium
+      - low
+      - highest_severity
+      - recommended_action
+      title: SectionSummary
+    SecurityReportAppendixTrigger:
       properties:
-        inventory_control_devices:
-          items:
-            $ref: '#/components/schemas/SecurityReportSectionItem'
-          type: array
-          title: Inventory Control Devices
-        data_protection:
-          items:
-            $ref: '#/components/schemas/SecurityReportSectionItem'
-          type: array
-          title: Data Protection
-        net_work_security:
-          items:
-            $ref: '#/components/schemas/SecurityReportSectionItem'
-          type: array
-          title: Net Work Security
-        application_security:
-          items:
-            $ref: '#/components/schemas/SecurityReportSectionItem'
-          type: array
-          title: Application Security
-        device_security:
-          items:
-            $ref: '#/components/schemas/SecurityReportSectionItem'
-          type: array
-          title: Device Security
+        request_by:
+          type: string
+          title: Request By
+        account_name:
+          type: string
+          title: Account Name
       type: object
-      required:
-      - inventory_control_devices
-      - data_protection
-      - net_work_security
-      - application_security
-      - device_security
-      title: Sections
-    SectionsSummary:
-      properties:
-        application_security:
-          $ref: '#/components/schemas/SectionSummary'
-        data_protection:
-          $ref: '#/components/schemas/SectionSummary'
-        device_security:
-          $ref: '#/components/schemas/SectionSummary'
-        inventory_control_devices:
-          $ref: '#/components/schemas/SectionSummary'
-        net_work_security:
-          $ref: '#/components/schemas/SectionSummary'
-      type: object
-      required:
-      - application_security
-      - data_protection
-      - device_security
-      - inventory_control_devices
-      - net_work_security
-      title: SectionsSummary
+      title: SecurityReportAppendixTrigger
+    TrendDirection:
+      type: string
+      enum:
+      - trend_up
+      - trend_down
+      - trend_flat
+      title: TrendDirection
     SecurityReportSummary:
       properties:
         total_low:
@@ -1566,29 +1461,35 @@ components:
       - trend_medium
       - trend_high
       title: SecurityReportSummary
-    accountId:
-      description: Account Id.
-      type: integer
-      format: int32
-      example: 10407
-      minimum: 0
-    ReportStatus:
-      description: Report status
-      type: string
-      example: Processing
-      enum:
-      - Success
-      - Processing
-      - Error
-      - NotStarted
-    Severity:
-      type: string
-      enum:
-      - High
-      - Medium
-      - Low
-      title: Severity
-      example: High
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    SectionsSummary:
+      properties:
+        application_security:
+          $ref: '#/components/schemas/SectionSummary'
+        data_protection:
+          $ref: '#/components/schemas/SectionSummary'
+        device_security:
+          $ref: '#/components/schemas/SectionSummary'
+        inventory_control_devices:
+          $ref: '#/components/schemas/SectionSummary'
+        net_work_security:
+          $ref: '#/components/schemas/SectionSummary'
+      type: object
+      required:
+      - application_security
+      - data_protection
+      - device_security
+      - inventory_control_devices
+      - net_work_security
+      title: SectionsSummary
     ScheduledReport:
       type: object
       properties:
@@ -1602,26 +1503,119 @@ components:
           description: Report Status URL
           type: string
           example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
-    limit:
-      type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
+    PagedSecurityReportAppendix:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/SecurityEventData'
+    ReportStatus:
+      description: Report status
+      type: string
+      example: Processing
+      enum:
+      - Success
+      - Processing
+      - Error
+      - NotStarted
+    TrendData:
+      properties:
+        content:
+          type: string
+          title: Content
+        direction:
+          $ref: '#/components/schemas/TrendDirection'
+        current_value:
+          type: integer
+          title: Current Value
+        previous_value:
+          type: integer
+          title: Previous Value
+      type: object
+      required:
+      - content
+      - direction
+      - current_value
+      - previous_value
+      title: TrendData
+      description: Schema for a trend object.
+  responses:
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '413':
+      description: Requested data too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 413
+            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   parameters:
-    limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
     month:
       name: month
       description: Month
@@ -1640,6 +1634,13 @@ components:
         type: integer
         maximum: 2099
         minimum: 2000
+    sort:
+      name: sort
+      in: query
+      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
+      example: deviceId,updateTime:desc
+      schema:
+        type: string
     accountId:
       name: X-Watchtower-Account-Id
       in: header
@@ -1654,13 +1655,6 @@ components:
       description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
       schema:
         $ref: '#/components/schemas/offset'
-    sort:
-      name: sort
-      in: query
-      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
-      example: deviceId,updateTime:desc
-      schema:
-        type: string
     authorization:
       name: Authorization
       in: header
@@ -1670,6 +1664,12 @@ components:
         type: string
         pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
       example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

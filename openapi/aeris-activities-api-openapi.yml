@@ -133,50 +133,6 @@ paths:
         - css_manage_incidents_for_advanced_reseller_enterprise
 components:
   schemas:
-    ActivityStatus:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: Current status of the activity (DRAFT/CREATED).
-          x-extensible-enum:
-          - DRAFT
-          - CREATED
-          example: DRAFT
-    Activity:
-      type: object
-      description: An activity related to an incident.
-      allOf:
-      - $ref: '#/components/schemas/Auditable'
-      - $ref: '#/components/schemas/ActivityStatus'
-      - type: object
-        required:
-        - id
-        - summary
-        properties:
-          id:
-            type: string
-            readOnly: true
-            description: Unique activity id.
-            example: j23h434k
-          summary:
-            type: string
-            maxLength: 100
-            description: Short description of the activity.
-            example: Initial activity
-          description:
-            type: string
-            maxLength: 2000
-            description: Detailed description of the activity.
-            example: Incident created.
-          attachments:
-            description: A list of attachment metadata.
-            readOnly: true
-            type: array
-            items:
-              $ref: '#/components/schemas/Attachment'
     Auditable:
       type: object
       description: Common metadata of auditable entities.
@@ -222,6 +178,38 @@ components:
             type: string
             description: File name.
             example: Image.jpg
+    Activity:
+      type: object
+      description: An activity related to an incident.
+      allOf:
+      - $ref: '#/components/schemas/Auditable'
+      - $ref: '#/components/schemas/ActivityStatus'
+      - type: object
+        required:
+        - id
+        - summary
+        properties:
+          id:
+            type: string
+            readOnly: true
+            description: Unique activity id.
+            example: j23h434k
+          summary:
+            type: string
+            maxLength: 100
+            description: Short description of the activity.
+            example: Initial activity
+          description:
+            type: string
+            maxLength: 2000
+            description: Detailed description of the activity.
+            example: Incident created.
+          attachments:
+            description: A list of attachment metadata.
+            readOnly: true
+            type: array
+            items:
+              $ref: '#/components/schemas/Attachment'
     Problem:
       type: object
       properties:
@@ -268,6 +256,18 @@ components:
             It may or may not yield further information if dereferenced.
 
             '
+    ActivityStatus:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: Current status of the activity (DRAFT/CREATED).
+          x-extensible-enum:
+          - DRAFT
+          - CREATED
+          example: DRAFT
   securitySchemes:
     oauth2:
       type: oauth2

@@ -282,91 +282,6 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 components:
-  responses:
-    '401':
-      description: Not authorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '429':
-      description: Too many requests.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 429
-            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '400':
-      description: Bad Request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Bad Request
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '413':
-      description: Requested data too large
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 413
-            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '404':
-      description: Not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Not found
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Internal Server Error
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   schemas:
     DeviceMetricsChartRequest:
       allOf:
@@ -391,6 +306,33 @@ components:
           destinationPort:
             type: integer
             description: Filter by destination server port number. Valid only for the `IP_FLOWS` metric group; a `400` is returned if used with any other group.
+    DeviceFlowTableRequest:
+      $ref: '#/components/schemas/DeviceFlowFilter'
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+    deviceId:
+      description: Internal Device ID.
+      type: integer
+      format: int32
+      example: 10407778
+      minimum: 0
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
     DeviceImeiChange:
       type: object
       properties:
@@ -421,21 +363,40 @@ components:
       - imei
       - previousImei
       - changeTime
-    imei:
-      description: IMEI (International Mobile Equipment Identity) of the device.
+    MetricGroup:
       type: string
-      minLength: 14
-      maxLength: 15
-      example: '86715704097269'
-    Pagination:
-      type: object
-      properties:
-        total:
-          $ref: '#/components/schemas/total'
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
+      description: 'Selects which group of metrics to retrieve for the `/devices/flow-aggregates/metrics/search` endpoint. Each group maps to a fixed set of response fields:
+
+        `DATA_TRANSACTIONS` — `avgMoDataBytes`, `avgMtDataBytes`.
+
+        `DATA_VOLUME` — `sumMoDataBytes`, `sumMtDataBytes`.
+
+        `DNS_QUERIES` — `privateOccurrences`, `publicOccurrences`. DNS filter fields apply.
+
+        `DESTINATION_ENDPOINTS` — `uniqueServerIpCount`.
+
+        `IP_FLOWS` — `occurrences`. IP-flow filter fields apply.'
+      enum:
+      - DATA_TRANSACTIONS
+      - DATA_VOLUME
+      - DNS_QUERIES
+      - DESTINATION_ENDPOINTS
+      - IP_FLOWS
+    PagedFlowAggregatesTable:
+      allOf:
+      - $ref: '#/components/schemas/DeepForensicsPagedBase'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/FlowAggregatesTableRow'
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
     PagedIpFlowMetricsTable:
       allOf:
       - $ref: '#/components/schemas/DeepForensicsPagedBase'
@@ -445,37 +406,25 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/IpFlowMetricsTableRow'
-    Error:
+    DeepForensicsPagedBase:
       type: object
       properties:
-        code:
+        total:
           type: integer
-          description: HTTP code
-          example: 500
-        message:
-          type: string
-          description: Error message
-          example: An error encountered in processing the request
-        timestamp:
-          type: string
-          description: ISO DateTime
-          example: '2025-06-02 09:01:53.678'
-        path:
-          type: string
-          description: Endpoint path at which the error occured
-          example: /watchtower/v1/events
-        traceId:
-          type: string
-          description: Trace Id
-          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    deviceId:
-      description: Internal Device ID.
-      type: integer
-      format: int32
-      example: 10407778
-      minimum: 0
-    DeviceFlowTableRequest:
-      $ref: '#/components/schemas/DeviceFlowFilter'
+          description: Total number of matching records across all pages.
+        offset:
+          type: integer
+        limit:
+          type: integer
+    PagedDnsQueriesTable:
+      allOf:
+      - $ref: '#/components/schemas/DeepForensicsPagedBase'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/DnsQueriesTableRow'
     DeviceMetricsChartRow:
       type: object
       description: One time-bucket row in the device metrics chart response. Only the fields corresponding to the requested `metrics` are populated; others are omitted.
@@ -528,12 +477,109 @@ components:
           - integer
           - 'null'
           description: Count of IP flow events in the time bucket.
-    total:
-      type: integer
-      format: int64
-      description: Total number of items available.
-      example: 1
-      minimum: 0
+    DeviceMetricsChartResponse:
+      type: object
+      description: Response for the device metrics chart endpoint. Contains all matching time-series rows; no pagination.
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceMetricsChartRow'
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    PagedDeviceImeiChanges:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            description: Array of IMEI change events
+            items:
+              $ref: '#/components/schemas/DeviceImeiChange'
+    DnsQueriesTableRequest:
+      $ref: '#/components/schemas/DeviceDnsFilter'
+    iccid:
+      description: Integrated Circuit Card Identifier.
+      type: string
+      minLength: 18
+      maxLength: 22
+      example: '891004234814455936'
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    DeviceIpFlowFilter:
+      type: object
+      description: Filter parameters for device-scoped IP Flow Metrics queries. `iccid` is required to scope the query to a single device.
+      required:
+      - iccid
+      properties:
+        iccid:
+          type: string
+          description: ICCID of the device to scope this query to.
+          example: '99987240680301008462'
+        destinationFqdn:
+          type: string
+          description: Filter by destination server FQDN.
+        destinationIp:
+          type: string
+          description: Filter by destination server IP address.
+        sourceIp:
+          type: string
+          description: Filter by source (device) IP address.
+        sourcePort:
+          type: integer
+          description: Filter by source (device) port number.
+        applicationProtocol:
+          type: string
+          description: Filter by application-layer protocol.
+        destinationPort:
+          type: integer
+          description: Filter by destination server port number.
+        networkProtocol:
+          type: array
+          description: Filter by one or more network transport protocols.
+          items:
+            type: string
+            enum:
+            - TCP
+            - UDP
+            - ICMP
+          example:
+          - TCP
+          - UDP
     DeviceDnsFilter:
       allOf:
       - $ref: '#/components/schemas/DeviceFlowFilter'
@@ -559,16 +605,50 @@ components:
             - ni
             default: in
             description: '`in` — return only queries to hosts in the `domainHosts` list. `ni` — exclude queries to those hosts. Defaults to `in` when omitted.'
-    PagedDeviceImeiChanges:
-      allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - type: object
-        properties:
-          data:
-            type: array
-            description: Array of IMEI change events
-            items:
-              $ref: '#/components/schemas/DeviceImeiChange'
+    DeviceFlowFilter:
+      type: object
+      description: Filter parameters for device-scoped flow aggregate queries. `iccid` is required to scope the query to a single device.
+      required:
+      - iccid
+      properties:
+        iccid:
+          type: string
+          description: ICCID of the device to scope this query to.
+          example: '99987240680301008462'
+        destinationFqdn:
+          type: string
+          description: Filter by destination server FQDN (partial match).
+          example: eicar.host
+        destinationIp:
+          type: string
+          description: Filter by destination server IP address.
+          example: 103.126.211.51
+        applicationProtocol:
+          type: string
+          description: Filter by application-layer protocol (e.g. HTTPS, DNS, ICMP).
+          example: HTTPS
+        serverPort:
+          type: integer
+          description: Filter by destination server port number.
+          example: 443
+        networkProtocol:
+          type: array
+          description: Filter by one or more network transport protocols.
+          items:
+            type: string
+            enum:
+            - TCP
+            - UDP
+            - ICMP
+          example:
+          - TCP
+          - UDP
+    imei:
+      description: IMEI (International Mobile Equipment Identity) of the device.
+      type: string
+      minLength: 14
+      maxLength: 15
+      example: '86715704097269'
     DnsQueriesTableRow:
       type: object
       properties:
@@ -592,6 +672,37 @@ components:
         occurrences:
           type: integer
           format: int64
+        sumMoDataBytes:
+          type: integer
+          format: int64
+        sumMtDataBytes:
+          type: integer
+          format: int64
+        sumDataBytes:
+          type: integer
+          format: int64
+    FlowAggregatesTableRow:
+      type: object
+      description: Per-destination endpoint aggregate row, used by the Flow Aggregates table.
+      properties:
+        serverFqdn:
+          type:
+          - string
+          - 'null'
+        serverIp:
+          type: string
+        applicationProtocol:
+          type: string
+        serverPort:
+          type:
+          - integer
+          - 'null'
+        networkProtocol:
+          type: string
+        occurrences:
+          type: integer
+          format: int64
+          description: Number of unique connection occurrences to this destination endpoint.
         sumMoDataBytes:
           type: integer
           format: int64
@@ -641,209 +752,7 @@ components:
           format: int64
         occurrences:
           type: integer
-    PagedDnsQueriesTable:
-      allOf:
-      - $ref: '#/components/schemas/DeepForensicsPagedBase'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/DnsQueriesTableRow'
-    DeviceIpFlowFilter:
-      type: object
-      description: Filter parameters for device-scoped IP Flow Metrics queries. `iccid` is required to scope the query to a single device.
-      required:
-      - iccid
-      properties:
-        iccid:
-          type: string
-          description: ICCID of the device to scope this query to.
-          example: '99987240680301008462'
-        destinationFqdn:
-          type: string
-          description: Filter by destination server FQDN.
-        destinationIp:
-          type: string
-          description: Filter by destination server IP address.
-        sourceIp:
-          type: string
-          description: Filter by source (device) IP address.
-        sourcePort:
-          type: integer
-          description: Filter by source (device) port number.
-        applicationProtocol:
-          type: string
-          description: Filter by application-layer protocol.
-        destinationPort:
-          type: integer
-          description: Filter by destination server port number.
-        networkProtocol:
-          type: array
-          description: Filter by one or more network transport protocols.
-          items:
-            type: string
-            enum:
-            - TCP
-            - UDP
-            - ICMP
-          example:
-          - TCP
-          - UDP
-    DeepForensicsPagedBase:
-      type: object
-      properties:
-        total:
-          type: integer
-          description: Total number of matching records across all pages.
-        offset:
-          type: integer
-        limit:
-          type: integer
-    DnsQueriesTableRequest:
-      $ref: '#/components/schemas/DeviceDnsFilter'
-    iccid:
-      description: Integrated Circuit Card Identifier.
-      type: string
-      minLength: 18
-      maxLength: 22
-      example: '891004234814455936'
-    accountId:
-      description: Account Id.
-      type: integer
-      format: int32
-      example: 10407
-      minimum: 0
-    FlowAggregatesTableRow:
-      type: object
-      description: Per-destination endpoint aggregate row, used by the Flow Aggregates table.
-      properties:
-        serverFqdn:
-          type:
-          - string
-          - 'null'
-        serverIp:
-          type: string
-        applicationProtocol:
-          type: string
-        serverPort:
-          type:
-          - integer
-          - 'null'
-        networkProtocol:
-          type: string
-        occurrences:
-          type: integer
-          format: int64
-          description: Number of unique connection occurrences to this destination endpoint.
-        sumMoDataBytes:
-          type: integer
-          format: int64
-        sumMtDataBytes:
-          type: integer
-          format: int64
-        sumDataBytes:
-          type: integer
-          format: int64
-    DeviceFlowFilter:
-      type: object
-      description: Filter parameters for device-scoped flow aggregate queries. `iccid` is required to scope the query to a single device.
-      required:
-      - iccid
-      properties:
-        iccid:
-          type: string
-          description: ICCID of the device to scope this query to.
-          example: '99987240680301008462'
-        destinationFqdn:
-          type: string
-          description: Filter by destination server FQDN (partial match).
-          example: eicar.host
-        destinationIp:
-          type: string
-          description: Filter by destination server IP address.
-          example: 103.126.211.51
-        applicationProtocol:
-          type: string
-          description: Filter by application-layer protocol (e.g. HTTPS, DNS, ICMP).
-          example: HTTPS
-        serverPort:
-          type: integer
-          description: Filter by destination server port number.
-          example: 443
-        networkProtocol:
-          type: array
-          description: Filter by one or more network transport protocols.
-          items:
-            type: string
-            enum:
-            - TCP
-            - UDP
-            - ICMP
-          example:
-          - TCP
-          - UDP
-    PagedFlowAggregatesTable:
-      allOf:
-      - $ref: '#/components/schemas/DeepForensicsPagedBase'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/FlowAggregatesTableRow'
-    MetricGroup:
-      type: string
-      description: 'Selects which group of metrics to retrieve for the `/devices/flow-aggregates/metrics/search` endpoint. Each group maps to a fixed set of response fields:
-
-        `DATA_TRANSACTIONS` — `avgMoDataBytes`, `avgMtDataBytes`.
-
-        `DATA_VOLUME` — `sumMoDataBytes`, `sumMtDataBytes`.
-
-        `DNS_QUERIES` — `privateOccurrences`, `publicOccurrences`. DNS filter fields apply.
-
-        `DESTINATION_ENDPOINTS` — `uniqueServerIpCount`.
-
-        `IP_FLOWS` — `occurrences`. IP-flow filter fields apply.'
-      enum:
-      - DATA_TRANSACTIONS
-      - DATA_VOLUME
-      - DNS_QUERIES
-      - DESTINATION_ENDPOINTS
-      - IP_FLOWS
-    dateTime:
-      description: ISO 8601 date time
-      type: string
-      format: date-time
-      example: '2021-07-04T17:36:47Z'
-    DeviceMetricsChartResponse:
-      type: object
-      description: Response for the device metrics chart endpoint. Contains all matching time-series rows; no pagination.
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeviceMetricsChartRow'
-    limit:
-      type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
   parameters:
-    limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
     startTime:
       name: startTime
       in: query
@@ -852,20 +761,6 @@ components:
       example: '2021-07-01T06:30:00Z'
       schema:
         $ref: '#/components/schemas/dateTime'
-    accountId:
-      name: X-Watchtower-Account-Id
-      in: header
-      description: Account Id
-      required: true
-      schema:
-        $ref: '#/components/schemas/accountId'
-      example: 1002000010
-    offset:
-      name: offset
-      in: query
-      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
-      schema:
-        $ref: '#/components/schemas/offset'
     endTime:
       name: endTime
       in: query
@@ -881,12 +776,20 @@ components:
       example: deviceId,updateTime:desc
       schema:
         type: string
-    deviceId:
-      name: deviceId
-      in: path
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
       required: true
       schema:
-        $ref: '#/components/schemas/deviceId'
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
     authorization:
       name: Authorization
       in: header
@@ -896,6 +799,103 @@ components:
         type: string
         pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
       example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    deviceId:
+      name: deviceId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/deviceId'
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+  responses:
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '404':
+      description: Not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '413':
+      description: Requested data too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 413
+            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2
