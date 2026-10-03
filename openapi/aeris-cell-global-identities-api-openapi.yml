@@ -160,20 +160,20 @@ components:
       schema:
         type: integer
         format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
+    Content-Type:
+      description: Handle Content-Type
       schema:
-        type: integer
-        format: int32
+        type: string
     X-RateLimit-Limit-Minute:
       description: The maximum number of requests allowed in a minute.
       schema:
         type: integer
         format: int32
-    Content-Type:
-      description: Handle Content-Type
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
       schema:
-        type: string
+        type: integer
+        format: int32
     X-RateLimit-Remaining-Second:
       description: The number of requests remaining in a second.
       schema:
@@ -250,13 +250,6 @@ components:
             dereferenced.
 
             '
-    RadioTypeEnum:
-      type: string
-      description: Radio types
-      enum:
-      - GSM
-      - WCDMA
-      - LTE
     SubscriptionIdTypeEnum:
       type: string
       description: Subscription ID type
@@ -264,6 +257,13 @@ components:
       - IMSI
       - MSISDN
       - ICC
+    RadioTypeEnum:
+      type: string
+      description: Radio types
+      enum:
+      - GSM
+      - WCDMA
+      - LTE
   responses:
     RateLimitedResponse:
       headers:

@@ -55,6 +55,194 @@ paths:
         - cnx_top_traffic_subscr_gprs
         - cnx_top_traffic_subscr_sms
 components:
+  responses:
+    500Response:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: https://hostname/iot/api/some-path
+    401Response:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Unauthorized
+                status: 401
+                detail: Token expired
+                instance: https://hostname/iot/api/some-path
+    404Response:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Not Found
+                status: 404
+                detail: Not Found
+                instance: https://hostname/iot/api/some-path
+    429Response:
+      description: Too Many Requests
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    400Response:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Bad Request
+                status: 400
+                detail: Invalid customerNo
+                instance: https://hostname/iot/api/some-path
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    403Response:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: https://hostname/iot/api/some-path
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+  parameters:
+    TrafficType:
+      name: trafficType
+      in: query
+      required: true
+      description: 'Specifies the traffic type to search for.
+
+        '
+      schema:
+        $ref: '#/components/schemas/TrafficTypeEnum'
+    OrganizationId:
+      name: organizationId
+      in: query
+      required: false
+      description: 'Specifies the organization ID.
+
+        '
+      schema:
+        type: string
+      example: 3.88.2
+    ToDate:
+      name: toDate
+      in: query
+      description: 'Specifies the latest date to search for aggregated traffic usage, in the following format: YYYY-MM-DD. The starting and ending dates must define a period of 1, 7, or 30 days. Otherwise, an error is returned.
+
+        '
+      required: false
+      schema:
+        type: string
+        format: date
+      example: '2022-04-20'
+    ResultLimit:
+      name: resultLimit
+      in: query
+      required: true
+      description: 'Specifies the number of results the query returns. Maximum possible value is 250.
+
+        '
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 250
+      example: 5
+    DateRange:
+      name: dateRange
+      in: query
+      required: false
+      description: "An optional parameter which is used to selects most common date ranges.\nValid values are:\n  - LAST_DAY\n  - LAST_2_DAYS\n  - LAST_7_DAYS\n  - LAST_30_DAYS\n  - THIS_MONTH\n\nThis parameter takes precedence over 'fromDate' and 'toDate' and calculates the dates automatically\nbased on the selected dateRange. If user provides all parameters 'fromDate', 'toDate' and 'dateRange'\nthen 'fromDate', 'toDate' provided by user are ignored.\n"
+      schema:
+        $ref: '#/components/schemas/DateRangeEnum'
+      example: LAST_DAY
+    FromDate:
+      name: fromDate
+      in: query
+      description: 'Specifies the earliest date to search for aggregated traffic usage, in the following format: YYYY-MM-DD. Traffic usage data is available only from the last 31 days.
+
+        '
+      required: false
+      schema:
+        type: string
+        format: date
+      example: '2022-04-20'
   schemas:
     DateRangeEnum:
       type: string
@@ -65,6 +253,35 @@ components:
       - LAST_7_DAYS
       - LAST_30_DAYS
       - THIS_MONTH
+    TrafficTypeEnum:
+      type: string
+      description: The traffice types.
+      example: SMS
+      x-extensible-enum:
+      - SMS
+      - DATA
+    TrafficTopUsageSubscriptionsResponse:
+      type: object
+      properties:
+        subscriptionTrafficUsageData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrafficTopUsageSubscriptionsResponseItem'
+    TrafficTopUsageSubscriptionsResponseItem:
+      type: object
+      properties:
+        imsi:
+          type: string
+          example: '238208000000001'
+          description: The IMSI of the subscription.
+        msisdn:
+          type: string
+          example: '33123456789'
+          description: The MSISDN of the subscription.
+        volume:
+          type: integer
+          format: int64
+          example: 500000
     ErrorResponse:
       type: object
       properties:
@@ -98,223 +315,6 @@ components:
           type: string
           description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
           example: https://api.documentation.url/request-id
-    TrafficTypeEnum:
-      type: string
-      description: The traffice types.
-      example: SMS
-      x-extensible-enum:
-      - SMS
-      - DATA
-    TrafficTopUsageSubscriptionsResponseItem:
-      type: object
-      properties:
-        imsi:
-          type: string
-          example: '238208000000001'
-          description: The IMSI of the subscription.
-        msisdn:
-          type: string
-          example: '33123456789'
-          description: The MSISDN of the subscription.
-        volume:
-          type: integer
-          format: int64
-          example: 500000
-    TrafficTopUsageSubscriptionsResponse:
-      type: object
-      properties:
-        subscriptionTrafficUsageData:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrafficTopUsageSubscriptionsResponseItem'
-  responses:
-    429Response:
-      description: Too Many Requests
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    400Response:
-      description: Bad Request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Bad Request
-                status: 400
-                detail: Invalid customerNo
-                instance: https://hostname/iot/api/some-path
-    401Response:
-      description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Unauthorized
-                status: 401
-                detail: Token expired
-                instance: https://hostname/iot/api/some-path
-    404Response:
-      description: Not Found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Not Found
-                status: 404
-                detail: Not Found
-                instance: https://hostname/iot/api/some-path
-    403Response:
-      description: Forbidden
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Forbidden
-                status: 403
-                detail: You do not have access to the resource
-                instance: https://hostname/iot/api/some-path
-    500Response:
-      description: Internal Server Error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Internal Server Error
-                status: 500
-                detail: Internal Server Error
-                instance: https://hostname/iot/api/some-path
-  headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-  parameters:
-    ToDate:
-      name: toDate
-      in: query
-      description: 'Specifies the latest date to search for aggregated traffic usage, in the following format: YYYY-MM-DD. The starting and ending dates must define a period of 1, 7, or 30 days. Otherwise, an error is returned.
-
-        '
-      required: false
-      schema:
-        type: string
-        format: date
-      example: '2022-04-20'
-    OrganizationId:
-      name: organizationId
-      in: query
-      required: false
-      description: 'Specifies the organization ID.
-
-        '
-      schema:
-        type: string
-      example: 3.88.2
-    ResultLimit:
-      name: resultLimit
-      in: query
-      required: true
-      description: 'Specifies the number of results the query returns. Maximum possible value is 250.
-
-        '
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-        maximum: 250
-      example: 5
-    TrafficType:
-      name: trafficType
-      in: query
-      required: true
-      description: 'Specifies the traffic type to search for.
-
-        '
-      schema:
-        $ref: '#/components/schemas/TrafficTypeEnum'
-    DateRange:
-      name: dateRange
-      in: query
-      required: false
-      description: "An optional parameter which is used to selects most common date ranges.\nValid values are:\n  - LAST_DAY\n  - LAST_2_DAYS\n  - LAST_7_DAYS\n  - LAST_30_DAYS\n  - THIS_MONTH\n\nThis parameter takes precedence over 'fromDate' and 'toDate' and calculates the dates automatically\nbased on the selected dateRange. If user provides all parameters 'fromDate', 'toDate' and 'dateRange'\nthen 'fromDate', 'toDate' provided by user are ignored.\n"
-      schema:
-        $ref: '#/components/schemas/DateRangeEnum'
-      example: LAST_DAY
-    FromDate:
-      name: fromDate
-      in: query
-      description: 'Specifies the earliest date to search for aggregated traffic usage, in the following format: YYYY-MM-DD. Traffic usage data is available only from the last 31 days.
-
-        '
-      required: false
-      schema:
-        type: string
-        format: date
-      example: '2022-04-20'
   securitySchemes:
     Oauth2_auth:
       type: oauth2

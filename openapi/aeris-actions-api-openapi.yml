@@ -331,62 +331,7 @@ paths:
     - url: https://iot-api.aeris.com/iot/api
       description: API server
 components:
-  headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
   responses:
-    '404':
-      description: Not Found
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            problem-example:
-              type: about:blank
-              title: Not Found
-              status: 404
-              detail: Not Found
-    '500':
-      description: Internal Server Error
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            problem-example:
-              type: about:blank
-              title: Internal Server Error
-              status: 500
-              detail: Internal Server Error
     '403':
       description: Forbidden
       headers:
@@ -402,6 +347,21 @@ components:
               title: Forbidden
               status: 403
               detail: Forbidden
+    '500':
+      description: Internal Server Error
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            problem-example:
+              type: about:blank
+              title: Internal Server Error
+              status: 500
+              detail: Internal Server Error
     '429':
       description: Too Many Requests
       allOf:
@@ -431,6 +391,33 @@ components:
               title: Unauthorized
               status: 401
               detail: Permission denied
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    '404':
+      description: Not Found
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            problem-example:
+              type: about:blank
+              title: Not Found
+              status: 404
+              detail: Not Found
     '400':
       description: Bad Request
       headers:
@@ -446,61 +433,7 @@ components:
               title: Bad Request
               status: 400
               detail: ownerOrganizationId should not be null or empty
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
   schemas:
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type. When dereferenced,
-
-            it provides human-readable documentation for the problem type
-
-            (for example, using HTML).
-
-            '
-          default: about:blank
-          example: about:blank
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable
-
-            for engineers (not aimed for non-technical stakeholders and not localized);
-
-            '
-          example: Internal Server Error
-        status:
-          type: integer
-          format: int32
-          description: 'The HTTP status code generated by the origin server for this occurrence
-
-            of the problem.
-
-            '
-          minimum: 100
-          example: 500
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Internal Server Error
     TriggeredActionsListResponse:
       type: object
       properties:
@@ -615,102 +548,48 @@ components:
                     type: string
               ownerOrganizationId:
                 type: string
-    SharedBundleDetailsResponse:
-      allOf:
-      - $ref: '#/components/schemas/SharedBundleSummary'
-      - $ref: '#/components/schemas/SharedBundleDetails'
-      - $ref: '#/components/schemas/SharedBundleCycle'
-    SharedBundleSummary:
-      type: object
-      required:
-      - id
-      - service_type
-      - granted
-      - remaining
-      - organization_id
-      properties:
-        id:
-          type: string
-          example: avagdhdcnbtdhgaf==
-          description: 'The unique identifier for each shared bundle.
-
-            '
-        service_type:
-          type: string
-          example: DATA
-          description: 'The shared bundle connectivity service type.
-
-
-            _Available service_type values and the corresponding unit for the shared bundle:_
-
-            - ''DATA'' (bytes)
-
-            - ''SMS'' (count)
-
-            - ''VOICE'' (seconds)
-
-            - ''CSD'' (seconds)
-
-            '
-          x-extensible-enum:
-          - DATA
-          - SMS
-          - VOICE
-          - CSD
-        granted:
-          type: integer
-          example: 29000000000
-          description: 'The granted volume for the service type, positive number.
-
-            '
-          format: int64
-        remaining:
-          type: integer
-          example: 3468702000
-          description: 'The remaining volume for the service type, mostly positive number but may be negative if an overage has been consumed.
-
-            '
-          format: int64
-        organization_id:
-          type: string
-          example: 0.5.2.3
-          description: '''organization_id'' is used to filter out a single Organization.
-
-            '
-    Problem_2:
+    Problem:
       type: object
       properties:
         type:
           type: string
           format: uri
-          description: 'An absolute URI that identifies the problem type. When dereferenced,it SHOULD provide
+          description: 'An absolute URI that identifies the problem type. When dereferenced,
 
-            human-readable documentation for the problem type (e.g., using HTML).
+            it provides human-readable documentation for the problem type
+
+            (for example, using HTML).
 
             '
           default: about:blank
-          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
+          example: about:blank
         title:
           type: string
-          description: 'A short summary of the problem type in english and readable for engineers.
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (not aimed for non-technical stakeholders and not localized);
 
             '
-          example: Service Unavailable
+          example: Internal Server Error
         status:
           type: integer
           format: int32
-          description: The HTTP status code generated by the origin server for this occurrence of the problem.
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
           minimum: 100
-          example: 503
+          example: 500
           exclusiveMaximum: 600
         detail:
           type: string
-          description: A human readable explanation specific to this occurrence of the problem.
-          example: Connection to database timed out.
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
-          example: https://api.documentation.url/request-id
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Internal Server Error
     SharedBundleDetails:
       type: object
       required:
@@ -771,6 +650,31 @@ components:
           description: 'The timestamp when the shared bundle information was last read from the internal backend system.
 
             '
+    SharedBundleDetailsResponse:
+      allOf:
+      - $ref: '#/components/schemas/SharedBundleSummary'
+      - $ref: '#/components/schemas/SharedBundleDetails'
+      - $ref: '#/components/schemas/SharedBundleCycle'
+    SharedBundleCycle:
+      type: object
+      required:
+      - cycle_started_at
+      - cycle_ended_at
+      properties:
+        cycle_started_at:
+          type: string
+          format: datetime
+          example: '2020-10-01T00:00:00.000Z'
+          description: 'Timestamp when the shared bundle consumption cycle is started at (inclusive).
+
+            '
+        cycle_ended_at:
+          type: string
+          format: datetime
+          example: '2020-11-01T00:00:00.000Z'
+          description: 'Timestamp when the shared bundle consumption cycle is (or will be) ended at (exclusive).
+
+            '
     RateLimitedResponse:
       headers:
         Content-Type:
@@ -797,30 +701,101 @@ components:
           schema:
             type: integer
             format: int32
-    SharedBundleCycle:
-      type: object
-      required:
-      - cycle_started_at
-      - cycle_ended_at
-      properties:
-        cycle_started_at:
-          type: string
-          format: datetime
-          example: '2020-10-01T00:00:00.000Z'
-          description: 'Timestamp when the shared bundle consumption cycle is started at (inclusive).
-
-            '
-        cycle_ended_at:
-          type: string
-          format: datetime
-          example: '2020-11-01T00:00:00.000Z'
-          description: 'Timestamp when the shared bundle consumption cycle is (or will be) ended at (exclusive).
-
-            '
     SharedBundleSummaryResponse:
       allOf:
       - $ref: '#/components/schemas/SharedBundleSummary'
       - $ref: '#/components/schemas/SharedBundleCycle'
+    Problem_2:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,it SHOULD provide
+
+            human-readable documentation for the problem type (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
+        title:
+          type: string
+          description: 'A short summary of the problem type in english and readable for engineers.
+
+            '
+          example: Service Unavailable
+        status:
+          type: integer
+          format: int32
+          description: The HTTP status code generated by the origin server for this occurrence of the problem.
+          minimum: 100
+          example: 503
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem.
+          example: Connection to database timed out.
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
+          example: https://api.documentation.url/request-id
+    SharedBundleSummary:
+      type: object
+      required:
+      - id
+      - service_type
+      - granted
+      - remaining
+      - organization_id
+      properties:
+        id:
+          type: string
+          example: avagdhdcnbtdhgaf==
+          description: 'The unique identifier for each shared bundle.
+
+            '
+        service_type:
+          type: string
+          example: DATA
+          description: 'The shared bundle connectivity service type.
+
+
+            _Available service_type values and the corresponding unit for the shared bundle:_
+
+            - ''DATA'' (bytes)
+
+            - ''SMS'' (count)
+
+            - ''VOICE'' (seconds)
+
+            - ''CSD'' (seconds)
+
+            '
+          x-extensible-enum:
+          - DATA
+          - SMS
+          - VOICE
+          - CSD
+        granted:
+          type: integer
+          example: 29000000000
+          description: 'The granted volume for the service type, positive number.
+
+            '
+          format: int64
+        remaining:
+          type: integer
+          example: 3468702000
+          description: 'The remaining volume for the service type, mostly positive number but may be negative if an overage has been consumed.
+
+            '
+          format: int64
+        organization_id:
+          type: string
+          example: 0.5.2.3
+          description: '''organization_id'' is used to filter out a single Organization.
+
+            '
   parameters:
     actionParam:
       in: query
@@ -887,6 +862,15 @@ components:
         Note! Only one of type ''q'' is allowed per request.
 
         '
+    cursorParam:
+      in: query
+      name: cursor
+      schema:
+        type: string
+      example: DFVSDB3434%DFB%EYY445
+      description: 'Parameter used for pagination. This field is automatically populated in the response field "next" if there are more results in the system than delivered in the response.
+
+        '
     sortParam:
       in: query
       name: sort
@@ -913,24 +897,13 @@ components:
         - granted:desc
 
         '
-    cycleParam:
+    limitParam:
       in: query
-      name: cycle
+      name: limit
       schema:
-        type: string
-        x-extensible-enum:
-        - current
-        - previous
-        default: current
-      description: 'Cycle parameter. Selects which shared bundle consumption cycle to retrieve.
-
-
-        _Available values:_
-
-
-        - current
-
-        - previous
+        type: integer
+        default: 100
+      description: 'Specifies the maximum number of results to be returned. Allowed interval is 1-1000.
 
         '
     qParam:
@@ -1008,24 +981,51 @@ components:
         - service_type==csd
 
         '
-    cursorParam:
+    cycleParam:
       in: query
-      name: cursor
+      name: cycle
       schema:
         type: string
-      example: DFVSDB3434%DFB%EYY445
-      description: 'Parameter used for pagination. This field is automatically populated in the response field "next" if there are more results in the system than delivered in the response.
+        x-extensible-enum:
+        - current
+        - previous
+        default: current
+      description: 'Cycle parameter. Selects which shared bundle consumption cycle to retrieve.
+
+
+        _Available values:_
+
+
+        - current
+
+        - previous
 
         '
-    limitParam:
-      in: query
-      name: limit
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
       schema:
         type: integer
-        default: 100
-      description: 'Specifies the maximum number of results to be returned. Allowed interval is 1-1000.
-
-        '
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
   securitySchemes:
     BearerAuth:
       type: http

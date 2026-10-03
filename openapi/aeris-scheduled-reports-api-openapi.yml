@@ -51,18 +51,6 @@ paths:
           $ref: '#/components/responses/429'
 components:
   responses:
-    '404':
-      description: Not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Not found
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '403':
       description: Forbidden.
       content:
@@ -96,6 +84,18 @@ components:
           example:
             code: 401
             message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '404':
+      description: Not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b

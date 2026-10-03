@@ -113,14 +113,6 @@ paths:
                 $ref: '#/components/schemas/RequestError'
 components:
   schemas:
-    OutboundSMSBinaryMessage:
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Base64 coded string
     RequestError:
       type: object
       properties:
@@ -151,13 +143,6 @@ components:
                 variables:
                   type: string
                   description: points to the variable(s) in violation
-    OutboundSMSMessageRequestHolder:
-      type: object
-      required:
-      - outboundSMSMessageRequest
-      properties:
-        outboundSMSMessageRequest:
-          $ref: '#/components/schemas/OutboundSMSMessageRequest'
     DeliveryInfoList:
       type: object
       required:
@@ -172,6 +157,21 @@ components:
         resourceURL:
           type: string
           description: Link to the successful response.
+    OutboundSMSTextMessage:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Regular text string of up to 160 characters.
+    OutboundSMSMessageRequestHolder:
+      type: object
+      required:
+      - outboundSMSMessageRequest
+      properties:
+        outboundSMSMessageRequest:
+          $ref: '#/components/schemas/OutboundSMSMessageRequest'
     OutboundSMSMessageRequest:
       type: object
       required:
@@ -204,14 +204,14 @@ components:
         subAddress:
           type: string
           description: 'A string that represents the sub-address of the device to send the message to. Supports only SIM card. For example: subAddress:sim'
-    OutboundSMSTextMessage:
+    OutboundSMSBinaryMessage:
       type: object
       required:
       - message
       properties:
         message:
           type: string
-          description: Regular text string of up to 160 characters.
+          description: Base64 coded string
     DeliveryInfo:
       type: object
       required:

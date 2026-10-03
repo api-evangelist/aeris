@@ -122,7 +122,24 @@ paths:
         - cnx_subscription_view
 components:
   responses:
-    default:
+    '403':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Forbidden
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    '500':
       content:
         application/problem+json:
           schema:
@@ -136,6 +153,9 @@ components:
                 detail: Internal Server Error
                 instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
       description: Internal Server Error
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
     '429':
       content:
         application/problem+json:
@@ -152,27 +172,23 @@ components:
       description: Too Many Requests
       allOf:
       - $ref: '#/components/responses/RateLimitedResponse'
-    ImsiRangesResponse:
+    ImsiRangeResponse:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/imsiRanges'
-          examples:
-            imsiRanges:
-              value:
-                imsiStore:
-                - startNumber: '440525070026500'
-                  endNumber: '440525070026799'
-                  amount: 100
-                  nextNumber: '686187022311006'
-                  freeAmount: 0
-                  reservedFor: NOTRESERVED
-                  rangeName: IMSI_LPWA_4405250720033083
-                  rangeDesc: IMSI_LPWA_44052507
-                  date: '2018-05-29T09:56:56Z'
-                  imsiRangeNo: 3083
-                  dcpImsiId: KDCIMSI020033083
-                next: /imsi-ranges?organizationId=0500001&schemeId=ZZRSCHEME01 &limit=10&cursor=ODk0NTA0MjExNzEyMDYwMjIyMjI=
+            $ref: '#/components/schemas/imsiStore'
+          example:
+            startNumber: '440525070026500'
+            endNumber: '440525070026799'
+            amount: 100
+            nextNumber: '686187022311006'
+            freeAmount: 0
+            reservedFor: NOTRESERVED
+            rangeName: IMSI_LPWA_4405250720033083
+            rangeDesc: IMSI_LPWA_44052507
+            date: '2018-05-29T09:56:56Z'
+            imsiRangeNo: 3083
+            dcpImsiId: KDCIMSI020033083
       description: OK
       allOf:
       - $ref: '#/components/responses/RateLimitedResponse'
@@ -205,23 +221,6 @@ components:
           $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
         Content-Type:
           $ref: '#/components/headers/Content-Type'
-    '403':
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Forbidden
-                status: 403
-                detail: You do not have access to the resource
-                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-      description: Forbidden
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
     '400':
       content:
         application/problem+json:
@@ -239,6 +238,44 @@ components:
       headers:
         Content-Type:
           $ref: '#/components/headers/Content-Type'
+    default:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Internal Server Error
+    ImsiRangesResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/imsiRanges'
+          examples:
+            imsiRanges:
+              value:
+                imsiStore:
+                - startNumber: '440525070026500'
+                  endNumber: '440525070026799'
+                  amount: 100
+                  nextNumber: '686187022311006'
+                  freeAmount: 0
+                  reservedFor: NOTRESERVED
+                  rangeName: IMSI_LPWA_4405250720033083
+                  rangeDesc: IMSI_LPWA_44052507
+                  date: '2018-05-29T09:56:56Z'
+                  imsiRangeNo: 3083
+                  dcpImsiId: KDCIMSI020033083
+                next: /imsi-ranges?organizationId=0500001&schemeId=ZZRSCHEME01 &limit=10&cursor=ODk0NTA0MjExNzEyMDYwMjIyMjI=
+      description: OK
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
     '404':
       content:
         application/problem+json:
@@ -256,50 +293,9 @@ components:
       headers:
         Content-Type:
           $ref: '#/components/headers/Content-Type'
-    ImsiRangeResponse:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/imsiStore'
-          example:
-            startNumber: '440525070026500'
-            endNumber: '440525070026799'
-            amount: 100
-            nextNumber: '686187022311006'
-            freeAmount: 0
-            reservedFor: NOTRESERVED
-            rangeName: IMSI_LPWA_4405250720033083
-            rangeDesc: IMSI_LPWA_44052507
-            date: '2018-05-29T09:56:56Z'
-            imsiRangeNo: 3083
-            dcpImsiId: KDCIMSI020033083
-      description: OK
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-    '500':
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Internal Server Error
-                status: 500
-                detail: Internal Server Error
-                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-      description: Internal Server Error
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
   headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
       schema:
         type: integer
         format: int32
@@ -308,8 +304,8 @@ components:
       schema:
         type: integer
         format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
       schema:
         type: integer
         format: int32
@@ -318,6 +314,42 @@ components:
       schema:
         type: integer
         format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+  parameters:
+    Header-Authorization:
+      name: Authorization
+      in: header
+      required: true
+      description: A valid token string in the form Bearer <token string>
+      schema:
+        type: string
+    cursorParam:
+      in: query
+      name: cursor
+      schema:
+        type: string
+      example: DFVSDB3434%DFB%EYY445
+      description: 'Encoded string parameter used for pagination. This field is
+
+        automatically populated in the response field "next" if there
+
+        are more results in the system than delivered in the response.
+
+        '
+    limitParam:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        default: 100
+      description: 'Specifies the maximum number of results to be returned.
+
+        Allowed interval is 1-10000.
+
+        '
   schemas:
     imsiStore:
       type: object
@@ -357,46 +389,6 @@ components:
             $ref: '#/components/schemas/imsiStore'
         next:
           type: string
-    numberRange:
-      type: object
-      description: 'Number Range information.
-
-        '
-      properties:
-        startNumber:
-          type: string
-          description: The IMSI/MSISDN with which the range starts.
-          example: '440525070026500'
-        endNumber:
-          type: string
-          description: The IMSI/MSISDN with which the range ends.
-          example: '440525070026799'
-        amount:
-          type: integer
-          format: int64
-          description: Difference between start and end number.
-          example: 100
-    rangeDetails:
-      type: object
-      description: 'Range information.
-
-        '
-      properties:
-        nextNumber:
-          type: string
-          description: Next number in the range.
-          example: '440525070026589'
-        freeAmount:
-          type: integer
-          format: int64
-          description: The free amount in the number range
-          example: 0
-        reservedFor:
-          type: string
-          description: Status of the Range.
-          example: NOTRESERVED
-        numberRange:
-          $ref: '#/components/schemas/numberRange'
     Problem:
       type: object
       properties:
@@ -449,38 +441,46 @@ components:
             if dereferenced.
 
             '
-  parameters:
-    limitParam:
-      in: query
-      name: limit
-      schema:
-        type: integer
-        default: 100
-      description: 'Specifies the maximum number of results to be returned.
-
-        Allowed interval is 1-10000.
+    numberRange:
+      type: object
+      description: 'Number Range information.
 
         '
-    cursorParam:
-      in: query
-      name: cursor
-      schema:
-        type: string
-      example: DFVSDB3434%DFB%EYY445
-      description: 'Encoded string parameter used for pagination. This field is
-
-        automatically populated in the response field "next" if there
-
-        are more results in the system than delivered in the response.
+      properties:
+        startNumber:
+          type: string
+          description: The IMSI/MSISDN with which the range starts.
+          example: '440525070026500'
+        endNumber:
+          type: string
+          description: The IMSI/MSISDN with which the range ends.
+          example: '440525070026799'
+        amount:
+          type: integer
+          format: int64
+          description: Difference between start and end number.
+          example: 100
+    rangeDetails:
+      type: object
+      description: 'Range information.
 
         '
-    Header-Authorization:
-      name: Authorization
-      in: header
-      required: true
-      description: A valid token string in the form Bearer <token string>
-      schema:
-        type: string
+      properties:
+        nextNumber:
+          type: string
+          description: Next number in the range.
+          example: '440525070026589'
+        freeAmount:
+          type: integer
+          format: int64
+          description: The free amount in the number range
+          example: 0
+        reservedFor:
+          type: string
+          description: Status of the Range.
+          example: NOTRESERVED
+        numberRange:
+          $ref: '#/components/schemas/numberRange'
   securitySchemes:
     OAuth2:
       type: oauth2

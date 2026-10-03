@@ -974,37 +974,668 @@ paths:
       - oauth2:
         - om_view_order
 components:
+  examples:
+    CreateSimSpecificationExample:
+      value:
+        type: CREATE_SIM_SPEC
+        orderedFor: '3.77'
+        parameters:
+          name: 010_ZZRSCHEME00021
+          specificationId: 010_ZZRSCHEME00021
+          description: Plastic SIM
+          maxQuantity: 0
+          minQuantity: 10
+          minOrderVolume: 1
+          orderIncrement: 0
+          earliestDeliveryDays: 14
+          priceCategory: 1
+          stockOrderFileShareId: '75654'
+          manufacturerOrderFileShareId: '75655'
+          warehouseOrderFileShareId: '75656'
+          numberSchemeId: ZZRSCHEME00021
+          earlyBinding: false
+          operatorNetworkId: '51426'
+    PatchDedicatedInternetServiceExample:
+      value:
+        parameters:
+          apn: foo.com
+          enabled2g3g: true
+          enabled4g: true
+          enabled5gNsa: true
+          ipVersion: IPV4
+          uplinkBandwidth: 1024
+          downlinkBandwidth: 2048
+          useSupplierDnsIpV4: true
+          primaryDnsIpV4: 8.8.8.8
+          secondaryDnsIpV4: 8.8.4.4
+          useSupplierDnsIpV6: true
+          primaryDnsIpV6: 2001:4860:4860::8888
+          secondaryDnsIpV6: 2001:4860:4860::8844
+          numberOfSimultaneousSessions: 1000
+          sessionTimeout: No_SUPERVISION
+          idleTimeout: TIMER
+          sendIpV4Dns: false
+          sendIpV6Dns: false
+          restrictM2MAccess: true
+          firewallAllowlist:
+          - ipAddress: 111.222.111.222
+            portStart: 1810
+            portEnd: 1820
+            protocol: TCP
+          subscriptionPackages:
+          - foo_SP_01
+          name: Ericsson-foo.com
+          description: Some description
+          supplierDnsHosted: true
+          dnsPlmnIds:
+          - '123456'
+          - '777888'
+          packetGws:
+          - id: '26'
+            isPrimary: true
+          - id: '27'
+            isPrimary: false
+          sessionTimeoutTimer: 0
+          idleTimeoutTimer: 60
+          isDefaultAPN: false
+          apnOiReplacement: mncfoo.mccfoo.gprs
+          esmContextQosId: '123456'
+          esmProfileQosId: '123456'
+          pdpQosId: '123456'
+    CreateDedicatedInternetServiceExample:
+      value:
+        type: CREATE_DEDICATED_INTERNET_DATA_SERVICE
+        orderedFor: '3.77'
+        parameters:
+          apn: foo.com
+          enabled2g3g: true
+          enabled4g: true
+          enabled5gNsa: true
+          ipVersion: IPV4
+          uplinkBandwidth: 1024
+          downlinkBandwidth: 2048
+          useSupplierDnsIpV4: true
+          primaryDnsIpV4: 8.8.8.8
+          secondaryDnsIpV4: 8.8.4.4
+          useSupplierDnsIpV6: true
+          primaryDnsIpV6: 2001:4860:4860::8888
+          secondaryDnsIpV6: 2001:4860:4860::8844
+          numberOfSimultaneousSessions: 1000
+          sessionTimeout: No_SUPERVISION
+          idleTimeout: TIMER
+          sendIpV4Dns: false
+          sendIpV6Dns: false
+          restrictM2MAccess: true
+          firewallAllowlist:
+          - ipAddress: 111.222.111.222
+            portStart: 1810
+            portEnd: 1820
+            protocol: TCP
+          subscriptionPackages:
+          - foo_SP_01
+          name: Ericsson-foo.com
+          description: Some description
+          supplierDnsHosted: true
+          dnsPlmnIds:
+          - '123456'
+          - '777888'
+          packetGws:
+          - id: '26'
+            isPrimary: true
+          - id: '27'
+            isPrimary: false
+          sessionTimeoutTimer: 0
+          idleTimeoutTimer: 60
+          isDefaultAPN: false
+          apnOiReplacement: mncfoo.mccfoo.gprs
+          esmContextQosId: '123456'
+          esmProfileQosId: '123456'
+          pdpQosId: '123456'
+          operatorNetworkId: '538'
+    Create4gRoamingProfileExample:
+      value:
+        type: CREATE_4G_RP
+        orderedFor: '3.77'
+        parameters:
+          name: RP998LTE
+          description: RP998LTE Offering
+          realms:
+          - epc.mnc860.mcc354.3gppnetwork.org
+          - epc.mnc010.mcc440.3gppnetwork.org
+          - epc.mnc002.mcc219.3gppnetwork.org
+          operatorNetworkId: '538'
+    UpdateDedicatedInternetServiceExample:
+      value:
+        type: UPDATE_DEDICATED_INTERNET_DATA_SERVICE
+        orderedFor: '3.77'
+        parameters:
+          id: '123456789'
+          apn: foo.com
+          enabled2g3g: true
+          enabled4g: true
+          enabled5gNsa: true
+          ipVersion: IPV4
+          uplinkBandwidth: 1024
+          downlinkBandwidth: 2048
+          useSupplierDnsIpV4: true
+          primaryDnsIpV4: 8.8.8.8
+          secondaryDnsIpV4: 8.8.4.4
+          useSupplierDnsIpV6: true
+          primaryDnsIpV6: 2001:4860:4860::8888
+          secondaryDnsIpV6: 2001:4860:4860::8844
+          numberOfSimultaneousSessions: 1000
+          sessionTimeout: No_SUPERVISION
+          idleTimeout: TIMER
+          sendIpV4Dns: false
+          sendIpV6Dns: false
+          restrictM2MAccess: true
+          firewallAllowlist:
+          - ipAddress: 111.222.111.222
+            portStart: 1810
+            portEnd: 1820
+            protocol: TCP
+          subscriptionPackages:
+          - foo_SP_01
+          name: Ericsson-foo.com
+          description: Some description
+          supplierDnsHosted: true
+          dnsPlmnIds:
+          - '123456'
+          - '777888'
+          packetGws:
+          - id: '26'
+            isPrimary: true
+          - id: '27'
+            isPrimary: false
+          sessionTimeoutTimer: 0
+          idleTimeoutTimer: 60
+          isDefaultAPN: false
+          apnOiReplacement: mncfoo.mccfoo.gprs
+          esmContextQosId: '123456'
+          esmProfileQosId: '123456'
+          pdpQosId: '123456'
+    GetDedicatedInternetServiceExample:
+      value:
+        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        type: CREATE_DEDICATED_INTERNET_DATA_SERVICE
+        status: DRAFT
+        orderedFor: '3.77'
+        createdAt: 2022-07-12 03:48:02.759000+00:00
+        updatedAt: 2022-07-12 03:48:02.759000+00:00
+        parameters:
+          operatorNetworkId: '538'
+          apn: foo.com
+          enabled2g3g: true
+          enabled4g: true
+          enabled5gNsa: true
+          ipVersion: IPV4
+          uplinkBandwidth: 1024
+          downlinkBandwidth: 2048
+          useSupplierDnsIpV4: true
+          primaryDnsIpV4: 8.8.8.8
+          secondaryDnsIpV4: 8.8.4.4
+          useSupplierDnsIpV6: true
+          primaryDnsIpV6: 2001:4860:4860::8888
+          secondaryDnsIpV6: 2001:4860:4860::8844
+          numberOfSimultaneousSessions: 1000
+          sessionTimeout: No_SUPERVISION
+          idleTimeout: TIMER
+          sendIpV4Dns: false
+          sendIpV6Dns: false
+          restrictM2MAccess: true
+          firewallAllowlist:
+          - ipAddress: 111.222.111.222
+            portStart: 1810
+            portEnd: 1820
+            protocol: TCP
+          subscriptionPackages:
+          - foo_SP_01
+          name: Ericsson-foo.com
+          description: Some description
+          supplierDnsHosted: true
+          dnsPlmnIds:
+          - '123456'
+          - '777888'
+          packetGws:
+          - id: '26'
+            isPrimary: true
+          - id: '27'
+            isPrimary: false
+          sessionTimeoutTimer: 0
+          idleTimeoutTimer: 60
+          isDefaultAPN: false
+          apnOiReplacement: mncfoo.mccfoo.gprs
+          esmContextQosId: '123456'
+          esmProfileQosId: '123456'
+          pdpQosId: '123456'
+    Update2g3gRoamingProfileExample:
+      value:
+        type: UPDATE_2G3G_RP
+        orderedFor: '3.77'
+        parameters:
+          id: '1'
+          status: ACTIVE
+          name: RP90
+          description: RP90
+          globalTitles:
+          - '164780001'
+          - '2250505987'
+          - '32468'
+          - '32475'
+          - '7901106'
+          - '7901154'
+          - '790116'
+          - '7901472'
+          - '790160'
+          - '799426'
+          - '99292'
+          - '99293'
+    Patch2g3gRoamingProfileExample:
+      value:
+        parameters:
+          name: RP90
+          description: RP90
+          globalTitles:
+          - '22505987'
+          - '32468146810'
+          - '324681990'
+          - '324681991'
+          - '324750'
+          - '3247510'
+          - '3247513'
+          - '3247516'
+          - '4178777'
+          - '4178931'
+          - '7901164'
+          - '7901165'
+          - '7901167'
+          - '7901604'
+          - '97695318000'
+          operatorNetworkId: '538'
+    UpdateSimSpecificationExample:
+      value:
+        type: UPDATE_SIM_SPEC
+        orderedFor: '3.77'
+        parameters:
+          id: '316'
+          description: Plastic SIM
+          maxQuantity: 0
+          minQuantity: 10
+          minOrderVolume: 1
+          orderIncrement: 0
+          earliestDeliveryDays: 14
+          priceCategory: 1
+          stockOrderFileShareId: '75654'
+          manufacturerOrderFileShareId: '75655'
+          warehouseOrderFileShareId: '75656'
+    Create2g3gRoamingProfileExample:
+      value:
+        type: CREATE_2G3G_RP
+        orderedFor: '3.77'
+        parameters:
+          name: RP90
+          description: RP90
+          globalTitles:
+          - '22505987'
+          - '32468146810'
+          - '324681990'
+          - '324681991'
+          - '324750'
+          - '3247510'
+          - '3247513'
+          - '3247516'
+          - '4178777'
+          - '4178931'
+          - '7901164'
+          - '7901165'
+          - '7901167'
+          - '7901604'
+          - '97695318000'
+          operatorNetworkId: '538'
+    Get2g3gRoamingProfileExample:
+      value:
+        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        type: CREATE_2G3G_RP
+        status: DRAFT
+        orderedFor: '3.77'
+        createdAt: 2022-07-04 01:52:18.058000+00:00
+        updatedAt: 2022-07-04 01:52:18.058000+00:00
+        parameters:
+          name: RP90
+          description: RP90
+          globalTitles:
+          - '22505987'
+          - '32468146810'
+          - '324681990'
+          - '4178777'
+          - '4178931'
+          - '7901164'
+          - '7901165'
+          - '7901167'
+          - '7901604'
+          - '97695318000'
+          operatorNetworkId: '538'
+    UpdateProfileSpecificationExample:
+      value:
+        type: UPDATE_PROFILE_SPEC
+        orderedFor: '3.77'
+        parameters:
+          id: '564393'
+          description: Profile Spec for OpTest1
+          priceCategory: 1
+          stockOrderFileShareId: '564269'
+          manufacturerOrderFileShareId: '564268'
+          warehouseOrderFileShareId: '564270'
+          profileStockOrderFileShareId: '564271'
+          smdpId: 5.6.7.8
+          formSpecificationIds:
+          - '665200'
+          - '663679'
+          - '564305'
+    CreateProfileSpecificationExample:
+      value:
+        type: CREATE_PROFILE_SPEC
+        orderedFor: '3.77'
+        parameters:
+          specificationId: PS OpTest1
+          name: PS OpTest1
+          description: Profile Spec for OpTest1
+          priceCategory: 1
+          stockOrderFileShareId: '564269'
+          manufacturerOrderFileShareId: '564268'
+          warehouseOrderFileShareId: '564270'
+          profileStockOrderFileShareId: '564271'
+          numberSchemeId: ZZRSCHEME00021
+          smdpId: 5.6.7.8
+          bootstrapProfileType: BOOTSTRAP
+          operatorNetworkId: '75654'
+          formSpecificationIds:
+          - '665200'
+          - '663679'
+          - '564305'
+    Patch4gRoamingProfileExample:
+      value:
+        parameters:
+          name: RP998LTE
+          description: RP998LTE Offering
+          realms:
+          - epc.mnc860.mcc354.3gppnetwork.org
+          - epc.mnc010.mcc440.3gppnetwork.org
+          - epc.mnc002.mcc219.3gppnetwork.org
+          operatorNetworkId: '538'
+    Update4gRoamingProfileExample:
+      value:
+        type: UPDATE_4G_RP
+        orderedFor: '3.77'
+        parameters:
+          id: '1'
+          status: ACTIVE
+          name: RP998LTE
+          description: RP998LTE Offering
+          realms:
+          - epc.mnc860.mcc354.3gppnetwork.org
+          - epc.mnc010.mcc440.3gppnetwork.org
+          - epc.mnc020.mcc412.3gppnetwork.org
+    UpdateFormSpecificationExample:
+      value:
+        type: UPDATE_FORM_SPEC
+        orderedFor: '3.77'
+        parameters:
+          id: '75654'
+          description: Form Spec OpTest1 001
+          maxQuantity: 3
+          minQuantity: 100
+          minOrderVolume: 2
+          orderIncrement: 1
+          earliestDeliveryDays: 8
+          smsrId: 1.2.3.4
+          profileSpecificationIds:
+          - '564393'
+          - '766095'
+    DeleteInventoryExample:
+      value:
+        type: DELETE_DEDICATED_INTERNET_DATA_SERVICE
+        orderedFor: '3.77'
+        parameters:
+          id: '1'
+    Get4gRoamingProfileExample:
+      value:
+        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        type: CREATE_4G_RP
+        status: DRAFT
+        orderedFor: '3.77'
+        createdAt: 2022-07-04 01:52:18.058000+00:00
+        updatedAt: 2022-07-04 01:52:18.058000+00:00
+        parameters:
+          name: RP998LTE
+          description: RP998LTE Offering
+          realms:
+          - epc.mnc860.mcc354.3gppnetwork.org
+          - epc.mnc010.mcc440.3gppnetwork.org
+          - epc.mnc002.mcc219.3gppnetwork.org
+          operatorNetworkId: '538'
+    CreateFormSpecificationExample:
+      value:
+        type: CREATE_FORM_SPEC
+        orderedFor: '3.77'
+        parameters:
+          specificationId: FS OpTest1 001
+          name: FS OpTest1 001
+          description: Form Spec OpTest1 001
+          maxQuantity: 3
+          minQuantity: 100
+          minOrderVolume: 2
+          orderIncrement: 1
+          earliestDeliveryDays: 8
+          smsrId: 1.2.3.4
+          formSpecificationType: M2M
+          operatorNetworkId: '75654'
+          profileSpecificationIds:
+          - '564393'
+          - '766095'
+  headers:
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
   schemas:
-    Update2g3gRoamingProfileRequest:
+    UpdateDedicatedInternetServiceRequest:
       required:
       - orderedFor
+      - parameters
       - type
       type: object
       properties:
         type:
           type: string
-          example: UPDATE_2G3G_RP
+          example: UPDATE_DEDICATED_INTERNET_DATA_SERVICE
         orderedFor:
           type: string
           description: The organization ID for which this order is made.
           example: '3.77'
-        schema:
-          $ref: '#/components/schemas/Update2g3gRoamingProfile'
-    GetDedicatedInternetServiceResponse:
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
+          - type: object
+            properties:
+              id:
+                type: string
+                example: '123456789'
+      discriminator:
+        propertyName: type
+    GlobalTitles:
       type: object
+      properties:
+        globalTitles:
+          uniqueItems: true
+          type: array
+          description: Global Titles
+          example:
+          - '164780001'
+          - '2250505987'
+          - '32468'
+          - '32475'
+          - '7901106'
+          - '7901154'
+          - '790116'
+          - '7901472'
+          - '790160'
+          - '799426'
+          - '99292'
+          - '99293'
+          items:
+            type: string
+    CreateSimSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_SIM_SPEC
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/SsmSimSpecification'
+    NotFound:
+      description: 'Network Resource with provided ID not found.
+
+        '
+    UpdateFormSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_FORM_SPEC
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/UpdateFormSpecification'
+    OrderApprovalItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 4745ceda-6a00-4b0f-a94f-01a8725eed1e
+        status:
+          type: string
+          example: PENDING
+          x-extensible-enum:
+          - PENDING
+          - APPROVED
+          - REJECTED
+          - CANCELED
+        approvalStage:
+          type: string
+          example: OPERATOR
+          x-extensible-enum:
+          - OPERATOR
+          - ADMIN
+        comments:
+          type: string
+          example: OK
+        order:
+          $ref: '#/components/schemas/OrderBaseInfo'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Get2g3gRoamingProfileResponse:
       allOf:
       - $ref: '#/components/schemas/OrderBase'
       - type: object
         properties:
           parameters:
-            allOf:
-            - $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
-            - type: object
-              properties:
-                operatorNetworkId:
-                  type: string
-                  description: Network group ID
-                  example: '538'
+            $ref: '#/components/schemas/Create2g3gRoamingProfile'
+    CreateFormSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_FORM_SPEC
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/SsmFormSpecification'
+    FirewallConfigItem:
+      type: object
+      properties:
+        ipAddress:
+          type: string
+          example: 111.222.111.222
+        portStart:
+          type: integer
+          format: int32
+          example: 1810
+        portEnd:
+          type: integer
+          format: int32
+          example: 1820
+        protocol:
+          type: string
+          example: TCP
+          x-extensible-enum:
+          - TCP
+          - UDP
+          - ICMP
+          - SCTP
+          - ESP
+          - ANY
+    UpdateSimSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_SIM_SPEC
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/UpdateSimSpecification'
     ExtendedDedicatedInternetServiceRequest:
       required:
       - packetGws
@@ -1073,182 +1704,32 @@ components:
             type: string
             description: The id of the PDP Qos.
             example: '123456'
-    ExtendedDedicatedInternetServiceRequest_packetGws:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '26'
-        isPrimary:
-          type: boolean
-          example: true
-      example: null
-    CreateFormSpecificationRequest:
+    ApproveAction:
       required:
-      - orderedFor
-      - parameters
-      - type
+      - action
       type: object
       properties:
-        type:
+        action:
           type: string
-          example: CREATE_FORM_SPEC
-        orderedFor:
-          type: string
-          description: the organization ID for which this order is made
-          example: '3.77'
-        parameters:
-          $ref: '#/components/schemas/SsmFormSpecification'
-    PostOrderRequest:
-      anyOf:
-      - $ref: '#/components/schemas/Create2g3gRoamingProfileRequest'
-      - $ref: '#/components/schemas/Update2g3gRoamingProfileRequest'
-      - $ref: '#/components/schemas/Create4gRoamingProfileRequest'
-      - $ref: '#/components/schemas/Update4gRoamingProfileRequest'
-      - $ref: '#/components/schemas/CreateDedicatedInternetServiceRequest'
-      - $ref: '#/components/schemas/UpdateDedicatedInternetServiceRequest'
-      - $ref: '#/components/schemas/CreateSimSpecificationRequest'
-      - $ref: '#/components/schemas/UpdateSimSpecificationRequest'
-      - $ref: '#/components/schemas/CreateFormSpecificationRequest'
-      - $ref: '#/components/schemas/UpdateFormSpecificationRequest'
-      - $ref: '#/components/schemas/CreateProfileSpecificationRequest'
-      - $ref: '#/components/schemas/UpdateProfileSpecificationRequest'
-      - $ref: '#/components/schemas/DeleteInventoryRequest'
-    Create4gRoamingProfileRequest:
-      required:
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: CREATE_4G_RP
-        orderedFor:
-          type: string
-          description: the organization ID for which this order is made
-          example: '3.77'
-        parameters:
-          $ref: '#/components/schemas/Create4gRoamingProfile'
-    CreateProfileSpecificationRequest:
-      required:
-      - orderedFor
-      - parameters
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: CREATE_PROFILE_SPEC
-        orderedFor:
-          type: string
-          description: the organization ID for which this order is made
-          example: '3.77'
-        parameters:
-          $ref: '#/components/schemas/SsmProfileSpecification'
-    Create2g3gRoamingProfileRequest:
-      required:
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: CREATE_2G3G_RP
-        orderedFor:
-          type: string
-          description: the organization ID for which this order is made
-          example: '3.77'
-        parameters:
-          $ref: '#/components/schemas/Create2g3gRoamingProfile'
-    Update4gRoamingProfile:
-      allOf:
-      - required:
-        - id
-        type: object
-        properties:
-          id:
-            type: string
-            description: inventory id
-            example: '1'
-          status:
-            type: string
-            description: The value of status could be ACTIVE or DEPRECATED. Set status to 'ACTIVE' to update an active roaming profile, set status to 'DEPRECATED' to deprecate an active roaming profile. If other parameters are changed for the roaming profile, the roaming profile are updated before it becomes 'ACTIVE' or 'DEPRECATED'.
-            example: ACTIVE
-            x-extensible-enum:
-            - ACTIVE
-            - DEPRECATED
-      - $ref: '#/components/schemas/RoamingProfile4g'
-    RoamingProfile2g3g:
-      allOf:
-      - $ref: '#/components/schemas/GlobalTitles'
-      - required:
-        - name
-        type: object
-        properties:
-          name:
-            maxLength: 255
-            minLength: 1
-            type: string
-            example: RP996
-          description:
-            maxLength: 500
-            type: string
-            example: RP996
-    GetOrderResponse:
-      anyOf:
-      - $ref: '#/components/schemas/Get2g3gRoamingProfileResponse'
-      - $ref: '#/components/schemas/Get4gRoamingProfileResponse'
-      - $ref: '#/components/schemas/GetDedicatedInternetServiceResponse'
-    OrderVerificationItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: c4f485a5-3275-43a0-9ee7-c0891f96fc17
-        status:
-          type: string
-          example: PENDING
-          x-extensible-enum:
-          - PENDING
-          - ACCEPTED
-          - REJECTED
+          example: APPROVE
         comments:
           type: string
           example: OK
-        order:
-          $ref: '#/components/schemas/OrderBaseInfo'
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    PostOrderResponse:
+    Update2g3gRoamingProfileRequest:
+      required:
+      - orderedFor
+      - type
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
         type:
           type: string
-          example: FOO_TYPE_OF_ORDER
-        status:
-          type: string
-          example: DRAFT
+          example: UPDATE_2G3G_RP
         orderedFor:
           type: string
-          description: the organization ID for which this order is made
+          description: The organization ID for which this order is made.
           example: '3.77'
-        createdAt:
-          type: string
-          format: date-time
-    Create4gRoamingProfile:
-      allOf:
-      - $ref: '#/components/schemas/RoamingProfile4g'
-      - type: object
-        properties:
-          operatorNetworkId:
-            type: string
-            example: '538'
+        schema:
+          $ref: '#/components/schemas/Update2g3gRoamingProfile'
     AcceptVerificationAction:
       required:
       - action
@@ -1260,484 +1741,6 @@ components:
         comments:
           type: string
           example: OK
-    CreateDedicatedInternetServiceRequest:
-      required:
-      - orderedFor
-      - parameters
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: CREATE_DEDICATED_INTERNET_DATA_SERVICE
-        orderedFor:
-          type: string
-          description: The organization ID for which this order is made.
-          example: '3.77'
-        parameters:
-          allOf:
-          - $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
-          - type: object
-            properties:
-              operatorNetworkId:
-                type: string
-                description: Network group ID
-                example: '538'
-      discriminator:
-        propertyName: type
-    SubmitAction:
-      required:
-      - action
-      type: object
-      properties:
-        action:
-          type: string
-          example: SUBMIT
-    DeleteInventoryRequest_parameters:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          example: '123456789'
-      example: null
-    UpdateSimSpecification:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4507776'
-        description:
-          maxLength: 240
-          minLength: 1
-          type: string
-          example: Plastic SIM
-        maxQuantity:
-          minimum: 0
-          type: integer
-          format: int32
-        minQuantity:
-          minimum: 0
-          type: integer
-          format: int32
-        minOrderVolume:
-          minimum: 0
-          type: integer
-          format: int32
-        orderIncrement:
-          minimum: 0
-          type: integer
-          format: int32
-        earliestDeliveryDays:
-          minimum: 0
-          type: integer
-          description: how many days the order needs to be delivered
-          format: int32
-        priceCategory:
-          minimum: 0
-          type: integer
-          format: int32
-        stockOrderFileShareId:
-          type: string
-          example: '75654'
-        manufacturerOrderFileShareId:
-          type: string
-          example: '75655'
-        warehouseOrderFileShareId:
-          type: string
-          example: '75656'
-    GlobalTitles:
-      type: object
-      properties:
-        globalTitles:
-          uniqueItems: true
-          type: array
-          description: Global Titles
-          example:
-          - '164780001'
-          - '2250505987'
-          - '32468'
-          - '32475'
-          - '7901106'
-          - '7901154'
-          - '790116'
-          - '7901472'
-          - '790160'
-          - '799426'
-          - '99292'
-          - '99293'
-          items:
-            type: string
-    CreateSimSpecificationRequest:
-      required:
-      - orderedFor
-      - parameters
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: CREATE_SIM_SPEC
-        orderedFor:
-          type: string
-          description: the organization ID for which this order is made
-          example: '3.77'
-        parameters:
-          $ref: '#/components/schemas/SsmSimSpecification'
-    SsmProfileSpecification:
-      allOf:
-      - $ref: '#/components/schemas/SsmCommSpecification'
-      - type: object
-        properties:
-          priceCategory:
-            minimum: 0
-            type: integer
-            format: int32
-          profileStockOrderFileShareId:
-            type: string
-            example: '75654'
-          numberSchemeId:
-            type: string
-            example: ZZRSCHEME00021
-          smdpId:
-            maxLength: 100
-            minLength: 1
-            type: string
-            description: Subscription Manager Data Preparation
-            example: 5.6.7.8
-          bootstrapProfileType:
-            type: string
-            example: VIRTUAL
-            x-extensible-enum:
-            - BOOTSTRAP
-            - VIRTUAL
-            - PROVISIONING
-            - OPERATIONAL
-          formSpecificationIds:
-            type: array
-            description: Form specifications that linked to this spec
-            example:
-            - '663679'
-            - '665200'
-            - '564305'
-            items:
-              type: string
-    Update2g3gRoamingProfile:
-      allOf:
-      - required:
-        - id
-        type: object
-        properties:
-          id:
-            type: string
-            description: inventory id
-            example: '1'
-          status:
-            type: string
-            description: The value of status could be ACTIVE or DEPRECATED. Set status to 'ACTIVE' to update an active roaming profile, set status to 'DEPRECATED' to deprecate an active roaming profile. If other parameters are changed for the roaming profile, the roaming profile are updated before it becomes 'ACTIVE' or 'DEPRECATED'.
-            example: ACTIVE
-            x-extensible-enum:
-            - ACTIVE
-            - DEPRECATED
-      - $ref: '#/components/schemas/RoamingProfile2g3g'
-    DeleteInventoryRequest:
-      required:
-      - orderedFor
-      - parameters
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: DELETE_DEDICATED_INTERNET_DATA_SERVICE
-          x-extensible-enum:
-          - DELETE_2G3G_RP
-          - DELETE_4G_RP
-          - DELETE_DEDICATED_INTERNET_DATA_SERVICE
-          - DELETE_SIM_SPEC
-          - DELETE_SIM_SPEC
-          - DELETE_PROFILE_SPEC
-        orderedFor:
-          type: string
-          description: The organization ID for which this order is made.
-          example: '3.77'
-        parameters:
-          $ref: '#/components/schemas/DeleteInventoryRequest_parameters'
-    CancelAction:
-      required:
-      - action
-      type: object
-      properties:
-        action:
-          type: string
-          example: CANCEL
-    Update4gRoamingProfileRequest:
-      required:
-      - orderedFor
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: UPDATE_4G_RP
-        orderedFor:
-          type: string
-          description: The organization ID for which this order is made.
-          example: '3.77'
-        schema:
-          $ref: '#/components/schemas/Update4gRoamingProfile'
-    FirewallConfigItem:
-      type: object
-      properties:
-        ipAddress:
-          type: string
-          example: 111.222.111.222
-        portStart:
-          type: integer
-          format: int32
-          example: 1810
-        portEnd:
-          type: integer
-          format: int32
-          example: 1820
-        protocol:
-          type: string
-          example: TCP
-          x-extensible-enum:
-          - TCP
-          - UDP
-          - ICMP
-          - SCTP
-          - ESP
-          - ANY
-    GetApprovalListResponse:
-      allOf:
-      - type: object
-        properties:
-          approvals:
-            type: array
-            items:
-              $ref: '#/components/schemas/OrderApprovalItem'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /orders/approvals?cursor=cursorstring
-    Get2g3gRoamingProfileResponse:
-      allOf:
-      - $ref: '#/components/schemas/OrderBase'
-      - type: object
-        properties:
-          parameters:
-            $ref: '#/components/schemas/Create2g3gRoamingProfile'
-    UpdateDedicatedInternetServiceRequest:
-      required:
-      - orderedFor
-      - parameters
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: UPDATE_DEDICATED_INTERNET_DATA_SERVICE
-        orderedFor:
-          type: string
-          description: The organization ID for which this order is made.
-          example: '3.77'
-        parameters:
-          allOf:
-          - $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
-          - type: object
-            properties:
-              id:
-                type: string
-                example: '123456789'
-      discriminator:
-        propertyName: type
-    GetRevisionListResponse:
-      allOf:
-      - type: object
-        properties:
-          revisions:
-            type: array
-            items:
-              $ref: '#/components/schemas/OrderRevisionItem'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /orders/revisions?cursor=cursorstring
-    UpdateProfileSpecificationRequest:
-      required:
-      - orderedFor
-      - parameters
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: UPDATE_PROFILE_SPEC
-        orderedFor:
-          type: string
-          description: The organization ID for which this order is made.
-          example: '3.77'
-        parameters:
-          $ref: '#/components/schemas/UpdateProfileSpecification'
-    OrderApprovalItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 4745ceda-6a00-4b0f-a94f-01a8725eed1e
-        status:
-          type: string
-          example: PENDING
-          x-extensible-enum:
-          - PENDING
-          - APPROVED
-          - REJECTED
-          - CANCELED
-        approvalStage:
-          type: string
-          example: OPERATOR
-          x-extensible-enum:
-          - OPERATOR
-          - ADMIN
-        comments:
-          type: string
-          example: OK
-        order:
-          $ref: '#/components/schemas/OrderBaseInfo'
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    GetOrderListResponse:
-      allOf:
-      - type: object
-        properties:
-          orders:
-            type: array
-            items:
-              $ref: '#/components/schemas/OrderBase'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /orders?cursor=DFVSDB3434%DFB%EYY445
-    RejectVerificationAction:
-      required:
-      - action
-      - comments
-      type: object
-      properties:
-        action:
-          type: string
-          example: REJECT_VERIFICATION
-        comments:
-          type: string
-          example: Something wrong
-    UpdateProfileSpecification:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4507778'
-        description:
-          maxLength: 240
-          minLength: 1
-          type: string
-          example: Plastic SIM
-        priceCategory:
-          minimum: 0
-          type: integer
-          format: int32
-        stockOrderFileShareId:
-          type: string
-          example: '75654'
-        manufacturerOrderFileShareId:
-          type: string
-          example: '75655'
-        warehouseOrderFileShareId:
-          type: string
-          example: '75656'
-        profileStockOrderFileShareId:
-          type: string
-          example: '75657'
-        smdpId:
-          maxLength: 100
-          minLength: 1
-          type: string
-          description: Subscription Manager Data Preparation
-          example: 5.6.7.8
-        formSpecificationIds:
-          type: array
-          description: Form specifications that linked to this spec
-          example:
-          - '663679'
-          - '665200'
-          - '564305'
-          items:
-            type: string
-    Get4gRoamingProfileResponse:
-      allOf:
-      - $ref: '#/components/schemas/OrderBase'
-      - type: object
-        properties:
-          parameters:
-            $ref: '#/components/schemas/Create4gRoamingProfile'
-    UpdateFormSpecification:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '4507777'
-        description:
-          maxLength: 240
-          minLength: 1
-          type: string
-          example: Plastic SIM
-        maxQuantity:
-          minimum: 0
-          type: integer
-          format: int32
-        minQuantity:
-          minimum: 0
-          type: integer
-          format: int32
-        minOrderVolume:
-          minimum: 0
-          type: integer
-          format: int32
-        orderIncrement:
-          minimum: 0
-          type: integer
-          format: int32
-        earliestDeliveryDays:
-          minimum: 0
-          type: integer
-          description: how many days the order needs to be delivered
-          format: int32
-        smsrId:
-          maxLength: 100
-          minLength: 1
-          type: string
-          description: Subscription Manager Secure Routing
-          example: 1.2.3.4
-        profileSpecificationIds:
-          type: array
-          description: Profile specifications that linked to this spec
-          example:
-          - '564393'
-          items:
-            type: string
     RoamingAreas:
       type: object
       properties:
@@ -1751,178 +1754,22 @@ components:
           - epc.mnc020.mcc412.3gppnetwork.org
           items:
             type: string
-    PostActionsRequest:
-      anyOf:
-      - $ref: '#/components/schemas/SubmitAction'
-      - $ref: '#/components/schemas/CancelAction'
-      - $ref: '#/components/schemas/ApproveAction'
-      - $ref: '#/components/schemas/RejectAction'
-      - $ref: '#/components/schemas/AcceptVerificationAction'
-      - $ref: '#/components/schemas/RejectVerificationAction'
-    OrderBase:
+    Get4gRoamingProfileResponse:
+      allOf:
+      - $ref: '#/components/schemas/OrderBase'
+      - type: object
+        properties:
+          parameters:
+            $ref: '#/components/schemas/Create4gRoamingProfile'
+    DeleteInventoryRequest_parameters:
+      required:
+      - id
       type: object
       properties:
         id:
           type: string
-          format: uuid
-        type:
-          type: string
-          example: FOO_TYPE_OF_ORDER
-        status:
-          type: string
-          example: DRAFT
-          x-extensible-enum:
-          - DRAFT
-          - CANCELED
-          - IMPLEMENTING
-          - SUCCEEDED
-          - FAILED
-          - PENDING_APPROVAL
-          - PENDING_REVISION
-          - PENDING_VERIFICATION
-          - PENDING_RESOLUTION
-        orderedFor:
-          type: string
-          description: the organization ID for which this order is made
-          example: '3.77'
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          description: 'An absolute URI that identifies the problem type. When dereferenced,
-
-            it SHOULD provide human-readable documentation for the problem type
-
-            (e.g., using HTML).
-
-            '
-          format: uri
-          example: https://your.api.documentation.url
-          default: about:blank
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable
-
-            for engineers (usually not suited for non technical stakeholders and
-
-            not localized).
-
-            '
-          example: Internal Server Error
-        status:
-          minimum: 100
-          type: integer
-          description: 'The HTTP status code generated by the origin server for this occurrence
-
-            of the problem.
-
-            '
-          format: int32
-          example: 500
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: The server has encountered a situation that it does not know how to handle.
-        instance:
-          type: string
-          description: 'An absolute URI that identifies the specific occurrence of the problem.
-
-            It may or may not yield further information if dereferenced.
-
-            '
-    NotFound:
-      description: 'Network Resource with provided ID not found.
-
-        '
-    Create2g3gRoamingProfile:
-      allOf:
-      - $ref: '#/components/schemas/RoamingProfile2g3g'
-      - type: object
-        properties:
-          operatorNetworkId:
-            type: string
-            example: '538'
-    SsmCommSpecification:
-      type: object
-      properties:
-        name:
-          type: string
-          example: PS OpTest1
-        specificationId:
-          type: string
-          example: PS OpTest1
-        description:
-          maxLength: 240
-          minLength: 1
-          type: string
-          example: Plastic SIM
-        stockOrderFileShareId:
-          type: string
-          example: '75654'
-        manufacturerOrderFileShareId:
-          type: string
-          example: '75655'
-        warehouseOrderFileShareId:
-          type: string
-          example: '75656'
-        operatorNetworkId:
-          type: string
-          example: '75657'
-    UpdateFormSpecificationRequest:
-      required:
-      - orderedFor
-      - parameters
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          example: UPDATE_FORM_SPEC
-        orderedFor:
-          type: string
-          description: The organization ID for which this order is made.
-          example: '3.77'
-        parameters:
-          $ref: '#/components/schemas/UpdateFormSpecification'
-    RoamingProfile4g:
-      allOf:
-      - $ref: '#/components/schemas/RoamingAreas'
-      - required:
-        - name
-        type: object
-        properties:
-          name:
-            maxLength: 255
-            minLength: 1
-            type: string
-            example: RP996LTE
-          description:
-            maxLength: 500
-            type: string
-            example: RP996LTE Offering
-    ApproveAction:
-      required:
-      - action
-      type: object
-      properties:
-        action:
-          type: string
-          example: APPROVE
-        comments:
-          type: string
-          example: OK
+          example: '123456789'
+      example: null
     SsmSimSpecification:
       allOf:
       - $ref: '#/components/schemas/SsmCommSpecification'
@@ -1958,20 +1805,11 @@ components:
             example: ZZRSCHEME00021
           earlyBinding:
             type: boolean
-    GetVerificationListResponse:
-      allOf:
-      - type: object
-        properties:
-          verifications:
-            type: array
-            items:
-              $ref: '#/components/schemas/OrderVerificationItem'
-      - type: object
-        properties:
-          next:
-            type: string
-            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
-            example: /orders/verifications?cursor=cursorstring
+    PatchOrderRequest:
+      anyOf:
+      - $ref: '#/components/schemas/Patch2g3gRoamingProfileRequest'
+      - $ref: '#/components/schemas/Patch4gRoamingProfileRequest'
+      - $ref: '#/components/schemas/PatchDedicatedInternetServiceRequest'
     SsmFormSpecification:
       allOf:
       - $ref: '#/components/schemas/SsmCommSpecification'
@@ -2025,7 +1863,126 @@ components:
             - '564393'
             items:
               type: string
-    UpdateSimSpecificationRequest:
+    RoamingProfile2g3g:
+      allOf:
+      - $ref: '#/components/schemas/GlobalTitles'
+      - required:
+        - name
+        type: object
+        properties:
+          name:
+            maxLength: 255
+            minLength: 1
+            type: string
+            example: RP996
+          description:
+            maxLength: 500
+            type: string
+            example: RP996
+    SsmProfileSpecification:
+      allOf:
+      - $ref: '#/components/schemas/SsmCommSpecification'
+      - type: object
+        properties:
+          priceCategory:
+            minimum: 0
+            type: integer
+            format: int32
+          profileStockOrderFileShareId:
+            type: string
+            example: '75654'
+          numberSchemeId:
+            type: string
+            example: ZZRSCHEME00021
+          smdpId:
+            maxLength: 100
+            minLength: 1
+            type: string
+            description: Subscription Manager Data Preparation
+            example: 5.6.7.8
+          bootstrapProfileType:
+            type: string
+            example: VIRTUAL
+            x-extensible-enum:
+            - BOOTSTRAP
+            - VIRTUAL
+            - PROVISIONING
+            - OPERATIONAL
+          formSpecificationIds:
+            type: array
+            description: Form specifications that linked to this spec
+            example:
+            - '663679'
+            - '665200'
+            - '564305'
+            items:
+              type: string
+    UpdateFormSpecification:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4507777'
+        description:
+          maxLength: 240
+          minLength: 1
+          type: string
+          example: Plastic SIM
+        maxQuantity:
+          minimum: 0
+          type: integer
+          format: int32
+        minQuantity:
+          minimum: 0
+          type: integer
+          format: int32
+        minOrderVolume:
+          minimum: 0
+          type: integer
+          format: int32
+        orderIncrement:
+          minimum: 0
+          type: integer
+          format: int32
+        earliestDeliveryDays:
+          minimum: 0
+          type: integer
+          description: how many days the order needs to be delivered
+          format: int32
+        smsrId:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: Subscription Manager Secure Routing
+          example: 1.2.3.4
+        profileSpecificationIds:
+          type: array
+          description: Profile specifications that linked to this spec
+          example:
+          - '564393'
+          items:
+            type: string
+    RejectAction:
+      required:
+      - action
+      - comments
+      type: object
+      properties:
+        action:
+          type: string
+          example: REJECT
+        comments:
+          type: string
+          example: Something wrong
+    CancelAction:
+      required:
+      - action
+      type: object
+      properties:
+        action:
+          type: string
+          example: CANCEL
+    DeleteInventoryRequest:
       required:
       - orderedFor
       - parameters
@@ -2034,36 +1991,30 @@ components:
       properties:
         type:
           type: string
-          example: UPDATE_SIM_SPEC
+          example: DELETE_DEDICATED_INTERNET_DATA_SERVICE
+          x-extensible-enum:
+          - DELETE_2G3G_RP
+          - DELETE_4G_RP
+          - DELETE_DEDICATED_INTERNET_DATA_SERVICE
+          - DELETE_SIM_SPEC
+          - DELETE_SIM_SPEC
+          - DELETE_PROFILE_SPEC
         orderedFor:
           type: string
           description: The organization ID for which this order is made.
           example: '3.77'
         parameters:
-          $ref: '#/components/schemas/UpdateSimSpecification'
-    OrderBaseInfo:
+          $ref: '#/components/schemas/DeleteInventoryRequest_parameters'
+    ExtendedDedicatedInternetServiceRequest_packetGws:
       type: object
       properties:
         id:
           type: string
-          format: uuid
-        type:
-          type: string
-          example: FOO_TYPE_OF_ORDER
-        orderedFor:
-          type: string
-          description: the organization ID for which this order is made
-          example: '3.77'
-    Patch4gRoamingProfileRequest:
-      type: object
-      properties:
-        parameters:
-          $ref: '#/components/schemas/Create4gRoamingProfile'
-    Patch2g3gRoamingProfileRequest:
-      type: object
-      properties:
-        parameters:
-          $ref: '#/components/schemas/Create2g3gRoamingProfile'
+          example: '26'
+        isPrimary:
+          type: boolean
+          example: true
+      example: null
     PatchDedicatedInternetServiceRequest:
       required:
       - parameters
@@ -2071,37 +2022,6 @@ components:
       properties:
         parameters:
           $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
-    OrderRevisionItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 4745ceda-6a00-4b0f-a94f-01a8725eed1e
-        status:
-          type: string
-          example: PENDING
-          x-extensible-enum:
-          - PENDING
-          - COMPLETED
-          - CANCELED
-        revisionStage:
-          type: string
-          example: OPERATOR
-          x-extensible-enum:
-          - OPERATOR
-          - ADMIN
-        comments:
-          type: string
-          example: OK
-        order:
-          $ref: '#/components/schemas/OrderBaseInfo'
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
     DedicatedInternetServiceRequest:
       required:
       - apn
@@ -2226,7 +2146,363 @@ components:
           items:
             type: string
             example: foo_SP_01
-    RejectAction:
+    PostOrderRequest:
+      anyOf:
+      - $ref: '#/components/schemas/Create2g3gRoamingProfileRequest'
+      - $ref: '#/components/schemas/Update2g3gRoamingProfileRequest'
+      - $ref: '#/components/schemas/Create4gRoamingProfileRequest'
+      - $ref: '#/components/schemas/Update4gRoamingProfileRequest'
+      - $ref: '#/components/schemas/CreateDedicatedInternetServiceRequest'
+      - $ref: '#/components/schemas/UpdateDedicatedInternetServiceRequest'
+      - $ref: '#/components/schemas/CreateSimSpecificationRequest'
+      - $ref: '#/components/schemas/UpdateSimSpecificationRequest'
+      - $ref: '#/components/schemas/CreateFormSpecificationRequest'
+      - $ref: '#/components/schemas/UpdateFormSpecificationRequest'
+      - $ref: '#/components/schemas/CreateProfileSpecificationRequest'
+      - $ref: '#/components/schemas/UpdateProfileSpecificationRequest'
+      - $ref: '#/components/schemas/DeleteInventoryRequest'
+    GetOrderResponse:
+      anyOf:
+      - $ref: '#/components/schemas/Get2g3gRoamingProfileResponse'
+      - $ref: '#/components/schemas/Get4gRoamingProfileResponse'
+      - $ref: '#/components/schemas/GetDedicatedInternetServiceResponse'
+    OrderVerificationItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: c4f485a5-3275-43a0-9ee7-c0891f96fc17
+        status:
+          type: string
+          example: PENDING
+          x-extensible-enum:
+          - PENDING
+          - ACCEPTED
+          - REJECTED
+        comments:
+          type: string
+          example: OK
+        order:
+          $ref: '#/components/schemas/OrderBaseInfo'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    GetRevisionListResponse:
+      allOf:
+      - type: object
+        properties:
+          revisions:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderRevisionItem'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /orders/revisions?cursor=cursorstring
+    UpdateSimSpecification:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4507776'
+        description:
+          maxLength: 240
+          minLength: 1
+          type: string
+          example: Plastic SIM
+        maxQuantity:
+          minimum: 0
+          type: integer
+          format: int32
+        minQuantity:
+          minimum: 0
+          type: integer
+          format: int32
+        minOrderVolume:
+          minimum: 0
+          type: integer
+          format: int32
+        orderIncrement:
+          minimum: 0
+          type: integer
+          format: int32
+        earliestDeliveryDays:
+          minimum: 0
+          type: integer
+          description: how many days the order needs to be delivered
+          format: int32
+        priceCategory:
+          minimum: 0
+          type: integer
+          format: int32
+        stockOrderFileShareId:
+          type: string
+          example: '75654'
+        manufacturerOrderFileShareId:
+          type: string
+          example: '75655'
+        warehouseOrderFileShareId:
+          type: string
+          example: '75656'
+    GetApprovalListResponse:
+      allOf:
+      - type: object
+        properties:
+          approvals:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderApprovalItem'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /orders/approvals?cursor=cursorstring
+    PostActionsRequest:
+      anyOf:
+      - $ref: '#/components/schemas/SubmitAction'
+      - $ref: '#/components/schemas/CancelAction'
+      - $ref: '#/components/schemas/ApproveAction'
+      - $ref: '#/components/schemas/RejectAction'
+      - $ref: '#/components/schemas/AcceptVerificationAction'
+      - $ref: '#/components/schemas/RejectVerificationAction'
+    UpdateProfileSpecification:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '4507778'
+        description:
+          maxLength: 240
+          minLength: 1
+          type: string
+          example: Plastic SIM
+        priceCategory:
+          minimum: 0
+          type: integer
+          format: int32
+        stockOrderFileShareId:
+          type: string
+          example: '75654'
+        manufacturerOrderFileShareId:
+          type: string
+          example: '75655'
+        warehouseOrderFileShareId:
+          type: string
+          example: '75656'
+        profileStockOrderFileShareId:
+          type: string
+          example: '75657'
+        smdpId:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: Subscription Manager Data Preparation
+          example: 5.6.7.8
+        formSpecificationIds:
+          type: array
+          description: Form specifications that linked to this spec
+          example:
+          - '663679'
+          - '665200'
+          - '564305'
+          items:
+            type: string
+    OrderBaseInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          example: FOO_TYPE_OF_ORDER
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+    CreateDedicatedInternetServiceRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_DEDICATED_INTERNET_DATA_SERVICE
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
+          - type: object
+            properties:
+              operatorNetworkId:
+                type: string
+                description: Network group ID
+                example: '538'
+      discriminator:
+        propertyName: type
+    OrderBase:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          example: FOO_TYPE_OF_ORDER
+        status:
+          type: string
+          example: DRAFT
+          x-extensible-enum:
+          - DRAFT
+          - CANCELED
+          - IMPLEMENTING
+          - SUCCEEDED
+          - FAILED
+          - PENDING_APPROVAL
+          - PENDING_REVISION
+          - PENDING_VERIFICATION
+          - PENDING_RESOLUTION
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    SubmitAction:
+      required:
+      - action
+      type: object
+      properties:
+        action:
+          type: string
+          example: SUBMIT
+    CreateProfileSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_PROFILE_SPEC
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/SsmProfileSpecification'
+    OrderRevisionItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 4745ceda-6a00-4b0f-a94f-01a8725eed1e
+        status:
+          type: string
+          example: PENDING
+          x-extensible-enum:
+          - PENDING
+          - COMPLETED
+          - CANCELED
+        revisionStage:
+          type: string
+          example: OPERATOR
+          x-extensible-enum:
+          - OPERATOR
+          - ADMIN
+        comments:
+          type: string
+          example: OK
+        order:
+          $ref: '#/components/schemas/OrderBaseInfo'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    SsmCommSpecification:
+      type: object
+      properties:
+        name:
+          type: string
+          example: PS OpTest1
+        specificationId:
+          type: string
+          example: PS OpTest1
+        description:
+          maxLength: 240
+          minLength: 1
+          type: string
+          example: Plastic SIM
+        stockOrderFileShareId:
+          type: string
+          example: '75654'
+        manufacturerOrderFileShareId:
+          type: string
+          example: '75655'
+        warehouseOrderFileShareId:
+          type: string
+          example: '75656'
+        operatorNetworkId:
+          type: string
+          example: '75657'
+    Create4gRoamingProfile:
+      allOf:
+      - $ref: '#/components/schemas/RoamingProfile4g'
+      - type: object
+        properties:
+          operatorNetworkId:
+            type: string
+            example: '538'
+    Create4gRoamingProfileRequest:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_4G_RP
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        parameters:
+          $ref: '#/components/schemas/Create4gRoamingProfile'
+    GetDedicatedInternetServiceResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/OrderBase'
+      - type: object
+        properties:
+          parameters:
+            allOf:
+            - $ref: '#/components/schemas/ExtendedDedicatedInternetServiceRequest'
+            - type: object
+              properties:
+                operatorNetworkId:
+                  type: string
+                  description: Network group ID
+                  example: '538'
+    RejectVerificationAction:
       required:
       - action
       - comments
@@ -2234,499 +2510,223 @@ components:
       properties:
         action:
           type: string
-          example: REJECT
+          example: REJECT_VERIFICATION
         comments:
           type: string
           example: Something wrong
-    PatchOrderRequest:
-      anyOf:
-      - $ref: '#/components/schemas/Patch2g3gRoamingProfileRequest'
-      - $ref: '#/components/schemas/Patch4gRoamingProfileRequest'
-      - $ref: '#/components/schemas/PatchDedicatedInternetServiceRequest'
-  examples:
-    UpdateSimSpecificationExample:
-      value:
-        type: UPDATE_SIM_SPEC
-        orderedFor: '3.77'
+    Update4gRoamingProfile:
+      allOf:
+      - required:
+        - id
+        type: object
+        properties:
+          id:
+            type: string
+            description: inventory id
+            example: '1'
+          status:
+            type: string
+            description: The value of status could be ACTIVE or DEPRECATED. Set status to 'ACTIVE' to update an active roaming profile, set status to 'DEPRECATED' to deprecate an active roaming profile. If other parameters are changed for the roaming profile, the roaming profile are updated before it becomes 'ACTIVE' or 'DEPRECATED'.
+            example: ACTIVE
+            x-extensible-enum:
+            - ACTIVE
+            - DEPRECATED
+      - $ref: '#/components/schemas/RoamingProfile4g'
+    PostOrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          example: FOO_TYPE_OF_ORDER
+        status:
+          type: string
+          example: DRAFT
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
+        createdAt:
+          type: string
+          format: date-time
+    Patch4gRoamingProfileRequest:
+      type: object
+      properties:
         parameters:
-          id: '316'
-          description: Plastic SIM
-          maxQuantity: 0
-          minQuantity: 10
-          minOrderVolume: 1
-          orderIncrement: 0
-          earliestDeliveryDays: 14
-          priceCategory: 1
-          stockOrderFileShareId: '75654'
-          manufacturerOrderFileShareId: '75655'
-          warehouseOrderFileShareId: '75656'
-    UpdateDedicatedInternetServiceExample:
-      value:
-        type: UPDATE_DEDICATED_INTERNET_DATA_SERVICE
-        orderedFor: '3.77'
+          $ref: '#/components/schemas/Create4gRoamingProfile'
+    UpdateProfileSpecificationRequest:
+      required:
+      - orderedFor
+      - parameters
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_PROFILE_SPEC
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
         parameters:
-          id: '123456789'
-          apn: foo.com
-          enabled2g3g: true
-          enabled4g: true
-          enabled5gNsa: true
-          ipVersion: IPV4
-          uplinkBandwidth: 1024
-          downlinkBandwidth: 2048
-          useSupplierDnsIpV4: true
-          primaryDnsIpV4: 8.8.8.8
-          secondaryDnsIpV4: 8.8.4.4
-          useSupplierDnsIpV6: true
-          primaryDnsIpV6: 2001:4860:4860::8888
-          secondaryDnsIpV6: 2001:4860:4860::8844
-          numberOfSimultaneousSessions: 1000
-          sessionTimeout: No_SUPERVISION
-          idleTimeout: TIMER
-          sendIpV4Dns: false
-          sendIpV6Dns: false
-          restrictM2MAccess: true
-          firewallAllowlist:
-          - ipAddress: 111.222.111.222
-            portStart: 1810
-            portEnd: 1820
-            protocol: TCP
-          subscriptionPackages:
-          - foo_SP_01
-          name: Ericsson-foo.com
-          description: Some description
-          supplierDnsHosted: true
-          dnsPlmnIds:
-          - '123456'
-          - '777888'
-          packetGws:
-          - id: '26'
-            isPrimary: true
-          - id: '27'
-            isPrimary: false
-          sessionTimeoutTimer: 0
-          idleTimeoutTimer: 60
-          isDefaultAPN: false
-          apnOiReplacement: mncfoo.mccfoo.gprs
-          esmContextQosId: '123456'
-          esmProfileQosId: '123456'
-          pdpQosId: '123456'
-    Update2g3gRoamingProfileExample:
-      value:
-        type: UPDATE_2G3G_RP
-        orderedFor: '3.77'
+          $ref: '#/components/schemas/UpdateProfileSpecification'
+    GetOrderListResponse:
+      allOf:
+      - type: object
+        properties:
+          orders:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderBase'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /orders?cursor=DFVSDB3434%DFB%EYY445
+    Create2g3gRoamingProfile:
+      allOf:
+      - $ref: '#/components/schemas/RoamingProfile2g3g'
+      - type: object
+        properties:
+          operatorNetworkId:
+            type: string
+            example: '538'
+    Patch2g3gRoamingProfileRequest:
+      type: object
+      properties:
         parameters:
-          id: '1'
-          status: ACTIVE
-          name: RP90
-          description: RP90
-          globalTitles:
-          - '164780001'
-          - '2250505987'
-          - '32468'
-          - '32475'
-          - '7901106'
-          - '7901154'
-          - '790116'
-          - '7901472'
-          - '790160'
-          - '799426'
-          - '99292'
-          - '99293'
-    PatchDedicatedInternetServiceExample:
-      value:
+          $ref: '#/components/schemas/Create2g3gRoamingProfile'
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'An absolute URI that identifies the problem type. When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          format: uri
+          example: https://your.api.documentation.url
+          default: about:blank
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable
+
+            for engineers (usually not suited for non technical stakeholders and
+
+            not localized).
+
+            '
+          example: Internal Server Error
+        status:
+          minimum: 100
+          type: integer
+          description: 'The HTTP status code generated by the origin server for this occurrence
+
+            of the problem.
+
+            '
+          format: int32
+          example: 500
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: The server has encountered a situation that it does not know how to handle.
+        instance:
+          type: string
+          description: 'An absolute URI that identifies the specific occurrence of the problem.
+
+            It may or may not yield further information if dereferenced.
+
+            '
+    RoamingProfile4g:
+      allOf:
+      - $ref: '#/components/schemas/RoamingAreas'
+      - required:
+        - name
+        type: object
+        properties:
+          name:
+            maxLength: 255
+            minLength: 1
+            type: string
+            example: RP996LTE
+          description:
+            maxLength: 500
+            type: string
+            example: RP996LTE Offering
+    Create2g3gRoamingProfileRequest:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: CREATE_2G3G_RP
+        orderedFor:
+          type: string
+          description: the organization ID for which this order is made
+          example: '3.77'
         parameters:
-          apn: foo.com
-          enabled2g3g: true
-          enabled4g: true
-          enabled5gNsa: true
-          ipVersion: IPV4
-          uplinkBandwidth: 1024
-          downlinkBandwidth: 2048
-          useSupplierDnsIpV4: true
-          primaryDnsIpV4: 8.8.8.8
-          secondaryDnsIpV4: 8.8.4.4
-          useSupplierDnsIpV6: true
-          primaryDnsIpV6: 2001:4860:4860::8888
-          secondaryDnsIpV6: 2001:4860:4860::8844
-          numberOfSimultaneousSessions: 1000
-          sessionTimeout: No_SUPERVISION
-          idleTimeout: TIMER
-          sendIpV4Dns: false
-          sendIpV6Dns: false
-          restrictM2MAccess: true
-          firewallAllowlist:
-          - ipAddress: 111.222.111.222
-            portStart: 1810
-            portEnd: 1820
-            protocol: TCP
-          subscriptionPackages:
-          - foo_SP_01
-          name: Ericsson-foo.com
-          description: Some description
-          supplierDnsHosted: true
-          dnsPlmnIds:
-          - '123456'
-          - '777888'
-          packetGws:
-          - id: '26'
-            isPrimary: true
-          - id: '27'
-            isPrimary: false
-          sessionTimeoutTimer: 0
-          idleTimeoutTimer: 60
-          isDefaultAPN: false
-          apnOiReplacement: mncfoo.mccfoo.gprs
-          esmContextQosId: '123456'
-          esmProfileQosId: '123456'
-          pdpQosId: '123456'
-    CreateDedicatedInternetServiceExample:
-      value:
-        type: CREATE_DEDICATED_INTERNET_DATA_SERVICE
-        orderedFor: '3.77'
-        parameters:
-          apn: foo.com
-          enabled2g3g: true
-          enabled4g: true
-          enabled5gNsa: true
-          ipVersion: IPV4
-          uplinkBandwidth: 1024
-          downlinkBandwidth: 2048
-          useSupplierDnsIpV4: true
-          primaryDnsIpV4: 8.8.8.8
-          secondaryDnsIpV4: 8.8.4.4
-          useSupplierDnsIpV6: true
-          primaryDnsIpV6: 2001:4860:4860::8888
-          secondaryDnsIpV6: 2001:4860:4860::8844
-          numberOfSimultaneousSessions: 1000
-          sessionTimeout: No_SUPERVISION
-          idleTimeout: TIMER
-          sendIpV4Dns: false
-          sendIpV6Dns: false
-          restrictM2MAccess: true
-          firewallAllowlist:
-          - ipAddress: 111.222.111.222
-            portStart: 1810
-            portEnd: 1820
-            protocol: TCP
-          subscriptionPackages:
-          - foo_SP_01
-          name: Ericsson-foo.com
-          description: Some description
-          supplierDnsHosted: true
-          dnsPlmnIds:
-          - '123456'
-          - '777888'
-          packetGws:
-          - id: '26'
-            isPrimary: true
-          - id: '27'
-            isPrimary: false
-          sessionTimeoutTimer: 0
-          idleTimeoutTimer: 60
-          isDefaultAPN: false
-          apnOiReplacement: mncfoo.mccfoo.gprs
-          esmContextQosId: '123456'
-          esmProfileQosId: '123456'
-          pdpQosId: '123456'
-          operatorNetworkId: '538'
-    Create2g3gRoamingProfileExample:
-      value:
-        type: CREATE_2G3G_RP
-        orderedFor: '3.77'
-        parameters:
-          name: RP90
-          description: RP90
-          globalTitles:
-          - '22505987'
-          - '32468146810'
-          - '324681990'
-          - '324681991'
-          - '324750'
-          - '3247510'
-          - '3247513'
-          - '3247516'
-          - '4178777'
-          - '4178931'
-          - '7901164'
-          - '7901165'
-          - '7901167'
-          - '7901604'
-          - '97695318000'
-          operatorNetworkId: '538'
-    GetDedicatedInternetServiceExample:
-      value:
-        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        type: CREATE_DEDICATED_INTERNET_DATA_SERVICE
-        status: DRAFT
-        orderedFor: '3.77'
-        createdAt: 2022-07-12 03:48:02.759000+00:00
-        updatedAt: 2022-07-12 03:48:02.759000+00:00
-        parameters:
-          operatorNetworkId: '538'
-          apn: foo.com
-          enabled2g3g: true
-          enabled4g: true
-          enabled5gNsa: true
-          ipVersion: IPV4
-          uplinkBandwidth: 1024
-          downlinkBandwidth: 2048
-          useSupplierDnsIpV4: true
-          primaryDnsIpV4: 8.8.8.8
-          secondaryDnsIpV4: 8.8.4.4
-          useSupplierDnsIpV6: true
-          primaryDnsIpV6: 2001:4860:4860::8888
-          secondaryDnsIpV6: 2001:4860:4860::8844
-          numberOfSimultaneousSessions: 1000
-          sessionTimeout: No_SUPERVISION
-          idleTimeout: TIMER
-          sendIpV4Dns: false
-          sendIpV6Dns: false
-          restrictM2MAccess: true
-          firewallAllowlist:
-          - ipAddress: 111.222.111.222
-            portStart: 1810
-            portEnd: 1820
-            protocol: TCP
-          subscriptionPackages:
-          - foo_SP_01
-          name: Ericsson-foo.com
-          description: Some description
-          supplierDnsHosted: true
-          dnsPlmnIds:
-          - '123456'
-          - '777888'
-          packetGws:
-          - id: '26'
-            isPrimary: true
-          - id: '27'
-            isPrimary: false
-          sessionTimeoutTimer: 0
-          idleTimeoutTimer: 60
-          isDefaultAPN: false
-          apnOiReplacement: mncfoo.mccfoo.gprs
-          esmContextQosId: '123456'
-          esmProfileQosId: '123456'
-          pdpQosId: '123456'
-    CreateSimSpecificationExample:
-      value:
-        type: CREATE_SIM_SPEC
-        orderedFor: '3.77'
-        parameters:
-          name: 010_ZZRSCHEME00021
-          specificationId: 010_ZZRSCHEME00021
-          description: Plastic SIM
-          maxQuantity: 0
-          minQuantity: 10
-          minOrderVolume: 1
-          orderIncrement: 0
-          earliestDeliveryDays: 14
-          priceCategory: 1
-          stockOrderFileShareId: '75654'
-          manufacturerOrderFileShareId: '75655'
-          warehouseOrderFileShareId: '75656'
-          numberSchemeId: ZZRSCHEME00021
-          earlyBinding: false
-          operatorNetworkId: '51426'
-    Patch2g3gRoamingProfileExample:
-      value:
-        parameters:
-          name: RP90
-          description: RP90
-          globalTitles:
-          - '22505987'
-          - '32468146810'
-          - '324681990'
-          - '324681991'
-          - '324750'
-          - '3247510'
-          - '3247513'
-          - '3247516'
-          - '4178777'
-          - '4178931'
-          - '7901164'
-          - '7901165'
-          - '7901167'
-          - '7901604'
-          - '97695318000'
-          operatorNetworkId: '538'
-    UpdateProfileSpecificationExample:
-      value:
-        type: UPDATE_PROFILE_SPEC
-        orderedFor: '3.77'
-        parameters:
-          id: '564393'
-          description: Profile Spec for OpTest1
-          priceCategory: 1
-          stockOrderFileShareId: '564269'
-          manufacturerOrderFileShareId: '564268'
-          warehouseOrderFileShareId: '564270'
-          profileStockOrderFileShareId: '564271'
-          smdpId: 5.6.7.8
-          formSpecificationIds:
-          - '665200'
-          - '663679'
-          - '564305'
-    DeleteInventoryExample:
-      value:
-        type: DELETE_DEDICATED_INTERNET_DATA_SERVICE
-        orderedFor: '3.77'
-        parameters:
-          id: '1'
-    Get4gRoamingProfileExample:
-      value:
-        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        type: CREATE_4G_RP
-        status: DRAFT
-        orderedFor: '3.77'
-        createdAt: 2022-07-04 01:52:18.058000+00:00
-        updatedAt: 2022-07-04 01:52:18.058000+00:00
-        parameters:
-          name: RP998LTE
-          description: RP998LTE Offering
-          realms:
-          - epc.mnc860.mcc354.3gppnetwork.org
-          - epc.mnc010.mcc440.3gppnetwork.org
-          - epc.mnc002.mcc219.3gppnetwork.org
-          operatorNetworkId: '538'
-    Get2g3gRoamingProfileExample:
-      value:
-        id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        type: CREATE_2G3G_RP
-        status: DRAFT
-        orderedFor: '3.77'
-        createdAt: 2022-07-04 01:52:18.058000+00:00
-        updatedAt: 2022-07-04 01:52:18.058000+00:00
-        parameters:
-          name: RP90
-          description: RP90
-          globalTitles:
-          - '22505987'
-          - '32468146810'
-          - '324681990'
-          - '4178777'
-          - '4178931'
-          - '7901164'
-          - '7901165'
-          - '7901167'
-          - '7901604'
-          - '97695318000'
-          operatorNetworkId: '538'
-    Patch4gRoamingProfileExample:
-      value:
-        parameters:
-          name: RP998LTE
-          description: RP998LTE Offering
-          realms:
-          - epc.mnc860.mcc354.3gppnetwork.org
-          - epc.mnc010.mcc440.3gppnetwork.org
-          - epc.mnc002.mcc219.3gppnetwork.org
-          operatorNetworkId: '538'
-    Update4gRoamingProfileExample:
-      value:
-        type: UPDATE_4G_RP
-        orderedFor: '3.77'
-        parameters:
-          id: '1'
-          status: ACTIVE
-          name: RP998LTE
-          description: RP998LTE Offering
-          realms:
-          - epc.mnc860.mcc354.3gppnetwork.org
-          - epc.mnc010.mcc440.3gppnetwork.org
-          - epc.mnc020.mcc412.3gppnetwork.org
-    Create4gRoamingProfileExample:
-      value:
-        type: CREATE_4G_RP
-        orderedFor: '3.77'
-        parameters:
-          name: RP998LTE
-          description: RP998LTE Offering
-          realms:
-          - epc.mnc860.mcc354.3gppnetwork.org
-          - epc.mnc010.mcc440.3gppnetwork.org
-          - epc.mnc002.mcc219.3gppnetwork.org
-          operatorNetworkId: '538'
-    CreateFormSpecificationExample:
-      value:
-        type: CREATE_FORM_SPEC
-        orderedFor: '3.77'
-        parameters:
-          specificationId: FS OpTest1 001
-          name: FS OpTest1 001
-          description: Form Spec OpTest1 001
-          maxQuantity: 3
-          minQuantity: 100
-          minOrderVolume: 2
-          orderIncrement: 1
-          earliestDeliveryDays: 8
-          smsrId: 1.2.3.4
-          formSpecificationType: M2M
-          operatorNetworkId: '75654'
-          profileSpecificationIds:
-          - '564393'
-          - '766095'
-    CreateProfileSpecificationExample:
-      value:
-        type: CREATE_PROFILE_SPEC
-        orderedFor: '3.77'
-        parameters:
-          specificationId: PS OpTest1
-          name: PS OpTest1
-          description: Profile Spec for OpTest1
-          priceCategory: 1
-          stockOrderFileShareId: '564269'
-          manufacturerOrderFileShareId: '564268'
-          warehouseOrderFileShareId: '564270'
-          profileStockOrderFileShareId: '564271'
-          numberSchemeId: ZZRSCHEME00021
-          smdpId: 5.6.7.8
-          bootstrapProfileType: BOOTSTRAP
-          operatorNetworkId: '75654'
-          formSpecificationIds:
-          - '665200'
-          - '663679'
-          - '564305'
-    UpdateFormSpecificationExample:
-      value:
-        type: UPDATE_FORM_SPEC
-        orderedFor: '3.77'
-        parameters:
-          id: '75654'
-          description: Form Spec OpTest1 001
-          maxQuantity: 3
-          minQuantity: 100
-          minOrderVolume: 2
-          orderIncrement: 1
-          earliestDeliveryDays: 8
-          smsrId: 1.2.3.4
-          profileSpecificationIds:
-          - '564393'
-          - '766095'
-  headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
+          $ref: '#/components/schemas/Create2g3gRoamingProfile'
+    Update2g3gRoamingProfile:
+      allOf:
+      - required:
+        - id
+        type: object
+        properties:
+          id:
+            type: string
+            description: inventory id
+            example: '1'
+          status:
+            type: string
+            description: The value of status could be ACTIVE or DEPRECATED. Set status to 'ACTIVE' to update an active roaming profile, set status to 'DEPRECATED' to deprecate an active roaming profile. If other parameters are changed for the roaming profile, the roaming profile are updated before it becomes 'ACTIVE' or 'DEPRECATED'.
+            example: ACTIVE
+            x-extensible-enum:
+            - ACTIVE
+            - DEPRECATED
+      - $ref: '#/components/schemas/RoamingProfile2g3g'
+    Update4gRoamingProfileRequest:
+      required:
+      - orderedFor
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          example: UPDATE_4G_RP
+        orderedFor:
+          type: string
+          description: The organization ID for which this order is made.
+          example: '3.77'
+        schema:
+          $ref: '#/components/schemas/Update4gRoamingProfile'
+    GetVerificationListResponse:
+      allOf:
+      - type: object
+        properties:
+          verifications:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderVerificationItem'
+      - type: object
+        properties:
+          next:
+            type: string
+            description: Opaque string returned within the meta object response on endpoints which support pagination. Indicates that more results are available and can be used as the 'cursor' parameter in the next request to return the next page of results. The last page of results will not have a 'next' present.
+            example: /orders/verifications?cursor=cursorstring
   responses:
     RateLimitedResponse:
       headers:

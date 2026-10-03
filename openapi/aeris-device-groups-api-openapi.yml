@@ -233,21 +233,110 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 components:
+  responses:
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '413':
+      description: Requested data too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 413
+            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '404':
+      description: Not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Not found
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   parameters:
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
     startTime:
       name: startTime
       in: query
       required: true
       description: The start timestamp. (inclusive)
       example: '2021-07-01T06:30:00Z'
-      schema:
-        $ref: '#/components/schemas/dateTime'
-    endTime:
-      name: endTime
-      in: query
-      required: true
-      description: The end timestamp. (exclusive)
-      example: '2021-07-05T06:30:00Z'
       schema:
         $ref: '#/components/schemas/dateTime'
     accountId:
@@ -258,12 +347,6 @@ components:
       schema:
         $ref: '#/components/schemas/accountId'
       example: 1002000010
-    offset:
-      name: offset
-      in: query
-      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
-      schema:
-        $ref: '#/components/schemas/offset'
     deviceGroupId:
       name: deviceGroupId
       in: path
@@ -280,21 +363,21 @@ components:
         type: string
         pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
       example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
-    limit:
-      name: limit
+    endTime:
+      name: endTime
       in: query
-      description: The number of items to retrieve per page (10000 max).
+      required: true
+      description: The end timestamp. (exclusive)
+      example: '2021-07-05T06:30:00Z'
       schema:
-        $ref: '#/components/schemas/limit'
+        $ref: '#/components/schemas/dateTime'
   schemas:
-    DeviceGroupBase:
+    DeviceGroupResourceBase:
       type: object
       properties:
         name:
           type: string
         description:
-          type: string
-        colorCode:
           type: string
         deviceAssigningType:
           $ref: '#/components/schemas/DeviceGroupAssigningType'
@@ -302,6 +385,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeviceCustomField'
+          description: Information about custom fields. Fill if deviceAssigningType = AUTO_BY_CUSTOM_FIELDS, empty otherwise
         devices:
           type: array
           description: Information about devices. Fill if deviceAssigningType = MANUALLY, empty otherwise
@@ -310,23 +394,8 @@ components:
         tacCodes:
           type: array
           items:
-            $ref: '#/components/schemas/DeviceTACCodeInfo'
-        totalDevices:
-          type: integer
-        createdBy:
-          type: string
-        createdTime:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        updatedTime:
-          type: string
-          format: date-time
-        ranking:
-          type: integer
-        deviceGroupType:
-          $ref: '#/components/schemas/DeviceGroupType'
+            type: string
+          description: Information about tac codes. Fill if deviceAssigningType = AUTO_BY_TAC_CODES, empty otherwise
         servicePlan:
           type: string
           deprecated: true
@@ -335,76 +404,13 @@ components:
           type: array
           items:
             type: string
-        enforcementRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/EnforcementRuleBase'
-        locationListIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-    total:
-      type: integer
-      format: int64
-      description: Total number of items available.
-      example: 1
-      minimum: 0
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
-    limit:
-      type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
-    Device:
-      type: object
-      required:
-      - iccid
-      - imsi
-      properties:
-        iccid:
-          type: string
-          description: iccid of device
-          maxLength: 50
-        imsi:
-          type: string
-          description: imsi of device
-          maxLength: 50
-    accountId:
-      description: Account Id.
-      type: integer
-      format: int32
-      example: 10407
-      minimum: 0
-    DeviceCustomField:
-      type: object
-      description: Information about custom fields. Fill if deviceAssigningType = AUTO_BY_CUSTOM_FIELDS, empty otherwise
-      required:
-      - customFieldId
-      - customFieldValue
-      properties:
-        customFieldId:
+        ranking:
           type: integer
-          format: int64
-          description: custom field id of group
-        customFieldValue:
-          type: string
-          description: custom field value of group
-          maxLength: 256
-    DeviceGroupCreateRequest:
-      allOf:
-      - $ref: '#/components/schemas/DeviceGroupResourceBase'
-      - type: object
-        properties:
-          deviceGroupType:
-            $ref: '#/components/schemas/DeviceGroupType'
+    DeviceGroupType:
+      type: string
+      enum:
+      - REPORTING
+      - ENFORCEMENT
     DeviceTACCodeInfo:
       type: object
       properties:
@@ -431,6 +437,83 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/DeviceGroup'
+    DeviceGroupAssigningType:
+      type: string
+      description: assign type
+      enum:
+      - AUTO_BY_TAC_CODES
+      - AUTO_BY_CUSTOM_FIELDS
+      - MANUALLY
+      - AUTO_BY_SERVICE_PLAN
+      example: AUTO_BY_TAC_CODES
+    enforcementRuleId:
+      description: Enforcement Rule identifier
+      type: integer
+      format: int64
+      example: 5102010
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    DeviceCustomField:
+      type: object
+      description: Information about custom fields. Fill if deviceAssigningType = AUTO_BY_CUSTOM_FIELDS, empty otherwise
+      required:
+      - customFieldId
+      - customFieldValue
+      properties:
+        customFieldId:
+          type: integer
+          format: int64
+          description: custom field id of group
+        customFieldValue:
+          type: string
+          description: custom field value of group
+          maxLength: 256
+    ScheduledReport:
+      type: object
+      properties:
+        reportId:
+          description: Report Id
+          type: string
+          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        statusEndpoint:
+          description: Report Status URL
+          type: string
+          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+    DeviceGroupCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/DeviceGroupResourceBase'
+      - type: object
+        properties:
+          deviceGroupType:
+            $ref: '#/components/schemas/DeviceGroupType'
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    DeviceGroupInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        colorCode:
+          type: string
+        deviceGroupType:
+          type: string
     DeviceGroupQueryRequest:
       type: object
       description: Search for name, assign type and created time range (set to null if don't want to filter)
@@ -489,12 +572,46 @@ components:
         isCountingActiveOnly:
           type: boolean
           default: true
-    DeviceGroupResourceBase:
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
+    DeviceGroup:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: integer
+      - $ref: '#/components/schemas/DeviceGroupBase'
+    DeviceGroupUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/DeviceGroupResourceBase'
+    EnforcementRuleBase:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/enforcementRuleId'
+        name:
+          type: string
+        status:
+          type: string
+        apn:
+          type: string
+    DeviceGroupBase:
       type: object
       properties:
         name:
           type: string
         description:
+          type: string
+        colorCode:
           type: string
         deviceAssigningType:
           $ref: '#/components/schemas/DeviceGroupAssigningType'
@@ -502,7 +619,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeviceCustomField'
-          description: Information about custom fields. Fill if deviceAssigningType = AUTO_BY_CUSTOM_FIELDS, empty otherwise
         devices:
           type: array
           description: Information about devices. Fill if deviceAssigningType = MANUALLY, empty otherwise
@@ -511,8 +627,23 @@ components:
         tacCodes:
           type: array
           items:
-            type: string
-          description: Information about tac codes. Fill if deviceAssigningType = AUTO_BY_TAC_CODES, empty otherwise
+            $ref: '#/components/schemas/DeviceTACCodeInfo'
+        totalDevices:
+          type: integer
+        createdBy:
+          type: string
+        createdTime:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        updatedTime:
+          type: string
+          format: date-time
+        ranking:
+          type: integer
+        deviceGroupType:
+          $ref: '#/components/schemas/DeviceGroupType'
         servicePlan:
           type: string
           deprecated: true
@@ -521,8 +652,41 @@ components:
           type: array
           items:
             type: string
-        ranking:
-          type: integer
+        enforcementRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnforcementRuleBase'
+        locationListIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    Device:
+      type: object
+      required:
+      - iccid
+      - imsi
+      properties:
+        iccid:
+          type: string
+          description: iccid of device
+          maxLength: 50
+        imsi:
+          type: string
+          description: imsi of device
+          maxLength: 50
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
     Error:
       type: object
       properties:
@@ -546,57 +710,6 @@ components:
           type: string
           description: Trace Id
           example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    DeviceGroupType:
-      type: string
-      enum:
-      - REPORTING
-      - ENFORCEMENT
-    DeviceGroupAssigningType:
-      type: string
-      description: assign type
-      enum:
-      - AUTO_BY_TAC_CODES
-      - AUTO_BY_CUSTOM_FIELDS
-      - MANUALLY
-      - AUTO_BY_SERVICE_PLAN
-      example: AUTO_BY_TAC_CODES
-    DeviceGroupUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/DeviceGroupResourceBase'
-    dateTime:
-      description: ISO 8601 date time
-      type: string
-      format: date-time
-      example: '2021-07-04T17:36:47Z'
-    Pagination:
-      type: object
-      properties:
-        total:
-          $ref: '#/components/schemas/total'
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
-    DeviceGroup:
-      allOf:
-      - type: object
-        properties:
-          id:
-            type: integer
-      - $ref: '#/components/schemas/DeviceGroupBase'
-    ScheduledReport:
-      type: object
-      properties:
-        reportId:
-          description: Report Id
-          type: string
-          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
-        status:
-          $ref: '#/components/schemas/ReportStatus'
-        statusEndpoint:
-          description: Report Status URL
-          type: string
-          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
     ReportStatus:
       description: Report status
       type: string
@@ -606,119 +719,6 @@ components:
       - Processing
       - Error
       - NotStarted
-    enforcementRuleId:
-      description: Enforcement Rule identifier
-      type: integer
-      format: int64
-      example: 5102010
-    EnforcementRuleBase:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/enforcementRuleId'
-        name:
-          type: string
-        status:
-          type: string
-        apn:
-          type: string
-    DeviceGroupInfo:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        colorCode:
-          type: string
-        deviceGroupType:
-          type: string
-  responses:
-    '429':
-      description: Too many requests.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 429
-            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '401':
-      description: Not authorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '400':
-      description: Bad Request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Bad Request
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '404':
-      description: Not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Not found
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '413':
-      description: Requested data too large
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 413
-            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Internal Server Error
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

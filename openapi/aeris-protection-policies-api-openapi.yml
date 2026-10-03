@@ -170,66 +170,31 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 components:
-  parameters:
-    startTime:
-      name: startTime
-      in: query
-      required: true
-      description: The start timestamp. (inclusive)
-      example: '2021-07-01T06:30:00Z'
-      schema:
-        $ref: '#/components/schemas/dateTime'
-    protectionPolicyId:
-      name: protectionPolicyId
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/protectionPolicyId'
-    endTime:
-      name: endTime
-      in: query
-      required: true
-      description: The end timestamp. (exclusive)
-      example: '2021-07-05T06:30:00Z'
-      schema:
-        $ref: '#/components/schemas/dateTime'
-    sort:
-      name: sort
-      in: query
-      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
-      example: deviceId,updateTime:desc
-      schema:
-        type: string
-    accountId:
-      name: X-Watchtower-Account-Id
-      in: header
-      description: Account Id
-      required: true
-      schema:
-        $ref: '#/components/schemas/accountId'
-      example: 1002000010
-    offset:
-      name: offset
-      in: query
-      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
-      schema:
-        $ref: '#/components/schemas/offset'
-    authorization:
-      name: Authorization
-      in: header
-      description: Bearer Token for authentication
-      required: true
-      schema:
-        type: string
-        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
-      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
-    limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
   responses:
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '429':
       description: Too many requests.
       content:
@@ -254,18 +219,6 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '400':
       description: Bad Request.
       content:
@@ -278,34 +231,83 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Internal Server Error
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+    startTime:
+      name: startTime
+      in: query
+      required: true
+      description: The start timestamp. (inclusive)
+      example: '2021-07-01T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    sort:
+      name: sort
+      in: query
+      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
+      example: deviceId,updateTime:desc
+      schema:
+        type: string
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    protectionPolicyId:
+      name: protectionPolicyId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/protectionPolicyId'
+    endTime:
+      name: endTime
+      in: query
+      required: true
+      description: The end timestamp. (exclusive)
+      example: '2021-07-05T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
   schemas:
-    total:
-      type: integer
-      format: int64
-      description: Total number of items available.
-      example: 1
-      minimum: 0
+    endpointFQDN:
+      description: Fully qualified domain name of the endpoint
+      type: string
+      maxLength: 253
+      minLength: 1
     ProtectionPolicyCreateRequest:
       allOf:
       - $ref: '#/components/schemas/ProtectionPolicyBase'
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
+    PagedProtectionPolicies:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProtectionPolicy'
     limit:
       type: integer
       format: int32
@@ -313,6 +315,59 @@ components:
       minimum: 1
       maximum: 10000
       default: 20
+    protectionPolicyId:
+      description: Protection Policy identifier
+      type: integer
+      format: int64
+      example: 21091
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+    ProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyBase'
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/protectionPolicyId'
+          status:
+            type: string
+          createdBy:
+            type: string
+          createdTime:
+            type: string
+            format: date-time
+          updatedBy:
+            type: string
+          updatedTime:
+            type: string
+            format: date-time
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    ProtectionPolicyUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyBase'
     accountId:
       description: Account Id.
       type: integer
@@ -345,25 +400,6 @@ components:
           type: integer
         enforcementRuleName:
           type: string
-    ProtectionPolicy:
-      allOf:
-      - $ref: '#/components/schemas/ProtectionPolicyBase'
-      - type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/protectionPolicyId'
-          status:
-            type: string
-          createdBy:
-            type: string
-          createdTime:
-            type: string
-            format: date-time
-          updatedBy:
-            type: string
-          updatedTime:
-            type: string
-            format: date-time
     ProtectionPolicyBase:
       type: object
       properties:
@@ -400,23 +436,6 @@ components:
           items:
             type: string
             example: 8080
-    ProtectionPolicyUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/ProtectionPolicyBase'
-    PagedProtectionPolicies:
-      allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/ProtectionPolicy'
-    protectionPolicyId:
-      description: Protection Policy identifier
-      type: integer
-      format: int64
-      example: 21091
     Error:
       type: object
       properties:
@@ -440,25 +459,6 @@ components:
           type: string
           description: Trace Id
           example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    dateTime:
-      description: ISO 8601 date time
-      type: string
-      format: date-time
-      example: '2021-07-04T17:36:47Z'
-    Pagination:
-      type: object
-      properties:
-        total:
-          $ref: '#/components/schemas/total'
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
-    endpointFQDN:
-      description: Fully qualified domain name of the endpoint
-      type: string
-      maxLength: 253
-      minLength: 1
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

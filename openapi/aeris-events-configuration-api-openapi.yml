@@ -163,31 +163,33 @@ paths:
           $ref: '#/components/responses/500'
 components:
   schemas:
-    EventSuppressionConfig:
+    EventSuppressionConfigCreateRequest:
       allOf:
-      - type: object
-        properties:
-          id:
-            description: Event suppression config Id
-            type: integer
-            format: int64
       - $ref: '#/components/schemas/EventSuppressionConfigBase'
       - type: object
         properties:
-          eventConfigId:
-            type: integer
-            description: Event config Id
-            example: 134242
-          detectionState:
-            type: string
           dismissPastEvents:
             type: boolean
-          lastModifiedBy:
-            description: Last modified user
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    EventSuppressionTargetDevices:
+      type: object
+      properties:
+        iccid:
+          type: array
+          description: List of Integrated Circuit Card Identifier of the device.
+          items:
             type: string
-            example: abc.xyz@aeris.com
-          lastModifiedTime:
-            $ref: '#/components/schemas/dateTime'
+          example:
+          - 891004234814455936
+          - 891004234814455937
+      required:
+      - iccid
     PagedEventConfigsTable:
       allOf:
       - $ref: '#/components/schemas/Pagination'
@@ -197,6 +199,73 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/EventConfig'
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    EventConfigSuppressionPeriodType:
+      type: string
+      enum:
+      - ALWAYS
+      - DURING_TIME_PERIOD
+    ConfigItem:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the configuration field.
+          example: Minimum Threshold
+        value:
+          type: string
+          description: Value of the configuration field.
+          example: 1024
+    EventConfig:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Event Config Id
+          example: 134242
+        eventTypeId:
+          description: Event Type Id
+          type: integer
+          example: 10
+        type:
+          description: Event Type
+          type: string
+          example: Traffic Spike
+        detectionState:
+          type: string
+          enum:
+          - DISMISSING
+          - ACTIVE_FOR_ALL_DEVICES
+          - MULTIPLE_STATES
+        suppressionConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSuppressionConfig'
+        lastModifiedBy:
+          description: Last modified user
+          type: string
+          example: abc.xyz@aeris.com
+        lastModifiedTime:
+          $ref: '#/components/schemas/dateTime'
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
     EventSuppressionMatchingTraffic:
       type: object
       properties:
@@ -253,36 +322,6 @@ components:
       description: Total number of items available.
       example: 1
       minimum: 0
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
-    limit:
-      type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
-    ConfigItem:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the configuration field.
-          example: Minimum Threshold
-        value:
-          type: string
-          description: Value of the configuration field.
-          example: 1024
-    accountId:
-      description: Account Id.
-      type: integer
-      format: int32
-      example: 10407
-      minimum: 0
     EventSuppressionConfigBase:
       type: object
       properties:
@@ -314,62 +353,40 @@ components:
           description: Comment for the suppression config
           type: string
           example: Just for truck
-    EventConfigSuppressionPeriodType:
-      type: string
-      enum:
-      - ALWAYS
-      - DURING_TIME_PERIOD
-    EventSuppressionConfigCreateRequest:
+    EventSuppressionConfigUpdateRequest:
       allOf:
+      - $ref: '#/components/schemas/EventSuppressionConfigBase'
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    EventSuppressionConfig:
+      allOf:
+      - type: object
+        properties:
+          id:
+            description: Event suppression config Id
+            type: integer
+            format: int64
       - $ref: '#/components/schemas/EventSuppressionConfigBase'
       - type: object
         properties:
+          eventConfigId:
+            type: integer
+            description: Event config Id
+            example: 134242
+          detectionState:
+            type: string
           dismissPastEvents:
             type: boolean
-    EventConfig:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Event Config Id
-          example: 134242
-        eventTypeId:
-          description: Event Type Id
-          type: integer
-          example: 10
-        type:
-          description: Event Type
-          type: string
-          example: Traffic Spike
-        detectionState:
-          type: string
-          enum:
-          - DISMISSING
-          - ACTIVE_FOR_ALL_DEVICES
-          - MULTIPLE_STATES
-        suppressionConfig:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventSuppressionConfig'
-        lastModifiedBy:
-          description: Last modified user
-          type: string
-          example: abc.xyz@aeris.com
-        lastModifiedTime:
-          $ref: '#/components/schemas/dateTime'
-    EventSuppressionTargetDevices:
-      type: object
-      properties:
-        iccid:
-          type: array
-          description: List of Integrated Circuit Card Identifier of the device.
-          items:
+          lastModifiedBy:
+            description: Last modified user
             type: string
-          example:
-          - 891004234814455936
-          - 891004234814455937
-      required:
-      - iccid
+            example: abc.xyz@aeris.com
+          lastModifiedTime:
+            $ref: '#/components/schemas/dateTime'
     Error:
       type: object
       properties:
@@ -393,24 +410,31 @@ components:
           type: string
           description: Trace Id
           example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    EventSuppressionConfigUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/EventSuppressionConfigBase'
-    dateTime:
-      description: ISO 8601 date time
-      type: string
-      format: date-time
-      example: '2021-07-04T17:36:47Z'
-    Pagination:
-      type: object
-      properties:
-        total:
-          $ref: '#/components/schemas/total'
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
   responses:
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '429':
       description: Too many requests.
       content:
@@ -435,18 +459,6 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '400':
       description: Bad Request.
       content:
@@ -456,18 +468,6 @@ components:
           example:
             code: 400
             message: Bad Request
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Internal Server Error
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
@@ -488,13 +488,6 @@ components:
       schema:
         $ref: '#/components/schemas/accountId'
       example: 1002000010
-    eventConfigId:
-      name: eventConfigId
-      in: path
-      description: Event Configuration Id
-      required: true
-      schema:
-        type: integer
     authorization:
       name: Authorization
       in: header
@@ -504,6 +497,13 @@ components:
         type: string
         pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
       example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    eventConfigId:
+      name: eventConfigId
+      in: path
+      description: Event Configuration Id
+      required: true
+      schema:
+        type: integer
     suppressionConfigId:
       name: suppressionConfigId
       in: path

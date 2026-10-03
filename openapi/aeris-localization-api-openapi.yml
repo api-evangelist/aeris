@@ -1234,20 +1234,6 @@ paths:
       - token: []
 components:
   schemas:
-    ProfileAllocation:
-      required:
-      - euiccAgreementId
-      - euiccId
-      - localeId
-      type: object
-      properties:
-        euiccId:
-          type: string
-        euiccAgreementId:
-          type: string
-        localeId:
-          type: string
-      description: Profile allocation request model
     FormSpecification:
       required:
       - earliestDeliveryDate
@@ -1271,16 +1257,75 @@ components:
           type: integer
           format: int32
       description: FormSpecification response model
-    ProfileSpecification:
+    ServiceContract:
       required:
       - id
+      - name
+      - subscriptionPackages
       type: object
       properties:
         id:
           type: string
         description:
           type: string
-      description: ProfileSpecification response model
+        name:
+          type: string
+        subscriptionPackages:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionPackage'
+      description: ServiceContract response model
+    EuiccSubscriptionExtended:
+      required:
+      - iccid
+      - localeList
+      - operatorId
+      - profileStatus
+      - state
+      type: object
+      properties:
+        imsi:
+          type:
+          - string
+          - 'null'
+        state:
+          type: string
+          enum:
+          - NEW
+          - ACTIVE
+          - DEACTIVATED
+          - PAUSE
+          - TERMINATED
+          - PENDING_TERMINATION
+          - REMOVED
+          - OPERATOR_BLOCKED
+          - ACTIVE_NO_BILLING
+          - DEACTIVATED_NO_BILLING
+          - UNKNOWN
+          - EXTERNAL_PROFILE
+        operatorId:
+          type: string
+        operatorName:
+          type:
+          - string
+          - 'null'
+        msisdn:
+          type:
+          - string
+          - 'null'
+        iccid:
+          type: string
+        profileStatus:
+          type: string
+          enum:
+          - OPERATIONAL
+          - DOWNLOAD_FAILED
+          - ALLOCATED
+        localeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuiccLocale'
+      description: Model for subscription information when fetching euicc information
     EuiccExtended:
       required:
       - companyId
@@ -1348,10 +1393,30 @@ components:
           type: integer
           format: int64
       description: Euicc extended response model
-    Euicc:
+    ProfileSpecification:
       required:
-      - companyId
-      - enabledIcc
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+      description: ProfileSpecification response model
+    EuiccLocale:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      description: Euicc locale response model
+    EuiccExtendedV2:
+      required:
+      - organizationId
       - euiccId
       - localizationTableId
       - state
@@ -1361,12 +1426,12 @@ components:
         subscriptions:
           type: array
           items:
-            $ref: '#/components/schemas/EuiccSubscription'
+            $ref: '#/components/schemas/EuiccSubscriptionExtended'
         euiccId:
           type: string
-        companyId:
+        organizationId:
           type: string
-        companyName:
+        organizationName:
           type:
           - string
           - 'null'
@@ -1408,30 +1473,14 @@ components:
           type:
           - string
           - 'null'
-        bootstrapCompanyId:
+        bootstrapOrganizationId:
           type:
           - string
           - 'null'
         localizationTableId:
           type: integer
           format: int64
-      description: Euicc response model
-    PrepareUnlinkedEsimProfileDto:
-      required:
-      - count
-      - euiccAgreementId
-      - localeId
-      type: object
-      properties:
-        count:
-          maximum: 10000
-          minimum: 1
-          type: integer
-          format: int64
-        euiccAgreementId:
-          type: string
-        localeId:
-          type: string
+      description: Euicc extended response model
     EuiccV2:
       required:
       - organizationId
@@ -1499,6 +1548,121 @@ components:
           type: integer
           format: int64
       description: Euicc response model
+    ServiceRequest:
+      required:
+      - companyId
+      - companyName
+      - createdBy
+      - lastUpdated
+      - serviceRequestId
+      - serviceRequestState
+      - serviceRequestType
+      - size
+      - timeCreated
+      type: object
+      properties:
+        serviceRequestId:
+          type: string
+        serviceRequestType:
+          type: string
+          enum:
+          - CESS
+          - CHANGE_SUBSCRIPTIONOWNER
+          - CHANGE_SUBSCRIPTIONREGION
+          - CHANGE_SUBSCRIPTIONSTATE
+          - CHANGE_SUBSCRIPTIONPACKAGE
+          - CHANGE_SUBSCRIPTIONLABEL
+          - CHANGE_SUBSCRIPTIONSTATE_PARENT
+          - CHANGE_SUBSCRIPTIONPACKAGE_PARENT
+          - CHANGE_SUBSCRIPTIONOWNER_PARENT
+          - CHANGE_SUBSCRIPTIONREGION_PARENT
+          - CHANGE_SUBSCRIPTION_NOTE
+          - CHANGE_ALTROAMINGPROVIDER
+          - CHANGE_SUBSCRIPTIONIP
+          - DEVICE_RECONNECT
+          - EUICC_ORDER
+          - EUICC_PROFILE_ORDER
+          - EUICC_STOCK_ORDER
+          - EUICC_UPDATE_LABEL
+          - EUICC_LOCALIZATION
+          - EUICC_DELOCALIZATION
+          - EUICC_LOCALIZATION_BATCH
+          - EUICC_DELOCALIZATION_BATCH
+          - EUICC_ADD_LOCALE
+          - EUICC_ADD_LOCALE_BATCH
+          - EUICC_REMOVE_LOCALE
+          - EUICC_DOWNLOAD_PROFILE
+          - EUICC_DELETE_PROFILE
+          - EUICC_RESET_COUNTERS
+          - EUICC_SET_FALLBACK_ATTR
+          - SIM_ORDER
+          - STOCK_ORDER
+          - TRIGGERPACKAGE_ASSIGN
+          - TRIGGERPACKAGE_REMOVE
+          - INDIVIDUAL_APN_UPDATE
+          - SECURITY_LOCK_STATE
+          - SECURITY_UNLOCK_STATE
+          - LOCK_SUBSCRIPTIONSTATE
+          - UNLOCK_SUBSCRIPTIONSTATE
+          - PREPARE_CONSUMER_PROFILE
+          - UNKNOWN
+        serviceRequestState:
+          type: string
+          enum:
+          - IN_PROGRESS
+          - PENDING
+          - CANCELED
+          - REJECTED
+          - COMPLETED
+          - COMPLETED_PARTIALLY
+          - FAILED
+          - FIXED
+          - ARCHIVED
+          - NOT_REQUIRED
+          - UNKNOWN
+        createdBy:
+          type: string
+        companyId:
+          type: string
+        companyName:
+          type: string
+        timeCreated:
+          $ref: '#/components/schemas/Instant'
+        lastUpdated:
+          $ref: '#/components/schemas/Instant'
+        size:
+          type: integer
+          format: int32
+      description: ServiceRequest response model
+    SubscriptionPackage:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+      description: SubscriptionPackage response model
+    ServiceRequestResponse:
+      required:
+      - serviceRequestId
+      - success
+      type: object
+      properties:
+        serviceRequestId:
+          type: string
+        success:
+          type: boolean
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Error message in case of unsuccesfull service request
+      description: Service request response model
     Subcription:
       required:
       - companyId
@@ -1599,9 +1763,102 @@ components:
           - string
           - 'null'
       description: Model for subscription
-    EuiccExtendedV2:
+    Instant:
+      type: object
+      properties:
+        epochSecond:
+          type: integer
+          format: int64
+        nano:
+          type: integer
+          format: int64
+    EuiccProfile:
       required:
-      - organizationId
+      - iccid
+      type: object
+      properties:
+        iccid:
+          type: string
+        imsi:
+          type:
+          - string
+          - 'null'
+        msisdn:
+          type:
+          - string
+          - 'null'
+      description: Profile allocation response model
+    PrepareUnlinkedEsimProfileDto:
+      required:
+      - count
+      - euiccAgreementId
+      - localeId
+      type: object
+      properties:
+        count:
+          maximum: 10000
+          minimum: 1
+          type: integer
+          format: int64
+        euiccAgreementId:
+          type: string
+        localeId:
+          type: string
+    LabelUpdate:
+      required:
+      - companyId
+      - euiccIds
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: Company id of the requester
+        label:
+          type: string
+          description: Updated label or omitted for clearing the label
+        euiccIds:
+          maxItems: 10000
+          minItems: 1
+          type: array
+          description: One or more 32 hexadecimal digit eUICC IDs
+          items:
+            type: string
+      description: eUICC label update request model
+    PrepareEsimProfileDto:
+      required:
+      - euiccAgreementId
+      - euiccIds
+      - localeId
+      type: object
+      properties:
+        euiccIds:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        euiccAgreementId:
+          type: string
+        localeId:
+          type: string
+    EuiccAgreementList:
+      required:
+      - euiccAgreements
+      - serviceContracts
+      type: object
+      properties:
+        euiccAgreements:
+          type: array
+          items:
+            $ref: '#/components/schemas/EuiccAgreement'
+        serviceContracts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceContract'
+      description: Euicc agreement list response model
+    Euicc:
+      required:
+      - companyId
+      - enabledIcc
       - euiccId
       - localizationTableId
       - state
@@ -1611,12 +1868,12 @@ components:
         subscriptions:
           type: array
           items:
-            $ref: '#/components/schemas/EuiccSubscriptionExtended'
+            $ref: '#/components/schemas/EuiccSubscription'
         euiccId:
           type: string
-        organizationId:
+        companyId:
           type: string
-        organizationName:
+        companyName:
           type:
           - string
           - 'null'
@@ -1658,121 +1915,14 @@ components:
           type:
           - string
           - 'null'
-        bootstrapOrganizationId:
+        bootstrapCompanyId:
           type:
           - string
           - 'null'
         localizationTableId:
           type: integer
           format: int64
-      description: Euicc extended response model
-    EuiccAgreement:
-      required:
-      - id
-      - leadOperator
-      - name
-      - profileSpecifications
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        formSpecification:
-          allOf:
-          - $ref: '#/components/schemas/FormSpecification'
-        leadOperator:
-          type: string
-        profileSpecifications:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProfileSpecification'
-      description: EuiccAgreement response model
-    ServiceContract:
-      required:
-      - id
-      - name
-      - subscriptionPackages
-      type: object
-      properties:
-        id:
-          type: string
-        description:
-          type: string
-        name:
-          type: string
-        subscriptionPackages:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionPackage'
-      description: ServiceContract response model
-    EuiccSubscriptionExtended:
-      required:
-      - iccid
-      - localeList
-      - operatorId
-      - profileStatus
-      - state
-      type: object
-      properties:
-        imsi:
-          type:
-          - string
-          - 'null'
-        state:
-          type: string
-          enum:
-          - NEW
-          - ACTIVE
-          - DEACTIVATED
-          - PAUSE
-          - TERMINATED
-          - PENDING_TERMINATION
-          - REMOVED
-          - OPERATOR_BLOCKED
-          - ACTIVE_NO_BILLING
-          - DEACTIVATED_NO_BILLING
-          - UNKNOWN
-          - EXTERNAL_PROFILE
-        operatorId:
-          type: string
-        operatorName:
-          type:
-          - string
-          - 'null'
-        msisdn:
-          type:
-          - string
-          - 'null'
-        iccid:
-          type: string
-        profileStatus:
-          type: string
-          enum:
-          - OPERATIONAL
-          - DOWNLOAD_FAILED
-          - ALLOCATED
-        localeList:
-          type: array
-          items:
-            $ref: '#/components/schemas/EuiccLocale'
-      description: Model for subscription information when fetching euicc information
-    ServiceRequestResponse:
-      required:
-      - serviceRequestId
-      - success
-      type: object
-      properties:
-        serviceRequestId:
-          type: string
-        success:
-          type: boolean
-        errorMessage:
-          type:
-          - string
-          - 'null'
-          description: Error message in case of unsuccesfull service request
-      description: Service request response model
+      description: Euicc response model
     Error:
       required:
       - code
@@ -1800,166 +1950,6 @@ components:
           description: Detailed error message
           example: Could not parse JSON body
       description: Error response model
-    ServiceRequest:
-      required:
-      - companyId
-      - companyName
-      - createdBy
-      - lastUpdated
-      - serviceRequestId
-      - serviceRequestState
-      - serviceRequestType
-      - size
-      - timeCreated
-      type: object
-      properties:
-        serviceRequestId:
-          type: string
-        serviceRequestType:
-          type: string
-          enum:
-          - CESS
-          - CHANGE_SUBSCRIPTIONOWNER
-          - CHANGE_SUBSCRIPTIONREGION
-          - CHANGE_SUBSCRIPTIONSTATE
-          - CHANGE_SUBSCRIPTIONPACKAGE
-          - CHANGE_SUBSCRIPTIONLABEL
-          - CHANGE_SUBSCRIPTIONSTATE_PARENT
-          - CHANGE_SUBSCRIPTIONPACKAGE_PARENT
-          - CHANGE_SUBSCRIPTIONOWNER_PARENT
-          - CHANGE_SUBSCRIPTIONREGION_PARENT
-          - CHANGE_SUBSCRIPTION_NOTE
-          - CHANGE_ALTROAMINGPROVIDER
-          - CHANGE_SUBSCRIPTIONIP
-          - DEVICE_RECONNECT
-          - EUICC_ORDER
-          - EUICC_PROFILE_ORDER
-          - EUICC_STOCK_ORDER
-          - EUICC_UPDATE_LABEL
-          - EUICC_LOCALIZATION
-          - EUICC_DELOCALIZATION
-          - EUICC_LOCALIZATION_BATCH
-          - EUICC_DELOCALIZATION_BATCH
-          - EUICC_ADD_LOCALE
-          - EUICC_ADD_LOCALE_BATCH
-          - EUICC_REMOVE_LOCALE
-          - EUICC_DOWNLOAD_PROFILE
-          - EUICC_DELETE_PROFILE
-          - EUICC_RESET_COUNTERS
-          - EUICC_SET_FALLBACK_ATTR
-          - SIM_ORDER
-          - STOCK_ORDER
-          - TRIGGERPACKAGE_ASSIGN
-          - TRIGGERPACKAGE_REMOVE
-          - INDIVIDUAL_APN_UPDATE
-          - SECURITY_LOCK_STATE
-          - SECURITY_UNLOCK_STATE
-          - LOCK_SUBSCRIPTIONSTATE
-          - UNLOCK_SUBSCRIPTIONSTATE
-          - PREPARE_CONSUMER_PROFILE
-          - UNKNOWN
-        serviceRequestState:
-          type: string
-          enum:
-          - IN_PROGRESS
-          - PENDING
-          - CANCELED
-          - REJECTED
-          - COMPLETED
-          - COMPLETED_PARTIALLY
-          - FAILED
-          - FIXED
-          - ARCHIVED
-          - NOT_REQUIRED
-          - UNKNOWN
-        createdBy:
-          type: string
-        companyId:
-          type: string
-        companyName:
-          type: string
-        timeCreated:
-          $ref: '#/components/schemas/Instant'
-        lastUpdated:
-          $ref: '#/components/schemas/Instant'
-        size:
-          type: integer
-          format: int32
-      description: ServiceRequest response model
-    EuiccProfile:
-      required:
-      - iccid
-      type: object
-      properties:
-        iccid:
-          type: string
-        imsi:
-          type:
-          - string
-          - 'null'
-        msisdn:
-          type:
-          - string
-          - 'null'
-      description: Profile allocation response model
-    Instant:
-      type: object
-      properties:
-        epochSecond:
-          type: integer
-          format: int64
-        nano:
-          type: integer
-          format: int64
-    PrepareEsimProfileDto:
-      required:
-      - euiccAgreementId
-      - euiccIds
-      - localeId
-      type: object
-      properties:
-        euiccIds:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        euiccAgreementId:
-          type: string
-        localeId:
-          type: string
-    LabelUpdate:
-      required:
-      - companyId
-      - euiccIds
-      type: object
-      properties:
-        companyId:
-          type: string
-          description: Company id of the requester
-        label:
-          type: string
-          description: Updated label or omitted for clearing the label
-        euiccIds:
-          maxItems: 10000
-          minItems: 1
-          type: array
-          description: One or more 32 hexadecimal digit eUICC IDs
-          items:
-            type: string
-      description: eUICC label update request model
-    SubscriptionPackage:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-        description:
-          type: string
-        name:
-          type: string
-      description: SubscriptionPackage response model
     EuiccSubscription:
       required:
       - iccid
@@ -2002,6 +1992,42 @@ components:
           items:
             $ref: '#/components/schemas/EuiccLocale'
       description: Model for minimal subscription information when fetching euicc information
+    EuiccAgreement:
+      required:
+      - id
+      - leadOperator
+      - name
+      - profileSpecifications
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        formSpecification:
+          allOf:
+          - $ref: '#/components/schemas/FormSpecification'
+        leadOperator:
+          type: string
+        profileSpecifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileSpecification'
+      description: EuiccAgreement response model
+    ProfileAllocation:
+      required:
+      - euiccAgreementId
+      - euiccId
+      - localeId
+      type: object
+      properties:
+        euiccId:
+          type: string
+        euiccAgreementId:
+          type: string
+        localeId:
+          type: string
+      description: Profile allocation request model
     Company:
       required:
       - id
@@ -2013,32 +2039,6 @@ components:
         name:
           type: string
       description: Company model
-    EuiccLocale:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-      description: Euicc locale response model
-    EuiccAgreementList:
-      required:
-      - euiccAgreements
-      - serviceContracts
-      type: object
-      properties:
-        euiccAgreements:
-          type: array
-          items:
-            $ref: '#/components/schemas/EuiccAgreement'
-        serviceContracts:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServiceContract'
-      description: Euicc agreement list response model
   parameters:
     Header-Accept:
       name: Accept

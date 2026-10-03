@@ -403,7 +403,7 @@ paths:
           $ref: '#/components/responses/500'
 components:
   schemas:
-    PagedApplicationActivityLog:
+    PagedLocationListActivityLog:
       allOf:
       - $ref: '#/components/schemas/Pagination'
       - type: object
@@ -411,7 +411,13 @@ components:
           data:
             type: array
             items:
-              $ref: '#/components/schemas/ApplicationActivityLog'
+              $ref: '#/components/schemas/LocationListActivityLog'
+    EventConfigActivityLogQuery:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
+    ApplicationActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLog'
     EventConfigActivityLog:
       allOf:
       - $ref: '#/components/schemas/BaseActivityLog'
@@ -423,6 +429,85 @@ components:
             $ref: '#/components/schemas/dateTime'
           suppressionPeriodEnd:
             $ref: '#/components/schemas/dateTime'
+    EventActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLog'
+      - type: object
+        properties:
+          occurrence:
+            type: integer
+            format: int64
+    EventActivityLogQuery:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
+      - type: object
+        properties:
+          occurrence:
+            type: integer
+            format: int64
+    ServiceConfigurationActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLog'
+    ServiceConfigurationActivityLogQuery:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    LocationListActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLog'
+    EnforcementRuleActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLog'
+      - type: object
+        properties:
+          error:
+            type: string
+    ScheduledReport:
+      type: object
+      properties:
+        reportId:
+          description: Report Id
+          type: string
+          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        statusEndpoint:
+          description: Report Status URL
+          type: string
+          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+    PagedProtectionPolicyActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProtectionPolicyActivityLog'
+    PagedEventActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/EventActivityLog'
+    PagedServiceConfigurationActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/ServiceConfigurationActivityLog'
     BaseActivityLogQueryRequest:
       type: object
       properties:
@@ -432,38 +517,16 @@ components:
           type: string
         userId:
           type: string
-    ProtectionPolicyActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLog'
-    total:
-      type: integer
-      format: int64
-      description: Total number of items available.
-      example: 1
-      minimum: 0
-    EventPolicyActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLog'
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
-    limit:
-      type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
-    ApplicationActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLog'
-    ServiceConfigurationActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLog'
-    PagedDeviceGroupActivityLog:
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    PagedEventConfigActivityLog:
       allOf:
       - $ref: '#/components/schemas/Pagination'
       - type: object
@@ -471,44 +534,69 @@ components:
           data:
             type: array
             items:
-              $ref: '#/components/schemas/DeviceGroupActivityLog'
-    EventActivityLogQuery:
+              $ref: '#/components/schemas/EventConfigActivityLog'
+    EventConfigSuppressionPeriodType:
+      type: string
+      enum:
+      - ALWAYS
+      - DURING_TIME_PERIOD
+    DeviceGroupInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        colorCode:
+          type: string
+        deviceGroupType:
+          type: string
+    ProtectionPolicyActivityLogQuery:
       allOf:
       - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
+    PagedEnforcementRuleActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
       - type: object
         properties:
-          occurrence:
-            type: integer
-            format: int64
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/EnforcementRuleActivityLog'
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
+    LocationListActivityLogQuery:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
+    ProtectionPolicyActivityLog:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLog'
+    DeviceGroupActivityLogQuery:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
     accountId:
       description: Account Id.
       type: integer
       format: int32
       example: 10407
       minimum: 0
-    DeviceGroupActivityLogQuery:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
-    EventActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLog'
-      - type: object
-        properties:
-          occurrence:
-            type: integer
-            format: int64
-    EventConfigSuppressionPeriodType:
-      type: string
-      enum:
-      - ALWAYS
-      - DURING_TIME_PERIOD
     EventPolicyActivityLogQuery:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
-    ServiceConfigurationActivityLogQuery:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
-    EnforcementRuleActivityLogQuery:
       allOf:
       - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
     DeviceGroupActivityLog:
@@ -527,18 +615,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeviceGroupInfo'
-    PagedLocationListActivityLog:
+    EventPolicyActivityLog:
       allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/LocationListActivityLog'
-    ApplicationActivityLogQuery:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
+      - $ref: '#/components/schemas/BaseActivityLog'
     Error:
       type: object
       properties:
@@ -562,21 +641,24 @@ components:
           type: string
           description: Trace Id
           example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    ProtectionPolicyActivityLogQuery:
+    PagedApplicationActivityLog:
       allOf:
-      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
-    EnforcementRuleActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLog'
+      - $ref: '#/components/schemas/Pagination'
       - type: object
         properties:
-          error:
-            type: string
-    dateTime:
-      description: ISO 8601 date time
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/ApplicationActivityLog'
+    ReportStatus:
+      description: Report status
       type: string
-      format: date-time
-      example: '2021-07-04T17:36:47Z'
+      example: Processing
+      enum:
+      - Success
+      - Processing
+      - Error
+      - NotStarted
     BaseActivityLog:
       type: object
       properties:
@@ -588,10 +670,7 @@ components:
           type: string
         userId:
           type: string
-    EventConfigActivityLogQuery:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
-    PagedEventConfigActivityLog:
+    PagedDeviceGroupActivityLog:
       allOf:
       - $ref: '#/components/schemas/Pagination'
       - type: object
@@ -599,59 +678,7 @@ components:
           data:
             type: array
             items:
-              $ref: '#/components/schemas/EventConfigActivityLog'
-    Pagination:
-      type: object
-      properties:
-        total:
-          $ref: '#/components/schemas/total'
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
-    PagedProtectionPolicyActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/ProtectionPolicyActivityLog'
-    LocationListActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/BaseActivityLog'
-    PagedEventActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/EventActivityLog'
-    ScheduledReport:
-      type: object
-      properties:
-        reportId:
-          description: Report Id
-          type: string
-          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
-        status:
-          $ref: '#/components/schemas/ReportStatus'
-        statusEndpoint:
-          description: Report Status URL
-          type: string
-          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
-    PagedEnforcementRuleActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/EnforcementRuleActivityLog'
+              $ref: '#/components/schemas/DeviceGroupActivityLog'
     PagedEventPolicyActivityLog:
       allOf:
       - $ref: '#/components/schemas/Pagination'
@@ -661,93 +688,37 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/EventPolicyActivityLog'
-    ReportStatus:
-      description: Report status
-      type: string
-      example: Processing
-      enum:
-      - Success
-      - Processing
-      - Error
-      - NotStarted
-    PagedServiceConfigurationActivityLog:
-      allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/ServiceConfigurationActivityLog'
-    LocationListActivityLogQuery:
+    ApplicationActivityLogQuery:
       allOf:
       - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
-    DeviceGroupInfo:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        colorCode:
-          type: string
-        deviceGroupType:
-          type: string
-  parameters:
-    startTime:
-      name: startTime
-      in: query
-      required: true
-      description: The start timestamp. (inclusive)
-      example: '2021-07-01T06:30:00Z'
-      schema:
-        $ref: '#/components/schemas/dateTime'
-    endTime:
-      name: endTime
-      in: query
-      required: true
-      description: The end timestamp. (exclusive)
-      example: '2021-07-05T06:30:00Z'
-      schema:
-        $ref: '#/components/schemas/dateTime'
-    sort:
-      name: sort
-      in: query
-      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
-      example: deviceId,updateTime:desc
-      schema:
-        type: string
-    accountId:
-      name: X-Watchtower-Account-Id
-      in: header
-      description: Account Id
-      required: true
-      schema:
-        $ref: '#/components/schemas/accountId'
-      example: 1002000010
-    offset:
-      name: offset
-      in: query
-      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
-      schema:
-        $ref: '#/components/schemas/offset'
-    authorization:
-      name: Authorization
-      in: header
-      description: Bearer Token for authentication
-      required: true
-      schema:
-        type: string
-        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
-      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
-    limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
+    EnforcementRuleActivityLogQuery:
+      allOf:
+      - $ref: '#/components/schemas/BaseActivityLogQueryRequest'
   responses:
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '429':
       description: Too many requests.
       content:
@@ -772,18 +743,6 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '400':
       description: Bad Request.
       content:
@@ -796,18 +755,59 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Internal Server Error
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    startTime:
+      name: startTime
+      in: query
+      required: true
+      description: The start timestamp. (inclusive)
+      example: '2021-07-01T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    sort:
+      name: sort
+      in: query
+      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
+      example: deviceId,updateTime:desc
+      schema:
+        type: string
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    endTime:
+      name: endTime
+      in: query
+      required: true
+      description: The end timestamp. (exclusive)
+      example: '2021-07-05T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

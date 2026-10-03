@@ -169,7 +169,123 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 components:
+  responses:
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    sort:
+      name: sort
+      in: query
+      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
+      example: deviceId,updateTime:desc
+      schema:
+        type: string
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    rateLimiterId:
+      name: rateLimiterId
+      in: path
+      required: true
+      description: The ID of the rate limiter
+      schema:
+        type: integer
+        format: int64
   schemas:
+    upstreamBurstSize:
+      type: integer
+      format: int64
+      minimum: 0
+      description: Upstream burst size in kbps.
+    downstreamBurstSize:
+      type: integer
+      format: int64
+      minimum: 0
+      description: Downstream burst size in kbps.
     PagedRateLimiters:
       allOf:
       - $ref: '#/components/schemas/Pagination'
@@ -179,6 +295,18 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/RateLimiter'
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    upstreamRate:
+      type: integer
+      format: int64
+      minimum: 0
+      description: Upstream rate in kbps.
     RateLimiter:
       type: object
       properties:
@@ -219,134 +347,6 @@ components:
         updatedTime:
           type: string
           format: date-time
-    total:
-      type: integer
-      format: int64
-      description: Total number of items available.
-      example: 1
-      minimum: 0
-    downstreamBurstSize:
-      type: integer
-      format: int64
-      minimum: 0
-      description: Downstream burst size in kbps.
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
-    limit:
-      type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
-    accountId:
-      description: Account Id.
-      type: integer
-      format: int32
-      example: 10407
-      minimum: 0
-    ExternalRateLimiterCreateRequest:
-      type: object
-      required:
-      - name
-      - configs
-      properties:
-        name:
-          type: string
-          maxLength: 100
-          description: Name of the rate limiter group.
-        configs:
-          type: array
-          description: List of rate limiter configurations to create (one per limit type).
-          items:
-            $ref: '#/components/schemas/ExternalRateLimiterConfig'
-    upstreamBurstSize:
-      type: integer
-      format: int64
-      minimum: 0
-      description: Upstream burst size in kbps.
-    ExternalRateLimitersQueryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          maxLength: 100
-          description: Filter by name of the rate limiter.
-        limitTypes:
-          type: array
-          items:
-            type: string
-          description: Filter by the limit type.
-    ExternalRateLimiterConfig:
-      type: object
-      required:
-      - limitType
-      - upstreamRate
-      - upstreamBurstSize
-      - downstreamRate
-      - downstreamBurstSize
-      properties:
-        limitType:
-          type: string
-          description: The limit type.
-          enum:
-          - SESSION_LEVEL
-          - AGGREGATE
-        upstreamRate:
-          type: integer
-          format: int64
-          description: Upstream rate in kbps.
-        upstreamBurstSize:
-          type: integer
-          format: int64
-          description: Upstream burst size in kbps.
-        downstreamRate:
-          type: integer
-          format: int64
-          description: Downstream rate in kbps.
-        downstreamBurstSize:
-          type: integer
-          format: int64
-          description: Downstream burst size in kbps.
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: HTTP code
-          example: 500
-        message:
-          type: string
-          description: Error message
-          example: An error encountered in processing the request
-        timestamp:
-          type: string
-          description: ISO DateTime
-          example: '2025-06-02 09:01:53.678'
-        path:
-          type: string
-          description: Endpoint path at which the error occured
-          example: /watchtower/v1/events
-        traceId:
-          type: string
-          description: Trace Id
-          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    downstreamRate:
-      type: integer
-      format: int64
-      minimum: 0
-      description: Downstream rate in kbps.
-    ExternalRateLimiterListResponse:
-      type: object
-      properties:
-        rateLimiters:
-          type: array
-          items:
-            $ref: '#/components/schemas/RateLimiter'
     ExternalRateLimiterUpdateRequest:
       type: object
       required:
@@ -384,117 +384,117 @@ components:
           $ref: '#/components/schemas/offset'
         limit:
           $ref: '#/components/schemas/limit'
-    upstreamRate:
+    ExternalRateLimiterConfig:
+      type: object
+      required:
+      - limitType
+      - upstreamRate
+      - upstreamBurstSize
+      - downstreamRate
+      - downstreamBurstSize
+      properties:
+        limitType:
+          type: string
+          description: The limit type.
+          enum:
+          - SESSION_LEVEL
+          - AGGREGATE
+        upstreamRate:
+          type: integer
+          format: int64
+          description: Upstream rate in kbps.
+        upstreamBurstSize:
+          type: integer
+          format: int64
+          description: Upstream burst size in kbps.
+        downstreamRate:
+          type: integer
+          format: int64
+          description: Downstream rate in kbps.
+        downstreamBurstSize:
+          type: integer
+          format: int64
+          description: Downstream burst size in kbps.
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    downstreamRate:
       type: integer
       format: int64
       minimum: 0
-      description: Upstream rate in kbps.
-  responses:
-    '429':
-      description: Too many requests.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 429
-            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '401':
-      description: Not authorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '400':
-      description: Bad Request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Bad Request
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Internal Server Error
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-  parameters:
-    sort:
-      name: sort
-      in: query
-      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
-      example: deviceId,updateTime:desc
-      schema:
-        type: string
-    accountId:
-      name: X-Watchtower-Account-Id
-      in: header
-      description: Account Id
-      required: true
-      schema:
-        $ref: '#/components/schemas/accountId'
-      example: 1002000010
-    offset:
-      name: offset
-      in: query
-      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
-      schema:
-        $ref: '#/components/schemas/offset'
-    authorization:
-      name: Authorization
-      in: header
-      description: Bearer Token for authentication
-      required: true
-      schema:
-        type: string
-        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
-      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
-    rateLimiterId:
-      name: rateLimiterId
-      in: path
-      required: true
-      description: The ID of the rate limiter
-      schema:
-        type: integer
-        format: int64
-    limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
+      description: Downstream rate in kbps.
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    ExternalRateLimitersQueryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: Filter by name of the rate limiter.
+        limitTypes:
+          type: array
+          items:
+            type: string
+          description: Filter by the limit type.
+    ExternalRateLimiterCreateRequest:
+      type: object
+      required:
+      - name
+      - configs
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          description: Name of the rate limiter group.
+        configs:
+          type: array
+          description: List of rate limiter configurations to create (one per limit type).
+          items:
+            $ref: '#/components/schemas/ExternalRateLimiterConfig'
+    ExternalRateLimiterListResponse:
+      type: object
+      properties:
+        rateLimiters:
+          type: array
+          items:
+            $ref: '#/components/schemas/RateLimiter'
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

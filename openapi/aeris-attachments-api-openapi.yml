@@ -248,32 +248,29 @@ paths:
         - css_manage_incidents_for_advanced_reseller_enterprise
 components:
   schemas:
-    Auditable:
+    AttachmentsList:
       type: object
-      description: Common metadata of auditable entities.
+      required:
+      - items
       properties:
-        created_at:
+        items:
+          description: A list of attachments metadata.
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+    FileUpload:
+      type: object
+      required:
+      - file
+      - fileName
+      properties:
+        file:
           type: string
-          format: date-time
-          description: The date and time when this entity was created. (RFC 3339 date-time)
-          example: '2017-06-27T15:47:03.000Z'
-          readOnly: true
-        created_by_user:
+          format: binary
+        fileName:
           type: string
-          description: The user who created this entity.
-          example: user@enterprise.xyz
-          readOnly: true
-        last_modified_at:
-          type: string
-          format: date-time
-          description: The date and time of last modification. (RFC 3339 date-time)
-          example: '2017-06-27T15:47:03.000Z'
-          readOnly: true
-        modified_by_user:
-          type: string
-          description: The user who was the last to modify this entity.
-          example: user@enterprise.xyz
-          readOnly: true
+          format: string
+          example: Sample.txt
     Attachment:
       type: object
       description: File attachment metadata.
@@ -339,29 +336,32 @@ components:
             It may or may not yield further information if dereferenced.
 
             '
-    AttachmentsList:
+    Auditable:
       type: object
-      required:
-      - items
+      description: Common metadata of auditable entities.
       properties:
-        items:
-          description: A list of attachments metadata.
-          type: array
-          items:
-            $ref: '#/components/schemas/Attachment'
-    FileUpload:
-      type: object
-      required:
-      - file
-      - fileName
-      properties:
-        file:
+        created_at:
           type: string
-          format: binary
-        fileName:
+          format: date-time
+          description: The date and time when this entity was created. (RFC 3339 date-time)
+          example: '2017-06-27T15:47:03.000Z'
+          readOnly: true
+        created_by_user:
           type: string
-          format: string
-          example: Sample.txt
+          description: The user who created this entity.
+          example: user@enterprise.xyz
+          readOnly: true
+        last_modified_at:
+          type: string
+          format: date-time
+          description: The date and time of last modification. (RFC 3339 date-time)
+          example: '2017-06-27T15:47:03.000Z'
+          readOnly: true
+        modified_by_user:
+          type: string
+          description: The user who was the last to modify this entity.
+          example: user@enterprise.xyz
+          readOnly: true
   securitySchemes:
     oauth2:
       type: oauth2

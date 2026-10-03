@@ -466,7 +466,483 @@ paths:
       - OAuth2:
         - cnx_euicc_inventory
 components:
+  responses:
+    '403':
+      description: Forbidden
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    '500':
+      description: Internal Server Error
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    '429':
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Too Many Requests
+                status: 429
+                detail: API rate limit exceeded
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    '401':
+      description: Unauthorized
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Unauthorized
+                status: 401
+                detail: Token expired
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    '400':
+      description: Bad Request
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Bad Request
+                status: 400
+                detail: orgId can not be null
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    '404':
+      description: Not Found
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Not Found
+                status: 404
+                detail: Not Found
+                instance: 123e4567-e89b-12d3-a456-426614174000
   schemas:
+    individualDeviceDetail:
+      type: object
+      description: 'Individual device detail.
+
+        '
+      properties:
+        device:
+          $ref: '#/components/schemas/device'
+    smsSent:
+      type: object
+      description: SMS origination information. It is reset daily.
+      properties:
+        count:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Reset daily. The number of mobile originated SMSes.
+        lastDestAddress:
+          type: string
+          description: Reset daily. The MSISDN the last SMS was sent to.
+        lastSmsSentAt:
+          type: string
+          description: Reset daily. The timestamp of the last mobile originated SMS.
+        errorCount:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Reset daily. Error count.
+    subscriptions:
+      type: object
+      properties:
+        iccId:
+          type: string
+        imsi:
+          type: string
+        status:
+          type: string
+        subscriptionState:
+          type: string
+          description: 'Subscription state.
+
+            '
+        msisdn:
+          type: string
+    locationUpdateItem:
+      type: object
+      description: Location update item.
+      properties:
+        type:
+          type: string
+          x-extensible-enum:
+          - VOICE_CONNECTION_2G3G
+          - DATA_CONNECTION_2G3G
+          - DATA_CONNECTION_4G5G
+          description: "The network connection types for the location update:\n  VOICE_CONNECTION_2G3G: GSM connection\n  DATA_CONNECTION_2G3G: GPRS connection\n  DATA_CONNECTION_4G5G: LTE connection\n"
+        status:
+          type: string
+          x-extensible-enum:
+          - 0_SUCCESS
+          - 1_FAILURE
+          description: "The status of the overall location update is as follows:\n  0: Success\n  1: Failure\n"
+        updatedAt:
+          type: string
+          description: The time of the last location update.
+        vlrGt:
+          type: string
+          description: The Visitor Location Register (VLR) global title according to E.164.
+        countryCode:
+          type: string
+          description: ISO3166 two-letter Country Code.
+        countryName:
+          type: string
+          description: Country name.
+        operatorName:
+          type: string
+          description: The operator name.
+        roamingOperatorName:
+          type: string
+          description: The roaming operator name.
+    smsReceived:
+      type: object
+      description: SMS termination information. It is reset daily.
+      properties:
+        count:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Reset daily. The number of mobile terminated SMSes.
+        lastSmsReceivedAt:
+          type: string
+          description: Reset daily. The timestamp of the last mobile terminated SMS.
+        errorCount:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Optional. Reset daily. Error count.
+    sms:
+      type: object
+      description: 'Sms recieved and sent detail.
+
+        '
+      properties:
+        sent:
+          $ref: '#/components/schemas/smsSent'
+        received:
+          $ref: '#/components/schemas/smsReceived'
+        error:
+          $ref: '#/components/schemas/smsError'
+    deviceDetail:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'SIM type.
+
+            '
+          example: ESIM, SIM
+        idType:
+          type: string
+          description: 'SIM profile key type.
+
+            '
+          example: EID, ICCID
+        value:
+          type: string
+          description: 'SIM profile key value of specified key type.
+
+            '
+          example: 0090923122299992358129036544309
+        euiccType:
+          type: string
+          description: Type of eUICC.
+          example: M2M
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/subscriptions'
+    session:
+      type: object
+      description: Session information.
+      properties:
+        apn:
+          type: string
+          description: Access Point Name of the session.
+          example: B.MAG.CXN
+        ipv4:
+          type: string
+          description: IPv4 address of the session in the mobile network.
+          example: 198.51.100.42
+        ipv6:
+          type: string
+          description: IPv6 address of the session in the mobile network.
+          example: 2001:0db8:5b96:0000:0000:426f:8e17:642a
+        startedAt:
+          type: string
+          description: Timestamp for the start of the session.
+          example: 2022-02-13 22:10:23.922000+00:00
+        endedAt:
+          type: string
+          description: Timestamp for the end of the session.
+          example: 2022-02-13 22:20:23.922000+00:00
+    data:
+      type: object
+      properties:
+        dataActive:
+          type: boolean
+          description: 'Optional. Indicates if the PDP is active. The possible values are:
+
+            - true
+
+            - false
+
+            '
+        dataActivatedAt:
+          type: string
+          description: The start time of last PDP session of the day.
+          example: 2013-09-30 06:51:34+00:00
+        ipv4:
+          type: string
+          format: ipv4
+          description: Last IPv4 address of the SIM in the mobile network for the specified time window (60 days).
+        ipv6:
+          type: string
+          format: ipv6
+          description: Last IPv6 address of the SIM in the mobile network for the specified time window (60 days).
+        apn:
+          type: string
+          description: Last fully qualified domain name for the specified time window (60 days)
+        uploadedBytes:
+          type: number
+          format: double
+          description: 'Accumulated transmitted bytes for the day (reset daily) in
+
+            double-precision floating-point format.
+
+            '
+        lastUploadedAt:
+          type: string
+          description: The timestamp of the last transmitted data. It is reset daily.
+        downloadedBytes:
+          type: number
+          format: double
+          description: 'Accumulated received bytes for the day (reset daily) in
+
+            double-precision floating-point format.
+
+            '
+        lastDownloadedAt:
+          type: string
+          description: The timestamp of the last received data. It is reset daily.
+        giDestAddress:
+          type: string
+          format: ipv4
+          description: IPv4 address of the SIM on the Internet.
+        sessionDetails:
+          type: array
+          description: 'GPRS, 3G, 4G or 5G sessions for the last 72 hours. Sessions are
+
+            sorted by startedAt ascendlingly, i.g. from oldest to newest.
+
+            '
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/session'
+    networkDetails:
+      type: object
+      properties:
+        detectedImei:
+          type: string
+          description: IMEI number detected by the network event.
+          example: '49015420323652'
+        lastEventReceivedAt:
+          type: string
+          description: 'Timestamp for the last event received for the session.
+
+            '
+          example: 2022-02-13 22:20:23.922000+00:00
+        firstEventReceivedAt:
+          type: string
+          description: 'Timestamp for the first event in the specified time window
+
+            (60 days).
+
+            '
+          example: 2022-02-13 22:20:23.922000+00:00
+        lastLocationUpdates:
+          $ref: '#/components/schemas/lastLocationUpdates'
+        data:
+          $ref: '#/components/schemas/data'
+        sms:
+          $ref: '#/components/schemas/sms'
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type.
+
+            When dereferenced, it SHOULD provide human-readable
+
+            documentation for the problem type (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://your.api.documentation.url
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and
+
+            readable for engineers (usually not suited for non technical
+
+            stakeholders and not localized); example: Service Unavailable
+
+            '
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for
+
+            this occurrence of the problem.
+
+            '
+          minimum: 100
+          example: 503
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Connection to database timed out
+        instance:
+          type: string
+          format: uuid
+          description: 'An UUID, taking the ''X-Flow-ID'' header value coming from upstream
+
+            service, referencing this specific request. Empty if the header is
+
+            absent.
+
+            '
+    smsError:
+      type: object
+      description: SMS error infomation.
+      properties:
+        lastErrorAt:
+          type: string
+          description: Timestamp of last SMS error
+        lastError:
+          type: string
+          description: Last error description.
+    lastLocationUpdates:
+      type: array
+      description: Last Location Update.
+      items:
+        $ref: '#/components/schemas/locationUpdateItem'
+    devices:
+      type: object
+      properties:
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/deviceDetail'
+        next:
+          type: string
+    device:
+      type: object
+      description: 'Device detail.
+
+        '
+      properties:
+        type:
+          type: string
+          description: 'SIM type.
+
+            '
+          example: ESIM, SIM
+        idType:
+          type: string
+          description: SIM profile key type.
+          example: EID, ICCID
+        value:
+          type: string
+          description: SIM profile key value of specified key type.
+          example: 0090923122299992358129036544309
+        euiccType:
+          type: string
+          description: Type of eUICC.
+          example: M2M
+        enabledIcc:
+          type: string
+          description: 'ICCID of enabled subscription in the SIM card.
+
+            '
+          example: '8991101200003204001'
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/subscription'
     subscription:
       type: object
       properties:
@@ -540,375 +1016,9 @@ components:
           example: '49015420323652'
         networkDetails:
           $ref: '#/components/schemas/networkDetails'
-    device:
-      type: object
-      description: 'Device detail.
-
-        '
-      properties:
-        type:
-          type: string
-          description: 'SIM type.
-
-            '
-          example: ESIM, SIM
-        idType:
-          type: string
-          description: SIM profile key type.
-          example: EID, ICCID
-        value:
-          type: string
-          description: SIM profile key value of specified key type.
-          example: 0090923122299992358129036544309
-        euiccType:
-          type: string
-          description: Type of eUICC.
-          example: M2M
-        enabledIcc:
-          type: string
-          description: 'ICCID of enabled subscription in the SIM card.
-
-            '
-          example: '8991101200003204001'
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/subscription'
-    devices:
-      type: object
-      properties:
-        devices:
-          type: array
-          items:
-            $ref: '#/components/schemas/deviceDetail'
-        next:
-          type: string
-    deviceDetail:
-      type: object
-      properties:
-        type:
-          type: string
-          description: 'SIM type.
-
-            '
-          example: ESIM, SIM
-        idType:
-          type: string
-          description: 'SIM profile key type.
-
-            '
-          example: EID, ICCID
-        value:
-          type: string
-          description: 'SIM profile key value of specified key type.
-
-            '
-          example: 0090923122299992358129036544309
-        euiccType:
-          type: string
-          description: Type of eUICC.
-          example: M2M
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/subscriptions'
-    session:
-      type: object
-      description: Session information.
-      properties:
-        apn:
-          type: string
-          description: Access Point Name of the session.
-          example: B.MAG.CXN
-        ipv4:
-          type: string
-          description: IPv4 address of the session in the mobile network.
-          example: 198.51.100.42
-        ipv6:
-          type: string
-          description: IPv6 address of the session in the mobile network.
-          example: 2001:0db8:5b96:0000:0000:426f:8e17:642a
-        startedAt:
-          type: string
-          description: Timestamp for the start of the session.
-          example: 2022-02-13 22:10:23.922000+00:00
-        endedAt:
-          type: string
-          description: Timestamp for the end of the session.
-          example: 2022-02-13 22:20:23.922000+00:00
-    lastLocationUpdates:
-      type: array
-      description: Last Location Update.
-      items:
-        $ref: '#/components/schemas/locationUpdateItem'
-    individualDeviceDetail:
-      type: object
-      description: 'Individual device detail.
-
-        '
-      properties:
-        device:
-          $ref: '#/components/schemas/device'
-    smsError:
-      type: object
-      description: SMS error infomation.
-      properties:
-        lastErrorAt:
-          type: string
-          description: Timestamp of last SMS error
-        lastError:
-          type: string
-          description: Last error description.
-    smsReceived:
-      type: object
-      description: SMS termination information. It is reset daily.
-      properties:
-        count:
-          type: integer
-          format: int32
-          minimum: 0
-          description: Reset daily. The number of mobile terminated SMSes.
-        lastSmsReceivedAt:
-          type: string
-          description: Reset daily. The timestamp of the last mobile terminated SMS.
-        errorCount:
-          type: integer
-          format: int32
-          minimum: 0
-          description: Optional. Reset daily. Error count.
-    networkDetails:
-      type: object
-      properties:
-        detectedImei:
-          type: string
-          description: IMEI number detected by the network event.
-          example: '49015420323652'
-        lastEventReceivedAt:
-          type: string
-          description: 'Timestamp for the last event received for the session.
-
-            '
-          example: 2022-02-13 22:20:23.922000+00:00
-        firstEventReceivedAt:
-          type: string
-          description: 'Timestamp for the first event in the specified time window
-
-            (60 days).
-
-            '
-          example: 2022-02-13 22:20:23.922000+00:00
-        lastLocationUpdates:
-          $ref: '#/components/schemas/lastLocationUpdates'
-        data:
-          $ref: '#/components/schemas/data'
-        sms:
-          $ref: '#/components/schemas/sms'
-    smsSent:
-      type: object
-      description: SMS origination information. It is reset daily.
-      properties:
-        count:
-          type: integer
-          format: int32
-          minimum: 0
-          description: Reset daily. The number of mobile originated SMSes.
-        lastDestAddress:
-          type: string
-          description: Reset daily. The MSISDN the last SMS was sent to.
-        lastSmsSentAt:
-          type: string
-          description: Reset daily. The timestamp of the last mobile originated SMS.
-        errorCount:
-          type: integer
-          format: int32
-          minimum: 0
-          description: Reset daily. Error count.
-    data:
-      type: object
-      properties:
-        dataActive:
-          type: boolean
-          description: 'Optional. Indicates if the PDP is active. The possible values are:
-
-            - true
-
-            - false
-
-            '
-        dataActivatedAt:
-          type: string
-          description: The start time of last PDP session of the day.
-          example: 2013-09-30 06:51:34+00:00
-        ipv4:
-          type: string
-          format: ipv4
-          description: Last IPv4 address of the SIM in the mobile network for the specified time window (60 days).
-        ipv6:
-          type: string
-          format: ipv6
-          description: Last IPv6 address of the SIM in the mobile network for the specified time window (60 days).
-        apn:
-          type: string
-          description: Last fully qualified domain name for the specified time window (60 days)
-        uploadedBytes:
-          type: number
-          format: double
-          description: 'Accumulated transmitted bytes for the day (reset daily) in
-
-            double-precision floating-point format.
-
-            '
-        lastUploadedAt:
-          type: string
-          description: The timestamp of the last transmitted data. It is reset daily.
-        downloadedBytes:
-          type: number
-          format: double
-          description: 'Accumulated received bytes for the day (reset daily) in
-
-            double-precision floating-point format.
-
-            '
-        lastDownloadedAt:
-          type: string
-          description: The timestamp of the last received data. It is reset daily.
-        giDestAddress:
-          type: string
-          format: ipv4
-          description: IPv4 address of the SIM on the Internet.
-        sessionDetails:
-          type: array
-          description: 'GPRS, 3G, 4G or 5G sessions for the last 72 hours. Sessions are
-
-            sorted by startedAt ascendlingly, i.g. from oldest to newest.
-
-            '
-          maxItems: 10
-          items:
-            $ref: '#/components/schemas/session'
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type.
-
-            When dereferenced, it SHOULD provide human-readable
-
-            documentation for the problem type (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: https://your.api.documentation.url
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and
-
-            readable for engineers (usually not suited for non technical
-
-            stakeholders and not localized); example: Service Unavailable
-
-            '
-        status:
-          type: integer
-          format: int32
-          description: 'The HTTP status code generated by the origin server for
-
-            this occurrence of the problem.
-
-            '
-          minimum: 100
-          example: 503
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Connection to database timed out
-        instance:
-          type: string
-          format: uuid
-          description: 'An UUID, taking the ''X-Flow-ID'' header value coming from upstream
-
-            service, referencing this specific request. Empty if the header is
-
-            absent.
-
-            '
-    subscriptions:
-      type: object
-      properties:
-        iccId:
-          type: string
-        imsi:
-          type: string
-        status:
-          type: string
-        subscriptionState:
-          type: string
-          description: 'Subscription state.
-
-            '
-        msisdn:
-          type: string
-    sms:
-      type: object
-      description: 'Sms recieved and sent detail.
-
-        '
-      properties:
-        sent:
-          $ref: '#/components/schemas/smsSent'
-        received:
-          $ref: '#/components/schemas/smsReceived'
-        error:
-          $ref: '#/components/schemas/smsError'
-    locationUpdateItem:
-      type: object
-      description: Location update item.
-      properties:
-        type:
-          type: string
-          x-extensible-enum:
-          - VOICE_CONNECTION_2G3G
-          - DATA_CONNECTION_2G3G
-          - DATA_CONNECTION_4G5G
-          description: "The network connection types for the location update:\n  VOICE_CONNECTION_2G3G: GSM connection\n  DATA_CONNECTION_2G3G: GPRS connection\n  DATA_CONNECTION_4G5G: LTE connection\n"
-        status:
-          type: string
-          x-extensible-enum:
-          - 0_SUCCESS
-          - 1_FAILURE
-          description: "The status of the overall location update is as follows:\n  0: Success\n  1: Failure\n"
-        updatedAt:
-          type: string
-          description: The time of the last location update.
-        vlrGt:
-          type: string
-          description: The Visitor Location Register (VLR) global title according to E.164.
-        countryCode:
-          type: string
-          description: ISO3166 two-letter Country Code.
-        countryName:
-          type: string
-          description: Country name.
-        operatorName:
-          type: string
-          description: The operator name.
-        roamingOperatorName:
-          type: string
-          description: The roaming operator name.
   headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
       schema:
         type: integer
         format: int32
@@ -917,8 +1027,8 @@ components:
       schema:
         type: integer
         format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
       schema:
         type: integer
         format: int32
@@ -927,121 +1037,18 @@ components:
       schema:
         type: integer
         format: int32
-  responses:
-    '429':
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Too Many Requests
-                status: 429
-                detail: API rate limit exceeded
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    '401':
-      description: Unauthorized
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Unauthorized
-                status: 401
-                detail: Token expired
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    '403':
-      description: Forbidden
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Forbidden
-                status: 403
-                detail: You do not have access to the resource
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    '400':
-      description: Bad Request
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Bad Request
-                status: 400
-                detail: orgId can not be null
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    '404':
-      description: Not Found
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Not Found
-                status: 404
-                detail: Not Found
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    '500':
-      description: Internal Server Error
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Internal Server Error
-                status: 500
-                detail: Internal Server Error
-                instance: 123e4567-e89b-12d3-a456-426614174000
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
   parameters:
+    Header-Authorization:
+      name: Authorization
+      in: header
+      required: true
+      description: A valid token string in the form Bearer <token string>
+      schema:
+        type: string
     sortParam:
       in: query
       name: order
@@ -1132,13 +1139,6 @@ components:
         are more results in the system than delivered in the response.
 
         '
-    Header-Authorization:
-      name: Authorization
-      in: header
-      required: true
-      description: A valid token string in the form Bearer <token string>
-      schema:
-        type: string
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -258,7 +258,184 @@ paths:
       operationId: getDetails
       x-operation-id-source: derived
 components:
+  responses:
+    Response_404:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Not Found
+                status: 404
+                detail: Not Found
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    Response_400:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Bad Request
+                status: 400
+                detail: IdentifierType can not be null
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    Response_500:
+      description: 'Internal Server Error, Error occurred -
+
+        see status code and problem object
+
+        for more
+
+        '
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    Response_403:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    Response_401:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Unauthorized
+                status: 401
+                detail: Token expired
+                instance: 123e4567-e89b-12d3-a456-426614174000
+    Response_429:
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Too Many Requests
+                status: 429
+                detail: API rate limit exceeded
+                instance: 123e4567-e89b-12d3-a456-426614174000
+  headers:
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
   schemas:
+    SubscriptionState:
+      x-extensible-enum:
+      - ACTIVE
+      - ACTIVE_NO_BILLING
+      - DEACTIVATED
+      - DEACTIVATED_NO_BILLING
+      - OPERATOR_BLOCKED
+      - PAUSE
+      - TERMINATED
+      - TERMINATED_PENDING
+      type: string
+    SetIpResponse:
+      uniqueItems: true
+      type: array
+      items:
+        $ref: '#/components/schemas/IpResponse'
+    IpResponse:
+      type: object
+      properties:
+        apnName:
+          type: string
+        ip:
+          type: string
+        ipVersion:
+          $ref: '#/components/schemas/IpVersion'
+        operatorId:
+          type: string
+        server:
+          type: string
+        subnet:
+          type: string
+    GetSubscriptionDetailsByPrimaryKey:
+      type: object
+      required:
+      - identifierType
+      - identifierValues
+      properties:
+        identifierType:
+          $ref: '#/components/schemas/IdentifierType'
+        identifierValues:
+          $ref: '#/components/schemas/IdentifierValues'
+    Order:
+      enum:
+      - ICC
+      - IMSI
+      - MSISDN
+      type: string
     IndividualApnResponse:
       type: object
       properties:
@@ -278,6 +455,23 @@ components:
         contextEntityId:
           type: integer
           format: int32
+    SetIndividualApnResponse:
+      uniqueItems: true
+      type: array
+      items:
+        $ref: '#/components/schemas/IndividualApnResponse'
+    IpVersion:
+      x-extensible-enum:
+      - IPV4
+      - IPV6
+      type: string
+    IdentifierValues:
+      description: 'List of identifiers of the given type
+
+        '
+      type: array
+      items:
+        type: string
     CustomField:
       type: object
       properties:
@@ -285,13 +479,75 @@ components:
           type: string
         fieldValue:
           type: string
-    PrimaryKeyQueryResponse:
+    CustomFieldArray:
+      uniqueItems: true
+      type: array
+      items:
+        $ref: '#/components/schemas/CustomField'
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,
+
+            it SHOULD provide human-readable documentation for the problem type
+
+            (e.g., using HTML).
+
+            '
+          default: about:blank
+          example: https://your.api.documentation.url
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and
+
+            readable for engineers (usually not suited for non technical
+
+            stakeholders and not localized); example: Service Unavailable
+
+            '
+        status:
+          type: integer
+          format: int32
+          description: 'The HTTP status code generated by the origin server for
+
+            this occurrence of the problem.
+
+            '
+          minimum: 100
+          example: 503
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: 'A human readable explanation specific to this occurrence of the
+
+            problem.
+
+            '
+          example: Connection to database timed out
+        instance:
+          type: string
+          description: 'An absolute URI that identifies the specific occurrence
+
+            of the problem. It may or may not yield further information
+
+            if dereferenced.
+
+            '
+    SecondaryKeyQueryResponse:
       type: object
       properties:
         subscriptions:
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionResponse'
+        next:
+          type: string
+        size:
+          format: int32
+          type: integer
     IdentifierType:
       description: 'Used to identify a list of subscription details.
 
@@ -309,16 +565,6 @@ components:
       - IMSI
       - MSISDN
       type: string
-    SetIndividualApnResponse:
-      uniqueItems: true
-      type: array
-      items:
-        $ref: '#/components/schemas/IndividualApnResponse'
-    SetIpResponse:
-      uniqueItems: true
-      type: array
-      items:
-        $ref: '#/components/schemas/IpResponse'
     SubscriptionResponse:
       type: object
       properties:
@@ -562,39 +808,6 @@ components:
             '
         provisionedAt:
           $ref: '#/components/schemas/Date'
-    Order:
-      enum:
-      - ICC
-      - IMSI
-      - MSISDN
-      type: string
-    Date:
-      type: string
-      format: date-time
-    SecondaryKeyQueryResponse:
-      type: object
-      properties:
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionResponse'
-        next:
-          type: string
-        size:
-          format: int32
-          type: integer
-    IdentifierValues:
-      description: 'List of identifiers of the given type
-
-        '
-      type: array
-      items:
-        type: string
-    CustomFieldArray:
-      uniqueItems: true
-      type: array
-      items:
-        $ref: '#/components/schemas/CustomField'
     AdditionalFields:
       description: 'Collection of additional subscription field groups to include
 
@@ -629,229 +842,16 @@ components:
       - MONTHLY_DATA
       - MONTHLY_SMS
       type: string
-    Problem:
+    PrimaryKeyQueryResponse:
       type: object
       properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type. When dereferenced,
-
-            it SHOULD provide human-readable documentation for the problem type
-
-            (e.g., using HTML).
-
-            '
-          default: about:blank
-          example: https://your.api.documentation.url
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and
-
-            readable for engineers (usually not suited for non technical
-
-            stakeholders and not localized); example: Service Unavailable
-
-            '
-        status:
-          type: integer
-          format: int32
-          description: 'The HTTP status code generated by the origin server for
-
-            this occurrence of the problem.
-
-            '
-          minimum: 100
-          example: 503
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: 'A human readable explanation specific to this occurrence of the
-
-            problem.
-
-            '
-          example: Connection to database timed out
-        instance:
-          type: string
-          description: 'An absolute URI that identifies the specific occurrence
-
-            of the problem. It may or may not yield further information
-
-            if dereferenced.
-
-            '
-    SubscriptionState:
-      x-extensible-enum:
-      - ACTIVE
-      - ACTIVE_NO_BILLING
-      - DEACTIVATED
-      - DEACTIVATED_NO_BILLING
-      - OPERATOR_BLOCKED
-      - PAUSE
-      - TERMINATED
-      - TERMINATED_PENDING
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionResponse'
+    Date:
       type: string
-    IpResponse:
-      type: object
-      properties:
-        apnName:
-          type: string
-        ip:
-          type: string
-        ipVersion:
-          $ref: '#/components/schemas/IpVersion'
-        operatorId:
-          type: string
-        server:
-          type: string
-        subnet:
-          type: string
-    IpVersion:
-      x-extensible-enum:
-      - IPV4
-      - IPV6
-      type: string
-    GetSubscriptionDetailsByPrimaryKey:
-      type: object
-      required:
-      - identifierType
-      - identifierValues
-      properties:
-        identifierType:
-          $ref: '#/components/schemas/IdentifierType'
-        identifierValues:
-          $ref: '#/components/schemas/IdentifierValues'
-  responses:
-    Response_404:
-      description: Not Found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Not Found
-                status: 404
-                detail: Not Found
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    Response_429:
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Too Many Requests
-                status: 429
-                detail: API rate limit exceeded
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    Response_401:
-      description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Unauthorized
-                status: 401
-                detail: Token expired
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    Response_403:
-      description: Forbidden
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Forbidden
-                status: 403
-                detail: You do not have access to the resource
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    Response_500:
-      description: 'Internal Server Error, Error occurred -
-
-        see status code and problem object
-
-        for more
-
-        '
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Internal Server Error
-                status: 500
-                detail: Internal Server Error
-                instance: 123e4567-e89b-12d3-a456-426614174000
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    Response_400:
-      description: Bad Request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Bad Request
-                status: 400
-                detail: IdentifierType can not be null
-                instance: 123e4567-e89b-12d3-a456-426614174000
-  headers:
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
+      format: date-time
   securitySchemes:
     Oauth2Auth:
       flows:

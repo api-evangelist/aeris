@@ -148,20 +148,20 @@ components:
       schema:
         type: integer
         format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
+    Content-Type:
+      description: Handle Content-Type
       schema:
-        type: integer
-        format: int32
+        type: string
     X-RateLimit-Limit-Minute:
       description: The maximum number of requests allowed in a minute.
       schema:
         type: integer
         format: int32
-    Content-Type:
-      description: Handle Content-Type
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
       schema:
-        type: string
+        type: integer
+        format: int32
     X-RateLimit-Remaining-Second:
       description: The number of requests remaining in a second.
       schema:
@@ -175,6 +175,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NetworkNodeArray'
+    NetworkNode:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Node Id
+          example: 1
+        name:
+          type: string
+          description: Node Name
+          example: STO-EPG1
+        nodeType:
+          type: string
+          description: Node Type
+          example: EPG
+        redundancyNodeId:
+          type:
+          - integer
+          - 'null'
+          description: Redundancy Node Id
+          example: 2
+    NetworkNodeArray:
+      type: object
+      properties:
+        networkNodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkNode'
+        apnSuffixes:
+          type: array
+          items:
+            type: string
+            example: m2m.cn
     Problem:
       type: object
       properties:
@@ -226,39 +259,6 @@ components:
             It may or may not yield further information if dereferenced.
 
             '
-    NetworkNode:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Node Id
-          example: 1
-        name:
-          type: string
-          description: Node Name
-          example: STO-EPG1
-        nodeType:
-          type: string
-          description: Node Type
-          example: EPG
-        redundancyNodeId:
-          type:
-          - integer
-          - 'null'
-          description: Redundancy Node Id
-          example: 2
-    NetworkNodeArray:
-      type: object
-      properties:
-        networkNodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/NetworkNode'
-        apnSuffixes:
-          type: array
-          items:
-            type: string
-            example: m2m.cn
   responses:
     RateLimitedResponse:
       headers:

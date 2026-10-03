@@ -210,6 +210,30 @@ paths:
           $ref: '#/components/responses/500'
 components:
   responses:
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '429':
       description: Too many requests.
       content:
@@ -231,18 +255,6 @@ components:
           example:
             code: 401
             message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
@@ -270,49 +282,53 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Internal Server Error
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+    policyId:
+      name: policyId
+      in: path
+      required: true
+      description: The ID of the event policy
+      schema:
+        type: integer
+        format: int64
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
   schemas:
-    PagedEventPoliciesTable:
+    EventPolicyCreateResponse:
       type: object
       properties:
-        page:
-          type: integer
-          example: 0
-          description: Current page number (0-based)
-        size:
-          type: integer
-          example: 20
-          description: Page size
-        totalPages:
-          type: integer
-          example: 5
-          description: Total number of pages
-        totalElements:
+        id:
           type: integer
           format: int64
-          example: 100
-          description: Total number of elements
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventPolicySummaryResponse'
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
+          description: ID of the newly created event policy
+          example: 42
     limit:
       type: integer
       format: int32
@@ -320,81 +336,19 @@ components:
       minimum: 1
       maximum: 10000
       default: 20
-    EventPolicyUpdateRequest:
-      type: object
-      required:
-      - name
-      - deviceGroupIds
-      - eventTypeIds
-      properties:
-        name:
-          type: string
-          maxLength: 255
-          description: Name of the event policy
-          example: My Fleet Policy
-        description:
-          type: string
-          description: Optional description
-        deviceGroupIds:
-          type: array
-          minItems: 1
-          description: IDs of the device groups this policy applies to. At least one device group is required.
-          items:
-            type: integer
-            format: int64
-        eventTypeIds:
-          type: array
-          minItems: 1
-          description: IDs of the event types to watch. At least one event type is required.
-          items:
-            type: integer
-    accountId:
-      description: Account Id.
-      type: integer
-      format: int32
-      example: 10407
-      minimum: 0
-    EventPolicySearchRequest:
+    ScheduledReport:
       type: object
       properties:
-        name:
+        reportId:
+          description: Report Id
           type: string
-          description: Filter by policy name (partial match, case-insensitive)
-          example: fleet
-        deviceGroupIds:
-          type: array
-          description: Filter — return policies that include ANY of these device group IDs
-          items:
-            type: integer
-            format: int64
-        eventTypeIds:
-          type: array
-          description: Filter — return policies that include ANY of these event type IDs
-          items:
-            type: integer
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: HTTP code
-          example: 500
-        message:
+          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        statusEndpoint:
+          description: Report Status URL
           type: string
-          description: Error message
-          example: An error encountered in processing the request
-        timestamp:
-          type: string
-          description: ISO DateTime
-          example: '2025-06-02 09:01:53.678'
-        path:
-          type: string
-          description: Endpoint path at which the error occured
-          example: /watchtower/v1/events
-        traceId:
-          type: string
-          description: Trace Id
-          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
     EventPolicyResponse:
       type: object
       properties:
@@ -438,6 +392,12 @@ components:
           example: jane.doe@example.com
         lastModifiedTime:
           $ref: '#/components/schemas/dateTime'
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
     EventPolicySummaryResponse:
       type: object
       properties:
@@ -484,6 +444,34 @@ components:
       type: string
       format: date-time
       example: '2021-07-04T17:36:47Z'
+    EventPolicyUpdateRequest:
+      type: object
+      required:
+      - name
+      - deviceGroupIds
+      - eventTypeIds
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Name of the event policy
+          example: My Fleet Policy
+        description:
+          type: string
+          description: Optional description
+        deviceGroupIds:
+          type: array
+          minItems: 1
+          description: IDs of the device groups this policy applies to. At least one device group is required.
+          items:
+            type: integer
+            format: int64
+        eventTypeIds:
+          type: array
+          minItems: 1
+          description: IDs of the event types to watch. At least one event type is required.
+          items:
+            type: integer
     EventPolicyCreateRequest:
       type: object
       required:
@@ -513,27 +501,53 @@ components:
           description: IDs of the event types (alert_types) to watch. At least one event type is required.
           items:
             type: integer
-    EventPolicyCreateResponse:
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    Error:
       type: object
       properties:
-        id:
+        code:
           type: integer
-          format: int64
-          description: ID of the newly created event policy
-          example: 42
-    ScheduledReport:
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    EventPolicySearchRequest:
       type: object
       properties:
-        reportId:
-          description: Report Id
+        name:
           type: string
-          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
-        status:
-          $ref: '#/components/schemas/ReportStatus'
-        statusEndpoint:
-          description: Report Status URL
-          type: string
-          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+          description: Filter by policy name (partial match, case-insensitive)
+          example: fleet
+        deviceGroupIds:
+          type: array
+          description: Filter — return policies that include ANY of these device group IDs
+          items:
+            type: integer
+            format: int64
+        eventTypeIds:
+          type: array
+          description: Filter — return policies that include ANY of these event type IDs
+          items:
+            type: integer
     ReportStatus:
       description: Report status
       type: string
@@ -543,44 +557,30 @@ components:
       - Processing
       - Error
       - NotStarted
-  parameters:
-    accountId:
-      name: X-Watchtower-Account-Id
-      in: header
-      description: Account Id
-      required: true
-      schema:
-        $ref: '#/components/schemas/accountId'
-      example: 1002000010
-    offset:
-      name: offset
-      in: query
-      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
-      schema:
-        $ref: '#/components/schemas/offset'
-    authorization:
-      name: Authorization
-      in: header
-      description: Bearer Token for authentication
-      required: true
-      schema:
-        type: string
-        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
-      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
-    policyId:
-      name: policyId
-      in: path
-      required: true
-      description: The ID of the event policy
-      schema:
-        type: integer
-        format: int64
-    limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
+    PagedEventPoliciesTable:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 0
+          description: Current page number (0-based)
+        size:
+          type: integer
+          example: 20
+          description: Page size
+        totalPages:
+          type: integer
+          example: 5
+          description: Total number of pages
+        totalElements:
+          type: integer
+          format: int64
+          example: 100
+          description: Total number of elements
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventPolicySummaryResponse'
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

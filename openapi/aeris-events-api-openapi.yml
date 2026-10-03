@@ -492,163 +492,16 @@ paths:
     servers:
     - url: https://watchtower-api-prd.aeriscloud.com
 components:
-  parameters:
-    imsiParam:
-      in: query
-      name: imsi
-      description: One or more imsi(s), comma separated, which identifies the subscription(s) to get events for, e.g. "238208000000001,238208000000002". The maximum imsi number is 15.
-      required: true
-      style: form
-      explode: false
-      schema:
-        type: string
-      allowReserved: true
-      example: 238208000000001,238208000000002
-    toParam:
-      in: query
-      name: to
-      description: The end time, UTC, for the time window processed to generate the response, e.g. "2019-06-28T00:00:00.000Z". If not input, will use default value "Now (UTC)".
-      required: false
-      schema:
-        type: string
-        format: date-time
-      allowReserved: true
-      example: '2019-06-28T01:00:00.000Z'
-    additionalFieldsParam:
-      name: additionalFields
-      in: query
-      description: "Parameter used to filter the response object, you can determine a subset of additional fields that you want to\ninclude in the response, e.g. \"lac,apn\".\n\n\n__Request__\n\n\nGET /events\n\n\n__Response__\n\n```json\n\n{\n  \"next\": \"DFVSDB3434%DFB%EYY445\",\n  \"items\": [\n    {\n      \"imsi\": \"238208000000001\",\n      \"id\": \"WOh6LIABUqU6IY0JSVLK\",\n      \"code\": \"m46-0\",\n      \"occurred_at\": \"2017-06-27T15:47:03.000Z\",\n    }\n    ...\n  ]\n}\n\n```\n\n\n__Request__\n\n\nGET /events?__additionalFields=lac,apn__\n\n\n__Response__\n\n```json\n\n{\n  \"next\": \"DFVSDB3434%DFB%EYY445\",\n  \"items\": [\n    {\n      \"imsi\": \"238208000000001\",\n      \"id\": \"WOh6LIABUqU6IY0JSVLK\",\n      \"code\": \"m46-0\",\n      \"occurred_at\": \"2017-06-27T15:47:03.000Z\",\n      \"lac\": \"2323\",\n      \"apn\": \"ericsson.api.net\"\n    }\n    ...\n  ]\n}\n\n```\n"
-      required: false
-      schema:
-        type: string
-      allowReserved: true
-    sortParam:
-      in: query
-      name: sort
-      description: Sort parameter containing sort field and sort mode used for getting the event data, e.g. "occurred_at:asc". If not input, will use default value "occurred_at:asc".
-      schema:
-        type: string
-        enum:
-        - code:asc
-        - code:desc
-        - occurred_at:asc
-        - occurred_at:desc
-      allowReserved: true
-    fromParam:
-      in: query
-      name: from
-      description: The start time, UTC, for the time window processed to generate the response, e.g. "2019-06-28T00:00:00.000Z". If not input, will use default value "One hour ago (UTC)".
-      required: false
-      schema:
-        type: string
-        format: date-time
-      allowReserved: true
-      example: '2019-06-28T00:00:00.000Z'
-    codeParam:
-      in: query
-      name: code
-      description: One or more codes, comma separated, filtering which events to retrieve, e.g. "l42,m56".
-      required: false
-      schema:
-        type: string
-      example: l42,m56
-    eventIdParam:
-      in: path
-      name: event_id
-      description: An id which identifies a specific signalling event, which is the id field in response of /events.
-      required: true
-      schema:
-        type: string
-    limitParam:
-      in: query
-      name: limit
-      description: Specifies the maximum number of events to be returned, allowed interval is 1-1000, if not input, will use default value "100".
-      required: false
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 1000
-      example: 100
-    cursorParam:
-      in: query
-      name: cursor
-      description: 'Parameter used for display the content of next page on pagination, cannot be used with other parameters in one request.
-
-
-        Set to the value of ''next'' for the next page of results.
-
-        '
-      schema:
-        type: string
-      allowReserved: true
-    fieldsParam:
-      name: fields
-      in: query
-      description: "Parameter used to filter the response object, you can determine a subset of fields that you want to\ninclude in the response, e.g. \"(imsi,lac)\".\n\n\n__Request__\n\n\nGET /events/WOh6LIABUqU6IY0JSVLK\n\n\n__Response__\n\n```json\n\n{\n  \"imsi\": \"238208000000001\",\n  \"id\": \"WOh6LIABUqU6IY0JSVLK\",\n  \"code\": \"m46-0\",\n  \"occurred_at\": \"2017-06-27T15:47:03.000Z\",\n  \"rat_type\": 1,\n  \"visited_nw\": \"France | Orange\",\n  \"imei\": \"676767676767\",\n  \"lac\": \"2323\",\n  \"lai\": \"2323\",\n  \"ggsn_ip\": \"8.8.8.8\",\n  \"sgsn_ip\": \"8.8.4.4\",\n  \"apn\": \"ericsson.api.net\"\n  ...\n}\n\n```\n\n\n__Request__\n\n\nGET /events/WOh6LIABUqU6IY0JSVLK?__fields=(imsi,lac)__\n\n\n__Response__\n\n```json\n\n{\n  \"imsi\": \"238208000000001\",\n  \"lac\": \"2323\"\n}\n\n```\n"
-      required: false
-      schema:
-        type: string
-      allowReserved: true
-    startTime:
-      name: startTime
-      in: query
-      required: true
-      description: The start timestamp. (inclusive)
-      example: '2021-07-01T06:30:00Z'
-      schema:
-        $ref: '#/components/schemas/dateTime'
-    endTime:
-      name: endTime
-      in: query
-      required: true
-      description: The end timestamp. (exclusive)
-      example: '2021-07-05T06:30:00Z'
-      schema:
-        $ref: '#/components/schemas/dateTime'
-    sort:
-      name: sort
-      in: query
-      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
-      example: deviceId,updateTime:desc
-      schema:
-        type: string
-    accountId:
-      name: X-Watchtower-Account-Id
-      in: header
-      description: Account Id
-      required: true
-      schema:
-        $ref: '#/components/schemas/accountId'
-      example: 1002000010
-    offset:
-      name: offset
-      in: query
-      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
-      schema:
-        $ref: '#/components/schemas/offset'
-    eventId:
-      name: eventId
-      in: path
-      description: Event Id
-      required: true
-      schema:
-        $ref: '#/components/schemas/EventId'
-    authorization:
-      name: Authorization
-      in: header
-      description: Bearer Token for authentication
-      required: true
-      schema:
-        type: string
-        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
-      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
-    limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
   schemas:
+    500Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse'
+      - type: object
+        properties:
+          title:
+            example: Internal server error
+          status:
+            example: 500
     503Response:
       allOf:
       - $ref: '#/components/schemas/ErrorResponse'
@@ -658,54 +511,6 @@ components:
             example: Service Unavailable
           status:
             example: 503
-    404Response:
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponse'
-      - type: object
-        properties:
-          title:
-            example: No Found
-          status:
-            example: 404
-    ErrorResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-          description: 'An absolute URI that identifies the problem type. When dereferenced,it SHOULD provide
-
-            human-readable documentation for the problem type (e.g., using HTML).
-
-            '
-          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
-        title:
-          type: string
-          description: 'A short, summary of the problem type. Written in english and readable for engineers (usually not suited
-
-            for non technical stakeholders and not localized.
-
-            '
-          example: Service Unavailable
-        status:
-          type: integer
-          format: int32
-          description: The HTTP status code generated by the origin server for this occurrence of the problem.
-          minimum: 100
-          example: 503
-          exclusiveMaximum: 600
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem.
-          example: Connection to database timed out.
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
-          example: https://api.documentation.url/request-id
-        parameters:
-          type: object
-          additionalProperties:
-            type: string
     Event:
       type: object
       allOf:
@@ -908,15 +713,15 @@ components:
             example: Bad Request
           status:
             example: 400
-    500Response:
+    401Response:
       allOf:
       - $ref: '#/components/schemas/ErrorResponse'
       - type: object
         properties:
           title:
-            example: Internal server error
+            example: Authentication Failure
           status:
-            example: 500
+            example: 401
     ListEvent:
       type: object
       required:
@@ -950,15 +755,6 @@ components:
         id: WOh6LIABUqU6IY0JSVLK
         code: m46-0
         occurred_at: '2019-06-27T15:47:03.000Z'
-    401Response:
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponse'
-      - type: object
-        properties:
-          title:
-            example: Authentication Failure
-          status:
-            example: 401
     529Response:
       allOf:
       - $ref: '#/components/schemas/ErrorResponse'
@@ -968,115 +764,60 @@ components:
             example: Service Overloaded
           status:
             example: 529
-    SummaryDataRows:
-      type: array
-      items:
-        type: array
-        items: {}
-    PagedSummaryTable:
-      allOf:
-      - type: object
-        properties:
-          lastEvaluatedDate:
-            type: string
-      - $ref: '#/components/schemas/Pagination'
-      - $ref: '#/components/schemas/PagedSummaryTableData'
-    AggregateEventSecurityItem:
-      description: Aggregate Event Security Item
-      type: string
-      example: Malicious Endpoint
-      enum:
-      - Unclassified
-      - Address Scan
-      - Malicious IP
-      - New IP
-      - New Port
-      - Port Scan
-      - SIM Misuse
-      - TCP Bad Flags
-      - TCP Max Flows
-      - Traffic Spike
-      - Malicious Endpoint
-      - Botnet and C&C
-      - Cryptocurrency
-      - Data Exfiltration
-      - Suspicious Endpoint
-      - Phishing
-      - Ransomware
-      - Devices located according to expectations
-      - Non IoT devices in use
-      - Unencrypted data flow to private apps
-      - Unencrypted data flow to public apps
-      - Use of untrusted DNS servers
-      - Data Sovereignty
-      - Devices communicating using VPN
-      - Non compliant communication - OFAC
-      - Public applications
-      - Removable devices in use
-      - Blocked Flows
-      - Devices utilizing private APN
-      - Devices utilizing internet APN
-      - 'Anomalous Mobility Event: Moving Outside a Location List'
-      - 'Anomalous Mobility Event: Impossible Mobility'
-      - High Frequency Reconnect
-      - High Cell Disconnect Rate
-      x-enum-varnames:
-      - Unclassified
-      - AddressScan
-      - MaliciousIP
-      - NewIP
-      - NewPort
-      - PortScan
-      - SIMMisuse
-      - TCPBadFlags
-      - TCPMaxFlows
-      - TrafficSpike
-      - MaliciousEndpoint
-      - BotnetAndCnC
-      - Cryptocurrency
-      - DataExfiltration
-      - SuspiciousEndpoint
-      - Phishing
-      - Ransomware
-      - DevicesLocatedAccordingToExpectations
-      - NonIoTDevicesInUse
-      - UnencryptedDataFlowToPrivateApps
-      - UnencryptedDataFlowToPublicApps
-      - UseOfUntrustedDNSServers
-      - DataSovereignty
-      - DevicesCommunicatingUsingVPN
-      - NonCompliantCommunicationOFAC
-      - PublicApplications
-      - RemovableDevicesInUse
-      - BlockedFlows
-      - DevicesUtilizingPrivateAPN
-      - DevicesUtilizingInternetAPN
-      - AnomalousMobilityEventMovingOutsideLocationList
-      - AnomalousMobilityEventImpossibleMobility
-      - HighFrequencyReconnect
-      - HighCellDisconnectRate
-    SummaryDataSchema:
+    ErrorResponse:
       type: object
       properties:
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-    total:
-      type: integer
-      format: int64
-      description: Total number of items available.
-      example: 1
-      minimum: 0
-    PagedEventsTable:
+        type:
+          type: string
+          format: uri
+          description: 'An absolute URI that identifies the problem type. When dereferenced,it SHOULD provide
+
+            human-readable documentation for the problem type (e.g., using HTML).
+
+            '
+          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
+        title:
+          type: string
+          description: 'A short, summary of the problem type. Written in english and readable for engineers (usually not suited
+
+            for non technical stakeholders and not localized.
+
+            '
+          example: Service Unavailable
+        status:
+          type: integer
+          format: int32
+          description: The HTTP status code generated by the origin server for this occurrence of the problem.
+          minimum: 100
+          example: 503
+          exclusiveMaximum: 600
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem.
+          example: Connection to database timed out.
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
+          example: https://api.documentation.url/request-id
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+    404Response:
       allOf:
-      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/ErrorResponse'
       - type: object
         properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/Event_2'
+          title:
+            example: No Found
+          status:
+            example: 404
+    EventId:
+      type: string
+      description: Event Id
+      example: v1_1652823856823_6b71e284b63a527caa6296a66e9fdd0c
+      maxLength: 128
+      minLength: 1
     AggregateEventRiskCategory:
       description: Aggregate Event Category
       type: string
@@ -1090,127 +831,6 @@ components:
       - Network Security
       - Application Security
       - 'Device Security: Traffic'
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
-    limit:
-      type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
-    EventDeviceGroup:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-          example: Group1
-        colorCode:
-          type: string
-          example: '#123aaff'
-    domain:
-      description: FQDN
-      type: string
-      example: abc.xyz.com
-    malwareProtectionLevel:
-      type: string
-      enum:
-      - NONE
-      - ESSENTIAL
-      - AGGRESSIVE
-      - COMPREHENSIVE
-    EventType:
-      type: string
-      description: Type of the Event
-      example: Malicious Endpoint
-      enum:
-      - Address Scan
-      - Botnet and C&C
-      - Cryptocurrency
-      - Data Exfiltration
-      - Malicious Endpoint
-      - New IP
-      - New Port
-      - Phishing
-      - Port Scan
-      - Ransomware
-      - SIM Misuse
-      - Suspicious Endpoint
-      - TCP Bad Flags
-      - TCP Max Flows
-      - Traffic Spike
-      - Unclassified
-      - 'Anomalous Mobility: Moving Outside Location List'
-      - 'Anomalous Mobility: Impossible Mobility'
-      - High Frequency Reconnect
-      - High Cell Disconnect Rate
-      x-enum-varnames:
-      - AddressScan
-      - BotnetAndCnC
-      - Cryptocurrency
-      - DataExfiltration
-      - MaliciousEndpoint
-      - NewIP
-      - NewPort
-      - Phishing
-      - PortScan
-      - Ransomware
-      - SIMMisuse
-      - SuspiciousEndpoint
-      - TCPBadFlags
-      - TCPMaxFlows
-      - TrafficSpike
-      - Unclassified
-      - AnomalousMobilityMovingOutsideLocationList
-      - AnomalousMobilityImpossibleMobility
-      - HighFrequencyReconnect
-      - HighCellDisconnectRate
-    accountId:
-      description: Account Id.
-      type: integer
-      format: int32
-      example: 10407
-      minimum: 0
-    EventsBulkUpdateRequest:
-      allOf:
-      - type: object
-        properties:
-          eventIds:
-            type: array
-            items:
-              type: string
-              description: Event Id
-              example: v1_1652823856823_6b71e284b63a527caa6296a66e9fdd0c
-              maxLength: 128
-              minLength: 1
-      - $ref: '#/components/schemas/EventsUpdateRequest'
-    port:
-      type: integer
-      description: Port number
-      minimum: 0
-      maximum: 65536
-      example: 8080
-    EventSeverity:
-      description: Severity of the Event
-      type: string
-      example: Critical
-      enum:
-      - Critical
-      - High
-      - Medium
-      - Low
-      x-enum-varnames:
-      - Critical
-      - High
-      - Medium
-      - Low
     Event_2:
       type: object
       properties:
@@ -1365,71 +985,6 @@ components:
           type: string
           description: Postal town associated with the device location.
           example: San Francisco
-    EventStatus:
-      description: Status of the Event
-      type: string
-      example: Saved For Review
-      enum:
-      - New
-      - Saved For Review
-      - In Process
-      - Resolved
-      - Dismissed
-      x-enum-varnames:
-      - New
-      - SavedForReview
-      - InProcess
-      - Resolved
-      - Dismissed
-    deviceProfileId:
-      description: Device Profile ID assigned to the device.
-      type: string
-      maxLength: 30
-      example: AER0000007087071
-    ip:
-      type: string
-      description: IP Address
-      example: 172.16.1.3
-    EventId:
-      type: string
-      description: Event Id
-      example: v1_1652823856823_6b71e284b63a527caa6296a66e9fdd0c
-      maxLength: 128
-      minLength: 1
-    Field:
-      type: object
-      properties:
-        name:
-          description: The field name.
-          type: string
-        type:
-          description: The data type of the field.
-          type: string
-          enum:
-          - BOOLEAN
-          - DATE
-          - TIMESTAMP
-          - STRING
-          - INTEGER
-          - FLOAT
-          - DOUBLE
-          - ARRAY
-      required:
-      - name
-      - type
-    EventCategory:
-      type: string
-      description: Category of the Event
-      example: Malicious
-      enum:
-      - Malicious
-      - Suspicious
-      - Anomalous
-    msisdn:
-      description: Mobile Station International Subscriber Directory Number.
-      type: string
-      maxLength: 15
-      example: '8801500121121'
     AggregateEventAssessedSeverity:
       description: Aggregate Event Severity
       type: string
@@ -1439,156 +994,6 @@ components:
       - High
       - Medium
       - Low
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: HTTP code
-          example: 500
-        message:
-          type: string
-          description: Error message
-          example: An error encountered in processing the request
-        timestamp:
-          type: string
-          description: ISO DateTime
-          example: '2025-06-02 09:01:53.678'
-        path:
-          type: string
-          description: Endpoint path at which the error occured
-          example: /watchtower/v1/events
-        traceId:
-          type: string
-          description: Trace Id
-          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    PagedSummaryTableData:
-      type: object
-      properties:
-        schema:
-          $ref: '#/components/schemas/SummaryDataSchema'
-        data:
-          $ref: '#/components/schemas/SummaryDataRows'
-    EventsMetricsRequest:
-      allOf:
-      - $ref: '#/components/schemas/EventsQueryRequest'
-      - type: object
-        properties:
-          interval:
-            type: string
-            description: Time interval in ISO8601 duration format (e.g. P1D for daily, PT1H for hourly)
-            example: PT1H
-          dimensions:
-            type: string
-            description: Comma-separated list of dimensions
-            example: type,status
-          metrics:
-            type: string
-            description: Comma-separated list of metrics. use cnt__<field> to get count aggregate.
-            example: cnt__event_id
-    iccid:
-      description: Integrated Circuit Card Identifier.
-      type: string
-      minLength: 18
-      maxLength: 22
-      example: '891004234814455936'
-    dateTime:
-      description: ISO 8601 date time
-      type: string
-      format: date-time
-      example: '2021-07-04T17:36:47Z'
-    Pagination:
-      type: object
-      properties:
-        total:
-          $ref: '#/components/schemas/total'
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
-    endpointFQDN:
-      description: Fully qualified domain name of the endpoint
-      type: string
-      maxLength: 253
-      minLength: 1
-    ScheduledReport:
-      type: object
-      properties:
-        reportId:
-          description: Report Id
-          type: string
-          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
-        status:
-          $ref: '#/components/schemas/ReportStatus'
-        statusEndpoint:
-          description: Report Status URL
-          type: string
-          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
-    EventsUpdateRequest:
-      type: object
-      description: Object representing an event update request.
-      properties:
-        status:
-          description: Status of the Event
-          type: string
-          example: Saved For Review
-          enum:
-          - New
-          - Saved For Review
-          - In Process
-          - Resolved
-          - Dismissed
-          x-enum-varnames:
-          - New
-          - SavedForReview
-          - InProcess
-          - Resolved
-          - Dismissed
-        notes:
-          description: Notes entered by a human user while taking an action on event.
-          type: string
-          example: Acknowledging the event. Starting investigation of IMEI change.
-        reason:
-          description: Additional Reasoning about status/status change.
-          type: string
-          example: False Positive
-        email:
-          type: string
-          format: email
-          description: Email id of the user
-        requestId:
-          description: This column will store the request ID.
-          type: string
-          example: REQ201043380628
-    ReportStatus:
-      description: Report status
-      type: string
-      example: Processing
-      enum:
-      - Success
-      - Processing
-      - Error
-      - NotStarted
-    imsi:
-      description: International Mobile Subscriber Identifier of the device.
-      type: string
-      maxLength: 15
-      example: '310009133100012'
-    AggregatedEventsQueryRequest:
-      type: object
-      properties:
-        securityItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/AggregateEventSecurityItem'
-        assessedSeverities:
-          type: array
-          items:
-            $ref: '#/components/schemas/AggregateEventAssessedSeverity'
-        riskCategories:
-          type: array
-          items:
-            $ref: '#/components/schemas/AggregateEventRiskCategory'
     EventsQueryRequest:
       type: object
       properties:
@@ -1680,9 +1085,604 @@ components:
           type: string
           description: Filter by postal town of device location.
           example: San Francisco
+    endpointFQDN:
+      description: Fully qualified domain name of the endpoint
+      type: string
+      maxLength: 253
+      minLength: 1
+    EventsMetricsRequest:
+      allOf:
+      - $ref: '#/components/schemas/EventsQueryRequest'
+      - type: object
+        properties:
+          interval:
+            type: string
+            description: Time interval in ISO8601 duration format (e.g. P1D for daily, PT1H for hourly)
+            example: PT1H
+          dimensions:
+            type: string
+            description: Comma-separated list of dimensions
+            example: type,status
+          metrics:
+            type: string
+            description: Comma-separated list of metrics. use cnt__<field> to get count aggregate.
+            example: cnt__event_id
+    domain:
+      description: FQDN
+      type: string
+      example: abc.xyz.com
+    PagedSummaryTableData:
+      type: object
+      properties:
+        schema:
+          $ref: '#/components/schemas/SummaryDataSchema'
+        data:
+          $ref: '#/components/schemas/SummaryDataRows'
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    deviceProfileId:
+      description: Device Profile ID assigned to the device.
+      type: string
+      maxLength: 30
+      example: AER0000007087071
+    port:
+      type: integer
+      description: Port number
+      minimum: 0
+      maximum: 65536
+      example: 8080
+    PagedSummaryTable:
+      allOf:
+      - type: object
+        properties:
+          lastEvaluatedDate:
+            type: string
+      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/PagedSummaryTableData'
+    imsi:
+      description: International Mobile Subscriber Identifier of the device.
+      type: string
+      maxLength: 15
+      example: '310009133100012'
+    ScheduledReport:
+      type: object
+      properties:
+        reportId:
+          description: Report Id
+          type: string
+          example: 7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        statusEndpoint:
+          description: Report Status URL
+          type: string
+          example: /watchtower/v1/scheduled-reports/7ae9e22d-8ad4-4a69-950a-6b13d75f0c74
+    SummaryDataRows:
+      type: array
+      items:
+        type: array
+        items: {}
+    AggregatedEventsQueryRequest:
+      type: object
+      properties:
+        securityItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregateEventSecurityItem'
+        assessedSeverities:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregateEventAssessedSeverity'
+        riskCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/AggregateEventRiskCategory'
+    SummaryDataSchema:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+    EventsBulkUpdateRequest:
+      allOf:
+      - type: object
+        properties:
+          eventIds:
+            type: array
+            items:
+              type: string
+              description: Event Id
+              example: v1_1652823856823_6b71e284b63a527caa6296a66e9fdd0c
+              maxLength: 128
+              minLength: 1
+      - $ref: '#/components/schemas/EventsUpdateRequest'
+    Pagination:
+      type: object
+      properties:
+        total:
+          $ref: '#/components/schemas/total'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+    EventType:
+      type: string
+      description: Type of the Event
+      example: Malicious Endpoint
+      enum:
+      - Address Scan
+      - Botnet and C&C
+      - Cryptocurrency
+      - Data Exfiltration
+      - Malicious Endpoint
+      - New IP
+      - New Port
+      - Phishing
+      - Port Scan
+      - Ransomware
+      - SIM Misuse
+      - Suspicious Endpoint
+      - TCP Bad Flags
+      - TCP Max Flows
+      - Traffic Spike
+      - Unclassified
+      - 'Anomalous Mobility: Moving Outside Location List'
+      - 'Anomalous Mobility: Impossible Mobility'
+      - High Frequency Reconnect
+      - High Cell Disconnect Rate
+      x-enum-varnames:
+      - AddressScan
+      - BotnetAndCnC
+      - Cryptocurrency
+      - DataExfiltration
+      - MaliciousEndpoint
+      - NewIP
+      - NewPort
+      - Phishing
+      - PortScan
+      - Ransomware
+      - SIMMisuse
+      - SuspiciousEndpoint
+      - TCPBadFlags
+      - TCPMaxFlows
+      - TrafficSpike
+      - Unclassified
+      - AnomalousMobilityMovingOutsideLocationList
+      - AnomalousMobilityImpossibleMobility
+      - HighFrequencyReconnect
+      - HighCellDisconnectRate
+    offset:
+      description: Position in pagination.
+      type: integer
+      format: int32
+      default: 0
+      minimum: 0
+    dateTime:
+      description: ISO 8601 date time
+      type: string
+      format: date-time
+      example: '2021-07-04T17:36:47Z'
+    malwareProtectionLevel:
+      type: string
+      enum:
+      - NONE
+      - ESSENTIAL
+      - AGGRESSIVE
+      - COMPREHENSIVE
+    EventsUpdateRequest:
+      type: object
+      description: Object representing an event update request.
+      properties:
+        status:
+          description: Status of the Event
+          type: string
+          example: Saved For Review
+          enum:
+          - New
+          - Saved For Review
+          - In Process
+          - Resolved
+          - Dismissed
+          x-enum-varnames:
+          - New
+          - SavedForReview
+          - InProcess
+          - Resolved
+          - Dismissed
+        notes:
+          description: Notes entered by a human user while taking an action on event.
+          type: string
+          example: Acknowledging the event. Starting investigation of IMEI change.
+        reason:
+          description: Additional Reasoning about status/status change.
+          type: string
+          example: False Positive
+        email:
+          type: string
+          format: email
+          description: Email id of the user
+        requestId:
+          description: This column will store the request ID.
+          type: string
+          example: REQ201043380628
+    EventDeviceGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          example: Group1
+        colorCode:
+          type: string
+          example: '#123aaff'
+    EventSeverity:
+      description: Severity of the Event
+      type: string
+      example: Critical
+      enum:
+      - Critical
+      - High
+      - Medium
+      - Low
+      x-enum-varnames:
+      - Critical
+      - High
+      - Medium
+      - Low
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    AggregateEventSecurityItem:
+      description: Aggregate Event Security Item
+      type: string
+      example: Malicious Endpoint
+      enum:
+      - Unclassified
+      - Address Scan
+      - Malicious IP
+      - New IP
+      - New Port
+      - Port Scan
+      - SIM Misuse
+      - TCP Bad Flags
+      - TCP Max Flows
+      - Traffic Spike
+      - Malicious Endpoint
+      - Botnet and C&C
+      - Cryptocurrency
+      - Data Exfiltration
+      - Suspicious Endpoint
+      - Phishing
+      - Ransomware
+      - Devices located according to expectations
+      - Non IoT devices in use
+      - Unencrypted data flow to private apps
+      - Unencrypted data flow to public apps
+      - Use of untrusted DNS servers
+      - Data Sovereignty
+      - Devices communicating using VPN
+      - Non compliant communication - OFAC
+      - Public applications
+      - Removable devices in use
+      - Blocked Flows
+      - Devices utilizing private APN
+      - Devices utilizing internet APN
+      - 'Anomalous Mobility Event: Moving Outside a Location List'
+      - 'Anomalous Mobility Event: Impossible Mobility'
+      - High Frequency Reconnect
+      - High Cell Disconnect Rate
+      x-enum-varnames:
+      - Unclassified
+      - AddressScan
+      - MaliciousIP
+      - NewIP
+      - NewPort
+      - PortScan
+      - SIMMisuse
+      - TCPBadFlags
+      - TCPMaxFlows
+      - TrafficSpike
+      - MaliciousEndpoint
+      - BotnetAndCnC
+      - Cryptocurrency
+      - DataExfiltration
+      - SuspiciousEndpoint
+      - Phishing
+      - Ransomware
+      - DevicesLocatedAccordingToExpectations
+      - NonIoTDevicesInUse
+      - UnencryptedDataFlowToPrivateApps
+      - UnencryptedDataFlowToPublicApps
+      - UseOfUntrustedDNSServers
+      - DataSovereignty
+      - DevicesCommunicatingUsingVPN
+      - NonCompliantCommunicationOFAC
+      - PublicApplications
+      - RemovableDevicesInUse
+      - BlockedFlows
+      - DevicesUtilizingPrivateAPN
+      - DevicesUtilizingInternetAPN
+      - AnomalousMobilityEventMovingOutsideLocationList
+      - AnomalousMobilityEventImpossibleMobility
+      - HighFrequencyReconnect
+      - HighCellDisconnectRate
+    EventStatus:
+      description: Status of the Event
+      type: string
+      example: Saved For Review
+      enum:
+      - New
+      - Saved For Review
+      - In Process
+      - Resolved
+      - Dismissed
+      x-enum-varnames:
+      - New
+      - SavedForReview
+      - InProcess
+      - Resolved
+      - Dismissed
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    EventCategory:
+      type: string
+      description: Category of the Event
+      example: Malicious
+      enum:
+      - Malicious
+      - Suspicious
+      - Anomalous
+    PagedEventsTable:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/Event_2'
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    ip:
+      type: string
+      description: IP Address
+      example: 172.16.1.3
+    ReportStatus:
+      description: Report status
+      type: string
+      example: Processing
+      enum:
+      - Success
+      - Processing
+      - Error
+      - NotStarted
+    msisdn:
+      description: Mobile Station International Subscriber Directory Number.
+      type: string
+      maxLength: 15
+      example: '8801500121121'
+    Field:
+      type: object
+      properties:
+        name:
+          description: The field name.
+          type: string
+        type:
+          description: The data type of the field.
+          type: string
+          enum:
+          - BOOLEAN
+          - DATE
+          - TIMESTAMP
+          - STRING
+          - INTEGER
+          - FLOAT
+          - DOUBLE
+          - ARRAY
+      required:
+      - name
+      - type
+    iccid:
+      description: Integrated Circuit Card Identifier.
+      type: string
+      minLength: 18
+      maxLength: 22
+      example: '891004234814455936'
+  parameters:
+    fromParam:
+      in: query
+      name: from
+      description: The start time, UTC, for the time window processed to generate the response, e.g. "2019-06-28T00:00:00.000Z". If not input, will use default value "One hour ago (UTC)".
+      required: false
+      schema:
+        type: string
+        format: date-time
+      allowReserved: true
+      example: '2019-06-28T00:00:00.000Z'
+    codeParam:
+      in: query
+      name: code
+      description: One or more codes, comma separated, filtering which events to retrieve, e.g. "l42,m56".
+      required: false
+      schema:
+        type: string
+      example: l42,m56
+    sortParam:
+      in: query
+      name: sort
+      description: Sort parameter containing sort field and sort mode used for getting the event data, e.g. "occurred_at:asc". If not input, will use default value "occurred_at:asc".
+      schema:
+        type: string
+        enum:
+        - code:asc
+        - code:desc
+        - occurred_at:asc
+        - occurred_at:desc
+      allowReserved: true
+    additionalFieldsParam:
+      name: additionalFields
+      in: query
+      description: "Parameter used to filter the response object, you can determine a subset of additional fields that you want to\ninclude in the response, e.g. \"lac,apn\".\n\n\n__Request__\n\n\nGET /events\n\n\n__Response__\n\n```json\n\n{\n  \"next\": \"DFVSDB3434%DFB%EYY445\",\n  \"items\": [\n    {\n      \"imsi\": \"238208000000001\",\n      \"id\": \"WOh6LIABUqU6IY0JSVLK\",\n      \"code\": \"m46-0\",\n      \"occurred_at\": \"2017-06-27T15:47:03.000Z\",\n    }\n    ...\n  ]\n}\n\n```\n\n\n__Request__\n\n\nGET /events?__additionalFields=lac,apn__\n\n\n__Response__\n\n```json\n\n{\n  \"next\": \"DFVSDB3434%DFB%EYY445\",\n  \"items\": [\n    {\n      \"imsi\": \"238208000000001\",\n      \"id\": \"WOh6LIABUqU6IY0JSVLK\",\n      \"code\": \"m46-0\",\n      \"occurred_at\": \"2017-06-27T15:47:03.000Z\",\n      \"lac\": \"2323\",\n      \"apn\": \"ericsson.api.net\"\n    }\n    ...\n  ]\n}\n\n```\n"
+      required: false
+      schema:
+        type: string
+      allowReserved: true
+    cursorParam:
+      in: query
+      name: cursor
+      description: 'Parameter used for display the content of next page on pagination, cannot be used with other parameters in one request.
+
+
+        Set to the value of ''next'' for the next page of results.
+
+        '
+      schema:
+        type: string
+      allowReserved: true
+    eventIdParam:
+      in: path
+      name: event_id
+      description: An id which identifies a specific signalling event, which is the id field in response of /events.
+      required: true
+      schema:
+        type: string
+    toParam:
+      in: query
+      name: to
+      description: The end time, UTC, for the time window processed to generate the response, e.g. "2019-06-28T00:00:00.000Z". If not input, will use default value "Now (UTC)".
+      required: false
+      schema:
+        type: string
+        format: date-time
+      allowReserved: true
+      example: '2019-06-28T01:00:00.000Z'
+    fieldsParam:
+      name: fields
+      in: query
+      description: "Parameter used to filter the response object, you can determine a subset of fields that you want to\ninclude in the response, e.g. \"(imsi,lac)\".\n\n\n__Request__\n\n\nGET /events/WOh6LIABUqU6IY0JSVLK\n\n\n__Response__\n\n```json\n\n{\n  \"imsi\": \"238208000000001\",\n  \"id\": \"WOh6LIABUqU6IY0JSVLK\",\n  \"code\": \"m46-0\",\n  \"occurred_at\": \"2017-06-27T15:47:03.000Z\",\n  \"rat_type\": 1,\n  \"visited_nw\": \"France | Orange\",\n  \"imei\": \"676767676767\",\n  \"lac\": \"2323\",\n  \"lai\": \"2323\",\n  \"ggsn_ip\": \"8.8.8.8\",\n  \"sgsn_ip\": \"8.8.4.4\",\n  \"apn\": \"ericsson.api.net\"\n  ...\n}\n\n```\n\n\n__Request__\n\n\nGET /events/WOh6LIABUqU6IY0JSVLK?__fields=(imsi,lac)__\n\n\n__Response__\n\n```json\n\n{\n  \"imsi\": \"238208000000001\",\n  \"lac\": \"2323\"\n}\n\n```\n"
+      required: false
+      schema:
+        type: string
+      allowReserved: true
+    imsiParam:
+      in: query
+      name: imsi
+      description: One or more imsi(s), comma separated, which identifies the subscription(s) to get events for, e.g. "238208000000001,238208000000002". The maximum imsi number is 15.
+      required: true
+      style: form
+      explode: false
+      schema:
+        type: string
+      allowReserved: true
+      example: 238208000000001,238208000000002
+    limitParam:
+      in: query
+      name: limit
+      description: Specifies the maximum number of events to be returned, allowed interval is 1-1000, if not input, will use default value "100".
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+      example: 100
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
+    startTime:
+      name: startTime
+      in: query
+      required: true
+      description: The start timestamp. (inclusive)
+      example: '2021-07-01T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
+    sort:
+      name: sort
+      in: query
+      description: Use <b>sort=comma-separated-fields[:asc|desc]</b> to sort the result.
+      example: deviceId,updateTime:desc
+      schema:
+        type: string
+    authorization:
+      name: Authorization
+      in: header
+      description: Bearer Token for authentication
+      required: true
+      schema:
+        type: string
+        pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
+      example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    endTime:
+      name: endTime
+      in: query
+      required: true
+      description: The end timestamp. (exclusive)
+      example: '2021-07-05T06:30:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    eventId:
+      name: eventId
+      in: path
+      description: Event Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/EventId'
   headers:
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
       schema:
         type: integer
         format: int32
@@ -1691,8 +1691,8 @@ components:
       schema:
         type: integer
         format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
       schema:
         type: integer
         format: int32
@@ -1702,6 +1702,30 @@ components:
         type: integer
         format: int32
   responses:
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '429':
       description: Too many requests.
       content:
@@ -1726,18 +1750,6 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '400':
       description: Bad Request.
       content:
@@ -1747,18 +1759,6 @@ components:
           example:
             code: 400
             message: Bad Request
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '404':
-      description: Not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Not found
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
@@ -1774,15 +1774,15 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
+    '404':
+      description: Not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            code: 500
-            message: Internal Server Error
+            code: 404
+            message: Not found
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
