@@ -127,6 +127,30 @@ components:
             totalNumberOfPendingMessages:
               type: string
               description: Total number of SMS messages that are awaiting for retrieval from storage.
+    InboundSMSMessage:
+      type: object
+      properties:
+        dateTime:
+          type: string
+          description: Date and time when the successful response is created.
+        destinationAddress:
+          type: string
+          description: The number associated with your service. It corresponds to the registrationID.
+        messageId:
+          type: string
+          description: Message identifier generated automatically by the server.
+        message:
+          type: string
+          description: 'For Text SMS: a string with maximum 160 characters. For Binary SMS: a Base64 (RFC4648) encoded string with up to 140 bytes of binary data. For example: AQIDBAUGBwgJCg=='
+        resourceURL:
+          type: string
+          description: Link to the SMS message.
+        senderAddress:
+          type: string
+          description: The name of the enterprise that sent the SMS.
+        messageType:
+          type: string
+          description: 'The type of SMS message. For Binary SMS: use ''binary''. When field is not present, the message is a text message'
     RequestError:
       type: object
       properties:
@@ -157,30 +181,6 @@ components:
                 variables:
                   type: string
                   description: points to the variable(s) in violation
-    InboundSMSMessage:
-      type: object
-      properties:
-        dateTime:
-          type: string
-          description: Date and time when the successful response is created.
-        destinationAddress:
-          type: string
-          description: The number associated with your service. It corresponds to the registrationID.
-        messageId:
-          type: string
-          description: Message identifier generated automatically by the server.
-        message:
-          type: string
-          description: 'For Text SMS: a string with maximum 160 characters. For Binary SMS: a Base64 (RFC4648) encoded string with up to 140 bytes of binary data. For example: AQIDBAUGBwgJCg=='
-        resourceURL:
-          type: string
-          description: Link to the SMS message.
-        senderAddress:
-          type: string
-          description: The name of the enterprise that sent the SMS.
-        messageType:
-          type: string
-          description: 'The type of SMS message. For Binary SMS: use ''binary''. When field is not present, the message is a text message'
   securitySchemes:
     BasicAuth:
       type: http

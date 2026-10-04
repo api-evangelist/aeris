@@ -255,46 +255,6 @@ paths:
         - subscription.write
 components:
   schemas:
-    IdType:
-      type: string
-      description: Type of identifier
-      x-extensible-enum:
-      - IMSI
-      example: IMSI
-    UpdateCustomFieldRequest:
-      type: object
-      properties:
-        identifierType:
-          $ref: '#/components/schemas/IdType'
-        organizationId:
-          type: string
-          example: 1.23.45. If not specified, default company id of user is used.
-        identifiers:
-          description: 'List of identifiers to update.  Max number of items allowed is 100k.
-
-            '
-          type: array
-          items:
-            type: string
-          example:
-          - '123456789012345'
-          - '123456789012346'
-        customFields:
-          $ref: '#/components/schemas/SubscriptionCustomFields'
-    CustomFieldsResponse:
-      type: object
-      properties:
-        items:
-          description: 'Array of custom fields
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomField'
-    SubscriptionCustomFields:
-      type: array
-      items:
-        $ref: '#/components/schemas/AttachedCustomField'
     AttachedCustomField:
       type: object
       required:
@@ -363,6 +323,53 @@ components:
             type: string
           example:
           - red
+    UpdateCustomFieldRequest:
+      type: object
+      properties:
+        identifierType:
+          $ref: '#/components/schemas/IdType'
+        organizationId:
+          type: string
+          example: 1.23.45. If not specified, default company id of user is used.
+        identifiers:
+          description: 'List of identifiers to update.  Max number of items allowed is 100k.
+
+            '
+          type: array
+          items:
+            type: string
+          example:
+          - '123456789012345'
+          - '123456789012346'
+        customFields:
+          $ref: '#/components/schemas/SubscriptionCustomFields'
+    IdType:
+      type: string
+      description: Type of identifier
+      x-extensible-enum:
+      - IMSI
+      example: IMSI
+    SubscriptionCustomFields:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttachedCustomField'
+    CustomFieldsResponse:
+      type: object
+      properties:
+        items:
+          description: 'Array of custom fields
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+    CustomFieldType:
+      type: string
+      description: Type of custom field
+      x-extensible-enum:
+      - PREDEFINED_FIELD_VALUES
+      - FREE_TEXT
+      example: PREDEFINED_FIELD_VALUES
     Problem:
       type: object
       example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.4
@@ -414,40 +421,32 @@ components:
             dereferenced.
 
             '
-    CustomFieldType:
-      type: string
-      description: Type of custom field
-      x-extensible-enum:
-      - PREDEFINED_FIELD_VALUES
-      - FREE_TEXT
-      example: PREDEFINED_FIELD_VALUES
+  headers:
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
   responses:
-    Response_500:
-      description: Internal Server Error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            problem-response-example:
-              value:
-              - type: about:blank
-                title: Internal Server Error
-                status: 500
-                detail: null
-                instance: null
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
     Response_429:
       description: Too Many Requests
       allOf:
@@ -464,6 +463,20 @@ components:
                 status: 429
                 detail: Too Many Requests
                 instance: null
+    Response_500:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            problem-response-example:
+              value:
+              - type: about:blank
+                title: Internal Server Error
+                status: 500
+                detail: null
+                instance: null
     Response_403:
       description: Forbidden
       content:
@@ -478,31 +491,18 @@ components:
                 status: 403
                 detail: null
                 instance: null
-  headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
   securitySchemes:
     Oauth2_auth:
       flows:

@@ -133,18 +133,25 @@ paths:
         - css_manage_incidents_for_advanced_reseller_enterprise
 components:
   schemas:
-    ActivityStatus:
+    Attachment:
       type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: Current status of the activity (DRAFT/CREATED).
-          x-extensible-enum:
-          - DRAFT
-          - CREATED
-          example: DRAFT
+      description: File attachment metadata.
+      allOf:
+      - $ref: '#/components/schemas/Auditable'
+      - type: object
+        required:
+        - id
+        - name
+        properties:
+          id:
+            type: string
+            description: File attachment unique id.
+            example: dg3g5vdg
+            readOnly: true
+          name:
+            type: string
+            description: File name.
+            example: Image.jpg
     Activity:
       type: object
       description: An activity related to an incident.
@@ -177,51 +184,18 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Attachment'
-    Attachment:
+    ActivityStatus:
       type: object
-      description: File attachment metadata.
-      allOf:
-      - $ref: '#/components/schemas/Auditable'
-      - type: object
-        required:
-        - id
-        - name
-        properties:
-          id:
-            type: string
-            description: File attachment unique id.
-            example: dg3g5vdg
-            readOnly: true
-          name:
-            type: string
-            description: File name.
-            example: Image.jpg
-    Auditable:
-      type: object
-      description: Common metadata of auditable entities.
+      required:
+      - status
       properties:
-        created_at:
+        status:
           type: string
-          format: date-time
-          description: The date and time when this entity was created. (RFC 3339 date-time)
-          example: '2017-06-27T15:47:03.000Z'
-          readOnly: true
-        created_by_user:
-          type: string
-          description: The user who created this entity.
-          example: user@enterprise.xyz
-          readOnly: true
-        last_modified_at:
-          type: string
-          format: date-time
-          description: The date and time of last modification. (RFC 3339 date-time)
-          example: '2017-06-27T15:47:03.000Z'
-          readOnly: true
-        modified_by_user:
-          type: string
-          description: The user who was the last to modify this entity.
-          example: user@enterprise.xyz
-          readOnly: true
+          description: Current status of the activity (DRAFT/CREATED).
+          x-extensible-enum:
+          - DRAFT
+          - CREATED
+          example: DRAFT
     Problem:
       type: object
       properties:
@@ -268,6 +242,32 @@ components:
             It may or may not yield further information if dereferenced.
 
             '
+    Auditable:
+      type: object
+      description: Common metadata of auditable entities.
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when this entity was created. (RFC 3339 date-time)
+          example: '2017-06-27T15:47:03.000Z'
+          readOnly: true
+        created_by_user:
+          type: string
+          description: The user who created this entity.
+          example: user@enterprise.xyz
+          readOnly: true
+        last_modified_at:
+          type: string
+          format: date-time
+          description: The date and time of last modification. (RFC 3339 date-time)
+          example: '2017-06-27T15:47:03.000Z'
+          readOnly: true
+        modified_by_user:
+          type: string
+          description: The user who was the last to modify this entity.
+          example: user@enterprise.xyz
+          readOnly: true
   securitySchemes:
     oauth2:
       type: oauth2

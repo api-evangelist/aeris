@@ -258,19 +258,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Attachment'
-    FileUpload:
-      type: object
-      required:
-      - file
-      - fileName
-      properties:
-        file:
-          type: string
-          format: binary
-        fileName:
-          type: string
-          format: string
-          example: Sample.txt
     Attachment:
       type: object
       description: File attachment metadata.
@@ -290,6 +277,19 @@ components:
             type: string
             description: File name.
             example: Image.jpg
+    FileUpload:
+      type: object
+      required:
+      - file
+      - fileName
+      properties:
+        file:
+          type: string
+          format: binary
+        fileName:
+          type: string
+          format: string
+          example: Sample.txt
     Problem:
       type: object
       properties:

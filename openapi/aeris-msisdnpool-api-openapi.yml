@@ -120,25 +120,65 @@ paths:
       - OAuth2:
         - cnx_subscription_view
 components:
+  headers:
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+  parameters:
+    limitParam:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        default: 100
+      description: 'Specifies the maximum number of results to be returned.
+
+        Allowed interval is 1-10000.
+
+        '
+    cursorParam:
+      in: query
+      name: cursor
+      schema:
+        type: string
+      example: DFVSDB3434%DFB%EYY445
+      description: 'Encoded string parameter used for pagination. This field is
+
+        automatically populated in the response field "next" if there
+
+        are more results in the system than delivered in the response.
+
+        '
+    Header-Authorization:
+      name: Authorization
+      in: header
+      required: true
+      description: A valid token string in the form Bearer <token string>
+      schema:
+        type: string
   responses:
-    '403':
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Forbidden
-                status: 403
-                detail: You do not have access to the resource
-                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-      description: Forbidden
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    '500':
+    default:
       content:
         application/problem+json:
           schema:
@@ -152,9 +192,6 @@ components:
                 detail: Internal Server Error
                 instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
       description: Internal Server Error
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
     '429':
       content:
         application/problem+json:
@@ -188,6 +225,23 @@ components:
       headers:
         Content-Type:
           $ref: '#/components/headers/Content-Type'
+    '403':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Forbidden
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
     RateLimitedResponse:
       headers:
         X-RateLimit-Limit-Second:
@@ -200,52 +254,6 @@ components:
           $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
         Content-Type:
           $ref: '#/components/headers/Content-Type'
-    '400':
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Bad Request
-                status: 400
-                detail: organizationId can not be null
-                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-      description: Bad Request
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    default:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Internal Server Error
-                status: 500
-                detail: Internal Server Error
-                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-      description: Internal Server Error
-    MsisdnPoolResponse:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/msisdnPoolDetail'
-          example:
-            shortName: pool22312
-            poolDesc: Test pool
-            quarantinePeriod: 60
-            numberLength: 15
-            poolId: TESTOPPREFMSISDNP00002
-            status: ACTIVE
-      description: OK
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
     MsisdnPoolsResponse:
       content:
         application/json:
@@ -265,6 +273,23 @@ components:
       description: OK
       allOf:
       - $ref: '#/components/responses/RateLimitedResponse'
+    '400':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Bad Request
+                status: 400
+                detail: organizationId can not be null
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Bad Request
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
     '404':
       content:
         application/problem+json:
@@ -282,88 +307,55 @@ components:
       headers:
         Content-Type:
           $ref: '#/components/headers/Content-Type'
-  headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-  parameters:
-    Header-Authorization:
-      name: Authorization
-      in: header
-      required: true
-      description: A valid token string in the form Bearer <token string>
-      schema:
-        type: string
-    cursorParam:
-      in: query
-      name: cursor
-      schema:
-        type: string
-      example: DFVSDB3434%DFB%EYY445
-      description: 'Encoded string parameter used for pagination. This field is
-
-        automatically populated in the response field "next" if there
-
-        are more results in the system than delivered in the response.
-
-        '
-    limitParam:
-      in: query
-      name: limit
-      schema:
-        type: integer
-        default: 100
-      description: 'Specifies the maximum number of results to be returned.
-
-        Allowed interval is 1-10000.
-
-        '
+    MsisdnPoolResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/msisdnPoolDetail'
+          example:
+            shortName: pool22312
+            poolDesc: Test pool
+            quarantinePeriod: 60
+            numberLength: 15
+            poolId: TESTOPPREFMSISDNP00002
+            status: ACTIVE
+      description: OK
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+    '500':
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: https://exmaple.api.documentation.url/123e4567-e89b-12d3-a456-426614174000
+      description: Internal Server Error
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
   schemas:
-    poolData:
+    msisdnPoolDetail:
       type: object
-      description: 'Pool data.
+      description: 'MSISDN pool information.
 
         '
       properties:
-        shortName:
+        poolId:
           type: string
-          description: The name of MSISDN pool used in the number scheme.
-          example: pool22312
-        poolDesc:
+          description: Id of Msisdn Pool.
+          example: TESTOPPREFMSISDNP00002
+        status:
           type: string
-          description: Description of Msisdn Pool.
-          example: Test pool
-        quarantinePeriod:
-          type: integer
-          format: int32
-          description: Number of days the MSISDNs are locked before being made available for reallocation
-          example: 60
-        numberLength:
-          type: integer
-          format: int32
-          description: Length of number.
-          example: 15
+          description: Status of Msisdn Pool.
+          example: Active
+        poolData:
+          $ref: '#/components/schemas/poolData'
     Problem:
       type: object
       properties:
@@ -416,22 +408,30 @@ components:
             if dereferenced.
 
             '
-    msisdnPoolDetail:
+    poolData:
       type: object
-      description: 'MSISDN pool information.
+      description: 'Pool data.
 
         '
       properties:
-        poolId:
+        shortName:
           type: string
-          description: Id of Msisdn Pool.
-          example: TESTOPPREFMSISDNP00002
-        status:
+          description: The name of MSISDN pool used in the number scheme.
+          example: pool22312
+        poolDesc:
           type: string
-          description: Status of Msisdn Pool.
-          example: Active
-        poolData:
-          $ref: '#/components/schemas/poolData'
+          description: Description of Msisdn Pool.
+          example: Test pool
+        quarantinePeriod:
+          type: integer
+          format: int32
+          description: Number of days the MSISDNs are locked before being made available for reallocation
+          example: 60
+        numberLength:
+          type: integer
+          format: int32
+          description: Length of number.
+          example: 15
     msisdnPools:
       type: object
       properties:

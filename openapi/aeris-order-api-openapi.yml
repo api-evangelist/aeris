@@ -694,188 +694,6 @@ paths:
       x-codegen-request-body-name: body
 components:
   schemas:
-    ServiceContract:
-      type: object
-      properties:
-        serviceContractId:
-          type: string
-          description: Internal ID of the service contract.
-        name:
-          type: string
-          description: Name is used as reference in SIM order data.
-        description:
-          type: string
-          description: Description of the service contract.
-        subscriptionPackages:
-          type: array
-          description: Possible subscription packages usable with this service contract.
-          items:
-            $ref: '#/components/schemas/SubscriptionPackage'
-      description: Service contract data required for making a SIM order.
-    SIMStockOrderMetadataResponse:
-      type: object
-      properties:
-        simSpecifications:
-          type: array
-          description: List of possible SIM specifications.
-          items:
-            $ref: '#/components/schemas/SIMSpecification'
-      description: Contains the data set required for populating a SIM Stock Order correctly.
-    Multi-profileEuiccOrder:
-      required:
-      - contactEmail
-      - contactName
-      - contactPhone
-      - deliveryAddress
-      - organizationId
-      - packageMarkings
-      - preferredDeliveryDate
-      - quantity
-      - templateId
-      type: object
-      properties:
-        preferredDeliveryDate:
-          type: string
-          format: date
-        deliveryAddress:
-          type: string
-          description: Delivery address to use for the order.
-        packageMarkings:
-          type: string
-        templateId:
-          type: integer
-          description: Numeric identifier of the order template to use.
-          format: int64
-        quantity:
-          type: integer
-          description: Quantity of subscription profiles ordered.
-          format: int32
-        organizationId:
-          type: string
-          description: Organization for which the order is made.
-        contactName:
-          type: string
-        contactEmail:
-          type: string
-        contactPhone:
-          type: string
-      description: Multi-profile eUICC Order Request Model
-    EuiccOrder:
-      required:
-      - contactEmail
-      - contactName
-      - contactPhone
-      - deliveryAddress
-      - euiccAgreement
-      - initialState
-      - organizationId
-      - packageMarkings
-      - preferredDeliveryDate
-      - quantity
-      type: object
-      properties:
-        preferredDeliveryDate:
-          type: string
-          format: date
-        deliveryAddress:
-          type: string
-          description: Delivery address to use for the order.
-        quantity:
-          type: integer
-          description: Quantity of subscriptions ordered.
-          format: int32
-        contactName:
-          type: string
-        contactEmail:
-          type: string
-        contactPhone:
-          type: string
-        initialState:
-          type: string
-          description: Initial state for the subscriptions. Must be Active.
-          enum:
-          - Active
-          - Deactivated
-        profileSpecification:
-          type: string
-          description: The profile specification to use for the order.
-        euiccAgreement:
-          type: string
-          description: The euiccAgreement to use for the order.
-        subscriptionPackage:
-          type: string
-          description: Subscription package for the ordered subscriptions. The subscription package must be also active.
-        organizationId:
-          type: string
-          description: Organization for which the order is made.
-        packageMarkings:
-          type: string
-        poolShortName:
-          type: string
-          description: Short name of the MSISDN pool to use when required by profile specification.
-      description: Euicc Order Request Model
-    OrderResponse:
-      required:
-      - jobId
-      type: object
-      properties:
-        jobId:
-          type: string
-          description: Request ID for a successful order.
-        resultCode:
-          type: string
-        errorCode:
-          type: string
-      description: Order Response
-    PendingJobDto:
-      type: object
-      properties:
-        jobId:
-          type: string
-        orderedBy:
-          type: string
-        companyId:
-          type: string
-        createdAt:
-          type: number
-          format: double
-        updatedAt:
-          type: number
-          format: double
-        orders:
-          type: array
-          items:
-            $ref: '#/components/schemas/PendingOrderResourceDto'
-    MSISDNPool:
-      type: object
-      properties:
-        msisdnPoolId:
-          type: string
-          description: Internal ID of the MSISDN pool.
-        shortName:
-          type: string
-          description: Pool short name is used as reference in SIM order data.
-        desciption:
-          type: string
-          description: Description of the MSISDN pool.
-      description: Defines the range from which MSISDN numbers will be generated.
-    SubscriptionPackage:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name is used as reference to the subscription package in SIM order data.
-        description:
-          type: string
-          description: Description of the subscription package.
-        status:
-          type: string
-          description: The subscription package status must be active for SIM order.
-        networkResourceGroupId:
-          type: integer
-          description: The network resource group id of this subscription package.
-          format: int64
-      description: The ordered subscriptions must belong into a subscription package.
     SubscriptionProfileStockOrder:
       required:
       - contactEmail
@@ -906,6 +724,45 @@ components:
           type: string
           description: Short name of the MSISDN pool to use when required by profile specification.
       description: Subscription Profile Stock Order Request Model
+    Error:
+      required:
+      - code
+      - httpStatus
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          format: int32
+          example: 2040
+        httpStatus:
+          type: integer
+          description: Response HTTP status
+          format: int32
+          example: 401
+        message:
+          type: string
+          description: Error message
+          example: Request validation failed
+        detailedMessage:
+          type: string
+          description: Detailed error message
+          example: Could not parse JSON body. Optional, This attribute will not be included in the response if the message is empty.
+      description: Error response model
+    MSISDNPool:
+      type: object
+      properties:
+        msisdnPoolId:
+          type: string
+          description: Internal ID of the MSISDN pool.
+        shortName:
+          type: string
+          description: Pool short name is used as reference in SIM order data.
+        desciption:
+          type: string
+          description: Description of the MSISDN pool.
+      description: Defines the range from which MSISDN numbers will be generated.
     OrderReference:
       type: object
       properties:
@@ -913,6 +770,50 @@ components:
           type: string
         requestId:
           type: string
+    EuiccStockOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - formSpecification
+      - operatorId
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      type: object
+      properties:
+        preferredDeliveryDate:
+          type: string
+          format: date
+        deliveryAddress:
+          type: string
+          description: Delivery address to use for the order.
+        quantity:
+          type: integer
+          description: Quantity of subscriptions ordered.
+          format: int32
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        profileSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        formSpecification:
+          type: string
+          description: The profile specification to use for the order.
+        operatorId:
+          type: string
+          description: Operator for which the order is made.
+        packageMarkings:
+          type: string
+        poolShortName:
+          type: string
+          description: Short name of the MSISDN pool to use when required by profile specification.
+      description: Euicc Stock Order Request Model
     PendingApprovalsDto:
       type: object
       properties:
@@ -920,25 +821,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PendingJobDto'
-    SIMOrderMetadataResponse:
-      type: object
-      properties:
-        simSpecifications:
-          type: array
-          description: List of possible SIM specifications for this company.
-          items:
-            $ref: '#/components/schemas/SIMSpecification'
-        serviceContracts:
-          type: array
-          description: List of possible service contracts for this company.
-          items:
-            $ref: '#/components/schemas/ServiceContract'
-        deliveryAddresses:
-          type: array
-          description: List of possible delivery addresses for this company.
-          items:
-            $ref: '#/components/schemas/Deliveryaddress'
-      description: Contains the data set required for populating a SIM order correctly.
     SIMOrder:
       required:
       - companyId
@@ -995,14 +877,25 @@ components:
           type: string
           description: Short name of the MSISDN pool to use when required by SIM specification.
       description: SIM Order Request Model
-    EsbRequest:
+    SIMOrderMetadataResponse:
       type: object
       properties:
-        userToken:
-          type: string
-        uuid:
-          type: string
-          format: uuid
+        simSpecifications:
+          type: array
+          description: List of possible SIM specifications for this company.
+          items:
+            $ref: '#/components/schemas/SIMSpecification'
+        serviceContracts:
+          type: array
+          description: List of possible service contracts for this company.
+          items:
+            $ref: '#/components/schemas/ServiceContract'
+        deliveryAddresses:
+          type: array
+          description: List of possible delivery addresses for this company.
+          items:
+            $ref: '#/components/schemas/Deliveryaddress'
+      description: Contains the data set required for populating a SIM order correctly.
     PendingOrderResourceDto:
       type: object
       properties:
@@ -1022,17 +915,46 @@ components:
         preferredDeliveryDate:
           type: number
           format: double
-    Deliveryaddress:
+    Multi-profileEuiccOrder:
+      required:
+      - contactEmail
+      - contactName
+      - contactPhone
+      - deliveryAddress
+      - organizationId
+      - packageMarkings
+      - preferredDeliveryDate
+      - quantity
+      - templateId
       type: object
       properties:
+        preferredDeliveryDate:
+          type: string
+          format: date
         deliveryAddress:
           type: string
-          description: Delivery address to use in SIM order data.
-        phone:
+          description: Delivery address to use for the order.
+        packageMarkings:
           type: string
-          description: Phone number corresponding with the delivery address.
-      description: A registered delivery address for a company.
-    SimOrderResponse:
+        templateId:
+          type: integer
+          description: Numeric identifier of the order template to use.
+          format: int64
+        quantity:
+          type: integer
+          description: Quantity of subscription profiles ordered.
+          format: int32
+        organizationId:
+          type: string
+          description: Organization for which the order is made.
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+      description: Multi-profile eUICC Order Request Model
+    OrderResponse:
       required:
       - jobId
       type: object
@@ -1044,7 +966,7 @@ components:
           type: string
         errorCode:
           type: string
-      description: SIM Order Response
+      description: Order Response
     SIMStockOrder:
       required:
       - companyId
@@ -1083,32 +1005,6 @@ components:
         contactPhone:
           type: string
       description: SIM Stock Order Request Model
-    Error:
-      required:
-      - code
-      - httpStatus
-      - message
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Error code
-          format: int32
-          example: 2040
-        httpStatus:
-          type: integer
-          description: Response HTTP status
-          format: int32
-          example: 401
-        message:
-          type: string
-          description: Error message
-          example: Request validation failed
-        detailedMessage:
-          type: string
-          description: Detailed error message
-          example: Could not parse JSON body. Optional, This attribute will not be included in the response if the message is empty.
-      description: Error response model
     OrderApprovalResponse:
       type: object
       properties:
@@ -1123,6 +1019,31 @@ components:
           format: int32
         orderReference:
           $ref: '#/components/schemas/OrderReference'
+    EsbRequest:
+      type: object
+      properties:
+        userToken:
+          type: string
+        uuid:
+          type: string
+          format: uuid
+    SubscriptionPackage:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name is used as reference to the subscription package in SIM order data.
+        description:
+          type: string
+          description: Description of the subscription package.
+        status:
+          type: string
+          description: The subscription package status must be active for SIM order.
+        networkResourceGroupId:
+          type: integer
+          description: The network resource group id of this subscription package.
+          format: int64
+      description: The ordered subscriptions must belong into a subscription package.
     SIMSpecification:
       type: object
       properties:
@@ -1169,14 +1090,47 @@ components:
           items:
             $ref: '#/components/schemas/MSISDNPool'
       description: SIM specification data required for making a SIM order.
-    EuiccStockOrder:
+    SimOrderResponse:
+      required:
+      - jobId
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: Request ID for a successful order.
+        resultCode:
+          type: string
+        errorCode:
+          type: string
+      description: SIM Order Response
+    Deliveryaddress:
+      type: object
+      properties:
+        deliveryAddress:
+          type: string
+          description: Delivery address to use in SIM order data.
+        phone:
+          type: string
+          description: Phone number corresponding with the delivery address.
+      description: A registered delivery address for a company.
+    SIMStockOrderMetadataResponse:
+      type: object
+      properties:
+        simSpecifications:
+          type: array
+          description: List of possible SIM specifications.
+          items:
+            $ref: '#/components/schemas/SIMSpecification'
+      description: Contains the data set required for populating a SIM Stock Order correctly.
+    EuiccOrder:
       required:
       - contactEmail
       - contactName
       - contactPhone
       - deliveryAddress
-      - formSpecification
-      - operatorId
+      - euiccAgreement
+      - initialState
+      - organizationId
       - packageMarkings
       - preferredDeliveryDate
       - quantity
@@ -1198,21 +1152,67 @@ components:
           type: string
         contactPhone:
           type: string
+        initialState:
+          type: string
+          description: Initial state for the subscriptions. Must be Active.
+          enum:
+          - Active
+          - Deactivated
         profileSpecification:
           type: string
           description: The profile specification to use for the order.
-        formSpecification:
+        euiccAgreement:
           type: string
-          description: The profile specification to use for the order.
-        operatorId:
+          description: The euiccAgreement to use for the order.
+        subscriptionPackage:
           type: string
-          description: Operator for which the order is made.
+          description: Subscription package for the ordered subscriptions. The subscription package must be also active.
+        organizationId:
+          type: string
+          description: Organization for which the order is made.
         packageMarkings:
           type: string
         poolShortName:
           type: string
           description: Short name of the MSISDN pool to use when required by profile specification.
-      description: Euicc Stock Order Request Model
+      description: Euicc Order Request Model
+    ServiceContract:
+      type: object
+      properties:
+        serviceContractId:
+          type: string
+          description: Internal ID of the service contract.
+        name:
+          type: string
+          description: Name is used as reference in SIM order data.
+        description:
+          type: string
+          description: Description of the service contract.
+        subscriptionPackages:
+          type: array
+          description: Possible subscription packages usable with this service contract.
+          items:
+            $ref: '#/components/schemas/SubscriptionPackage'
+      description: Service contract data required for making a SIM order.
+    PendingJobDto:
+      type: object
+      properties:
+        jobId:
+          type: string
+        orderedBy:
+          type: string
+        companyId:
+          type: string
+        createdAt:
+          type: number
+          format: double
+        updatedAt:
+          type: number
+          format: double
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/PendingOrderResourceDto'
   securitySchemes:
     token:
       type: apiKey

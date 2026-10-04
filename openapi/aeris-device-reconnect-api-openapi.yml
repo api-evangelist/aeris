@@ -58,23 +58,44 @@ paths:
       operationId: postDeviceReconnect
       x-operation-id-source: derived
 components:
+  headers:
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
   schemas:
-    Subscription:
-      title: Subscription
+    DeviceReconnectResponse:
+      title: DeviceReconnectResponse
+      description: Response type for successfully created subscription request.
       required:
-      - identifier
-      - identifier_type
+      - subscription_request_id
+      type: object
       properties:
-        identifier_type:
-          description: "The type of the values for the items.\n it is case insensitive, Value can be: IMSI, MSISDN, ICC"
+        subscription_request_id:
+          description: The request id returned for the subscription change request.
           type: string
-          x-extensible-enum:
-          - IMSI
-          - MSISDN
-          - ICC
-        identifier:
-          description: The identifier of the subscription. The type of the identifier is given by the property "identifier_type".
-          type: string
+      example:
+        subscription_request_id: REQ201234567890
     DeviceReconnectRequest:
       title: DeviceReconnectRequest
       description: The model for a subscription device reconnect request.
@@ -93,18 +114,22 @@ components:
         subscription:
           identifier_type: IMSI
           identifier: '100000123456001'
-    DeviceReconnectResponse:
-      title: DeviceReconnectResponse
-      description: Response type for successfully created subscription request.
+    Subscription:
+      title: Subscription
       required:
-      - subscription_request_id
-      type: object
+      - identifier
+      - identifier_type
       properties:
-        subscription_request_id:
-          description: The request id returned for the subscription change request.
+        identifier_type:
+          description: "The type of the values for the items.\n it is case insensitive, Value can be: IMSI, MSISDN, ICC"
           type: string
-      example:
-        subscription_request_id: REQ201234567890
+          x-extensible-enum:
+          - IMSI
+          - MSISDN
+          - ICC
+        identifier:
+          description: The identifier of the subscription. The type of the identifier is given by the property "identifier_type".
+          type: string
     Problem:
       type: object
       properties:
@@ -156,32 +181,15 @@ components:
             dereferenced.
 
             '
-  headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
   responses:
+    Response_429:
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
     RateLimitedResponse:
       headers:
         X-RateLimit-Limit-Second:
@@ -194,14 +202,6 @@ components:
           $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
         Content-Type:
           $ref: '#/components/headers/Content-Type'
-    Response_429:
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
   securitySchemes:
     Oauth2_auth:
       flows:

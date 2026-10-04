@@ -155,17 +155,18 @@ paths:
                 $ref: '#/components/schemas/Problem'
 components:
   headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
       schema:
         type: integer
         format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
     X-RateLimit-Limit-Minute:
       description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
       schema:
         type: integer
         format: int32
@@ -174,12 +175,18 @@ components:
       schema:
         type: integer
         format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
+    Content-Type:
+      description: Handle Content-Type
       schema:
-        type: integer
-        format: int32
+        type: string
   schemas:
+    RadioTypeEnum:
+      type: string
+      description: Radio types
+      enum:
+      - GSM
+      - WCDMA
+      - LTE
     CellGlobalIdentity:
       type: object
       properties:
@@ -257,13 +264,6 @@ components:
       - IMSI
       - MSISDN
       - ICC
-    RadioTypeEnum:
-      type: string
-      description: Radio types
-      enum:
-      - GSM
-      - WCDMA
-      - LTE
   responses:
     RateLimitedResponse:
       headers:

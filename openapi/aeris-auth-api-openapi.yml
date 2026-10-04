@@ -109,58 +109,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    BadRequestTokenError:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Application-specific error code.
-          example: 4000
-        httpStatus:
-          type: integer
-          description: HTTP status code returned.
-          example: 400
-        message:
-          type: string
-          description: Short, human-readable error summary.
-          example: Request validation failed
-        detailedMessage:
-          type: string
-          description: Detailed explanation of the validation failure.
-          example: 'tokenV3.arg1.username: username must not be null'
-      required:
-      - code
-      - httpStatus
-      - message
-      - detailedMessage
-      example:
-        code: 4000
-        httpStatus: 400
-        message: Request validation failed
-        detailedMessage: 'tokenV3.arg1.username: username must not be null'
-    UnauthorizedTokenError:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: Application-specific error code.
-          example: 2040
-        httpStatus:
-          type: integer
-          description: HTTP status code returned.
-          example: 401
-        message:
-          type: string
-          description: Human-readable error message.
-          example: Invalid credentials
-      required:
-      - code
-      - httpStatus
-      - message
-      example:
-        code: 2040
-        httpStatus: 401
-        message: Invalid credentials
     TokenResponse:
       type: object
       properties:
@@ -227,3 +175,55 @@ components:
               e: AQAB
               x5c:
               - MIIFJzCCAw+gAwIBAgIEWAqkOTANBgkqhkiG9w0BAQsFADBEMRMwEQYKCZImiZPyLGQBGRYDbmV0MRgwFgYKCZImiZPyLGQBGRYIZXJpY3Nzb24xEzARBgoJkiaJk/IsZAEZFgNpb3QwHhcNMjAwMTE2MTE1MTI1WhcNMjEwMTE1MTE1MTI1WjBEMRMwEQYKCZImiZPyLGQBGRYDbmV0MRgwFgYKCZImiZPyLGQBGRYIZXJpY3Nzb24xEzARBgoJkiaJk/IsZAEZFgNpb3QwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQCBjI+6c7DYmFzAddJzmrZQcRnESmIMNESd8U+A2KDg68zRdXc5Dy9LG+wYwUxz2aCFKNILIlCKBZ1jJUqdoP/5N3hkhKV31ihNU06B2+AwXBGdc3Nifr/Aextfv70leWeqwlMGJry7c6B9gnVLI/erJu4yNOrLifCoh6qjwAtz4t0DODfTCO7/5nGArIMUCC/0wAHk52AwUgt4BC2neuJnuAJV1+FhCBM5/ZvEVmzGiQVU9Uv4s8KWl8Z6c3AOaCsItfNBjBFfqGPy/Y4EwZQjSX9gNxyU2OBdVdIiKmv+NDgt9725/A4pYGISWxdXC3ku7D0trNlamc2OBvwGkPdwwMCFWlrVqq/ZcHK/oVBkyRGMlcplxKmwkUlNDfPk58IR3SQfkQxj3hFMtabccaF6mf2EW7bb1phWSBPEd7ha2duSpNEPGeK+Hv8ZQVIFIvsCUJycoBtPq7NEy5DEiOUUW7ti2XClnIxdK/MESjXgpkKx85zWPfye0HM0b+VgDLt4TeInzWpk3R/TKEed4gpUaCQ2lECTJwI7AgCBkSWecFOvyg0L+Skf99f5SyunKO+kgyZbiRiKDc0KRJEswyLnHkNh/eYV6HcxkgiWEVNSaeKNPX0PF0Y3sBxFzpP2W2FVdHEAWRo44GdzBuyMe9R3+8/pkfNgOdH2qivJvKXtpQIDAQABoyEwHzAdBgNVHQ4EFgQUbYnMU8UlC0s5nxS0qN0/Hj/E0n4wDQYJKoZIhvcNAQELBQADggIBAHI8LuIFZeaBWJksxFvD8fFwlNIHqwKVVw04zRCqa65f0/PIGGhFjFrEa2x3EpCkrDuGSYkRsPUFXlHlzO+8HpabQX0vxEpbuqfktFkd4PHqDp3VVG2oj15ezdMtT9zdRViBKuIlwKHyVEF/xyEgsUm9l+96SWdv9L+wWYp/9vhckULArzVxRYcgz/iRQ0cWS953GNoTSDhkV5R5Ixi89b9+bFEs+2eT/kgzA8NTYMbWWxw9wfFDmQxw9c5GXRHRJI6vruP30JhPGRGEe6Y+wBZcVIXY1mvdbBYSt7xEt9oPN2/Df5ra97Kzk5DjrUjVpv1Sw8maeVR5hNxws0wEd1CEc8X6ut0r4NHJN1FzBqPlvMxJj/TLtEM/lrdIIqdngYmqmDDA5fSJUYMXWkSZQx/xm3eTZp3l2Ze3bU6SbazExxL3QClDe5uOY/SDY+CJJpSxjQ2m1ka4NIuCO1U5/9vHfRX1W7tsTl4yuMxXI1VvG7bSqNZvOaPGBXrFb/FLM/bnJL3LqH9X1NpB1UA1GOfgHwbM8rCu9Do1pJM/xvAAFyoMvkhY2+ULPtR++1Wym/IJLpo4WyLk+ZsMpm9c0wrM0BWUT48r+5CaIq5xtwRk962xNr2NPgQS9tsGKWejd8hGQBH2RnKlF6IbEyTH2gVkFfnugn3GrS+ryJsh/cec
+    UnauthorizedTokenError:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Application-specific error code.
+          example: 2040
+        httpStatus:
+          type: integer
+          description: HTTP status code returned.
+          example: 401
+        message:
+          type: string
+          description: Human-readable error message.
+          example: Invalid credentials
+      required:
+      - code
+      - httpStatus
+      - message
+      example:
+        code: 2040
+        httpStatus: 401
+        message: Invalid credentials
+    BadRequestTokenError:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Application-specific error code.
+          example: 4000
+        httpStatus:
+          type: integer
+          description: HTTP status code returned.
+          example: 400
+        message:
+          type: string
+          description: Short, human-readable error summary.
+          example: Request validation failed
+        detailedMessage:
+          type: string
+          description: Detailed explanation of the validation failure.
+          example: 'tokenV3.arg1.username: username must not be null'
+      required:
+      - code
+      - httpStatus
+      - message
+      - detailedMessage
+      example:
+        code: 4000
+        httpStatus: 400
+        message: Request validation failed
+        detailedMessage: 'tokenV3.arg1.username: username must not be null'

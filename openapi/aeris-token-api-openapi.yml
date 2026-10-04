@@ -153,66 +153,7 @@ paths:
         '403':
           $ref: '#/components/responses/403'
 components:
-  responses:
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '401':
-      description: Not authorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '400':
-      description: Bad Request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Bad Request
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   schemas:
-    AuthorizedAccountsResponse:
-      type: object
-      description: Paginated list of managed enterprise accounts
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ManagedAccount'
-          description: List of managed enterprise accounts
-        offset:
-          type: integer
-          description: Current offset
-          example: 0
-        limit:
-          type: integer
-          description: Page size
-          example: 20
-        total:
-          type: integer
-          format: int64
-          description: Total number of managed accounts
-          example: 1847
     Error:
       type: object
       properties:
@@ -249,6 +190,65 @@ components:
           type: string
           description: Account display name
           example: Swisscom Enterprise AG
+    AuthorizedAccountsResponse:
+      type: object
+      description: Paginated list of managed enterprise accounts
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManagedAccount'
+          description: List of managed enterprise accounts
+        offset:
+          type: integer
+          description: Current offset
+          example: 0
+        limit:
+          type: integer
+          description: Page size
+          example: 20
+        total:
+          type: integer
+          format: int64
+          description: Total number of managed accounts
+          example: 1847
+  responses:
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   parameters:
     authorization:
       name: Authorization

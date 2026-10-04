@@ -783,52 +783,32 @@ paths:
       - OAuth2:
         - cnx_ss_euicc_activationcode_man
 components:
+  headers:
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
   responses:
-    '403':
-      description: Forbidden
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: https://your.api.documentation.url/forbidden
-            title: Forbidden
-            status: 403
-            detail: The server understood the request but refuses to authorize it
-            instance: https://api.documentation.url/request-id
-    '405':
-      description: Method Not Allowed
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: https://your.api.documentation.url/method-not-allowed
-            title: Method Not Allowed
-            status: 405
-            detail: The request method is not supported for this resource
-            instance: https://api.documentation.url/request-id
-    '500':
-      description: Internal Server Error
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: https://your.api.documentation.url/internal-server-error
-            title: Internal Server Error
-            status: 500
-            detail: The server encountered an unexpected condition that prevented it from fulfilling the request
-            instance: https://api.documentation.url/request-id
     '429':
       description: Too Many Requests
       allOf:
@@ -858,6 +838,21 @@ components:
             status: 401
             detail: Authentication credentials were missing or incorrect
             instance: https://api.documentation.url/request-id
+    '403':
+      description: Forbidden
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/forbidden
+            title: Forbidden
+            status: 403
+            detail: The server understood the request but refuses to authorize it
+            instance: https://api.documentation.url/request-id
     RateLimitedResponse:
       headers:
         X-RateLimit-Limit-Second:
@@ -870,6 +865,21 @@ components:
           $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
         Content-Type:
           $ref: '#/components/headers/Content-Type'
+    '405':
+      description: Method Not Allowed
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/method-not-allowed
+            title: Method Not Allowed
+            status: 405
+            detail: The request method is not supported for this resource
+            instance: https://api.documentation.url/request-id
     '400':
       description: Bad Request
       headers:
@@ -900,91 +910,45 @@ components:
             status: 404
             detail: The requested resource could not be found
             instance: https://api.documentation.url/request-id
+    '500':
+      description: Internal Server Error
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://your.api.documentation.url/internal-server-error
+            title: Internal Server Error
+            status: 500
+            detail: The server encountered an unexpected condition that prevented it from fulfilling the request
+            instance: https://api.documentation.url/request-id
   schemas:
-    ActivationCodeInsert:
+    ActivationCodeList:
       required:
-      - code
-      - state
-      type: object
-      properties:
-        code:
-          type: string
-          description: The activation code.
-        euiccId:
-          type: string
-          description: The EID of the eUICC the code is assigned to, or planned for.
-        iccId:
-          type: string
-          description: The ICC of the profile referred to by the activation code.
-        imsi:
-          type: string
-          description: The IMSI associated with the activation code. Required when activationCodeType is INTERNAL. Must be 14 or 15 numeric digits.
-        state:
-          type: string
-          description: The state in which the activation code should be stored. In DRAFT state, the entity is still modifiable and will not be issued to any eUICCs. When AVAILABLE, the code entity can not be modified and may be assigned and issued to an eUICC.
-          enum:
-          - DRAFT
-          - AVAILABLE
-    ImportJobStatusResponse:
+      - name
+      - organizationId
+      type: array
+      items:
+        $ref: '#/components/schemas/ActivationCodeItem'
+    RetryUploadResponse:
       required:
-      - jobId
       - status
       type: object
       properties:
-        jobId:
-          type: string
-          description: The import job ID.
         status:
           type: string
-          description: The current status of the import job.
+          description: Status of the retry request.
           enum:
-          - IN_PROGRESS
-          - COMPLETED
-          - FAILED
-        totalFailures:
-          type: integer
-          format: int64
-          description: Total number of rows that failed to import. Only present when the job is not IN_PROGRESS.
-        totalSuccess:
-          type: integer
-          format: int64
-          description: Total number of rows successfully imported. Only present when the job is not IN_PROGRESS.
-        page:
-          type: integer
-          description: The requested page of failure rows (0-based). Only present when the job is not IN_PROGRESS.
-        pageSize:
-          type: integer
-          description: The number of failure rows per page. Only present when the job is not IN_PROGRESS.
-        failedRows:
-          type: array
-          description: Paginated list of failed import rows. Only present when the job is not IN_PROGRESS.
-          items:
-            $ref: '#/components/schemas/ImportFailureRow'
-    ActivationCodeImportRequest:
-      required:
-      - file
-      - localizationTableId
-      - localeId
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-          description: CSV file containing activation code data. Mandatory columns are ICCID and ACTIVATION CODE.
-        activationCodeType:
-          type: string
-          description: Type of activation code to import.
-          enum:
-          - INTERNAL
-          - EXTERNAL
-          default: EXTERNAL
-        localizationTableId:
-          type: integer
-          format: int64
-          description: Localization table ID to associate the imported codes with.
-        localeId:
-          type: string
-          description: Locale ID within the localization table.
+          - ALREADY_COMPLETED
+          - RETRYING
+        retryJobId:
+          type:
+          - string
+          - 'null'
+          description: The UIS job ID assigned to the new retry job. Present when status is RETRYING; null when ALREADY_COMPLETED.
     ImportFailureRow:
       type: object
       properties:
@@ -1023,6 +987,56 @@ components:
           type: string
           format: date-time
           description: The timestamp when the failure record was created.
+    UploadFailedRecord:
+      type: object
+      properties:
+        iccid:
+          type: string
+          description: The ICCID of the failed record.
+        imsi:
+          type: string
+          description: The IMSI of the failed record.
+        errorCode:
+          type: string
+          description: Machine-readable error code from UIS.
+        errorMessage:
+          type: string
+          description: Human-readable error message from UIS.
+    ImportJobStatusResponse:
+      required:
+      - jobId
+      - status
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: The import job ID.
+        status:
+          type: string
+          description: The current status of the import job.
+          enum:
+          - IN_PROGRESS
+          - COMPLETED
+          - FAILED
+        totalFailures:
+          type: integer
+          format: int64
+          description: Total number of rows that failed to import. Only present when the job is not IN_PROGRESS.
+        totalSuccess:
+          type: integer
+          format: int64
+          description: Total number of rows successfully imported. Only present when the job is not IN_PROGRESS.
+        page:
+          type: integer
+          description: The requested page of failure rows (0-based). Only present when the job is not IN_PROGRESS.
+        pageSize:
+          type: integer
+          description: The number of failure rows per page. Only present when the job is not IN_PROGRESS.
+        failedRows:
+          type: array
+          description: Paginated list of failed import rows. Only present when the job is not IN_PROGRESS.
+          items:
+            $ref: '#/components/schemas/ImportFailureRow'
     UploadStatusResponse:
       type: object
       properties:
@@ -1057,56 +1071,6 @@ components:
           description: List of individual records that failed, if any.
           items:
             $ref: '#/components/schemas/UploadFailedRecord'
-    ActivationCodeItem:
-      required:
-      - id
-      - code
-      - organizationId
-      - state
-      - localizationTableId
-      - localeId
-      - added
-      type: object
-      properties:
-        id:
-          type: string
-          description: The assigned unique entity id.
-        code:
-          type: string
-          description: The activation code.
-        organizationId:
-          type: string
-          description: The owner of the profile referred to by the activation code.
-        euiccId:
-          type: string
-          description: The EID of the eUICC the code is assigned to, or planned for.
-        iccId:
-          type: string
-          description: The ICC of the profile referred to by the activation code.
-        state:
-          type: string
-          description: The state in which the activation code should be stored. In DRAFT state, the entity is still modifiable and will not be issued to any eUICCs. When AVAILABLE, the code entity can not be modified and may be assigned and issued to an eUICC. When RESERVED, the code has been assigned to an eUICC. When DELETED, the profile referred to by the activation code has been deleted, and the code cannot be used anymore.
-          enum:
-          - DRAFT
-          - AVAILABLE
-          - RESERVED
-          - REMOVED
-        localizationTableId:
-          type: integer
-          format: int64
-        localeId:
-          type: string
-        added:
-          type: string
-          format: date-time
-        addedRequestId:
-          type: string
-        issued:
-          type: string
-          format: date-time
-          description: The date when the activation code was issued to an eUICC.
-        issuedRequestId:
-          type: string
     ActivationCodeUpdate:
       type: object
       properties:
@@ -1130,59 +1094,6 @@ components:
           format: int64
         localeId:
           type: string
-    UploadFailedRecord:
-      type: object
-      properties:
-        iccid:
-          type: string
-          description: The ICCID of the failed record.
-        imsi:
-          type: string
-          description: The IMSI of the failed record.
-        errorCode:
-          type: string
-          description: Machine-readable error code from UIS.
-        errorMessage:
-          type: string
-          description: Human-readable error message from UIS.
-    ExportActivationCodeRequest:
-      type: object
-      required:
-      - organizationId
-      properties:
-        organizationId:
-          type: array
-          description: A list of organizations ids for which activation codes should be listed.
-          items:
-            type: string
-          maxItems: 1000
-        euiccId:
-          type: array
-          description: A list of euicc ids (EIDs) for which activation codes should be listed.
-          items:
-            type: string
-        iccId:
-          type: array
-          description: A list of ICC ids for which activation codes should be listed.
-          items:
-            type: string
-        profileType:
-          type: string
-          description: profile type
-        state:
-          $ref: '#/components/schemas/ActivationCodeStateParam'
-          description: Filter activation codes by state
-        page:
-          type: integer
-          minimum: 0
-          default: 0
-          description: Page number
-        limit:
-          type: integer
-          minimum: 1
-          maximum: 10000
-          default: 10
-          description: Number of items per page
     Problem:
       type: object
       properties:
@@ -1235,6 +1146,56 @@ components:
 
             '
           example: https://api.documentation.url/request-id
+    ActivationCodeItem:
+      required:
+      - id
+      - code
+      - organizationId
+      - state
+      - localizationTableId
+      - localeId
+      - added
+      type: object
+      properties:
+        id:
+          type: string
+          description: The assigned unique entity id.
+        code:
+          type: string
+          description: The activation code.
+        organizationId:
+          type: string
+          description: The owner of the profile referred to by the activation code.
+        euiccId:
+          type: string
+          description: The EID of the eUICC the code is assigned to, or planned for.
+        iccId:
+          type: string
+          description: The ICC of the profile referred to by the activation code.
+        state:
+          type: string
+          description: The state in which the activation code should be stored. In DRAFT state, the entity is still modifiable and will not be issued to any eUICCs. When AVAILABLE, the code entity can not be modified and may be assigned and issued to an eUICC. When RESERVED, the code has been assigned to an eUICC. When DELETED, the profile referred to by the activation code has been deleted, and the code cannot be used anymore.
+          enum:
+          - DRAFT
+          - AVAILABLE
+          - RESERVED
+          - REMOVED
+        localizationTableId:
+          type: integer
+          format: int64
+        localeId:
+          type: string
+        added:
+          type: string
+          format: date-time
+        addedRequestId:
+          type: string
+        issued:
+          type: string
+          format: date-time
+          description: The date when the activation code was issued to an eUICC.
+        issuedRequestId:
+          type: string
     ActivationCodeStateParam:
       type: string
       description: The state in which the activation code should be stored. In DRAFT state, the entity is still modifiable and will not be issued to any eUICCs. When AVAILABLE, the code entity can not be modified and may be assigned and issued to an eUICC. When RESERVED, the code has been assigned to an eUICC. When REMOVED, the profile referred to by the activation code has been deleted, and the code cannot be used anymore.
@@ -1271,22 +1232,69 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ActivationCodeInsert'
-    RetryUploadResponse:
+    ExportActivationCodeRequest:
+      type: object
       required:
-      - status
+      - organizationId
+      properties:
+        organizationId:
+          type: array
+          description: A list of organizations ids for which activation codes should be listed.
+          items:
+            type: string
+          maxItems: 1000
+        euiccId:
+          type: array
+          description: A list of euicc ids (EIDs) for which activation codes should be listed.
+          items:
+            type: string
+        iccId:
+          type: array
+          description: A list of ICC ids for which activation codes should be listed.
+          items:
+            type: string
+        profileType:
+          type: string
+          description: profile type
+        state:
+          $ref: '#/components/schemas/ActivationCodeStateParam'
+          description: Filter activation codes by state
+        page:
+          type: integer
+          minimum: 0
+          default: 0
+          description: Page number
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          default: 10
+          description: Number of items per page
+    ActivationCodeImportRequest:
+      required:
+      - file
+      - localizationTableId
+      - localeId
       type: object
       properties:
-        status:
+        file:
           type: string
-          description: Status of the retry request.
+          format: binary
+          description: CSV file containing activation code data. Mandatory columns are ICCID and ACTIVATION CODE.
+        activationCodeType:
+          type: string
+          description: Type of activation code to import.
           enum:
-          - ALREADY_COMPLETED
-          - RETRYING
-        retryJobId:
-          type:
-          - string
-          - 'null'
-          description: The UIS job ID assigned to the new retry job. Present when status is RETRYING; null when ALREADY_COMPLETED.
+          - INTERNAL
+          - EXTERNAL
+          default: EXTERNAL
+        localizationTableId:
+          type: integer
+          format: int64
+          description: Localization table ID to associate the imported codes with.
+        localeId:
+          type: string
+          description: Locale ID within the localization table.
     ActivationCodeImportAcceptedResponse:
       required:
       - jobId
@@ -1301,38 +1309,30 @@ components:
           description: Acceptance status of the import request.
           enum:
           - ACCEPTED
-    ActivationCodeList:
+    ActivationCodeInsert:
       required:
-      - name
-      - organizationId
-      type: array
-      items:
-        $ref: '#/components/schemas/ActivationCodeItem'
-  headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
+      - code
+      - state
+      type: object
+      properties:
+        code:
+          type: string
+          description: The activation code.
+        euiccId:
+          type: string
+          description: The EID of the eUICC the code is assigned to, or planned for.
+        iccId:
+          type: string
+          description: The ICC of the profile referred to by the activation code.
+        imsi:
+          type: string
+          description: The IMSI associated with the activation code. Required when activationCodeType is INTERNAL. Must be 14 or 15 numeric digits.
+        state:
+          type: string
+          description: The state in which the activation code should be stored. In DRAFT state, the entity is still modifiable and will not be issued to any eUICCs. When AVAILABLE, the code entity can not be modified and may be assigned and issued to an eUICC.
+          enum:
+          - DRAFT
+          - AVAILABLE
   parameters:
     Header-Accept-Version:
       name: Accept-Version

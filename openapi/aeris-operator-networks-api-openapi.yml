@@ -50,6 +50,31 @@ paths:
         default:
           $ref: '#/components/responses/Problem'
 components:
+  headers:
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
   responses:
     Unauthorized:
       description: Unauthorized
@@ -66,25 +91,8 @@ components:
             status: 401
             detail: The request has not been applied because the server requires user authentication.
             instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-    InternalError:
+    Problem:
       description: Internal Server Error.
-      headers:
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
-          example:
-            type: https://www.iana.org/assignments/http-status-codes
-            title: Internal Server Error
-            status: 500
-            detail: The server has encountered a situation that it does not know how to handle.
-            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
-    TooManyRequests:
-      description: Too Many Requests
-      allOf:
-      - $ref: '#/components/responses/RateLimitedResponse'
       content:
         application/problem+json:
           schema:
@@ -104,6 +112,29 @@ components:
             status: 403
             detail: Authentication token is valid, but user has no access permissions to the request resource.
             instance: https://api.documentation.url/request-id
+    TooManyRequests:
+      description: Too Many Requests
+      allOf:
+      - $ref: '#/components/responses/RateLimitedResponse'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    InternalError:
+      description: Internal Server Error.
+      headers:
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://www.iana.org/assignments/http-status-codes
+            title: Internal Server Error
+            status: 500
+            detail: The server has encountered a situation that it does not know how to handle.
+            instance: https://api.documentation.url/123e4567-e89b-12d3-a456-426614174000
     RateLimitedResponse:
       headers:
         X-RateLimit-Limit-Second:
@@ -116,12 +147,6 @@ components:
           $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
         Content-Type:
           $ref: '#/components/headers/Content-Type'
-    Problem:
-      description: Internal Server Error.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Problem'
   schemas:
     GetOperatorNetworksListResponse:
       allOf:
@@ -131,41 +156,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/OperatorNetworkRead'
-    OperatorNetworkRead:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Operator network ID
-        name:
-          type: string
-          minLength: 1
-          maxLength: 255
-          example: My network
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 500
-          example: default operator network
-        status:
-          type: string
-          example: ACTIVE
-          x-extensible-enum:
-          - DRAFT
-          - ACTIVE
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        operatorId:
-          type: string
-          description: operator ID
-          example: '3.77'
-      required:
-      - name
     Problem:
       type: object
       properties:
@@ -217,31 +207,41 @@ components:
             It may or may not yield further information if dereferenced.
 
             '
-  headers:
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
+    OperatorNetworkRead:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Operator network ID
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: My network
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 500
+          example: default operator network
+        status:
+          type: string
+          example: ACTIVE
+          x-extensible-enum:
+          - DRAFT
+          - ACTIVE
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        operatorId:
+          type: string
+          description: operator ID
+          example: '3.77'
+      required:
+      - name
   securitySchemes:
     oauth2:
       type: oauth2

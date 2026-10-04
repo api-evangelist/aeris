@@ -95,36 +95,6 @@ paths:
                 $ref: '#/components/schemas/RequestError'
 components:
   schemas:
-    RequestError:
-      type: object
-      properties:
-        requestError:
-          type: object
-          properties:
-            serviceException:
-              type: object
-              properties:
-                messageId:
-                  type: string
-                  description: violation identifier, ref. User Guide
-                text:
-                  type: string
-                  description: describes the violation
-                variables:
-                  type: string
-                  description: points to the variable(s) in violation
-            policyException:
-              type: object
-              properties:
-                messageId:
-                  type: string
-                  description: violation identifier, ref. User Guide
-                text:
-                  type: string
-                  description: describes the violation
-                variables:
-                  type: string
-                  description: points to the variable(s) in violation
     DeliveryInfo:
       type: object
       required:
@@ -157,6 +127,36 @@ components:
         resourceURL:
           type: string
           description: Link to the successful response.
+    RequestError:
+      type: object
+      properties:
+        requestError:
+          type: object
+          properties:
+            serviceException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
+            policyException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
   securitySchemes:
     BasicAuth:
       type: http

@@ -88,99 +88,53 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 components:
-  responses:
-    '403':
-      description: Forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '500':
-      description: Internal Server Error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Internal Server Error
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '429':
-      description: Too many requests.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 429
-            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '401':
-      description: Not authorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '400':
-      description: Bad Request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Bad Request
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '413':
-      description: Requested data too large
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 413
-            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   schemas:
-    TACCodeSummaryEntry:
+    Error:
       type: object
-      description: A name/count pair representing one category in a TAC code metric summary.
       properties:
-        name:
-          type: string
-          description: Category label (device type, brand name, or model name).
-          example: Modem
-        total:
+        code:
           type: integer
-          description: Number of devices in this category.
-          example: 405
-    limit:
-      type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    TACCodeMetrics:
+      type: object
+      description: Full TAC code distribution summary for the account.
+      properties:
+        totalTacCodeDevices:
+          type: integer
+          description: Total number of devices with a recognised TAC in the account.
+          example: 478
+        summaryOfTypes:
+          type: array
+          description: Distribution of devices by device type (e.g. Modem, IoT Device).
+          items:
+            $ref: '#/components/schemas/TACCodeSummaryEntry'
+        summaryOfBrands:
+          type: array
+          description: Distribution of devices by manufacturer brand.
+          items:
+            $ref: '#/components/schemas/TACCodeSummaryEntry'
+        summaryOfModels:
+          type: array
+          description: Distribution of devices by model name.
+          items:
+            $ref: '#/components/schemas/TACCodeSummaryEntry'
     TACCodeEntry:
       type: object
       description: TAC code entry with device type metadata and total device count.
@@ -205,16 +159,25 @@ components:
           type: integer
           description: Number of devices in the account that share this TAC.
           example: 113
-    PagedTACCodeList:
-      allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - type: object
-        properties:
-          data:
-            type: array
-            description: List of TAC code entries observed in the account.
-            items:
-              $ref: '#/components/schemas/TACCodeEntry'
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    TACCodeSummaryEntry:
+      type: object
+      description: A name/count pair representing one category in a TAC code metric summary.
+      properties:
+        name:
+          type: string
+          description: Category label (device type, brand name, or model name).
+          example: Modem
+        total:
+          type: integer
+          description: Number of devices in this category.
+          example: 405
     TACCodeSearchFilter:
       type: object
       description: Optional filter body for searching TAC codes. All filters are optional; omit the body or send `{}` to retrieve all TAC codes for the account.
@@ -251,6 +214,28 @@ components:
           example:
           - EC21
           - MA510-GL
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    PagedTACCodeList:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            description: List of TAC code entries observed in the account.
+            items:
+              $ref: '#/components/schemas/TACCodeEntry'
+    total:
+      type: integer
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
     Pagination:
       type: object
       properties:
@@ -266,64 +251,79 @@ components:
       format: int32
       default: 0
       minimum: 0
-    TACCodeMetrics:
-      type: object
-      description: Full TAC code distribution summary for the account.
-      properties:
-        totalTacCodeDevices:
-          type: integer
-          description: Total number of devices with a recognised TAC in the account.
-          example: 478
-        summaryOfTypes:
-          type: array
-          description: Distribution of devices by device type (e.g. Modem, IoT Device).
-          items:
-            $ref: '#/components/schemas/TACCodeSummaryEntry'
-        summaryOfBrands:
-          type: array
-          description: Distribution of devices by manufacturer brand.
-          items:
-            $ref: '#/components/schemas/TACCodeSummaryEntry'
-        summaryOfModels:
-          type: array
-          description: Distribution of devices by model name.
-          items:
-            $ref: '#/components/schemas/TACCodeSummaryEntry'
-    total:
-      type: integer
-      format: int64
-      description: Total number of items available.
-      example: 1
-      minimum: 0
-    accountId:
-      description: Account Id.
-      type: integer
-      format: int32
-      example: 10407
-      minimum: 0
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: HTTP code
-          example: 500
-        message:
-          type: string
-          description: Error message
-          example: An error encountered in processing the request
-        timestamp:
-          type: string
-          description: ISO DateTime
-          example: '2025-06-02 09:01:53.678'
-        path:
-          type: string
-          description: Endpoint path at which the error occured
-          example: /watchtower/v1/events
-        traceId:
-          type: string
-          description: Trace Id
-          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+  responses:
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '413':
+      description: Requested data too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 413
+            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '403':
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: Forbidden
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '500':
+      description: Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Internal Server Error
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   parameters:
     offset:
       name: offset
@@ -331,20 +331,6 @@ components:
       description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
       schema:
         $ref: '#/components/schemas/offset'
-    limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
-    accountId:
-      name: X-Watchtower-Account-Id
-      in: header
-      description: Account Id
-      required: true
-      schema:
-        $ref: '#/components/schemas/accountId'
-      example: 1002000010
     sort:
       name: sort
       in: query
@@ -352,6 +338,12 @@ components:
       example: deviceId,updateTime:desc
       schema:
         type: string
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
+      schema:
+        $ref: '#/components/schemas/limit'
     authorization:
       name: Authorization
       in: header
@@ -361,6 +353,14 @@ components:
         type: string
         pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
       example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2
