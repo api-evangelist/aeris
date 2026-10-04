@@ -2719,6 +2719,9 @@ apis:
   - type: Idempotency
     url: conventions/aeris-conventions.yml
 common:
+- type: CapabilityMap
+  url: capabilities/aeris-capability-edges.yml
+  name: Aeris Business Capability Map
 - type: Overlay
   url: overlays/aeris-iot-accelerator-overlay.yaml
 - type: Website

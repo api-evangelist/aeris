@@ -1,0 +1,87 @@
+slug: aeris
+provider: Aeris
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 6
+edges:
+- tag: Subscription management - additional functions
+  spec_file: aeris-subscription-management-additional-functions-api-openapi.yml
+  capability_id: BC-4240.40
+  capability_id_l1: BC-4240
+  capability_name: Subscription Modification
+  confidence: 0.8
+  evidence: POST /requests/package-changes SubscriptionPackageChange 'Create a package change request';
+    POST /requests/state-changes 'Create a state change request'; POST /requests/owner-changes 'Create
+    an owner change request'
+  reason: Operations perform in-life changes to active connectivity subscriptions — package (plan) changes,
+    state changes, owner and region changes, plus cancellation of a SIM order. That is squarely Subscription
+    Modification within the subscription commercial lifecycle; some operations (cancel SIM order, region
+    change) edge towards other sub-capabilities, hence 0.8 rather than 0.95.
+- tag: Activities
+  spec_file: aeris-activities-api-openapi.yml
+  capability_id: BC-600.30
+  capability_id_l1: BC-600
+  capability_name: IT Service Management
+  confidence: 0.75
+  evidence: 'POST /incidents/{incident_id}/activities  createIncidentActivity  Create new activity; openapi
+    title: Incident Management Activities API'
+  reason: Activities nested under incidents with status updates and attachments — incident ticket work-log
+    entries, i.e. IT service management incident handling. Confidence moderate because the tag itself
+    is generic.
+- tag: SubscriptionInventory
+  spec_file: aeris-subscriptioninventory-api-openapi.yml
+  capability_id: BC-4240
+  capability_id_l1: BC-4240
+  capability_name: Subscription Lifecycle Management
+  confidence: 0.75
+  evidence: POST /subscriptions/{subscription_id}:changeMsisdn activateSubscription 'Activate Subscription';
+    POST /subscriptions/{subscription_id}:suspendSubscription 'Suspend Subscription'; schemas ActivateSubscriptionRequest,
+    SuspendSubscriptionRequest
+  reason: The surface activates, suspends and amends live subscriptions (MSISDN reassignment, IMEI assignment,
+    APN disablement) and queries subscription detail and history — the service-activation and in-life
+    change portion of the subscription lifecycle. Held at L1 because the operations straddle provisioning
+    (activate) and modification/suspension rather than naming one sub-capability.
+- tag: Enforcement Rules
+  spec_file: aeris-enforcement-rules-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.72
+  evidence: 'POST /watchtower/v1/enforcement-rules  createEnforcementRule; schemas: protectionPolicyId,
+    malwareProtectionLevel, deviceGroupId'
+  reason: Operations create, activate and deactivate enforcement rules carrying malware protection levels
+    and protection policies against device groups — i.e. definition and runtime enforcement of security
+    controls. Clearly Cybersecurity Management; ambiguous between governance/policy and detection-response
+    sub-capabilities, so L2 left unmapped.
+- tag: Incidents
+  spec_file: aeris-incidents-api-openapi.yml
+  capability_id: BC-600.30
+  capability_id_l1: BC-600
+  capability_name: IT Service Management
+  confidence: 0.72
+  evidence: POST /incidents createIncident Create incident; GET /incidents/{incident_id}/status getIncidentStatus;
+    openapi title "Incident Management Incidents API"
+  reason: A ticket/incident lifecycle surface (create, search, status update, activities, attachments)
+    — this is ITSM-style incident management for the connectivity platform's customers, not production
+    SRE incident response, so Cross-Industry IT Service Management is the honest fit. Some ambiguity vs
+    BC-4220.30 keeps confidence moderate.
+- tag: Invoices
+  spec_file: aeris-invoices-api-openapi.yml
+  capability_id: BC-4250.30
+  capability_id_l1: BC-4250
+  capability_name: Invoicing & Statement Management
+  confidence: 0.7
+  evidence: GET /invoices QueryInvoices Query invoice data files; GET /invoices/{id} DownloadInvoice Download
+    an invoice data file
+  reason: Operations retrieve and download customer invoice data files for the subscription-based connectivity
+    service, which realises invoice generation/delivery. Thin surface (query/download only) so moderate
+    confidence.
