@@ -2719,6 +2719,8 @@ apis:
   - type: Idempotency
     url: conventions/aeris-conventions.yml
 common:
+- type: RateLimits
+  url: rate-limits/aeris-rate-limits.yml
 - type: CapabilityMap
   url: capabilities/aeris-capability-edges.yml
   name: Aeris Business Capability Map
