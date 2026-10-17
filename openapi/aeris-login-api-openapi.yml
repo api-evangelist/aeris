@@ -144,19 +144,6 @@ paths:
     - url: https://iot-api.aeris.com/dcpapi/rest
 components:
   schemas:
-    Credentials:
-      required:
-      - email
-      - password
-      type: object
-      properties:
-        email:
-          type: string
-          description: User email
-        password:
-          type: string
-          description: User password
-      description: Login request model
     TokenReissue:
       required:
       - expirationTime
@@ -175,6 +162,37 @@ components:
         token:
           type: string
       description: Token reissue response model
+    Credentials:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+        password:
+          type: string
+          description: User password
+      description: Login request model
+    Login:
+      required:
+      - expirationTime
+      - message
+      - token
+      - userId
+      type: object
+      properties:
+        message:
+          type: string
+        expirationTime:
+          type: integer
+          format: int64
+        userId:
+          type: string
+        token:
+          type: string
+      description: Login response model
     Error:
       required:
       - code
@@ -202,24 +220,6 @@ components:
           description: Detailed error message
           example: Could not parse JSON body
       description: Error response model
-    Login:
-      required:
-      - expirationTime
-      - message
-      - token
-      - userId
-      type: object
-      properties:
-        message:
-          type: string
-        expirationTime:
-          type: integer
-          format: int64
-        userId:
-          type: string
-        token:
-          type: string
-      description: Login response model
     Error_2:
       required:
       - code

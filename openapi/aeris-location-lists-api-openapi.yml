@@ -206,29 +206,61 @@ paths:
           $ref: '#/components/responses/500'
 components:
   schemas:
-    Error:
+    LocationListType:
+      description: Type of the location list
+      type: string
+      enum:
+      - GENERAL
+      - PER_IMSI
+    LocationListCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/LocationListResourceBase'
+      - type: object
+        required:
+        - name
+        - listType
+    LocationListQueryRequest:
       type: object
       properties:
-        code:
+        name:
+          type: string
+          description: Filter by location list name (partial match)
+        listTypes:
+          type: array
+          description: Filter by location list types
+          items:
+            $ref: '#/components/schemas/LocationListType'
+        deviceGroupIds:
+          type: array
+          description: Filter by associated device group IDs
+          items:
+            type: integer
+    LocationListSummary:
+      type: object
+      properties:
+        id:
           type: integer
-          description: HTTP code
-          example: 500
-        message:
+          format: int64
+        name:
           type: string
-          description: Error message
-          example: An error encountered in processing the request
-        timestamp:
+        listType:
+          $ref: '#/components/schemas/LocationListType'
+        entryCount:
+          type: integer
+        deviceGroupIds:
+          type: array
+          items:
+            type: integer
+        createdBy:
           type: string
-          description: ISO DateTime
-          example: '2025-06-02 09:01:53.678'
-        path:
+        createdTime:
           type: string
-          description: Endpoint path at which the error occured
-          example: /watchtower/v1/events
-        traceId:
+          format: date-time
+        updatedBy:
           type: string
-          description: Trace Id
-          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+        updatedTime:
+          type: string
+          format: date-time
     LocationList:
       type: object
       properties:
@@ -262,15 +294,82 @@ components:
         updatedTime:
           type: string
           format: date-time
-    PagedLocationLists:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    LocationListSuggestionRequest:
+      type: object
+      required:
+      - deviceGroupIds
+      - listType
+      - effectiveStartTs
+      properties:
+        deviceGroupIds:
+          type: array
+          items:
+            type: integer
+        listType:
+          $ref: '#/components/schemas/LocationListType'
+        effectiveStartTs:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+            end:
+              type: string
+              format: date-time
+        country:
+          type: string
+          description: Optional filter by country
+        postalTown:
+          type: string
+          description: Optional filter by city/town
+    imsi:
+      description: International Mobile Subscriber Identifier of the device.
+      type: string
+      maxLength: 15
+      example: '310009133100012'
+    accountId:
+      description: Account Id.
+      type: integer
+      format: int32
+      example: 10407
+      minimum: 0
+    limit:
+      type: integer
+      format: int32
+      description: Number of items to retrieve (10000 max).
+      minimum: 1
+      maximum: 10000
+      default: 20
+    LocationListUpdateRequest:
       allOf:
-      - $ref: '#/components/schemas/Pagination'
+      - $ref: '#/components/schemas/LocationListResourceBase'
       - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/LocationListSummary'
+        required:
+        - name
+        - listType
     LocationListResourceBase:
       type: object
       properties:
@@ -296,19 +395,21 @@ components:
           description: IDs of device groups associated with this location list
           items:
             type: integer
-    limit:
+    total:
       type: integer
-      format: int32
-      description: Number of items to retrieve (10000 max).
-      minimum: 1
-      maximum: 10000
-      default: 20
-    LocationListType:
-      description: Type of the location list
-      type: string
-      enum:
-      - GENERAL
-      - PER_IMSI
+      format: int64
+      description: Total number of items available.
+      example: 1
+      minimum: 0
+    PagedLocationLists:
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/LocationListSummary'
     LocationListEntry:
       type: object
       properties:
@@ -368,45 +469,11 @@ components:
           type: string
           description: Effective start timestamp
           example: '2025-01-01T00:00:00Z'
-    LocationListCreateRequest:
-      allOf:
-      - $ref: '#/components/schemas/LocationListResourceBase'
-      - type: object
-        required:
-        - name
-        - listType
-    accountId:
-      description: Account Id.
+    offset:
+      description: Position in pagination.
       type: integer
       format: int32
-      example: 10407
-      minimum: 0
-    LocationListQueryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Filter by location list name (partial match)
-        listTypes:
-          type: array
-          description: Filter by location list types
-          items:
-            $ref: '#/components/schemas/LocationListType'
-        deviceGroupIds:
-          type: array
-          description: Filter by associated device group IDs
-          items:
-            type: integer
-    imsi:
-      description: International Mobile Subscriber Identifier of the device.
-      type: string
-      maxLength: 15
-      example: '310009133100012'
-    total:
-      type: integer
-      format: int64
-      description: Total number of items available.
-      example: 1
+      default: 0
       minimum: 0
     Pagination:
       type: object
@@ -417,110 +484,7 @@ components:
           $ref: '#/components/schemas/offset'
         limit:
           $ref: '#/components/schemas/limit'
-    LocationListUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/LocationListResourceBase'
-      - type: object
-        required:
-        - name
-        - listType
-    offset:
-      description: Position in pagination.
-      type: integer
-      format: int32
-      default: 0
-      minimum: 0
-    LocationListSummary:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        listType:
-          $ref: '#/components/schemas/LocationListType'
-        entryCount:
-          type: integer
-        deviceGroupIds:
-          type: array
-          items:
-            type: integer
-        createdBy:
-          type: string
-        createdTime:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        updatedTime:
-          type: string
-          format: date-time
-    LocationListSuggestionRequest:
-      type: object
-      required:
-      - deviceGroupIds
-      - listType
-      - effectiveStartTs
-      properties:
-        deviceGroupIds:
-          type: array
-          items:
-            type: integer
-        listType:
-          $ref: '#/components/schemas/LocationListType'
-        effectiveStartTs:
-          type: object
-          properties:
-            start:
-              type: string
-              format: date-time
-            end:
-              type: string
-              format: date-time
-        country:
-          type: string
-          description: Optional filter by country
-        postalTown:
-          type: string
-          description: Optional filter by city/town
   responses:
-    '429':
-      description: Too many requests.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 429
-            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '413':
-      description: Requested data too large
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 413
-            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '401':
-      description: Not authorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '403':
       description: Forbidden.
       content:
@@ -530,18 +494,6 @@ components:
           example:
             code: 403
             message: Forbidden
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
-    '400':
-      description: Bad Request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Bad Request
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
@@ -569,13 +521,55 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '413':
+      description: Requested data too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 413
+            message: Requested data too large. Please use /watchtower/v1/.../export for requesting larger amounts of data
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '400':
+      description: Bad Request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad Request
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '429':
+      description: Too many requests.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 429
+            message: 'Rate Limit Exceeded (XX) for clientId: XXXXXX. Please retry after XXX seconds'
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   parameters:
-    offset:
-      name: offset
-      in: query
-      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
-      schema:
-        $ref: '#/components/schemas/offset'
     sort:
       name: sort
       in: query
@@ -583,12 +577,6 @@ components:
       example: deviceId,updateTime:desc
       schema:
         type: string
-    limit:
-      name: limit
-      in: query
-      description: The number of items to retrieve per page (10000 max).
-      schema:
-        $ref: '#/components/schemas/limit'
     locationListId:
       name: locationListId
       in: path
@@ -597,6 +585,20 @@ components:
       schema:
         type: integer
         format: int64
+    offset:
+      name: offset
+      in: query
+      description: The position in pagination. Specifies the starting row offset into the result set returned. For example, if the page size (limit) is 10, then to select the second page, pass the offset as 10 to retrieve items 11 to 20.<br><br> Search parameters must be consistent across pages.
+      schema:
+        $ref: '#/components/schemas/offset'
+    accountId:
+      name: X-Watchtower-Account-Id
+      in: header
+      description: Account Id
+      required: true
+      schema:
+        $ref: '#/components/schemas/accountId'
+      example: 1002000010
     authorization:
       name: Authorization
       in: header
@@ -606,14 +608,12 @@ components:
         type: string
         pattern: ^Bearer [A-Za-z0-9-._~+/]+=*$
       example: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
-    accountId:
-      name: X-Watchtower-Account-Id
-      in: header
-      description: Account Id
-      required: true
+    limit:
+      name: limit
+      in: query
+      description: The number of items to retrieve per page (10000 max).
       schema:
-        $ref: '#/components/schemas/accountId'
-      example: 1002000010
+        $ref: '#/components/schemas/limit'
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

@@ -108,6 +108,36 @@ paths:
                 $ref: '#/components/schemas/RequestError'
 components:
   schemas:
+    RequestError:
+      type: object
+      properties:
+        requestError:
+          type: object
+          properties:
+            serviceException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
+            policyException:
+              type: object
+              properties:
+                messageId:
+                  type: string
+                  description: violation identifier, ref. User Guide
+                text:
+                  type: string
+                  description: describes the violation
+                variables:
+                  type: string
+                  description: points to the variable(s) in violation
     InboundSMSMessageRequest:
       type: object
       properties:
@@ -151,36 +181,6 @@ components:
         messageType:
           type: string
           description: 'The type of SMS message. For Binary SMS: use ''binary''. When field is not present, the message is a text message'
-    RequestError:
-      type: object
-      properties:
-        requestError:
-          type: object
-          properties:
-            serviceException:
-              type: object
-              properties:
-                messageId:
-                  type: string
-                  description: violation identifier, ref. User Guide
-                text:
-                  type: string
-                  description: describes the violation
-                variables:
-                  type: string
-                  description: points to the variable(s) in violation
-            policyException:
-              type: object
-              properties:
-                messageId:
-                  type: string
-                  description: violation identifier, ref. User Guide
-                text:
-                  type: string
-                  description: describes the violation
-                variables:
-                  type: string
-                  description: points to the variable(s) in violation
   securitySchemes:
     BasicAuth:
       type: http

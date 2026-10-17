@@ -352,24 +352,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ConfigurationErrorResponse'
-    409Configuration:
-      description: Conflict — resource already exists or invalid state transition
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ConfigurationErrorResponse'
-    '401':
-      description: Not authorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Unauthorized
-            timestamp: 2025-06-01 13:28:03.967000
-            path: /watchtower/v1/...
-            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
     '403':
       description: Forbidden.
       content:
@@ -394,6 +376,12 @@ components:
             timestamp: 2025-06-01 13:28:03.967000
             path: /watchtower/v1/...
             traceId: c3db9d7a432317363c8bc5ddb5aadf4b
+    409Configuration:
+      description: Conflict — resource already exists or invalid state transition
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConfigurationErrorResponse'
     '500':
       description: Internal Server Error.
       content:
@@ -420,151 +408,19 @@ components:
             - field: gatewayId
               code: VALIDATION_ERROR
               message: must be exactly 15 digits
+    '401':
+      description: Not authorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Unauthorized
+            timestamp: 2025-06-01 13:28:03.967000
+            path: /watchtower/v1/...
+            traceId: c3db9d7a432317363c8bc5ddb5aadf4b
   schemas:
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: HTTP code
-          example: 500
-        message:
-          type: string
-          description: Error message
-          example: An error encountered in processing the request
-        timestamp:
-          type: string
-          description: ISO DateTime
-          example: '2025-06-02 09:01:53.678'
-        path:
-          type: string
-          description: Endpoint path at which the error occured
-          example: /watchtower/v1/events
-        traceId:
-          type: string
-          description: Trace Id
-          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
-    BatchFailureRecord:
-      type: object
-      properties:
-        gatewayId:
-          type: string
-          description: Gateway ID from the original request (may be invalid)
-        failureCategory:
-          type: string
-          description: 'High-level category: validation / company_not_found / ip_enrichment'
-        failureReason:
-          type: string
-          description: Specific reason code (e.g. MISSING_GATEWAY_ID, IPAM_NON_2XX)
-    BatchGatewayDeprovisionRequest:
-      type: object
-      required:
-      - gateways
-      properties:
-        gateways:
-          type: array
-          maxItems: 5000
-          items:
-            $ref: '#/components/schemas/GatewayDeprovisionItem'
-    ConfigurationErrorResponse:
-      type: object
-      description: RFC 7807 error envelope (FS section 4.7)
-      properties:
-        title:
-          type: string
-          description: Human-readable error summary
-          example: Payload validation failed
-        status:
-          type: integer
-          description: HTTP status code
-          example: 422
-        correlationId:
-          type: string
-          description: Trace / correlation ID (X-Watchtower-Trace-Id or auto-generated UUID)
-          example: c7f5a8b2-1234-5678-abcd-ef0123456789
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConfigurationErrorDetail'
-    BatchDeprovisionFailureRecord:
-      type: object
-      properties:
-        gatewayId:
-          type: string
-          description: Gateway ID from the original request
-        failureCategory:
-          type: string
-          description: 'High-level category: validation / ipam_failed / not_found / already_terminated'
-        failureReason:
-          type: string
-          description: Specific reason code
-    BatchGatewayDeprovisionResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-          description: Total records received
-        terminated:
-          type: integer
-          description: Successfully terminated
-        skipped:
-          type: integer
-          description: Skipped (already terminated or not found)
-        rejected:
-          type: integer
-          description: Failed validation or IPAM release
-        failures:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchDeprovisionFailureRecord'
-    BatchGatewayProvisionResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-          description: Total records received
-        provisioned:
-          type: integer
-          description: Successfully provisioned
-        updated:
-          type: integer
-          description: Already existed and were idempotently returned
-        rejected:
-          type: integer
-          description: Failed validation or enrichment
-        failures:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchFailureRecord'
-    ConfigurationErrorDetail:
-      type: object
-      properties:
-        field:
-          type:
-          - string
-          - 'null'
-          description: Field name that caused the error (null for non-field errors)
-          example: gatewayId
-        code:
-          type: string
-          description: Machine-readable error code
-          example: VALIDATION_ERROR
-        message:
-          type: string
-          description: Human-readable error message
-          example: must be exactly 15 digits
-    GatewayDeprovisionItem:
-      type: object
-      required:
-      - gatewayId
-      - companyId
-      properties:
-        gatewayId:
-          type: string
-          description: IMSI of the gateway to deprovision
-        companyId:
-          type: string
-          description: Company owning the gateway
     GatewayProvisionRequest:
       type: object
       required:
@@ -653,50 +509,23 @@ components:
           - string
           - 'null'
           description: APN hint from caller — always overridden by server-side configuration
-    GatewayUpdateRequest:
+    ConfigurationErrorDetail:
       type: object
-      description: Partial update for a gateway. Only provided fields are updated.
       properties:
-        serialNumber:
+        field:
           type:
           - string
           - 'null'
-        deviceType:
-          type:
-          - string
-          - 'null'
-        firmwareVersion:
-          type:
-          - string
-          - 'null'
-        imei:
-          type:
-          - string
-          - 'null'
-          pattern: ^\d{15}$
-        mcc:
-          type:
-          - string
-          - 'null'
-          pattern: ^\d{3}$
-        mnc:
-          type:
-          - string
-          - 'null'
-          pattern: ^\d{2,3}$
-        attributes:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: string
-        billing:
-          type:
-          - object
-          - 'null'
-          properties:
-            billingStatus:
-              type: string
+          description: Field name that caused the error (null for non-field errors)
+          example: gatewayId
+        code:
+          type: string
+          description: Machine-readable error code
+          example: VALIDATION_ERROR
+        message:
+          type: string
+          description: Human-readable error message
+          example: must be exactly 15 digits
     GatewayHistoryResponse:
       type: object
       properties:
@@ -726,6 +555,49 @@ components:
           type: string
           format: date-time
           description: Wall-clock time of the transition
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: HTTP code
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: An error encountered in processing the request
+        timestamp:
+          type: string
+          description: ISO DateTime
+          example: '2025-06-02 09:01:53.678'
+        path:
+          type: string
+          description: Endpoint path at which the error occured
+          example: /watchtower/v1/events
+        traceId:
+          type: string
+          description: Trace Id
+          example: ed81f29f-ea9b-4099-aa00-f8ed40b7a567
+    ConfigurationErrorResponse:
+      type: object
+      description: RFC 7807 error envelope (FS section 4.7)
+      properties:
+        title:
+          type: string
+          description: Human-readable error summary
+          example: Payload validation failed
+        status:
+          type: integer
+          description: HTTP status code
+          example: 422
+        correlationId:
+          type: string
+          description: Trace / correlation ID (X-Watchtower-Trace-Id or auto-generated UUID)
+          example: c7f5a8b2-1234-5678-abcd-ef0123456789
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigurationErrorDetail'
     BatchGatewayProvisionRequest:
       type: object
       required:
@@ -736,6 +608,49 @@ components:
           maxItems: 5000
           items:
             $ref: '#/components/schemas/GatewayProvisionRequest'
+    BatchGatewayProvisionResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total records received
+        provisioned:
+          type: integer
+          description: Successfully provisioned
+        updated:
+          type: integer
+          description: Already existed and were idempotently returned
+        rejected:
+          type: integer
+          description: Failed validation or enrichment
+        failures:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchFailureRecord'
+    BatchFailureRecord:
+      type: object
+      properties:
+        gatewayId:
+          type: string
+          description: Gateway ID from the original request (may be invalid)
+        failureCategory:
+          type: string
+          description: 'High-level category: validation / company_not_found / ip_enrichment'
+        failureReason:
+          type: string
+          description: Specific reason code (e.g. MISSING_GATEWAY_ID, IPAM_NON_2XX)
+    GatewayDeprovisionItem:
+      type: object
+      required:
+      - gatewayId
+      - companyId
+      properties:
+        gatewayId:
+          type: string
+          description: IMSI of the gateway to deprovision
+        companyId:
+          type: string
+          description: Company owning the gateway
     GatewayResponse:
       type: object
       properties:
@@ -822,6 +737,91 @@ components:
           additionalProperties:
             type: string
           description: Custom attributes
+    BatchGatewayDeprovisionRequest:
+      type: object
+      required:
+      - gateways
+      properties:
+        gateways:
+          type: array
+          maxItems: 5000
+          items:
+            $ref: '#/components/schemas/GatewayDeprovisionItem'
+    BatchDeprovisionFailureRecord:
+      type: object
+      properties:
+        gatewayId:
+          type: string
+          description: Gateway ID from the original request
+        failureCategory:
+          type: string
+          description: 'High-level category: validation / ipam_failed / not_found / already_terminated'
+        failureReason:
+          type: string
+          description: Specific reason code
+    BatchGatewayDeprovisionResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total records received
+        terminated:
+          type: integer
+          description: Successfully terminated
+        skipped:
+          type: integer
+          description: Skipped (already terminated or not found)
+        rejected:
+          type: integer
+          description: Failed validation or IPAM release
+        failures:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchDeprovisionFailureRecord'
+    GatewayUpdateRequest:
+      type: object
+      description: Partial update for a gateway. Only provided fields are updated.
+      properties:
+        serialNumber:
+          type:
+          - string
+          - 'null'
+        deviceType:
+          type:
+          - string
+          - 'null'
+        firmwareVersion:
+          type:
+          - string
+          - 'null'
+        imei:
+          type:
+          - string
+          - 'null'
+          pattern: ^\d{15}$
+        mcc:
+          type:
+          - string
+          - 'null'
+          pattern: ^\d{3}$
+        mnc:
+          type:
+          - string
+          - 'null'
+          pattern: ^\d{2,3}$
+        attributes:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+        billing:
+          type:
+          - object
+          - 'null'
+          properties:
+            billingStatus:
+              type: string
   securitySchemes:
     oAuth2ClientCredentials:
       type: oauth2

@@ -375,9 +375,113 @@ paths:
     - url: https://iot-api.aeris.com/iot/api/xdr/reports
       description: API server
 components:
+  responses:
+    404Response:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Not Found
+                status: 404
+                detail: Not Found
+                instance: https://hostname/iot/api/some-path
+    403Response:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Forbidden
+                status: 403
+                detail: You do not have access to the resource
+                instance: https://hostname/iot/api/some-path
+    429Response:
+      description: Too Many Requests
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    500Response:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Internal Server Error
+                status: 500
+                detail: Internal Server Error
+                instance: https://hostname/iot/api/some-path
+    RateLimitedResponse:
+      headers:
+        X-RateLimit-Limit-Second:
+          $ref: '#/components/headers/X-RateLimit-Limit-Second'
+        X-RateLimit-Limit-Minute:
+          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
+        X-RateLimit-Remaining-Second:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
+        X-RateLimit-Remaining-Minute:
+          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
+        Content-Type:
+          $ref: '#/components/headers/Content-Type'
+    400Response:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Bad Request
+                status: 400
+                detail: Invalid customerNo
+                instance: https://hostname/iot/api/some-path
+    401Response:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            response:
+              value:
+                type: https://www.iana.org/assignments/http-status-codes/
+                title: Unauthorized
+                status: 401
+                detail: Token expired
+                instance: https://hostname/iot/api/some-path
   headers:
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
       schema:
         type: integer
         format: int32
@@ -386,8 +490,8 @@ components:
       schema:
         type: integer
         format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
       schema:
         type: integer
         format: int32
@@ -396,10 +500,6 @@ components:
       schema:
         type: integer
         format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
   schemas:
     QueryReportsResponseItem:
       type: object
@@ -424,35 +524,6 @@ components:
           type: string
           example: 2022-04
           description: The time period for the report.
-    ReportTypeEnum:
-      type: string
-      description: The report types.
-      example: CBADETRPT
-      x-extensible-enum:
-      - CBADETRPT
-      - CBDETRPT
-      - CBISRPT
-      - CBPPCRPT
-      - CBRECRPT
-      - CCHARPT
-      - CERRRPT
-      - COPCRPT
-      - CRECRPT
-      - CTRATRPT
-      - CTRFRPT
-      - CUSTOM
-      - IMSINM
-      - MSISDNUSE
-      - OI01
-      - OI04
-      - OI05
-      - SIMORDER
-      - SIMSTADET
-      - SIMSTAGE
-      - SIMSTAT
-      - SIMTERM
-      - TIMRECRPT
-      - SIMACTDET
     ErrorResponse:
       type: object
       properties:
@@ -486,6 +557,35 @@ components:
           type: string
           description: An absolute URI that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
           example: https://api.documentation.url/request-id
+    ReportTypeEnum:
+      type: string
+      description: The report types.
+      example: CBADETRPT
+      x-extensible-enum:
+      - CBADETRPT
+      - CBDETRPT
+      - CBISRPT
+      - CBPPCRPT
+      - CBRECRPT
+      - CCHARPT
+      - CERRRPT
+      - COPCRPT
+      - CRECRPT
+      - CTRATRPT
+      - CTRFRPT
+      - CUSTOM
+      - IMSINM
+      - MSISDNUSE
+      - OI01
+      - OI04
+      - OI05
+      - SIMORDER
+      - SIMSTADET
+      - SIMSTAGE
+      - SIMSTAT
+      - SIMTERM
+      - TIMRECRPT
+      - SIMACTDET
     QueryReportsResponse:
       type: object
       properties:
@@ -513,66 +613,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/QueryReportsResponseItem'
-    529Response:
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponse_2'
-      - type: object
-        properties:
-          title:
-            example: Service Overloaded
-          status:
-            example: 529
-    DataUsageReport:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UsageReport'
-      properties:
-        uploaded:
-          type: integer
-          format: int64
-          example: 500000
-          description: The amount of uploaded data in bytes.
-        downloaded:
-          type: integer
-          format: int64
-          example: 500000
-          description: The amount of downloaded data in bytes.
-    DataUsageResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UsageResponse'
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataUsageReport'
-    503Response:
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponse_2'
-      - type: object
-        properties:
-          title:
-            example: Service Unavailable
-          status:
-            example: 503
-    500Response:
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponse_2'
-      - type: object
-        properties:
-          title:
-            example: Internal server error
-          status:
-            example: 500
-    SmsUsageResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UsageResponse'
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SmsUsageReport'
     ErrorResponse_2:
       type: object
       properties:
@@ -613,6 +653,33 @@ components:
           type: object
           additionalProperties:
             type: string
+    500Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Internal server error
+          status:
+            example: 500
+    400Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Bad Request
+          status:
+            example: 400
+    404Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: No Found
+          status:
+            example: 404
     SmsCount:
       type: object
       properties:
@@ -626,6 +693,57 @@ components:
           format: int64
           example: 1
           description: The number of erroneous messages.
+    529Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Service Overloaded
+          status:
+            example: 529
+    SmsUsageResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsageResponse'
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SmsUsageReport'
+    SmsUsageReport:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsageReport'
+      properties:
+        received:
+          allOf:
+          - $ref: '#/components/schemas/SmsCount'
+          description: The number of received messages.
+        sent:
+          allOf:
+          - $ref: '#/components/schemas/SmsCount'
+          description: The number of sent messages.
+    UsageReport:
+      type: object
+      properties:
+        key:
+          type: string
+          description: 'The value of the key used to aggregate the reports. This is the sort field supplied in the request.
+
+            If the request was made witout a specified sort, then it will default to imsi.
+
+            '
+          example: '238208000000001'
+    401Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Authentication Failure
+          status:
+            example: 401
     UsageResponse:
       type: object
       properties:
@@ -643,158 +761,51 @@ components:
           type: string
           example: imsi
           description: The field name of the key in items.
-    400Response:
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponse_2'
-      - type: object
-        properties:
-          title:
-            example: Bad Request
-          status:
-            example: 400
-    401Response:
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponse_2'
-      - type: object
-        properties:
-          title:
-            example: Authentication Failure
-          status:
-            example: 401
-    UsageReport:
-      type: object
-      properties:
-        key:
-          type: string
-          description: 'The value of the key used to aggregate the reports. This is the sort field supplied in the request.
-
-            If the request was made witout a specified sort, then it will default to imsi.
-
-            '
-          example: '238208000000001'
-    404Response:
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponse_2'
-      - type: object
-        properties:
-          title:
-            example: No Found
-          status:
-            example: 404
-    SmsUsageReport:
+    DataUsageReport:
       type: object
       allOf:
       - $ref: '#/components/schemas/UsageReport'
       properties:
-        received:
-          allOf:
-          - $ref: '#/components/schemas/SmsCount'
-          description: The number of received messages.
-        sent:
-          allOf:
-          - $ref: '#/components/schemas/SmsCount'
-          description: The number of sent messages.
-  responses:
-    403Response:
-      description: Forbidden
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Forbidden
-                status: 403
-                detail: You do not have access to the resource
-                instance: https://hostname/iot/api/some-path
-    429Response:
-      description: Too Many Requests
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    401Response:
-      description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Unauthorized
-                status: 401
-                detail: Token expired
-                instance: https://hostname/iot/api/some-path
-    400Response:
-      description: Bad Request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Bad Request
-                status: 400
-                detail: Invalid customerNo
-                instance: https://hostname/iot/api/some-path
-    404Response:
-      description: Not Found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Not Found
-                status: 404
-                detail: Not Found
-                instance: https://hostname/iot/api/some-path
-    RateLimitedResponse:
-      headers:
-        X-RateLimit-Limit-Second:
-          $ref: '#/components/headers/X-RateLimit-Limit-Second'
-        X-RateLimit-Limit-Minute:
-          $ref: '#/components/headers/X-RateLimit-Limit-Minute'
-        X-RateLimit-Remaining-Second:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Second'
-        X-RateLimit-Remaining-Minute:
-          $ref: '#/components/headers/X-RateLimit-Remaining-Minute'
-        Content-Type:
-          $ref: '#/components/headers/Content-Type'
-    500Response:
-      description: Internal Server Error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            response:
-              value:
-                type: https://www.iana.org/assignments/http-status-codes/
-                title: Internal Server Error
-                status: 500
-                detail: Internal Server Error
-                instance: https://hostname/iot/api/some-path
+        uploaded:
+          type: integer
+          format: int64
+          example: 500000
+          description: The amount of uploaded data in bytes.
+        downloaded:
+          type: integer
+          format: int64
+          example: 500000
+          description: The amount of downloaded data in bytes.
+    DataUsageResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsageResponse'
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataUsageReport'
+    503Response:
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponse_2'
+      - type: object
+        properties:
+          title:
+            example: Service Unavailable
+          status:
+            example: 503
   parameters:
+    msisdnParam:
+      in: query
+      name: msisdn
+      description: One or more MSISDNs, comma separated, which identifies the subscription(s) to get reports for, e.g. "01151601063,01151601064". Can only be specified if imsi is NOT.
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: string
+      allowReserved: true
+      example: 01151601063,01151601064
     sortParam:
       in: query
       name: sort
@@ -837,17 +848,6 @@ components:
         type: string
       allowReserved: true
       example: 238208000000001,238208000000002
-    msisdnParam:
-      in: query
-      name: msisdn
-      description: One or more MSISDNs, comma separated, which identifies the subscription(s) to get reports for, e.g. "01151601063,01151601064". Can only be specified if imsi is NOT.
-      required: false
-      style: form
-      explode: false
-      schema:
-        type: string
-      allowReserved: true
-      example: 01151601063,01151601064
     fromParam:
       in: query
       name: from

@@ -314,25 +314,135 @@ paths:
         - css_premium_csp_incident_for_operators
 components:
   schemas:
-    Attachment:
+    Activity:
       type: object
-      description: File attachment metadata.
+      description: An activity related to an incident.
       allOf:
       - $ref: '#/components/schemas/Auditable'
+      - $ref: '#/components/schemas/ActivityStatus'
       - type: object
         required:
         - id
-        - name
+        - summary
         properties:
           id:
             type: string
-            description: File attachment unique id.
-            example: dg3g5vdg
             readOnly: true
-          name:
+            description: Unique activity id.
+            example: j23h434k
+          summary:
             type: string
-            description: File name.
-            example: Image.jpg
+            maxLength: 100
+            description: Short description of the activity.
+            example: Initial activity
+          description:
+            type: string
+            maxLength: 2000
+            description: Detailed description of the activity.
+            example: Incident created.
+          attachments:
+            description: A list of attachment metadata.
+            readOnly: true
+            type: array
+            items:
+              $ref: '#/components/schemas/Attachment'
+    Auditable:
+      type: object
+      description: Common metadata of auditable entities.
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when this entity was created. (RFC 3339 date-time)
+          example: '2017-06-27T15:47:03.000Z'
+          readOnly: true
+        created_by_user:
+          type: string
+          description: The user who created this entity.
+          example: user@enterprise.xyz
+          readOnly: true
+        last_modified_at:
+          type: string
+          format: date-time
+          description: The date and time of last modification. (RFC 3339 date-time)
+          example: '2017-06-27T15:47:03.000Z'
+          readOnly: true
+        modified_by_user:
+          type: string
+          description: The user who was the last to modify this entity.
+          example: user@enterprise.xyz
+          readOnly: true
+    VIPIncidentCount:
+      type: object
+      allOf:
+      - type: object
+        required:
+        - newOrganizationId
+        - currentCount
+        - maxUsageLimit
+        - month
+        properties:
+          newOrganizationId:
+            type: string
+            description: The ID of the Organization in the new period-separated format
+            example: 3.88
+          currentCount:
+            type: integer
+            description: Current VIP Incident count
+            example: 17
+          maxUsageLimit:
+            type: integer
+            description: The usage limit of VIP Incidents
+            example: 5
+          month:
+            type: string
+            description: The month for which the current VIP incident count applies in <mm/yyyy> format
+            example: 03/2022
+    SearchRequest:
+      type: object
+      properties:
+        limit:
+          description: The number of incidents to list.
+          type: string
+          example: '100'
+          minimum: 1
+        organization_ids:
+          description: A list of organization ids to filter the incidents.
+          type: array
+          items:
+            type: string
+            example:
+            - 1.2.3
+            - 1.2.4.*
+        from:
+          description: The starting date yyyy-mm-dd. (RFC 3339 date-time)
+          type: string
+          format: date
+          example: '2020-01-01'
+        to:
+          description: The finishing date yyyy-mm-dd. (RFC 3339 date-time)
+          type: string
+          format: date
+          example: '2020-02-02'
+        sort:
+          description: Sorting fields and order.
+          type: string
+          x-extensible-enum:
+          - id
+          - created
+          - last_modified_at
+          example: -last_modified_at,id
+    IncidentDetails:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Incident'
+      - type: object
+        properties:
+          activities:
+            description: A list of activities related to this incident. The first activity is always the creation of the incident.
+            type: array
+            items:
+              $ref: '#/components/schemas/Activity'
     IncidentStatus:
       type: object
       required:
@@ -372,105 +482,6 @@ components:
           description: The reason for resolution of the RESOLVED incident status.
           example: Reported Incident is the duplicate ticket
           readOnly: true
-    IncidentDetails:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Incident'
-      - type: object
-        properties:
-          activities:
-            description: A list of activities related to this incident. The first activity is always the creation of the incident.
-            type: array
-            items:
-              $ref: '#/components/schemas/Activity'
-    SearchRequest:
-      type: object
-      properties:
-        limit:
-          description: The number of incidents to list.
-          type: string
-          example: '100'
-          minimum: 1
-        organization_ids:
-          description: A list of organization ids to filter the incidents.
-          type: array
-          items:
-            type: string
-            example:
-            - 1.2.3
-            - 1.2.4.*
-        from:
-          description: The starting date yyyy-mm-dd. (RFC 3339 date-time)
-          type: string
-          format: date
-          example: '2020-01-01'
-        to:
-          description: The finishing date yyyy-mm-dd. (RFC 3339 date-time)
-          type: string
-          format: date
-          example: '2020-02-02'
-        sort:
-          description: Sorting fields and order.
-          type: string
-          x-extensible-enum:
-          - id
-          - created
-          - last_modified_at
-          example: -last_modified_at,id
-    Activity:
-      type: object
-      description: An activity related to an incident.
-      allOf:
-      - $ref: '#/components/schemas/Auditable'
-      - $ref: '#/components/schemas/ActivityStatus'
-      - type: object
-        required:
-        - id
-        - summary
-        properties:
-          id:
-            type: string
-            readOnly: true
-            description: Unique activity id.
-            example: j23h434k
-          summary:
-            type: string
-            maxLength: 100
-            description: Short description of the activity.
-            example: Initial activity
-          description:
-            type: string
-            maxLength: 2000
-            description: Detailed description of the activity.
-            example: Incident created.
-          attachments:
-            description: A list of attachment metadata.
-            readOnly: true
-            type: array
-            items:
-              $ref: '#/components/schemas/Attachment'
-    IncidentsList:
-      type: object
-      required:
-      - items
-      properties:
-        items:
-          description: A list of brief representations of incidents.
-          type: array
-          items:
-            $ref: '#/components/schemas/Incident'
-    ActivityStatus:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: Current status of the activity (DRAFT/CREATED).
-          x-extensible-enum:
-          - DRAFT
-          - CREATED
-          example: DRAFT
     Problem:
       type: object
       properties:
@@ -659,58 +670,47 @@ components:
             type: boolean
             description: true if incident is VIP. VIP incident is a functionality available for operators only, as part of the IoT Accelerator Premium Support service.
       - $ref: '#/components/schemas/Auditable'
-    VIPIncidentCount:
+    IncidentsList:
       type: object
+      required:
+      - items
+      properties:
+        items:
+          description: A list of brief representations of incidents.
+          type: array
+          items:
+            $ref: '#/components/schemas/Incident'
+    Attachment:
+      type: object
+      description: File attachment metadata.
       allOf:
+      - $ref: '#/components/schemas/Auditable'
       - type: object
         required:
-        - newOrganizationId
-        - currentCount
-        - maxUsageLimit
-        - month
+        - id
+        - name
         properties:
-          newOrganizationId:
+          id:
             type: string
-            description: The ID of the Organization in the new period-separated format
-            example: 3.88
-          currentCount:
-            type: integer
-            description: Current VIP Incident count
-            example: 17
-          maxUsageLimit:
-            type: integer
-            description: The usage limit of VIP Incidents
-            example: 5
-          month:
+            description: File attachment unique id.
+            example: dg3g5vdg
+            readOnly: true
+          name:
             type: string
-            description: The month for which the current VIP incident count applies in <mm/yyyy> format
-            example: 03/2022
-    Auditable:
+            description: File name.
+            example: Image.jpg
+    ActivityStatus:
       type: object
-      description: Common metadata of auditable entities.
+      required:
+      - status
       properties:
-        created_at:
+        status:
           type: string
-          format: date-time
-          description: The date and time when this entity was created. (RFC 3339 date-time)
-          example: '2017-06-27T15:47:03.000Z'
-          readOnly: true
-        created_by_user:
-          type: string
-          description: The user who created this entity.
-          example: user@enterprise.xyz
-          readOnly: true
-        last_modified_at:
-          type: string
-          format: date-time
-          description: The date and time of last modification. (RFC 3339 date-time)
-          example: '2017-06-27T15:47:03.000Z'
-          readOnly: true
-        modified_by_user:
-          type: string
-          description: The user who was the last to modify this entity.
-          example: user@enterprise.xyz
-          readOnly: true
+          description: Current status of the activity (DRAFT/CREATED).
+          x-extensible-enum:
+          - DRAFT
+          - CREATED
+          example: DRAFT
   securitySchemes:
     oauth2:
       type: oauth2

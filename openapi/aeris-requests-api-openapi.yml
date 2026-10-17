@@ -86,31 +86,6 @@ paths:
       tags:
       - Requests
 components:
-  headers:
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Minute:
-      description: The maximum number of requests allowed in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
-      schema:
-        type: integer
-        format: int32
-    X-RateLimit-Limit-Second:
-      description: The maximum number of requests allowed in a second.
-      schema:
-        type: integer
-        format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
   schemas:
     ChangeHistoryRequest:
       type: object
@@ -163,6 +138,81 @@ components:
             '
           type: integer
           example: 10000
+    SubscriptionOperation:
+      type: string
+      description: Type of change
+      example: CHANGE_SUBSCRIPTIONSTATE
+      x-extensible-enum:
+      - CESS
+      - CHANGE_ALTROAMINGPROVIDER
+      - CHANGE_SP_EUICC
+      - CHANGE_SUBSCRIPTIONIP
+      - CHANGE_SUBSCRIPTIONLABEL
+      - CHANGE_SUBSCRIPTION_NOTE
+      - CHANGE_SUBSCRIPTIONOWNER
+      - CHANGE_SUBSCRIPTIONOWNER_EUICC
+      - CHANGE_SUBSCRIPTIONPACKAGE
+      - CHANGE_SUBSCRIPTIONREGION
+      - CHANGE_SUBSCRIPTIONSTATE
+      - CHANGE_SUBSCRIPTIONSTATE_EUICC
+      - CREATE_SUBSCRIPTION
+      - CREATE_SUBSCRIPTION_EUICC
+      - INDIVIDUAL_APN_UPDATE
+      - LOCK_SUBSCRIPTIONSTATE
+      - PBR_EXIT
+      - PCL_LIMIT_100_EXCEEDED
+      - REASSIGN_MSISDN
+      - THROTTLE_IMSI
+      - TRIGGER_ACTION
+      - UNLOCK_SUBSCRIPTIONSTATE
+      - UPDATE_IMEI
+      - UPDATE_ASSIGNED_IMEI
+    IdType:
+      type: string
+      description: Type of identifier used for identifier or identifier-range
+      x-extensible-enum:
+      - imsi
+      - subscription-package
+      example: imsi
+    SubscriptionChange:
+      type: object
+      properties:
+        occured_at:
+          description: Date for the change
+          type: string
+          format: date-time
+          example: '2021-02-02T12:45:56.789Z'
+        imsi:
+          description: Imsi for subscription
+          type: string
+        change:
+          $ref: '#/components/schemas/SubscriptionOperation'
+        initiated_by:
+          type: string
+          description: Change initiated by id
+          example: accountid@example.org
+        subscription_request_id:
+          type: string
+          description: Subscription request identifier for the change
+          example: REQ123
+        new_values:
+          $ref: '#/components/schemas/Values'
+    ChangeHistoryResponse:
+      type: object
+      properties:
+        changes:
+          description: 'Array of changes.  Even if array is empty or below page limit, there can be more changes in the next page.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionChange'
+        next:
+          type: string
+          description: 'Link to next page result.  There can be next page even if changes in this response is under page limit or empty.
+
+            '
+          example: https://iot-api.aeris.com/iot/api/subscriptions/changes/requests/ABC123321?page=RW5jb2RlZCBrZXkg
     Values:
       type: object
       description: New value for a change.  Only relevant field returned.
@@ -193,58 +243,17 @@ components:
         assigned_imei:
           type: string
           example: 00000123456789
-    IdType:
-      type: string
-      description: Type of identifier used for identifier or identifier-range
-      x-extensible-enum:
-      - imsi
-      - subscription-package
-      example: imsi
-    ChangeHistoryResponse:
+    IdentifierRangeType:
       type: object
       properties:
-        changes:
-          description: 'Array of changes.  Even if array is empty or below page limit, there can be more changes in the next page.
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionChange'
-        next:
+        start:
+          description: Start of range, inclusive
           type: string
-          description: 'Link to next page result.  There can be next page even if changes in this response is under page limit or empty.
-
-            '
-          example: https://iot-api.aeris.com/iot/api/subscriptions/changes/requests/ABC123321?page=RW5jb2RlZCBrZXkg
-    SubscriptionOperation:
-      type: string
-      description: Type of change
-      example: CHANGE_SUBSCRIPTIONSTATE
-      x-extensible-enum:
-      - CESS
-      - CHANGE_ALTROAMINGPROVIDER
-      - CHANGE_SP_EUICC
-      - CHANGE_SUBSCRIPTIONIP
-      - CHANGE_SUBSCRIPTIONLABEL
-      - CHANGE_SUBSCRIPTION_NOTE
-      - CHANGE_SUBSCRIPTIONOWNER
-      - CHANGE_SUBSCRIPTIONOWNER_EUICC
-      - CHANGE_SUBSCRIPTIONPACKAGE
-      - CHANGE_SUBSCRIPTIONREGION
-      - CHANGE_SUBSCRIPTIONSTATE
-      - CHANGE_SUBSCRIPTIONSTATE_EUICC
-      - CREATE_SUBSCRIPTION
-      - CREATE_SUBSCRIPTION_EUICC
-      - INDIVIDUAL_APN_UPDATE
-      - LOCK_SUBSCRIPTIONSTATE
-      - PBR_EXIT
-      - PCL_LIMIT_100_EXCEEDED
-      - REASSIGN_MSISDN
-      - THROTTLE_IMSI
-      - TRIGGER_ACTION
-      - UNLOCK_SUBSCRIPTIONSTATE
-      - UPDATE_IMEI
-      - UPDATE_ASSIGNED_IMEI
+          example: '123456789000000'
+        end:
+          description: End of range, inclusive
+          type: string
+          example: '123456789099999'
     Problem:
       type: object
       properties:
@@ -294,40 +303,31 @@ components:
             dereferenced.
 
             '
-    IdentifierRangeType:
-      type: object
-      properties:
-        start:
-          description: Start of range, inclusive
-          type: string
-          example: '123456789000000'
-        end:
-          description: End of range, inclusive
-          type: string
-          example: '123456789099999'
-    SubscriptionChange:
-      type: object
-      properties:
-        occured_at:
-          description: Date for the change
-          type: string
-          format: date-time
-          example: '2021-02-02T12:45:56.789Z'
-        imsi:
-          description: Imsi for subscription
-          type: string
-        change:
-          $ref: '#/components/schemas/SubscriptionOperation'
-        initiated_by:
-          type: string
-          description: Change initiated by id
-          example: accountid@example.org
-        subscription_request_id:
-          type: string
-          description: Subscription request identifier for the change
-          example: REQ123
-        new_values:
-          $ref: '#/components/schemas/Values'
+  headers:
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Minute:
+      description: The maximum number of requests allowed in a minute.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
+      schema:
+        type: integer
+        format: int32
+    X-RateLimit-Limit-Second:
+      description: The maximum number of requests allowed in a second.
+      schema:
+        type: integer
+        format: int32
   responses:
     Response_429:
       description: Too Many Requests

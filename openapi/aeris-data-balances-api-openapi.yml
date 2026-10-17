@@ -73,8 +73,12 @@ paths:
         - cc.read
 components:
   headers:
-    X-RateLimit-Remaining-Second:
-      description: The number of requests remaining in a second.
+    Content-Type:
+      description: Handle Content-Type
+      schema:
+        type: string
+    X-RateLimit-Remaining-Minute:
+      description: The number of requests remaining in a minute.
       schema:
         type: integer
         format: int32
@@ -83,8 +87,8 @@ components:
       schema:
         type: integer
         format: int32
-    X-RateLimit-Remaining-Minute:
-      description: The number of requests remaining in a minute.
+    X-RateLimit-Remaining-Second:
+      description: The number of requests remaining in a second.
       schema:
         type: integer
         format: int32
@@ -93,13 +97,9 @@ components:
       schema:
         type: integer
         format: int32
-    Content-Type:
-      description: Handle Content-Type
-      schema:
-        type: string
   responses:
-    Unauthorized:
-      description: Unauthorized
+    InternalError:
+      description: Internal error
       content:
         application/vnd.dcp-v1+json:
           schema:
@@ -112,8 +112,8 @@ components:
         application/vnd.dcp-v1+json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    InternalError:
-      description: Internal error
+    Unauthorized:
+      description: Unauthorized
       content:
         application/vnd.dcp-v1+json:
           schema:
@@ -131,6 +131,14 @@ components:
         Content-Type:
           $ref: '#/components/headers/Content-Type'
   schemas:
+    DataBalance:
+      type: object
+      properties:
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BucketDataModel'
+      description: Data balance
     ErrorResponse:
       type: object
       properties:
@@ -144,20 +152,6 @@ components:
         message:
           type: string
       description: Error response
-    DataBalance:
-      type: object
-      properties:
-        buckets:
-          type: array
-          items:
-            $ref: '#/components/schemas/BucketDataModel'
-      description: Data balance
-    SubscriptionIdTypeEnum:
-      type: string
-      description: Subscription ID type
-      enum:
-      - IMSI
-      - MSISDN
     BucketDataModel:
       type: object
       properties:
@@ -191,6 +185,12 @@ components:
           type: string
           format: date-time
       description: Bucket data
+    SubscriptionIdTypeEnum:
+      type: string
+      description: Subscription ID type
+      enum:
+      - IMSI
+      - MSISDN
   securitySchemes:
     Oauth2_auth:
       flows:
